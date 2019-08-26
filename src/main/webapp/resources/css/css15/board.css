@@ -1,0 +1,230 @@
+
+
+/* table style */
+table {border-collapse: collapse; empty-cells: show;}
+caption {display:none;}
+fieldset {border:0;}
+th {}
+td  {text-align:justify; font-family:돋움, Dotum;}
+td img {vertical-align:middle;}
+
+/* table Top */
+#container .content .bbsTop {position:relative; height:16px; margin:-4px 0 0px 0;}
+#container .content .bbsTop h4 {margin:0; padding:1px 0 0 20px; background:url("../img/icon/ico_h4.gif") no-repeat; font-size:14px; line-height:14px;}
+#container .content .bbsTop h4.no {margin:0; padding:1px 0 0 0px; background:none;}
+#container .content .bbsTop h5 {margin:0; padding:1px 0 0 0px;}
+#container .content .bbsTop .bbsTopTxt {position:absolute; top:0px; right:0; width:384px; text-align:right; font-weight:normal; font-size:11px; color:#777;}
+#container .content .bbsTop .bbsTopTxt .bbsTopTxtBlue {font-size:11px; color:#2e6eb0;}
+
+#container .content .bbsTopForm {position:relative; height:20px; margin:0 0 5px 0;}
+#container .content .bbsTopForm h4 {margin:0; padding:0; background:none;}
+#container .content .bbsTopForm form {position:absolute; top:-1px; right:0; text-align:right;}
+:root #container .content .bbsTopForm form {width:357px;}
+
+
+/* table List */
+table.bbsList {clear:both; width:684px; background:url("../img/table/thead.gif") 50% 0 no-repeat; margin-top:50px;}
+table.bbsList thead {}
+table.bbsList thead th {height:18px; padding:8px 0 6px; background:url("../img/table/th.gif") no-repeat; text-align:center; font-size:11px; border:0px solid red;}
+table.bbsList thead th.first {background:none;}
+table.bbsList tbody tr:hover td {}
+table.bbsList tbody th {}
+table.bbsList tbody td {height:18px; padding:7px 0 4px; border-bottom:1px solid #d6d6d6; background:url("../img/table/td.gif") 0 100% no-repeat; text-align:center; font-size:12px;}
+table.bbsList tbody td.first {background:none; border-left:1px solid #fff; text-align:center;}
+table.bbsList tbody td.end {border-right:1px solid #fff; text-align:center;}
+table.bbsList tbody td a:hover {color:#2e6eb0;}
+table.bbsList tbody td img {vertical-align:middle; margin-bottom:2px;}
+table.bbsList tbody td.tit {padding-left:11px; text-align:left; font-weight:normal;}
+table.bbsList tbody td.tit a {}
+table.bbsList tbody td.tc {text-align:center;}
+table.bbsList tbody td.noContent {height:239px; padding:0; background:none; text-align:center; font-weight:bold;}
+table.bbsList tbody td span.bbsRe {}
+table.bbsList tbody td span.bbsNew img {vertical-align:bottom;}
+table.bbsList tbody td.titPhoto {padding:9px 10px 9px 11px; text-align:left; font-weight:normal;}
+table.bbsList tbody td.titPhoto .titPhotoImg {float:left; width:87px; height:57px; margin-right:10px;}
+table.bbsList tbody td.titPhoto .titPhotoTxtBox {float:left;}
+table.bbsList tbody td.titPhoto .titPhotoTxtBox .titPhotoTit {margin:6px 0 9px; font-weight:bold;}
+table.bbsList tbody td.titPhoto .titPhotoTxtBox .titPhotoTxt {}
+
+/* table View */
+table.bbsView {clear:both; width:684px; margin-top:50px;}
+table.bbsView tbody td {text-align:left; font-size:12px;}
+table.bbsView tbody td.bbsViewTit {background:url("../img/table/th_view.gif") 0 0 no-repeat; height:33px; padding:0 0 0 21px; font-weight:bold;}
+table.bbsView tbody td.stit {height:33px; padding-top:2px; border-bottom:1px solid #d6d6d6; text-align:right;}
+table.bbsView tbody td.stit table {width:290px; text-align:center;}
+table.bbsView tbody td.stit table.best {width:652px; text-align:center;}
+table.bbsView tbody td.date {width:94px; font-size:11px; text-align:center;}
+table.bbsView tbody td.date1 {width:147px; font-size:11px; text-align:center;}
+table.bbsView tbody td.read {width:61px; font-size:11px; text-align:center;}
+table.bbsView tbody td.num {width:61px; font-size:11px; text-align:center;}
+table.bbsView tbody td.name {width:123px; font-size:11px; text-align:left; padding-left:13px;}
+table.bbsView tbody td.bbsViewContent {height:246px; padding:30px 0px; border-bottom:1px solid #d6d6d6; text-align:left; line-height:18px; vertical-align:top;}
+table.bbsView tbody td.bbsViewContent2 {height:246px; padding:30px 0px; border-bottom:1px solid #d6d6d6; text-align:left; font-size: 14px; line-height:30px; vertical-align:top;  font-family: "돋움,Verdana, Geneva, Arial, Helvetica, sans-serif";}
+table.bbsView tbody td.bbsViewContent .txArea {padding: 0 24px 10px 24px;}
+table.bbsView tbody td.bbsViewFile {height:30px; padding-top:4px; border-bottom:1px solid #d6d6d6; text-align:left;}
+table.bbsView tbody td.bbsViewFile th {width:95px;}
+table.bbsView tbody td.bbsViewFile img {vertical-align:top; text-align:left;}
+table.bbsView tbody td.bbsViewFile table {width:682px;}
+table.bbsView tbody td.bbsViewFile table td.bbsViewFileTxt {font-size:11px;}
+table.bbsView tbody td a:hover {color:#2e6eb0;}
+table.bbsView tbody td img {vertical-align:middle; margin-bottom:2px;}
+table.bbsView tbody td.tit {padding-left:11px; text-align:left; font-weight:normal;}
+
+table.bbsViewList {width:684px; margin-top:20px; border:1px solid #d6d6d6; border-width:1px 0; text-align:left; }
+table.bbsViewList th {width:95px; height:28px;}
+table.bbsViewList td {font-size:12px;}
+
+
+
+table.bbsViewL {width:684px; margin-top:20px; border:0px; border-width:0px 0; text-align:left; }
+table.bbsViewL th {width:95px; height:26px;}
+table.bbsViewL td {font-size:13px;}
+
+
+
+table.bbsViewListTop {width:684px; border-bottom:1px solid #d6d6d6; border-width:1px 0; text-align:left; }
+table.bbsViewListTop th {width:95px; height:28px;}
+table.bbsViewListTop th.bt {border-top:1px solid #d6d6d6; border-width:1px 0;}
+table.bbsViewListTop td {font-size:12px;}
+table.bbsViewListTop td.bt {border-top:1px solid #d6d6d6; border-width:1px 0;}
+table.bbsViewListTop td.tr {font-size:11px; text-align:right; padding-right:10px;}
+
+/* bbs Write */
+table.bbsWrite {clear:both; width:684px; border-top:2px solid #83a738; margin-top:10px;}
+table.bbsWrite tbody th {width:150px; height:31px; padding:0; border-bottom:1px solid #d6d6d6; background:url("../img/table/th.gif") no-repeat; text-align:center; font-size:11px;}
+table.bbsWrite tbody td {height:31px; padding-left:10px; border-bottom:1px solid #d6d6d6; background:url("../img/table/td.gif") 0 100% no-repeat; text-align:center; font-size:12px;}
+table.bbsWrite tbody td {text-align:left; font-size:12px;}
+table.bbsWrite tbody td .exp {padding:5px 0 0 0;}
+table.bbsWrite tbody td input.txtType {width:598px;}
+table.bbsWrite tbody td input.txtType2 {width:254px; height:20px; padding-top:3px; padding-left:3px; color: #666; border: 1px solid #cdcdcd;}
+table.bbsWrite tbody td input.txtType3 {width:60px; height:20px; padding-top:3px; padding-left:3px; color: #2E6EB0; border: 1px solid #cdcdcd;}
+:root table.bbsWrite tbody td input.txtType2 {height:17px;}
+table.bbsWrite tbody td input.radioType {}
+table.bbsWrite tbody tr.bbsWriteContent th {height:330px; padding-top:10px; vertical-align:top;}
+table.bbsWrite tbody tr.bbsWriteContent td {height:330px; padding:5px 10px;}
+table.bbsWrite tbody tr.bbsWriteContent textarea.textarea {width:598px; height:320px;}
+table.bbsWrite tbody tr.bbsWriteContent2 textarea.textarea {width:598px;}
+table.bbsWrite tbody tr.bbsWriteContent2 th {padding-top:10px; vertical-align:top;}
+table.bbsWrite tbody tr.bbsWriteContent2 td {padding:5px 10px;}
+
+/* bbs btn */
+.bbsListBtn {position:relative; height:0; width:684px;}
+.bbsListBtn span {position:absolute; top:18px; right:0;  text-align:right;}
+.bbsViewBtn {position:relative; height:22px; margin-top:7px; text-align:right; width:684px;}
+.bbsWriteBtn {position:relative; height:22px; margin-top:27px; text-align:center; width:684px;}
+
+/* bbs paging */
+.paging {margin-top:23px; text-align:center; font-size:12px;}
+.paging span{ width:14px; padding-left:5px; background:url("../img/btn/paging_line.gif") 0 3px no-repeat; text-align:center; color:#777;}
+.paging span a, .paging span a:link, .paging span a:visited {color:#777;}
+.paging span.first {background:none;}
+.paging span.selected a, .paging span.selected a:link, .paging span.selected a:visited {width:10px; color:#2f6fb1; font-weight:bold;}
+.paging span.pagingFirst {width:12px; padding:0; background:none; font-size:12px;}
+.paging span.pagingPrev {width:12px; padding:0 6px 0 0; background:none; font-size:12px;}
+.paging span.pagingNext {width:12px; padding:0 0 0 11px; background:none; font-size:12px;}
+.paging span.pagingEnd {width:12px; padding:0; background:none; font-size:12px;}
+
+/* bbs searching */
+.bbsSearch {margin-top:39px; text-align:center; word-spacing: -4px;}
+.bbsSearch label {padding-right:11px;}
+.bbsSearch label input {border:0;}
+.bbsSearch input.txtType {width:150px; height:20px; margin-left:6px; padding:2px 3px 0 3px; vertical-align:middle;}
+.bbsSearch img {vertical-align:middle;}
+.bbsSearch .btn1 { padding-left:5px; }
+.bbsSearch .btn2 { padding-left:4px; }
+
+.bbsSearchMd {margin-top:25px; text-align:center; word-spacing: -4px;}
+.bbsSearchMd label {padding-right:11px;}
+.bbsSearchMd label input {border:0;}
+.bbsSearchMd input.txtType {width:150px; height:20px; margin-left:6px; padding:2px 3px 0 3px; vertical-align:middle;}
+.bbsSearchMd img {vertical-align:middle;}
+.bbsSearchMd .btn1 { padding-left:5px; }
+.bbsSearchMd .btn2 { padding-left:4px; }
+
+.bbsSearchTop {word-spacing: -4px; overflow: hidden;}
+.bbsSearchTop select {width:62px;}
+.bbsSearchTop input.txtType {width:150px; height: 15px; margin-left:1px; vertical-align:middle;}
+.bbsSearchTop img {vertical-align:middle;}
+.bbsSearchTop .btn1 { padding-left:5px; }
+.bbsSearchTop .btn2 { padding-left:4px; }
+
+/* searchBox*/
+.searchBox {margin:10px 0; padding:16px 30px; border:3px solid #ededed;}
+.searchBox .searchBoxTop {}
+.searchBox .searchBoxBottom { margin-top:-4px;}
+:root .searchBox .searchBoxBottom { margin-top:8px;}
+.searchBox .hr {margin:7px -10px 0px;}
+.searchBox .searchBoxCenter {width:410px; margin-left:105px;}
+.searchBox .searchBoxCenter .txtType {width:300px;}
+
+
+/* table 정의 */
+.type01 {border-top:2px solid #c7be8b; width:100%;}
+.type01 th {padding:7px 0 8px; background-color:#f2f0df; color:#797676; border:solid #e4e4e4; border-width:0 1px 1px 0; line-height:15px; }
+.type01 th.last, .type01 td.last {border-right:0; }
+.type01 td {height:18px; padding:6px 6px; border-bottom:solid #e4e4e4; }
+.type01 tbody td {border:solid #e4e4e4; border-width:0 1px 1px 0; line-height:18px; text-align:center; }
+
+.type01 td.tdl, .typeCtb td.tdl, .typeCtb th.tdl{ padding-left:10px; padding-right:10px; text-align:left }
+.typeCtb2 td.tdl, .typeCtb2 th.tdl{ padding-left:10px; padding-right:10px; text-align:left; border-right:1px;}
+.type01 td.tdl2, .typeCtb td.tdl2, .typeCtb th.tdl2 { padding-left:40px; padding-right:10px; text-align:left }
+.typeCtb2 td.tdl2, .typeCtb2 th.tdl2 { padding-left:40px; padding-right:10px; text-align:left ; border-right:1px;}
+.type01 tbody th.th02 { background-color:#f4f4f4; color:#00467f !important; font-weight:normal; }
+.type01 tbody th {color:#00467f; background:none; font-weight:normal;}
+
+
+/* table 정의 */
+.type02 {width:100%;border-top:2px solid #c7be8b; }
+.type02 th {padding:7px 0 8px; background-color:#f2f0df; color:#797676; border:solid #e4e4e4; border-width:0 1px 1px 0; line-height:13px; }
+.type02 th.last, .type02 td.last {border-left:1px; }
+.type02 td {height:18px; padding:6px 6px; border-bottom:solid #e4e4e4; }
+.type02 tbody td {border:solid #e4e4e4; border-width:0 1px 1px 0; line-height:18px; text-align:left; }
+
+.type02 td.tdl, .typeCtb td.tdl, .typeCtb th.tdl{ padding-left:10px; padding-right:10px; text-align:left }
+.type02 td.tdl2, .typeCtb td.tdl2, .typeCtb th.tdl2 { padding-left:40px; padding-right:10px; text-align:left }
+.type02 tbody th.th02 { background-color:#f4f4f4; color:#00467f !important; font-weight:normal; }
+.type02 tbody th {color:#00467f; background:none; font-weight:normal;}
+
+
+
+.typeCtb {width:100%; border-top:2px solid #c7be8b;}
+.typeCtb th {padding:7px 0 8px; background-color:#f2f0df; color:#797676; border:solid #e4e4e4; border-width:0 1px 1px 0; line-height:13px; font-weight:normal;}
+.typeCtb td {height:18px; padding:6px 10px; border-bottom:solid #e4e4e4;}
+.typeCtb tbody td {border:solid #e4e4e4; border-width:0 0 1px 0; line-height:16px; text-align:left}
+.typeCtb tbody td strong {color:#00467f;}
+
+
+.table2 {width:100%;border-top:2px solid #c7be8b;}
+.table2 th {background-color:#f2f0df; color:#797676; border-bottom:1px solid #ccc;border-rightt:1px solid #ccc;}
+.table2 td {height:18px;text-align:center; border-bottom:1px solid #ccc;border-right:1px solid #ccc;}
+.table2 tbody td {}
+.table2 td.bor {border-right:1px solid #ccc;}
+.table2 th.last {border-right:0px; }
+.table2 td.last {border-right:0px; }
+
+
+
+/*서브애니*/
+.main_text .text_img{position:absolute;}
+.main_text .text_img div{position:relative;}
+
+.main_text .text_img img{background:transparent;-ms-filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#00FFFFFF,endColorstr=#00FFFFFF);zoom:1; position:relative;}
+.main_text .text1{top:300px; left:0px;}
+.main_text .text2{
+	top:400px;
+	left:0px;
+}
+.main_text .text3{top:500px; left:0px;}
+.main_text .text4{top:600px; left:0px;}
+
+
+
+
+.btnArea {width:100%; overflow:hidden; padding-top:10px; text-align:right;}
+.btnArea.center {text-align:center;}
+
+
+/* buttons */
+.btn_board {display:inline-block; width:60px; height:29px; margin-left:-1px; padding:1px 4px 0 2px; text-align:center; vertical-align:middle; background:url('/new_home/images/common/btn_board.png') no-repeat 0 0; font-size:12px; color:#4a494a; line-height:23px;}
+.btn_board a:link {font-size:12px; color:#4a494a;}
+.btn_board a, .btn_board button, .btn_board input {display:inline-block; width:100%; height:27px; margin:0; border:0; background:transparent none; padding-bottom:3px; text-align:center;}

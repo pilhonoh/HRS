@@ -1,0 +1,61 @@
+/*리셋===================================================================*/
+* {
+	margin: 0;
+	padding: 0;
+}
+time {
+	display: inline;
+}
+/*기본 font 설정*/
+
+a {
+	text-decoration: none;
+	color: #565347;
+}
+a:hover {
+	text-decoration: none;
+}
+
+/*이미지 설정*/
+img {
+	border: 0;
+	vertical-align: top;
+}
+/*리스트 설정*/
+ul, ol {
+	list-style: none;
+}
+/*테이블 설정*/
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+/*테이블 설정*/
+.blind{
+    position:absolute;
+	left: -9999em;
+}
+/*기본 form 설정*/
+select, input, textarea {
+	font-family: 돋움, dotum, 굴림, gulim, sans-serif;
+	font-size: 12px;
+	text-align: left;
+	border: #CCC 1px solid;
+	padding: 3px 3px;
+}
+input[type="radio"] {
+	position: relative;
+	top: 2px;
+}
+input[type="checkbox"] {
+	position: relative;
+	top: 2px;
+}
+input[type="submit"] {
+	cursor: pointer;
+	border: 0;
+}
+button {
+	cursor: pointer;
+	border: 0;
+}

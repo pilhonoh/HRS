@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="COCOUsrMember">
+
+
+
+
+
+
+
+	<!-- 비밀번호 찾기 loginId 존재 조회 -->
+	<select id="selectIdCheck" parameterType="hashmap" resultType="int">
+		<![CDATA[
+			SELECT COUNT(USER_ID)
+			    FROM COCO_USR_M
+			WHERE  LOGIN_ID = #{loginId}
+			AND    USE_YN = 'Y'
+		]]>
+	</select>
+
+
+
+
+
+
+
+
+
+
+
+	<!-- 탈퇴 전 사용자 정보 조회 -->
+	<!-- 
+	<select id="selectUserDelete" parameterType="hashmap" resultType="kr.ac.skku.user.vo.COCOUsrUserVO">
+		<![CDATA[
+			SELECT A.USER_ID
+				  ,A.USER_NM_KO
+				  ,A.USER_NM_EN
+				  ,A.JUMIN_NO
+				  ,A.EMAIL
+				  ,A.CELL_PHONE_NO
+				  ,A.HOME_TEL_NO
+				  ,A.ZIP_CD
+				  ,A.ADDR
+				  ,A.LOGIN_ID
+				  ,CASE WHEN B.LOCK_TYPE != 'N' THEN B.LOCK_TYPE
+				  		ELSE NVL((SELECT DECODE(C.USR_DEF_CD1, '0', 'N', C.USR_DEF_CD1 ) FROM COCO_COMCD_D C WHERE C.GRP_CD='USER_SECURITY' AND C.COM_CD='LOC_CNT'),'N')
+				   END LOCK_TYPE
+				  ,B.UNLOCK_TYPE
+				  ,B.LOGIN_NOTI_TYPE
+				  ,NVL((SELECT C.USR_DEF_CD1 FROM COCO_COMCD_D C WHERE C.GRP_CD='USER_SECURITY' AND C.COM_CD='LOC'),'N') LOCK_USE_YN
+				  ,NVL((SELECT C.USR_DEF_CD1 FROM COCO_COMCD_D C WHERE C.GRP_CD='USER_SECURITY' AND C.COM_CD='NOT'),'N') LOGIN_NOTI_USE_YN
+			  FROM COCO_USR_M A
+			      ,COCO_USR_D B
+			 WHERE A.USER_ID=B.USER_ID(+)
+			   #if(${userId}.length() > 0 )
+			   AND A.USER_ID = #{userId}
+			   #end
+			   #if(${userNmKo}.length() > 0 )
+			   AND A.USER_NM_KO = #{userNmKo}
+			   #end
+			   #if(${juminNo}.length() > 0 && ${juminNo}.length() == 13 )
+			   AND A.JUMIN_NO = #{juminNo}
+			   #end		
+			   #if(${birthDt}.length() > 0 && ${birthDt}.length() == 6 )
+			   AND substr(A.JUMIN_NO,1,6) = #{birthDt}
+			   #end					    		   
+                  #if(${userPasswd}.length() > 0 )
+			   AND A.USER_PASSWD = xx1.enc_varchar2_ins(#{userPasswd} ,0,'PWD','COCO_USR_M#','USER_PASSWD')
+			   #end
+			   #if(${userYn}.length() > 0 )
+			   AND A.USE_YN = #{userYn}
+			   #end
+			   #if(${loginId}.length() > 0 )
+			   AND A.LOGIN_ID = #{loginId}
+			   #end
+			   #if(${userNmKo}.length() < 1 && ${userPasswd}.length() < 1 && ${loginId}.length() < 1)
+			   AND 1 = 2
+			   #end
+		]]>
+	</select>
+	-->
+
+
+	<!-- 탈퇴 전 사용자 userId 조회 -->
+	<select id="selectUserId" parameterType="hashmap" resultType="String">
+		<![CDATA[
+			SELECT USER_ID
+			    FROM COCO_USR_M
+			WHERE  USER_NM_KO = #{userNmKo}
+			AND    USER_PASSWD= xx1.enc_varchar2_ins(#{userPasswd},0,'PWD','COCO_USR_M#','USER_PASSWD')
+			AND    LOGIN_ID = #{loginId}
+			AND    USE_YN = 'Y'
+		]]>
+	</select>
+	
+
+	<!-- 사용자 삭제(탈퇴) -->
+	<update id="deleteUser" parameterType="hashmap">
+		<![CDATA[
+			UPDATE COCO_USR_M
+			SET	   USE_YN = 'N'
+			      ,UPD_DT = SYSDATE
+			      ,UPD_ID = #{userId}
+			WHERE  USER_ID = #{userId}
+			AND    (USER_NM_KO = #{userNmKo} OR USER_NM_EN = #{userNmKo})
+			AND    USER_PASSWD= xx1.enc_varchar2_ins(#{userPasswd},0,'PWD','COCO_USR_M#','USER_PASSWD')
+			AND    LOGIN_ID = #{loginId}
+		]]>
+	</update>
+
+</mapper>
