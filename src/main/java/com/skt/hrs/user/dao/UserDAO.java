@@ -13,10 +13,10 @@ import org.springframework.stereotype.Repository;
 
 
 
-@Repository("adminDAO")
-public class AdminDAO {
+@Repository("userDAO")
+public class UserDAO {
 
-	private static final Logger logger = LoggerFactory.getLogger(AdminDAO.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
 
 	@Resource(name="sqlSession")

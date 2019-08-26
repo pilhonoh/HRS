@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.skt.hrs.user.service.AdminService;
+import com.skt.hrs.user.service.UserService;
 
 
 
 
 @Controller
-public class AdminController {
+public class UserController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
-	AdminService adminService;
+	UserService userService;
 	
 	
 	

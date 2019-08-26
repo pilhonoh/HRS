@@ -9,19 +9,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.skt.hrs.user.dao.AdminDAO;
+import com.skt.hrs.user.dao.UserDAO;
 
 
 
 
 
-@Service("adminService")
-public class AdminService {
+@Service("userService")
+public class UserService {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@Resource(name="adminDAO")
-	private AdminDAO adminDAO;
+	@Resource(name="userDAO")
+	private UserDAO userDAO;
 
 	
 	
