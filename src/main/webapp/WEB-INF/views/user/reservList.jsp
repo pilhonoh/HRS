@@ -6,28 +6,13 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>SKT헬스케어예약시스템</title>
-		<!-- CSS -->
-		<link href="/resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
-		<link href="/resources/vendor/XEIcon/xeicon.css" rel="stylesheet">
-		<link href="/resources/css/animate.css" rel="stylesheet">
-		<link href="/resources/css/reset.css" rel="stylesheet">
-		<link href="/resources/css/common.css" rel="stylesheet">
-		<!-- SCRIPT -->
-		<script src="/resources/vendor/jquery/jquery-1.12.3.js"></script>
-		<script src="/resources/vendor/jquery-ui/jquery-ui.min.js"></script>
-		<script src="/resources/js/common.js"></script>
+		<jsp:include page="${JSP}/include/resource.jsp" />
 	</head>
-	<body>
-
+	<body>	
 		<div class="wrap">
 
-			<header class="header">
-				<!--#include file="../include/header.html"-->
-				<jsp:include page="../include/header.jsp" />
+			<header class="header">				
+				<jsp:include page="${JSP}/include/header.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
@@ -134,8 +119,8 @@
 				</table>
 
 				<div class="paging_area">
-					<a href="#none" class="first"><img src="/resources/images/common/btn_first.gif"></a>
-					<a href="#none" class="prev"><img src="/resources/images/common/btn_prev.gif"></a>
+					<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
+					<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
 					<a href="#none" class="num selected">1</a>
 					<a href="#none" class="num">2</a>
 					<a href="#none" class="num">3</a>
@@ -146,8 +131,8 @@
 					<a href="#none" class="num">8</a>
 					<a href="#none" class="num">9</a>
 					<a href="#none" class="num">10</a>
-					<a href="#none" class="next"><img src="/resources/images/common/btn_next.gif"></a>
-					<a href="#none" class="last"><img src="/resources/images/common/btn_last.gif"></a>
+					<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>
+					<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>
 				</div>
 
 				<!-- <br><br><br><br><br><br>
@@ -160,7 +145,7 @@
 
 			<footer class="footer">
 				<!--#include file="../include/footer.html"-->
-				<jsp:include page="../include/footer.jsp" />
+				<jsp:include page="${JSP}/include/footer.jsp" />
 			</footer><!-- //footer -->
 
 		</div><!-- //wrap -->
@@ -170,19 +155,19 @@
 			<div class="bg"></div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">
 				<!--#include file="../popup/pop_예약신청.html" -->
-				<jsp:include page="../popup/pop_reservApply.jsp" />
+				<jsp:include page="${JSP}/popup/pop_reservApply.jsp" />
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">
 				<!--#include file="../popup/pop_대기신청.html" -->
-				<jsp:include page="../popup/pop_waitingApply.jsp" />	
+				<jsp:include page="${JSP}/popup/pop_waitingApply.jsp" />	
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">
 				<!--#include file="../popup/pop_예약대기취소.html" -->
-				<jsp:include page="../popup/pop_reservWaitingCancel.jsp" />
+				<jsp:include page="${JSP}/popup/pop_reservWaitingCancel.jsp" />
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
 				<!--#include file="../popup/pop_시작확인.html" -->
-				<jsp:include page="../popup/pop_startConfirm.jsp" />	
+				<jsp:include page="${JSP}/popup/pop_startConfirm.jsp" />	
 			</div>
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
