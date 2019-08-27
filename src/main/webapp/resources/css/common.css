@@ -1,0 +1,691 @@
+﻿@charset "utf-8";
+/* *******************************************************
+ * filename : common.css
+ * description : 공통디자인 CSS
+ * date : 2019-00-00
+******************************************************** */
+
+.header {
+	background:#33305e;
+}
+.header .inner {
+	width:1200px;
+	height:80px;
+	margin:0 auto;
+	position:relative;
+	background:url('../images/common/header_bg.png') no-repeat 50%;
+}
+.logo { 
+	width:190px;
+	height:44px;
+	background:url('../images/common/logo.png') no-repeat 50%;
+	position:absolute;
+	top:50%;
+	left:0;
+	margin-top:-22px;
+	text-indent:-9999px;
+}
+.user-desc {
+	font-size:22px;
+	color:#c7d7e4;
+	position:absolute;
+	right:0;
+	bottom:15px;
+}
+.user-desc strong {
+	display:inline-block;
+	font-size:22px;
+	font-weight:bold;
+	color:#fff;
+	background:url('../images/common/top_user_icons.png') no-repeat 0 0;
+	padding-left:25px;
+}
+.user-desc span {
+	font-size:22px;
+	font-weight:bold;
+	color:#49e38b;
+}
+
+.gnb-menu { 
+	position:absolute;
+	bottom:15px;
+	left:300px;
+}
+.gnb-menu li { 
+	float:left;
+	padding:0 20px;
+}
+.gnb-menu li a { 
+	font-size:18px;
+	font-weight:bold;
+	color:#bdbcd4;
+}
+.gnb-menu li.selected a,
+.gnb-menu li a:hover {
+	color:#fff;
+}
+
+.footer {
+	padding:20px;
+	border-top:1px solid #ddd;
+	text-align:center;
+	color:#999;
+	font-size:12px;
+}
+
+.content { 
+	width:1200px;
+	margin:0 auto;
+	box-sizing:border-box;
+	min-height:700px;
+	padding:30px 0;
+}
+
+/* 서브 */
+.tit-area { 
+	padding-bottom:10px;
+	border-bottom:1px solid #ddd;
+	margin-bottom:20px;
+}
+.tit-area h2 {
+	font-size:28px;
+	font-weight:bold;
+	color:#444;
+}
+
+/* 검색폼 */
+.stit {
+	display: inline-block;
+	height: 28px;
+	line-height: 28px;
+	font-size: 13px;
+	font-weight: bold;
+	color: #444;
+	padding-left: 12px;
+	vertical-align: middle;
+	position:relative;
+}
+.stit:before {
+	content: '';
+	width: 3px;
+	height: 3px;
+	position:absolute;
+	left:0;
+	top:50%;   
+	margin-top:-1px;
+	background-color: #666;
+}
+.search_field_wrap {
+	display: table;
+	width: 100%;
+	padding: 10px 0;
+	border-top: 1px solid #d7d7d7;
+	border-bottom: 1px solid #d7d7d7;
+	background-color: #f3f3f3;
+	box-sizing: border-box;
+	margin:20px 0;
+}
+.search_field_area {
+	display: table-cell;
+	vertical-align: middle;
+}
+.search_field { 
+	table-layout:fixed;
+	width:100%;
+	word-break: break-all;
+	/* border-collapse:inherit; */
+}
+.search_field tbody th {
+	text-align: left;
+}
+.search_field tbody th,
+.search_field tbody td {
+	padding: 4px 0 4px 15px;
+	box-sizing: border-box;
+}
+.search_btn_area {
+	display: table-cell;
+	width: 120px;
+	border-left: 1px solid #ddd;
+	font-size: 13px;
+	color: #555;
+	font-weight: bold;
+	vertical-align: middle;
+	text-align:center;
+}
+.search_btn {
+	height:30px;
+	padding:0 15px;
+	color: #fff;
+	font-size: 13px;
+	background: #94979c;
+	border-radius: 3px;
+	box-sizing: border-box;
+}
+.search_btn:hover {
+	background: #888b90;
+}
+.search_btn i { 
+	font-size:14px; 
+	vertical-align:-1px; 
+	margin-right:8px; 
+	color:#fff;
+}
+input.datepicker { 
+	width:80px;
+	text-align:center;
+	border-right:0;
+	padding:0;
+}
+button.ui-datepicker-trigger { 
+	height:28px;	
+	background:#fff;
+	vertical-align:middle;
+	padding:0 4px;
+	border:1px solid #ddd;
+	border-left:0;
+}
+.fromto {
+	display:inline-block;
+	line-height:28px;
+	padding:0 5px;
+	vertical-align:middle;
+}
+.ui-datepicker .ui-datepicker-prev, 
+.ui-datepicker .ui-datepicker-next { 
+	top:5px;
+}
+
+/* 테이블 스타일 */
+.tbl-style {
+	table-layout:fixed;
+	width:100%;
+	border-top: 2px solid #222;	
+	word-break: break-all;
+	border-collapse:inherit;
+}
+.tbl-style thead th { 
+	height:32px;
+}
+.tbl-style th {
+	height:28px;
+	font-size:13px;
+	color:#222;
+	font-weight:bold;
+	background:#f7f8f9;
+	border-left:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	text-align:center;
+}
+.tbl-style tbody th { 
+	text-align:left;
+	padding:3px 10px;
+}
+.tbl-style td {
+	height:28px;
+	font-size:13px;
+	color:#666;
+	padding:3px 10px;
+	border-left:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	background:#fff;
+}
+.tbl-style th:first-child,
+.tbl-style td:first-child {
+	border-left:0;
+}
+
+
+.t-btn {
+	height:28px;
+	font-size:13px;
+	color:#fff;
+	padding:0 15px;
+	border-radius:3px;
+	background:#33305e;
+}
+.t-btn.cr01 { 
+	background:#f59405;
+}
+
+
+/* 페이징 */
+.paging_area { 
+	padding:15px 0;
+	text-align:center; 
+	position:relative;
+}
+.paging_area img {
+	vertical-align:middle;
+}
+.paging_area a { 
+	display:inline-block; 
+	height:26px; 
+	line-height:26px; 
+	font-size:13px; 
+	color:#999; 
+	text-decoration:none; 
+	vertical-align:middle;
+}
+.paging_area a.selected { 
+	color:#575091; 
+	font-weight:bold;
+}
+.paging_area a:hover { 
+	color:#575091; 
+}
+.paging_area .num{ 
+	padding:0 10px;
+}
+
+
+/* layer popup */
+.layer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+.layer .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	background-color: rgba( 0, 0, 0, 0.7 );
+}
+.pop-layer {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+	-webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+	box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+}
+.pop-layer.size1 {
+	width:500px;
+}
+.pop-layer.size2 {
+	width:900px;
+}
+.pop-head { 
+	overflow:hidden;
+	height:50px;
+	position:relative;
+	padding:0 20px;
+	background:#33305e;
+}
+.pop-head h2 { 
+	line-height:50px;
+	font-size:17px;
+	color:#fff;
+	font-weight:700;
+}
+.pop-head .close { 
+	width:15px; 
+	height:15px; 
+	background:url('../images/common/pop_close.png') no-repeat 50%;  
+	outline:none; 
+	position:absolute;
+	top:50%;
+	right:20px; 
+	margin-top:-8px; 
+	transition:all .4s;
+	text-indent:-9999px;
+}
+.pop-head .close:hover { 
+	transform:rotate(180deg);
+}
+.pop-container {
+	max-height: 500px;
+	overflow: hidden;
+	overflow-y: auto; 
+	padding:20px;
+	box-sizing:border-box;
+	background:#fff;
+	word-break: break-all;
+}
+
+.pop-desc {
+	border:1px dashed #ddd;
+	background:#f9f9f9;
+	font-size:15px;
+	color:#33305e;
+	font-weight:bold;
+	padding:20px 0;
+	text-align:center;
+	margin-top:20px;
+}
+
+.pop-btn-area {
+	text-align:center;
+	padding:20px 0 0;
+}
+.pop-btn { 
+	height: 30px;
+    font-size: 13px;
+    color: #fff;
+    padding: 0 20px;
+    border-radius: 3px;
+    background: #33305e;
+}
+.pop-btn.gray { 
+	background: #999;
+}
+
+
+/* 예약확인 */
+/* .month-select {
+	border:1px solid #c9c9c9;
+	padding:20px 0;
+	text-align:center;
+}
+.month-select button { 
+	height:30px;
+	width:30px;
+	vertical-align:middle;
+}
+.month-select button i {
+	color:#f58026;
+	font-size:26px;
+	vertical-align:middle;
+}
+.month-select span  { 
+	display:inline-block;	
+	vertical-align:middle;
+	font-weight:bold;
+	margin:0 10px;
+}
+.month-select span strong {
+	display:inline-block;	
+	font-size:20px;
+	color:#333;
+	font-weight:bold;	
+	line-height:30px;
+	vertical-align:middle;
+}
+.month-select span i {
+	color:#f58026;
+	font-size:24px;
+	vertical-align:middle;
+	line-height:30px;
+	margin-right:5px;
+} */
+
+.month-area { 
+	display:table;
+	width:100%;
+	table-layout:fixed;
+	border:1px solid #c9c9c9;
+	margin-bottom:50px;
+}
+.month-area .month-btn { 
+	display:table-cell;
+	width:95px;
+	vertical-align:middle;
+	text-align:center;
+}
+.month-area .month-btn button { 
+	width:100%;
+	height:95px;
+}
+.month-area .month-btn i {
+	font-size:30px;
+	color:#f58026;
+}
+.month-area .calendar-area { 
+	display:table-cell;
+	vertical-align:middle;
+	text-align:center;
+	border-left:1px solid #c9c9c9;
+	border-right:1px solid #c9c9c9;
+	padding:0 40px;
+}
+
+
+.month-calendar {
+	width:100%;
+	table-layout:fixed;
+}
+.month-calendar td {
+	text-align:center;
+	padding:20px 0;
+}
+.cal-day em {	
+	display:block;
+	font-size:13px;
+	color:#999;
+	margin-bottom:10px;
+}
+.cal-day span {	
+	display:inline-block;
+	width:35px;
+	height:35px;
+	line-height:35px;
+	text-align:center;
+	border-radius:100%;
+	font-size:18px;
+	color:#333;
+	background:#fff;
+	cursor:pointer;
+}
+.cal-day.off span {
+	color:#999;
+}
+.cal-day.sat em,
+.cal-day.sat span,
+.cal-day.sun em,
+.cal-day.sun span {
+	color:#f1b7bf;
+	cursor:auto;
+}
+.cal-day.today span { 
+	background:#2bc56d;
+	font-weight:bold;
+	color:#fff;
+}
+
+.cal-day.month em { 
+	color:#333;
+	font-size:16px;
+	font-weight:900;
+}
+.cal-day.month span {
+	color:#333;
+	font-size:35px;
+	font-weight:900;
+	width:auto;
+	cursor:auto;
+}
+
+
+.sub-tit {
+	overflow:hidden;
+}
+.sub-tit h3 {
+	line-height:34px;
+	font-size:18px;
+	font-weight:bold;
+	color:#333;
+	float:left;
+}
+.sub-tit .f-right {
+	float:right;
+}
+
+.select-design span {
+	display:inline-block;
+	line-height:34px;
+	font-size:16px;
+	color:#666;
+	margin-right:5px;
+	vertical-align:middle;
+}
+.select-design select {
+	height:34px;
+	width:180px;
+	font-size:16px;
+	color:#fff;
+	background:#2bc56d;
+	border:0;
+	padding:2px 10px;
+	vertical-align:middle;
+}
+.select-design select::-ms-expand {
+    display: none;
+}
+
+.reservation-table { 
+	table-layout:fixed;
+	width:100%;
+	border-top: 2px solid #959a9d;	
+	margin-top:10px;
+}
+.reservation-table thead th {
+	height:55px;
+	font-size:15px;
+	color:#666;
+	border-left:1px solid #ebebeb;
+	border-bottom:2px solid #959a9d;
+}
+.reservation-table thead th:first-child {
+	border-left:0;
+	border-right:1px solid #a1a1a1;
+}
+.reservation-table tbody th { 
+	font-size:18px;
+	color:#333;
+	border-right:1px solid #a1a1a1;
+	border-bottom:1px solid #a1a1a1;
+}
+.reservation-table tbody td { 
+	height:95px;
+	font-size:18px;
+	color:#333;
+	border-left:1px solid #ebebeb;
+	border-bottom:1px solid #a1a1a1;
+}
+.reservation-table tbody tr:nth-child(even) { 
+	background:#fbfbfb;
+}
+
+.rv-box {
+	height:85px;
+	position:relative;
+	padding-top:10px;
+}
+.rv-box .name {
+	width:100%;
+	height:30px;
+	border-radius:30px;
+	padding-left:12px;
+	box-sizing:border-box;
+}
+.rv-box .name strong {
+	display:inline-block;
+	line-height:30px;
+	font-size:16px;
+	font-weight:bold;
+}
+.rv-box.man { 
+	background:#f7fbff;
+}
+.rv-box.man .name {
+	background:#e1eaf5;
+}
+.rv-box.man .name strong { 
+	background:url('../images/common/rv_m_icon.png') no-repeat 0 50%;  
+	padding-left:18px;
+	color:#1f3048;
+}
+.rv-box.woman {
+	background:#fff8f9;
+}
+.rv-box.woman .name {
+	background:#f8e2e6;
+}
+.rv-box.woman .name strong { 
+	background:url('../images/common/rv_w_icon.png') no-repeat 0 50%;  
+	padding-left:18px;
+	color:#562938;
+}
+.rv-btn-area {
+	overflow:hidden;
+}
+.rv-btn-area li {
+	float:left;
+	height:55px;
+	box-sizing:border-box;
+	padding:10px;
+	border-left:1px solid #ebebeb;
+}
+.rv-box.colspan1 .rv-btn-area li { width:100%; }
+.rv-box.colspan2 .rv-btn-area li { width:50%; }
+.rv-box.colspan3 .rv-btn-area li { width:33.33%; }
+.rv-box.colspan4 .rv-btn-area li { width:25%; }
+.rv-box.colspan5 .rv-btn-area li  { width:20%; }
+.rv-box.colspan6 .rv-btn-area li { width:16.66%; }
+.rv-box.colspan7 .rv-btn-area li { width:14.28%; }
+.rv-box.colspan8 .rv-btn-area li  { width:12.5%; }
+.rv-box.colspan9 .rv-btn-area li { width:11.11%; }
+
+.rv-btn-area li .rv-btn { 
+	width:100%;
+	height:35px;
+	border:2px solid #b5b5b5;
+	font-size:15px;
+	font-weight:bold;
+	color:#b5b5b5;
+	border-radius:8px;
+	background:#fff;
+}
+.rv-btn-area li .rv-btn:hover {
+	background:#f9f9f9;
+}
+.rv-btn-area li .rv-btn.st1 { 
+	border-color:#2bc56d;
+	color:#2bc56d;
+}
+.rv-btn-area li .rv-btn.st2 { 
+	border-color:#615e9b;
+	color:#615e9b;
+}
+.rv-btn-area li .rv-btn.st3 { 
+	border-color:#f58026;
+	color:#f58026;
+}
+.rv-btn-area li .rv-btn.st4 { 
+	border-color:#b97474;
+	color:#b97474;
+}
+.rv-btn-area li .rv-btn[disabled] { 
+	cursor:not-allowed;
+	background:#fff;
+}
+
+.rv-desc-list {
+	border:2px solid #e6e6e6;
+	border-radius:10px;
+	padding:10px 0 10px 150px;
+	background:url('../images/common/btm_info_img.png') no-repeat 20px 100%;  
+	min-height:120px;
+	box-sizing:border-box;
+	margin-top:20px;
+}
+.rv-desc-list ul li {
+	line-height:21px;
+	font-size:13px;
+	color:#676b77;
+	background:url('../images/common/list-bult_icon.png') no-repeat 0 50%;  
+	padding-left:12px;
+	margin:5px 0;
+}
+.rv-desc-list ul li strong {
+	font-weight:bold;
+	color:#534f8f;
+}
