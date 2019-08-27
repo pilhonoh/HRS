@@ -27,10 +27,10 @@ import com.skt.hrs.user.service.UserService;
 /**
  * 
  * @FileName  : UserController.java
- * @ÇÁ·Î±×·¥ ¼³¸í   : Çï½ºÄÉ¾î ¿¹¾à ½Ã½ºÅÛ »ç¿ëÀÚ È­¸é  ÄÁÆ®·Ñ·¯
+ * @í”„ë¡œê·¸ë¨ ì„¤ëª…   : í—¬ìŠ¤ì¼€ì–´ ì˜ˆì•½ ì‹œìŠ¤í…œ ì‚¬ìš©ì í™”ë©´  ì»¨íŠ¸ë¡¤ëŸ¬
  * @Date      : 2019. 8. 27. 
- * @ÀÛ¼ºÀÚ      : 
- * @º¯°æÀÌ·Â    :
+ * @ì‘ì„±ì      : 
+ * @ë³€ê²½ì´ë ¥    :
  */
 @Controller
 @RequestMapping(value = "/user")
@@ -45,10 +45,10 @@ public class UserController {
 	/**
 	 * 
 	 * @Method Name : reservStatusView
-	 * @Method ¼³¸í      : »ç¿ëÀÚ ¿¹¾à ÇöÈ² view
-	 * @ÀÛ¼ºÀÏ        : 2019. 8. 27. 
-	 * @ÀÛ¼ºÀÚ        : 
-	 * @º¯°æÀÌ·Â      :
+	 * @Method ì„¤ëª…      : ì‚¬ìš©ì ì˜ˆì•½ í˜„í™© view
+	 * @ì‘ì„±ì¼        : 2019. 8. 27. 
+	 * @ì‘ì„±ì        : 
+	 * @ë³€ê²½ì´ë ¥      :
 	 * @param req
 	 * @return ModelAndView
 	 */
@@ -66,10 +66,10 @@ public class UserController {
 	/**
 	 * 
 	 * @Method Name : reservListView
-	 * @Method ¼³¸í      : »ç¿ëÀÚ ¿¹¾à ¸®½ºÆ® view
-	 * @ÀÛ¼ºÀÏ        : 2019. 8. 27. 
-	 * @ÀÛ¼ºÀÚ        : 
-	 * @º¯°æÀÌ·Â      :
+	 * @Method ì„¤ëª…      : ì‚¬ìš©ì ì˜ˆì•½ ë¦¬ìŠ¤íŠ¸ view
+	 * @ì‘ì„±ì¼        : 2019. 8. 27. 
+	 * @ì‘ì„±ì        : 
+	 * @ë³€ê²½ì´ë ¥      :
 	 * @param req
 	 * @return ModelAndView
 	 */
