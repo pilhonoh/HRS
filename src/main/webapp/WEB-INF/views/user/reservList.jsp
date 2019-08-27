@@ -27,6 +27,7 @@
 
 			<header class="header">
 				<!--#include file="../include/header.html"-->
+				<jsp:include page="../include/header.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
@@ -159,6 +160,7 @@
 
 			<footer class="footer">
 				<!--#include file="../include/footer.html"-->
+				<jsp:include page="../include/footer.jsp" />
 			</footer><!-- //footer -->
 
 		</div><!-- //wrap -->
