@@ -11,15 +11,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>SKT헬스케어예약시스템</title>
 		<!-- CSS -->
-		<link href="../../resource/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
-		<link href="../../resource/vendor/XEIcon/xeicon.css" rel="stylesheet">
-		<link href="../../resource/css/animate.css" rel="stylesheet">
-		<link href="../../resource/css/reset.css" rel="stylesheet">
-		<link href="../../resource/css/common.css" rel="stylesheet">
+		<link href="/resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+		<link href="/resources/vendor/XEIcon/xeicon.css" rel="stylesheet">
+		<link href="/resources/css/animate.css" rel="stylesheet">
+		<link href="/resources/css/reset.css" rel="stylesheet">
+		<link href="/resources/css/common.css" rel="stylesheet">
 		<!-- SCRIPT -->
-		<script src="../../resource/vendor/jquery/jquery-1.12.3.js"></script>
-		<script src="../../resource/vendor/jquery-ui/jquery-ui.min.js"></script>
-		<script src="../../resource/js/common.js"></script>
+		<script src="/resources/vendor/jquery/jquery-1.12.3.js"></script>
+		<script src="/resources/vendor/jquery-ui/jquery-ui.min.js"></script>
+		<script src="/resources/js/common.js"></script>
 	</head>
 	<body>
 
