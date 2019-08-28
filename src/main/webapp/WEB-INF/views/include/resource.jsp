@@ -15,4 +15,4 @@
 <!-- SCRIPT -->
 <script src="${LIB}/jquery/jquery-1.12.3.js"></script>
 <script src="${LIB}/jquery-ui/jquery-ui.min.js"></script>
-<script src="${JS}/common.js"></script>
+<script src="${JS}/cmmn/common.js"></script>

@@ -1,13 +1,13 @@
 $(function(){				
 
 	//include header
-	$('.header').load("../include/header.html", function(){
-	});
+//	$('.header').load("../include/header.html", function(){
+//	});
 
 	// 달력UI
 	$(".datepicker").datepicker({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-		buttonImage: "../../resource/images/common/ico_date.png", // 버튼 이미지.
+		buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
 		dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 		changeMonth: true ,
 		changeYear: true,
@@ -24,8 +24,8 @@ $(function(){
 	});	
 
 	//include header
-	$('.footer').load("../include/footer.html", function(){
-	});
+//	$('.footer').load("../include/footer.html", function(){
+//	});
 
 });
 
@@ -185,3 +185,57 @@ function e_layer_pop04(id) {
 		});
 	});
 };
+
+/**
+ * 공통코드 select options 로드
+ * @returns
+ */
+function loadCodeSelect(cb){
+	$('select[data-code-tyl]').each(function(idx, select){
+		var tyl = $(select).data('code-tyl');	//코드타입(대)
+		var tys = $(select).data('code-tys');	//코드타입(소)
+		
+		console.log(tyl, tys)
+		$.ajax({
+			url: ROOT + '/cmmn/codeList',
+			data: {codeTyl: tyl, codeTys: tys || ''},
+			success : function(res){
+				console.log('codeList',res);				
+				if(res.status === 200){
+					var options = res.list.map( function(data){
+						return $('<option>').val(data.CODE).text(data.CODE_NM);
+					})
+					$(select).append(options);
+					
+					if(cb) cb();	//콜백이 있다면 실행
+				}
+				
+			},
+			error : function(err) {
+				console.error(err)
+			}
+		})
+	})
+}
+
+function getAfter2Weeks(fromDate) {
+	
+	var startDt = moment(fromDate) || moment();
+	var endDt = startDt.clone().add(2, 'w');
+	var dates = [];	
+	while(!startDt.isSame(endDt)){
+		var d = {
+			date: startDt.toDate(),
+			year: startDt.year(),
+			month: startDt.month()+1,
+			day: startDt.date(),
+			weekday: startDt.isoWeekday(),
+			weekdayName: startDt.format('ddd').toUpperCase()
+		}
+		
+		dates.push(d);
+		startDt = startDt.add(1, 'days');
+	}	
+	
+	return dates;
+}

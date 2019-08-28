@@ -7,3 +7,7 @@
 <c:set var="LIB" value="${RESOURCE}/vendor" />
 <c:set var="IMG" value="${RESOURCE}/images" />
 <c:set var="JSP" value="/WEB-INF/views" />
+<script>
+	var ROOT = '${ROOT}';
+	var IMG = '${IMG}';
+</script>

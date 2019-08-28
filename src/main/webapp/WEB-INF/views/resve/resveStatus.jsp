@@ -6,28 +6,16 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>SKT헬스케어예약시스템</title>
-		<!-- CSS -->
-		<link href="/resources/vendor/jquery-ui/jquery-ui.min.css" rel="stylesheet">
-		<link href="/resources/vendor/XEIcon/xeicon.css" rel="stylesheet">
-		<link href="/resources/css/animate.css" rel="stylesheet">
-		<link href="/resources/css/reset.css" rel="stylesheet">
-		<link href="/resources/css/common.css" rel="stylesheet">
-		<!-- SCRIPT -->
-		<script src="/resources/vendor/jquery/jquery-1.12.3.js"></script>
-		<script src="/resources/vendor/jquery-ui/jquery-ui.min.js"></script>
-		<script src="/resources/js/common.js"></script>
+		<jsp:include page="${JSP}/include/resource.jsp" />
+		<script src="${LIB}/moment/moment.min.js"></script>		
+		<script src="${JS}/resve/resveStatus.js"></script>
 	</head>
 	<body>
 
 		<div class="wrap">
 
 			<header class="header">
-				<!--#include file="../include/header.html"-->
-				<jsp:include page="../include/header.jsp" />
+				<jsp:include page="${JSP}/include/header.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
@@ -45,7 +33,7 @@
 							<tbody>
 								<tr>						
 									
-									<td><div class="cal-day"><em>MON</em><span>19</span></div></td>
+									<!-- <td><div class="cal-day"><em>MON</em><span>19</span></div></td>
 									<td><div class="cal-day"><em>THE</em><span>20</span></div></td>
 									<td><div class="cal-day"><em>WED</em><span>21</span></div></td>
 									<td><div class="cal-day"><em>THU</em><span>22</span></div></td>
@@ -61,7 +49,7 @@
 									<td><div class="cal-day sat"><em>SAT</em><span>31</span></div></td>
 
 									<td><div class="cal-day month"><em>2019</em><span>09</span></div></td>
-									<td><div class="cal-day sat"><em>SUN</em><span>01</span></div></td>
+									<td><div class="cal-day sat"><em>SUN</em><span>01</span></div></td> -->
 								</tr>
 							</tbody>
 						</table>
@@ -70,64 +58,13 @@
 						<button class="next"><i class="xi-angle-right-min"></i></button>
 					</div>
 				</div>
-
-				<!-- <div class="month-select">
-					<button class="pre"><i class="xi-angle-left-min"></i></button>
-					<span><i class="xi-calendar-check"></i><strong>2019.08</strong></span>
-					<button class="next"><i class="xi-angle-right-min"></i></button>
-				</div>
 				
-				<table class="month-calendar">
-					<tbody>
-						<tr>
-							<td><div class="cal-day off"><em>THU</em><span>01</span></div></td>
-							<td><div class="cal-day off"><em>FRI</em><span>02</span></div></td>
-							<td><div class="cal-day sat off"><em>SAT</em><span>03</span></div></td>
-							<td><div class="cal-day sun off"><em>SUN</em><span>04</span></div></td>
-				
-							<td><div class="cal-day off"><em>MON</em><span>05</span></div></td>
-							<td><div class="cal-day off"><em>THE</em><span>06</span></div></td>
-							<td><div class="cal-day off"><em>WED</em><span>07</span></div></td>
-							<td><div class="cal-day off"><em>THU</em><span>08</span></div></td>
-							<td><div class="cal-day off"><em>FRI</em><span>09</span></div></td>
-							<td><div class="cal-day sat off"><em>SAT</em><span>10</span></div></td>
-							<td><div class="cal-day sun off"><em>SUN</em><span>11</span></div></td>
-				
-							<td><div class="cal-day off"><em>MON</em><span>12</span></div></td>
-							<td><div class="cal-day off"><em>THE</em><span>13</span></div></td>
-							<td><div class="cal-day off"><em>WED</em><span>14</span></div></td>
-							<td><div class="cal-day off"><em>THU</em><span>15</span></div></td>
-							<td><div class="cal-day off"><em>FRI</em><span>16</span></div></td>
-							<td><div class="cal-day sat off"><em>SAT</em><span>17</span></div></td>
-							<td><div class="cal-day sun off"><em>SUN</em><span>18</span></div></td>
-				
-							<td><div class="cal-day off"><em>MON</em><span>19</span></div></td>
-							<td><div class="cal-day off"><em>THE</em><span>20</span></div></td>
-							<td><div class="cal-day off"><em>WED</em><span>21</span></div></td>
-							<td><div class="cal-day today"><em>THU</em><span>22</span></div></td>
-							<td><div class="cal-day"><em>FRI</em><span>23</span></div></td>
-							<td><div class="cal-day sat"><em>SAT</em><span>24</span></div></td>
-							<td><div class="cal-day sun"><em>SUN</em><span>25</span></div></td>
-				
-							<td><div class="cal-day"><em>MON</em><span>26</span></div></td>
-							<td><div class="cal-day"><em>THE</em><span>27</span></div></td>
-							<td><div class="cal-day"><em>WED</em><span>28</span></div></td>
-							<td><div class="cal-day"><em>THU</em><span>29</span></div></td>
-							<td><div class="cal-day"><em>FRI</em><span>30</span></div></td>
-							<td><div class="cal-day sat"><em>SAT</em><span>31</span></div></td>
-						</tr>
-					</tbody>
-				</table> -->
 
 				<div class="sub-tit">
 					<h3>2019년 8월 26일(월) 예약 : T타워</h3>
 					<div class="f-right select-design">
 						<span>사옥선택 :</span>
-						<select>
-							<option>T타워</option>
-							<option>T타워</option>
-							<option>T타워</option>
-						</select>
+						<select data-code-tyl="BLD"></select>
 					</div>
 				</div>
 
@@ -367,8 +304,7 @@
 				
 			</div><!-- //content -->
 
-			<footer class="footer">
-				<!--#include file="../include/footer.html"-->
+			<footer class="footer">				
 				<jsp:include page="../include/footer.jsp" />
 			</footer><!-- //footer -->
 
@@ -398,4 +334,7 @@
 		<!-- 레이어팝업 : E -->
 
 	</body>
+	
+	
+	
 </html>
