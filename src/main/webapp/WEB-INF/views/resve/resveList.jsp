@@ -7,6 +7,8 @@
 <html lang="ko">
 	<head>
 		<jsp:include page="${JSP}/include/resource.jsp" />
+		<script src="${LIB}/moment/moment.min.js"></script>	
+		<script src="${JS}/resve/resveList.js"></script>
 	</head>
 	<body>	
 		<div class="wrap">
@@ -34,18 +36,13 @@
 								<tr>
 									<th><strong class="stit">기간</strong></th>
 									<td>
-										<input type="text" class="datepicker">
+										<input type="text" class="datepicker" id="from_date">
 										<em class="fromto"> ~ </em>
-										<input type="text" class="datepicker">
+										<input type="text" class="datepicker" id="to_date">
 									</td>
 									<th><strong class="stit">상태</strong></th>
 									<td>
-										<select>
-											<option>예약완료</option>
-											<option>예약대기</option>
-											<option>예약취소</option>
-											<option>대기취소</option>
-											<option>케어 완료</option>
+										<select data-code-tyl="STS" data-empty-str="전체" id="stsCombo">
 										</select>
 									</td>
 								</tr>
@@ -80,7 +77,8 @@
 							<th>비고</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="resvelist">
+						<!-- 
 						<tr>
 							<td>2019-08-19</td>
 							<td>10:00 ~ 11:00</td>
@@ -115,12 +113,14 @@
 							<td>예약 완료</td>
 							<td></td>
 						</tr>
+						-->
 					</tbody>
 				</table>
 
 				<div class="paging_area">
 					<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
 					<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
+					<!-- 
 					<a href="#none" class="num selected">1</a>
 					<a href="#none" class="num">2</a>
 					<a href="#none" class="num">3</a>
@@ -131,6 +131,7 @@
 					<a href="#none" class="num">8</a>
 					<a href="#none" class="num">9</a>
 					<a href="#none" class="num">10</a>
+					-->
 					<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>
 					<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>
 				</div>
