@@ -525,8 +525,7 @@ function loadCodeSelect(cb){
 	$('select[data-code-tyl]').each(function(idx, select){
 		var tyl = $(select).data('code-tyl');	//코드타입(대)
 		var tys = $(select).data('code-tys');	//코드타입(소)
-		
-		console.log(tyl, tys)
+		var empStr = $(select).data('empty-str');
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
@@ -536,6 +535,9 @@ function loadCodeSelect(cb){
 					var options = res.list.map( function(data){
 						return $('<option>').val(data.CODE).text(data.CODE_NM);
 					})
+					if(empStr){
+						$(select).append($('<option>').val("").text(empStr));
+					}
 					$(select).append(options);
 					
 					if(cb) cb();	//콜백이 있다면 실행
