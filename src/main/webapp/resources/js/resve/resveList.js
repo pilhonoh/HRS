@@ -6,7 +6,7 @@ var resveList = {
 	init: function() {
 		loadCodeSelect(); //공통코드 로드
 		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		resveList.list.selectResveList(); //기본 목록 조회
+		resveList.list.renderResveList(); //기본 목록 조회 후 렌더
 	},
 	
 	

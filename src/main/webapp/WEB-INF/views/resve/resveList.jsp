@@ -42,7 +42,7 @@
 									</td>
 									<th><strong class="stit">상태</strong></th>
 									<td>
-										<select data-code-tyl="STS" data-empty-str="전체" id="stsCombo">
+										<select data-code-tyl="STS" data-empty-str="선택" id="stsCombo">
 										</select>
 									</td>
 								</tr>
