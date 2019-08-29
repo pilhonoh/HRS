@@ -16,49 +16,21 @@
 
 			<header class="header">
 				<jsp:include page="${JSP}/include/header.jsp" />
-			</header><!-- //header -->
+			</header>
 
 			<div class="content">
-				
-				<div class="tit-area">
-					<h2>헬스케어 예약 현황</h2>
-				</div>
 
 				<div class="month-area">
-					<div class="month-btn pre">
-						<button class="pre"><i class="xi-angle-left-min"></i></button>
-					</div>
 					<div class="calendar-area">
 						<table class="month-calendar">
 							<tbody>
-								<tr>						
-									
-									<!-- <td><div class="cal-day"><em>MON</em><span>19</span></div></td>
-									<td><div class="cal-day"><em>THE</em><span>20</span></div></td>
-									<td><div class="cal-day"><em>WED</em><span>21</span></div></td>
-									<td><div class="cal-day"><em>THU</em><span>22</span></div></td>
-									<td><div class="cal-day today"><em>FRI</em><span>23</span></div></td>
-									<td><div class="cal-day sat"><em>SAT</em><span>24</span></div></td>
-									<td><div class="cal-day sun"><em>SUN</em><span>25</span></div></td>
-						
-									<td><div class="cal-day"><em>MON</em><span>26</span></div></td>
-									<td><div class="cal-day"><em>THE</em><span>27</span></div></td>
-									<td><div class="cal-day"><em>WED</em><span>28</span></div></td>
-									<td><div class="cal-day"><em>THU</em><span>29</span></div></td>
-									<td><div class="cal-day"><em>FRI</em><span>30</span></div></td>
-									<td><div class="cal-day sat"><em>SAT</em><span>31</span></div></td>
-
-									<td><div class="cal-day month"><em>2019</em><span>09</span></div></td>
-									<td><div class="cal-day sat"><em>SUN</em><span>01</span></div></td> -->
+								<tr>		
+									<!-- 2주 캘린더 렌더링영역 -->
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="month-btn next">
-						<button class="next"><i class="xi-angle-right-min"></i></button>
-					</div>
-				</div>
-				
+				</div>				
 
 				<div class="sub-tit">
 					<h3>2019년 8월 26일(월) 예약 : T타워</h3>
@@ -71,15 +43,15 @@
 				<table class="reservation-table">
 					<colgroup>
 						<col>
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
+						<col style="width:10.5%">
 					</colgroup>
 					<thead>
 						<tr>
@@ -98,83 +70,14 @@
 					<tbody>
 						<tr>
 							<th>A</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td>
-								<div class="rv-box colspan1 man">
-									<p class="name"><strong>man</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td colspan="2">
-								<div class="rv-box colspan2 woman">
-									<p class="name"><strong>woman</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td colspan="3">
-								<div class="rv-box colspan3 man">
-									<p class="name"><strong>James</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
 							<td colspan="4">
-								<div class="rv-box colspan4 woman">
+								<div class="rv-box colspan4 man">
 									<p class="name"><strong>James</strong></p>
 									<ul class="rv-btn-area">
 										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-										<li><button class="rv-btn st3">예약완료</button></li>
+										<li><button class="rv-btn st1" onclick="e_layer_pop01('layer_pop01');">예약가능</button></li>
+										<li><button class="rv-btn st2" onclick="e_layer_pop02('layer_pop02');">대기가능</button></li>
+										<li><button class="rv-btn" disabled>예약불가</button></li>
 									</ul>
 								</div>
 							</td>
@@ -185,96 +88,20 @@
 							<td></td>
 						</tr>	
 						<tr>
-							<th>A</th>
+							<th>B</th>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
 							<td colspan="5">
 								<div class="rv-box colspan5 man">
-									<p class="name"><strong>James</strong></p>
+									<p class="name"><strong>Steve</strong></p>
 									<ul class="rv-btn-area">
 										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-										<li><button class="rv-btn st3">예약완료</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td colspan="6">
-								<div class="rv-box colspan6 woman">
-									<p class="name"><strong>James</strong></p>
-									<ul class="rv-btn-area">
+										<li><button class="rv-btn st4" onclick="e_layer_pop03('layer_pop03');">대기중</button></li>
+										<li><button class="rv-btn st2" onclick="e_layer_pop02('layer_pop02');">대기가능</button></li>
 										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-										<li><button class="rv-btn st3">예약완료</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td colspan="7">
-								<div class="rv-box colspan7 man">
-									<p class="name"><strong>James</strong></p>
-									<ul class="rv-btn-area">
 										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-										<li><button class="rv-btn st3">예약완료</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td colspan="8">
-								<div class="rv-box colspan8 woman">
-									<p class="name"><strong>James</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-										<li><button class="rv-btn st3">예약완료</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>A</th>
-							<td colspan="9">
-								<div class="rv-box colspan9 man">
-									<p class="name"><strong>James</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1">예약가능</button></li>
-										<li><button class="rv-btn st2">대기가능</button></li>
-										<li><button class="rv-btn st3">예약완료</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
-										<li><button class="rv-btn st4">대기중</button></li>
 									</ul>
 								</div>
 							</td>
@@ -289,27 +116,15 @@
 						<li>예약 <strong>취소는 시작 10분전 까지만</strong> 가능합니다.</li>
 						<li>예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 <strong>“예약 가능 SMS가 자동 발송</strong>됩니다.</li>
 					</ul>
-				</div>
-
-				<!-- 팝업 확인을 위한 버튼 -->
-				<br><br><br><br><br><br>
-				<p>※ 팝업 확인을 위한 버튼</p><br>
-				<button class="t-btn" onclick="e_layer_pop01('layer_pop01');"><em class="icon01">pop_예약신청</em></button>
-				<button class="t-btn" onclick="e_layer_pop02('layer_pop02');"><em class="icon01">pop_대기신청</em></button>
-				<button class="t-btn" onclick="e_layer_pop03('layer_pop03');"><em class="icon01">pop_예약대기취소</em></button>
-				<button class="t-btn" onclick="e_layer_pop04('layer_pop04');"><em class="icon01">pop_시작확인</em></button> 
-				<br><br><br>
-				<!-- 팝업 확인을 위한 버튼 -->
-				
+				</div>				
 				
 			</div><!-- //content -->
 
-			<footer class="footer">				
+			<footer class="footer">
 				<jsp:include page="../include/footer.jsp" />
-			</footer><!-- //footer -->
+			</footer>
 
-		</div><!-- //wrap -->		
-		
+		</div><!-- //wrap -->
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
@@ -334,7 +149,4 @@
 		<!-- 레이어팝업 : E -->
 
 	</body>
-	
-	
-	
 </html>
