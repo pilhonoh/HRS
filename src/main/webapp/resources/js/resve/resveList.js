@@ -6,7 +6,8 @@ var resveList = {
 	init: function() {
 		loadCodeSelect(); //콤보박스 공통코드 세팅
 		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		resveList.list.renderResveList(); //기본 목록 조회 후 렌더
+		resveList.list.renderResveList(); //목록 조회 후 렌더
+		resveList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 	},
 	
 	
@@ -49,14 +50,14 @@ var resveList = {
 	
 	datepicker: {
 		setDefaultValue: function() {
-			var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
 			var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
+			var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
 			
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			resveList.list.params.fromDate = fromDate;
-			resveList.list.params.toDate = toDate;
+			resveList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
+			resveList.list.params.toDate = moment().format('YYYYMMDD');
 		}
 	},
 	
@@ -146,10 +147,71 @@ var resveList = {
 				
 			});
 		}
+
+	},
+	
+	button: {
+		listBtnClickEvent: function() {
+			$('button#listBtn').on('click', function(e) {
+				//날짜 validation 실행
+				resveList.validation.dateCheck();
+				
+				//조회 페이지는 1로 초기화 param 세팅
+				resveList.list.params.pageNo = 1;
+				
+				//상태 param 세팅
+				resveList.list.params.statusCode = $('#stsCombo').val();
+								
+				//목록 조회 및 렌더 실행
+				resveList.list.renderResveList();
+			});
+		},
 		
+		resveCancelBtnEvent: function() {
+			$('button .resveCancelBtn').off();
+			$('button .resveCancelBtn').on('click', function(e) {
+				
+			});
+		},
 		
-		
-		
+		waitCancelBtnEvent: function() {
+			$('button .waitCancelBtn').off();
+			$('button .waitCancelBtn').on('click', function(e) {
+				
+			});
+		}
+	},
+	
+	
+	
+	validation: {
+		dateCheck: function() {
+			var fromDate = $('input#from_date').val().trim().split('-');
+			var toDate = $('input#to_date').val().trim().split('-');
+			
+			var fromdt = fromDate[0] + fromDate[1] + fromDate[2];
+			var todt = toDate[0] + toDate[1] + toDate[2];
+			
+			if (fromdt.length !== 8) {
+				alert('시작날짜 형식이 잘못되었습니다.');
+				return false;
+			}
+			
+			if (todt.length !== 8) {
+				alert('종료날짜 형식이 잘못되었습니다.');
+				return false;
+			}
+			
+			if (fromdt > todt) {
+				alert('시작날짜가 종료날짜가 클 수 없습니다.');
+				return false;
+			}
+			
+			resveList.list.params.fromDate = fromdt;
+			resveList.list.params.toDate = todt;
+			
+			return true;
+		}
 	}
 	
 

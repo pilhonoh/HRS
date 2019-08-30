@@ -26,7 +26,11 @@
 			AND T1.REG_DT = T2.REG_DT		
 		) B
 		ON A.RESVE_NO = B.RESVE_NO
-		WHERE RESVE_DE BETWEEN '20190829' AND '20190830'
+		WHERE 1=1
+			AND RESVE_DE BETWEEN #{fromDate} AND #{toDate}
+			<if test='statusCode != null and statusCode != ""'>
+			AND LAST_STTUS_CODE = #{statusCode}
+			</if>
 		ORDER BY A.RESVE_NO
 	</select>
 	
