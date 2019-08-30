@@ -7,4 +7,9 @@
 	SELECT * FROM CMMN_CODE 
 	WHERE CODE_TYL = #{codeTyl}
 	</select>
+	
+	<select id="cmmnCodeMapper.selectAllCodeList" parameterType="map" resultType="hashmap">
+	SELECT * FROM CMMN_CODE
+	</select>
+	
 </mapper>

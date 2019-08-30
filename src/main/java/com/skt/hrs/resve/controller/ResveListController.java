@@ -23,8 +23,8 @@ import com.skt.hrs.resve.service.ResveListService;
  * @FileName  : ResveListController.java
  * @프로그램 설명   : 헬스케어 예약 시스템 컨트롤러
  * @Date      : 2019. 8. 29. 
- * @작성자      : 
- * @변경이력    :
+ * @작성자    : LEE.J.H
+ * @변경이력  :
  */
 @Controller
 @RequestMapping(value = "/resve")
@@ -40,7 +40,7 @@ public class ResveListController {
 	 * 
 	 * @설명 : 예약현황리스트 view 호출
 	 * @작성일 : 2019.08.29
-	 * @작성자 : P149080
+	 * @작성자 : LEE.J.H
 	 * @param request
 	 * @param response
 	 * @return
@@ -64,17 +64,25 @@ public class ResveListController {
 	 * 
 	 * @설명 : 예약현황리스트 조회
 	 * @작성일 : 2019.08.29
-	 * @작성자 : P149080
+	 * @작성자 : LEE.J.H
 	 * @param request
-	 * @param response
 	 * @return
 	 * @throws Exception
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/selectResveList")
 	public @ResponseBody ResponseResult selectResveList(HttpServletRequest request) throws Exception {
-		DataEntity param = HttpUtil.getServletRequestParam(request);		
-		return resveListService.selectResveList(param);
+		DataEntity param = HttpUtil.getServletRequestParam(request);
+		
+		param.put("empNo", "P149080"); //테스트를 위해 사번 하드코딩
+		
+		ResponseResult result = new ResponseResult();
+		result = resveListService.selectResveList(param);
+		
+		int totalCount = resveListService.selectResveListTotalCount(param);
+		result.addCustoms("totalCount", totalCount);
+				
+		return result;
 	}
 	
 	
