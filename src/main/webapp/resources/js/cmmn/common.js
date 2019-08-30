@@ -559,6 +559,7 @@ function getAfter2Weeks(fromDate) {
 	while(!startDt.isSame(endDt)){
 		var d = {
 			date: startDt.toDate(),
+			yyyymmdd: startDt.format('YYYYMMDD'),
 			year: startDt.year(),
 			month: startDt.month()+1,
 			day: startDt.date(),
@@ -572,3 +573,24 @@ function getAfter2Weeks(fromDate) {
 	
 	return dates;
 }
+
+/*$.async = function(url, param){
+	return new Promise(function(resolve, reject){
+		$.ajax({
+			url: url,
+			data: param,
+			success: function(res){
+				if(res.status == 200){
+					resolve({list: res.list, item: res.item});
+				}else{
+					reject(res)
+				}
+			},
+			error: function(error){
+				reject(error)
+			}
+			
+		});
+	})	
+}
+*/

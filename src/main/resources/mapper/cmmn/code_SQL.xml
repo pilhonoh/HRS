@@ -4,7 +4,10 @@
 <mapper namespace="cmmnCodeMapper">
 
 	<select id="cmmnCodeMapper.selectCodeList" parameterType="map" resultType="hashmap">
-	SELECT * FROM CMMN_CODE 
-	WHERE CODE_TYL = #{codeTyl}
+		SELECT * FROM CMMN_CODE 
+		WHERE CODE_TYL = #{codeTyl}
+		<if test="codeTys != null and codeTys != ''">
+			AND CODE_TYS=#{codeTys}
+		</if>
 	</select>
 </mapper>

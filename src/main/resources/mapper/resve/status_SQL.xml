@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="resveStatusMapper">
+
+	<!-- 사용자의 이번달 예약/대기 건수 -->
+	<select id="resveStatusMapper.selectMonthCount" parameterType="map" resultType="hashmap">
+		SELECT (
+			SELECT COUNT(RESVE_NO) from resve_sttus
+			WHERE RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
+		    AND RESVE_EMPNO = #{empno}
+		) AS RESVE_CNT,
+		(
+			SELECT COUNT(RESVE_NO) from resve_sttus
+			WHERE RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
+		    AND WAIT_EMPNO = #{empno}
+		) AS WAIT_CNT
+	</select>	
+	
+	<!-- 예약현황 조회 -->
+	<select id="resveStatusMapper.selectResveStatus" parameterType="map" resultType="hashmap">
+		SELECT STTS.RESVE_NO,				/* 예약번호 */
+			STTS.RESVE_DE,					/* 예약일 */
+			STTS.RESVE_TM,					/* 예약시간 */
+			STTS.BLD_CODE,					/* 사옥코드 */
+			STTS.MSSR_EMPNO,				/* 관리사사번 */
+			STTS.BED_CODE,					/* 베드코드 */		    
+			BED.CODE_NM,					/* 베드명 */
+		    BED.CODE_ORDR,					/* 코드순번 */
+			STTS.RESVE_EMPNO,				/* 예약자사번 */    
+			STTS.WAIT_EMPNO,				/* 대기자사번 */
+			MSSR.NCNM AS MSSR_NCNM,			/* 관리사닉네임 */
+			MSSR.SEXDSTN AS MSSR_SEXDSTN,	/* 관리사성별 */
+			HIST.LAST_STTUS_CODE			/* 마지막상태코드 */
+		FROM RESVE_STTUS STTS
+		INNER JOIN (
+			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+			FROM RESVE_HIST T1
+			INNER JOIN (
+				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+				FROM RESVE_HIST	
+				GROUP BY RESVE_NO
+			) T2
+			ON T1.RESVE_NO = T2.RESVE_NO
+			AND T1.REG_DT = T2.REG_DT		
+		) HIST
+		ON STTS.RESVE_NO = HIST.RESVE_NO
+		INNER JOIN MASSEUR MSSR
+		ON STTS.MSSR_EMPNO = MSSR.EMPNO
+		LEFT JOIN (
+			SELECT * FROM CMMN_CODE
+		    WHERE CODE_TYL='BED'    
+		) BED
+		ON STTS.BLD_CODE = BED.CODE_TYS
+		AND STTS.BED_CODE = BED.CODE
+		WHERE STTS.RESVE_DE = #{resveDe}
+		AND STTS.BLD_CODE = #{bldCode}
+		ORDER BY BED_CODE, RESVE_TM
+			
+	<!-- 
+		SELECT BED.CODE AS BED_CODE,
+			BED.CODE_NM AS BED_NM,
+		    ST.*
+		FROM 
+		/* 사옥의 전체 베드목록 */
+		(
+			SELECT * FROM cmmn_code WHERE CODE_TYL='BED'
+		) BED	
+		LEFT JOIN 
+		/* 예약현황 */
+		(
+			SELECT STTS.RESVE_NO,	/* 예약번호 */
+				STTS.RESVE_DE,		/* 예약일 */
+				STTS.RESVE_TM,		/* 예약시간 */
+				STTS.BLD_CODE,		/* 사옥코드 */
+				STTS.MSSR_EMPNO,	/* 관리사사번 */
+				STTS.BED_CODE,		/* 베드코드 */
+				(SELECT CODE_NM FROM cmmn_code WHERE CODE_TYL='BED' AND CODE_TYS='SK01' AND CODE='A') AS BED_NM,	/* 베드명 */ 
+				STTS.RESVE_EMPNO,	/* 예약자사번 */    
+				STTS.WAIT_EMPNO,	/* 대기자사번 */
+				MSSR.NCNM AS MSSR_NCNM,			/* 관리사닉네임 */
+				MSSR.SEXDSTN AS MSSR_SEXDSTN,	/* 관리사성별 */
+				HIST.LAST_STTUS_CODE			/* 마지막상태코드 */
+			FROM RESVE_STTUS STTS
+			INNER JOIN (
+				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+				FROM RESVE_HIST T1
+				INNER JOIN (
+					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+					FROM RESVE_HIST	
+					GROUP BY RESVE_NO
+				) T2
+				ON T1.RESVE_NO = T2.RESVE_NO
+				AND T1.REG_DT = T2.REG_DT		
+		    ) HIST
+		    ON STTS.RESVE_NO = HIST.RESVE_NO
+			INNER JOIN MASSEUR MSSR
+			ON STTS.MSSR_EMPNO = MSSR.EMPNO
+			WHERE STTS.RESVE_DE = #{resveDe}
+			AND STTS.BLD_CODE = #{bldCode}
+		) ST	
+		ON BED.CODE_TYS = ST.BLD_CODE
+		AND BED.CODE = ST.BED_CODE
+		ORDER BY BED.CODE_ORDR, ST.RESVE_NO
+	 -->
+	</select>
+	
+</mapper>

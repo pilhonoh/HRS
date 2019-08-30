@@ -41,13 +41,16 @@
     	<beans:property name="cookieDomain" value=""/>
 	</beans:bean>
 	
-	<!-- /index?lang=ko, /index?lang=en 등 파라미터를 사용해 요청을 보내면 컨트롤러 앞단에서 요청을 가로채서 언어를 변경하는 인터셉터 -->
-	<mvc:interceptors>
-		<beans:bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-			<beans:property name="paramName" value="lang" />
-		</beans:bean>
+	
+	<beans:bean id="authInterceptor" class="com.skt.hrs.cmmn.interceptor.AuthInterceptor" />
+	
+	<mvc:interceptors>		
+		<mvc:interceptor>
+			<mvc:mapping path="/**/*" />
+			<mvc:exclude-mapping path="/resources/**" />			
+			<beans:ref bean="authInterceptor" />
+		</mvc:interceptor>
+		
 	</mvc:interceptors>
 
-	
-	
 </beans:beans>

@@ -9,7 +9,7 @@
 	</ul>
 	<p class="user-desc">
 		<strong>홍길동님,</strong>
-		예약 <span>3</span> 건 ,
-		대기 <span>3</span> 건이 있습니다.
+		예약 <span id="resveCnt">0</span> 건 ,
+		대기 <span id="waitCnt">0</span> 건이 있습니다.
 	</p>
 </div>

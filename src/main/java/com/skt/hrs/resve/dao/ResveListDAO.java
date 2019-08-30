@@ -32,7 +32,7 @@ public class ResveListDAO {
 	 * @변경이력 :
 	 */
 	public List selectResveList(DataEntity param) {
-		return sqlSession.selectList("cmmnCodeMapper.selectResveList", param);
+		return sqlSession.selectList("resveListMapper.selectResveList", param);
 	}
 	
 }

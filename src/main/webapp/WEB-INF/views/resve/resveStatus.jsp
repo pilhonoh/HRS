@@ -40,6 +40,7 @@
 					</div>
 				</div>
 
+				<!-- 예약현황테이블 -->
 				<table class="reservation-table">
 					<colgroup>
 						<col>
@@ -68,7 +69,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<!-- <tr>
 							<th>A</th>
 							<td colspan="4">
 								<div class="rv-box colspan4 man">
@@ -105,7 +106,7 @@
 									</ul>
 								</div>
 							</td>
-						</tr>	
+						</tr>	 -->
 					</tbody>
 				</table>
 
