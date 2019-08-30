@@ -2,12 +2,22 @@
  * 예약현황
  */
 var resveStatus = {
+	data : {
+		beds : []
+	},
 	// 초기화
 	init: function(){
-		resveStatus.setHeader();	// 헤더에 카운트표시
 		loadCodeSelect();			// 공통코드 로드
+		resveStatus.setHeader();	// 헤더에 카운트표시
+		resveStatus.fillBeds();		// bed목록 조회
 		resveStatus.calendar.render();	// 달력 렌더링
-		resveStatus.table.init();	// 예약현황테이블 초기화
+		//resveStatus.table.init();	// 예약현황테이블 초기화
+		//resveStatus.table.getStatus();
+		
+		//FIXME : await 적용(ie지원안됨) or promise 적용 or 콜백 형식으로 순차적으로 실행할 필요 있음.
+		setTimeout(function(){
+			$('.month-calendar .today span').trigger('click')
+		},100);
 	},
 	// 헤더세팅
 	setHeader : function(){
@@ -29,6 +39,20 @@ var resveStatus = {
 		})
 		
 	},
+	// 해당사옥의 bed목록 조회
+	fillBeds : function(){		
+		$.ajax({
+			url: ROOT + '/cmmn/codeList',
+			data: {codeTyl: "BED", codeTys: $('[data-code-tyl="BLD"').val()},
+			success : function(res){
+				console.log('fillBeds',res);
+				resveStatus.data.beds = res.list;											
+			},
+			error : function(err) {
+				console.error(err)
+			}
+		});
+	},	
 	// 상단 2주달력
 	calendar: {		
 		render : function(){
@@ -77,56 +101,37 @@ var resveStatus = {
 		},
 		click: function(e){
 			console.log('click',$(e.target).data('data'));
+			var data = $(e.target).data('data');			
+			var str = moment(data.date).locale('ko').format('YYYY년 M월 DD일(ddd)') + ' 예약 : ' + $('[data-code-tyl="BLD"] option:selected').text();
+			$('.sub-tit h3').text(str);
+			resveStatus.table.init();
 			resveStatus.table.getStatus($(e.target).data('data').yyyymmdd)
 		}
 	},
 	// 예약현황 테이블
 	table : {
+		// 초기화
 		init: function(){
-			$.ajax({
-				url: ROOT + '/cmmn/codeList',
-				data: {codeTyl: "BED", codeTys: $('[data-code-tyl="BLD"').val()},
-				success : function(res){
-					console.log('bedList',res);
-					var bedList = res.list;
-					var trList = [];
-					bedList.forEach(function(bed){
-						var $tr = $('<tr>').data(bed);
-						var $th = $('<th>').text(bed.CODE_NM);
-						$tr.append($th);
-						
-						for(var i=1; i<=9; i++){
-							var $td = $('<td>').addClass(bed.CODE + '-' + i);
-							$tr.append($td);
-						}
-						trList.push($tr);
-					})
-					$('.reservation-table tbody').empty().append(trList);
-					
-					resveStatus.table.getStatus()
-				},
-				error : function(err) {
-					console.error(err)
+			var bedList = resveStatus.data.beds;
+			var trList = [];
+			bedList.forEach(function(bed){
+				var $tr = $('<tr>').data(bed);
+				var $th = $('<th>').text(bed.CODE_NM);
+				$tr.append($th);
+				
+				for(var i=1; i<=9; i++){
+					var $td = $('<td>').addClass(bed.CODE + '-' + i);
+					$tr.append($td);
 				}
+				trList.push($tr);
 			})
-			//var data = await $.async(ROOT + '/cmmn/codeList', {codeTyl: "BED", codeTys: $('[data-code-tyl="BLD"').val()});
-			//console.log(data)
+			$('.reservation-table tbody').empty().append(trList);	
 		},
 		getStatus: function(yyyymmdd){
 			if(!yyyymmdd){
 				yyyymmdd = moment().format('YYYYMMDD');
 			}
-			$.ajax({
-//				<div class="rv-box colspan4 man">
-//					<p class="name"><strong>James</strong></p>
-//					<ul class="rv-btn-area">
-//						<li><button class="rv-btn" disabled>예약불가</button></li>
-//						<li><button class="rv-btn st1" onclick="e_layer_pop01('layer_pop01');">예약가능</button></li>
-//						<li><button class="rv-btn st2" onclick="e_layer_pop02('layer_pop02');">대기가능</button></li>
-//						<li><button class="rv-btn" disabled>예약불가</button></li>
-//					</ul>
-//				</div>
-				
+			$.ajax({				
 				url: ROOT + '/resve/getStatus',
 				data: {resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
 				success : function(res){
@@ -134,41 +139,63 @@ var resveStatus = {
 					var list = res.list;
 					
 					var last = undefined;
-					var $ul;
+					var $div;
+					
+					function getButton(status){
+						return {
+							//예약가능
+							'RESVE_POSBL' : '<button class="rv-btn st1" onclick="e_layer_pop01("layer_pop01");">예약가능</button>',	
+							//예약완료
+							'RESVE_COMPT' : '<button class="rv-btn st3" onclick="e_layer_pop03("layer_pop03");">예약완료</button>',	
+							//예약불가
+							'RESVE_IMPRTY' : '<button class="rv-btn" disabled>예약불가</button>',
+							//대기가능
+							'WAIT_POSBL' : '<button class="rv-btn st2" onclick="e_layer_pop02("layer_pop02");">대기가능</button>',
+							//대기중
+							'WAIT' : '<button class="rv-btn st4" onclick="e_layer_pop03("layer_pop03");">대기중</button>',
+							//예약취소
+							'RESVE_CANCL' : '',
+							//대기취소
+							'WAIT_CANCL' : '',
+							//완료
+							'COMPT' : '<button class="rv-btn st5">케어완료</button>'				
+						}[status]
+					}
 					
 					list.forEach(function(stts){
-						console.log(stts);
-																		
-						if(!last){							
-							$ul = $('<ul class="rv-btn-area">');							
+						
+						if(!last || 									// last가 없거나
+							last.RESVE_TM != (stts.RESVE_TM-1) || 		// last가 현재시간-1이 아니거나(연속되지않거나) (같은날 떨어진근무)
+							last.BED_CODE != stts.BED_CODE){			// 베드가 다른경우							
+							//근무를 새로 그림
+							$div = $('<div class="rv-box">').addClass(stts.MSSR_SEXDSTN == 'F' ? 'woman' : 'man');
+							var $p = $('<p class="name">').append($('<strong>').text(stts.MSSR_NCNM));
+							var $ul = $('<ul class="rv-btn-area">');
+							var $li = $('<li>').append(getButton(stts.LAST_STTUS));
+							
+							var $td = $('.' + stts.BED_CODE + '-' + stts.RESVE_TM);
+							
+							$td.empty().append($div.append($p).append($ul.append($li)));
+							
 						}else{
-							$ul = $('.' + last.BED_CODE + '-' + last.RESVE_TM).find('ul');
+							//이전근무에 연속해서 그림
+							var $ul = $div.find('ul');
+							var $li = $('<li>').append(getButton(stts.LAST_STTUS));
+							$ul.append($li);
+							$div.parent('td').attr('colspan', $ul.find('li').length);	// td colspan
+							$('.' + stts.BED_CODE + '-' + stts.RESVE_TM).remove();		// colspan을 했으니 td삭제
+							$div.removeClass('colspan' + ($ul.find('li').length-1))		// div colspan
+								.addClass('colspan' + $ul.find('li').length);
 						}
 						
 						last = stts;
-						
-						var $li = $('<li>').append($('<button class="rv-btn" disabled>예약불가</button>'));
-						
-						
-						var $div = $('<div class="rv-box">')
-										.addClass('colspan' + $ul.find('li').length)
-										.addClass(stts.MSSR_SEXDSTN == 'F' ? 'woman' : 'man');
-						var $p = $('<p class="name">').append($('<strong>').text(stts.MSSR_NCNM));
-						
-						$('.' + stts.BED_CODE + '-' + stts.RESVE_TM).append($div.append($p).append($ul.append($li)));
 					})
 					
 				},
 				error : function(err) {
 					console.error(err)
 				}
-			})
-			/*$('#resveTable').load(ROOT + '/resve/resveTable',
-				{resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
-				function(res){
-					console.log(res)
-				}
-			)*/
+			});			
 		}
 	},
 	
