@@ -112,33 +112,32 @@ var resveList = {
 				
 				var resveList = result.list;
 				var resveListHtml = [];
+				var btnText = '';
+				var resveDt = '';
 				
-				/*
-				<tr>
-					<td>2019-08-19</td>
-					<td>10:00 ~ 11:00</td>
-					<td>티타워</td>
-					<td>James(남)</td>
-					<td>A</td>
-					<td>2019-08-19</td>
-					<td>예약 완료</td>
-					<td>
-						<button class="t-btn">예약취소</button>
-					</td>
-				</tr>
-				*/
-				
-				for (var i in resveList) {			
+				for (var i in resveList) {
+					var stsCode = resveList[i].LAST_STTUS_CODE;
+					if (stsCode == 'STS01') {
+						btnText = '예약취소';
+					} else if (stsCode == 'STS03') {
+						btnText = '대기취소';
+					}
+					
+					var resve_de = resveList[i].RESVE_DE;
+					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+					
 					resveListHtml.push('<tr>');
-					resveListHtml.push('	<td>' + resveList[i].RESVE_DE + '</td>');
+					resveListHtml.push('	<td>' + resveDt + '</td>');
 					resveListHtml.push('	<td>' + resveList[i].RESVE_TM_TXT + '</td>');
 					resveListHtml.push('	<td>' + resveList[i].BLD_NM + '</td>');
 					resveListHtml.push('	<td>' + resveList[i].NCNM + '</td>');
 					resveListHtml.push('	<td>' + resveList[i].BED_NM + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].REG_DT + '</td>');
-					resveListHtml.push('	<td>' + '상태' + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].REG_DT_TXT + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].STTUS_NM + '</td>');
 					resveListHtml.push('	<td>');
-					resveListHtml.push('		<button class="t-btn">' + '버튼' + '</button>');
+					if (stsCode == 'STS01' || stsCode == 'STS03') {
+						resveListHtml.push('		<button class="t-btn">' + btnText + '</button>');
+					}
 					resveListHtml.push('	</td>');
 					resveListHtml.push('</tr>');
 				}
