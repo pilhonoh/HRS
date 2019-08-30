@@ -69,44 +69,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<!-- <tr>
-							<th>A</th>
-							<td colspan="4">
-								<div class="rv-box colspan4 man">
-									<p class="name"><strong>James</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st1" onclick="e_layer_pop01('layer_pop01');">예약가능</button></li>
-										<li><button class="rv-btn st2" onclick="e_layer_pop02('layer_pop02');">대기가능</button></li>
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-									</ul>
-								</div>
-							</td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>	
-						<tr>
-							<th>B</th>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td colspan="5">
-								<div class="rv-box colspan5 man">
-									<p class="name"><strong>Steve</strong></p>
-									<ul class="rv-btn-area">
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn st4" onclick="e_layer_pop03('layer_pop03');">대기중</button></li>
-										<li><button class="rv-btn st2" onclick="e_layer_pop02('layer_pop02');">대기가능</button></li>
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-										<li><button class="rv-btn" disabled>예약불가</button></li>
-									</ul>
-								</div>
-							</td>
-						</tr>	 -->
+						<!-- 예약현황 영역 -->
 					</tbody>
 				</table>
 
