@@ -4,10 +4,47 @@
 var resveList = {
 	// 초기화
 	init: function() {
-		loadCodeSelect(); //공통코드 로드
+		loadCodeSelect(); //콤보박스 공통코드 세팅
 		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
 		resveList.list.renderResveList(); //기본 목록 조회 후 렌더
 	},
+	
+	
+	cmmnCode: {
+		allCodeList: [],
+		getAllCodeList: function() {
+			$.ajax({
+				url: ROOT + '/cmmn/allCodeList',
+				success: function(res) {
+					console.log('allCodeList', res);
+					if (res.status === 200) {
+						resveList.cmmnCode.allCodeList = res.list;
+					}
+				},
+				error: function(err) {
+					console.error(err);
+				}
+			})
+		},
+		codeToName: function(code) {
+			var allCodeList = resveList.cmmnCode.allCodeList;
+			
+			if (allCodeList.length == 0) {
+				resveList.cmmnCode.getAllCodeList();
+			}
+			
+			var codeName = '';
+			for (var i in allCodeList) {
+				if (allCodeList[i].CODE == code) {
+					codeName = allCodeList[i].CODE_NM;
+					break;
+				}
+			}
+			
+			return codeName;
+		}
+	},
+	
 	
 	
 	datepicker: {
@@ -38,11 +75,11 @@ var resveList = {
 			pageNo: 1,
 			fromDate: '',
 			toDate: '',
-			statusCode: '' 
+			statusCode: ''
 		},
 		
 		//예약 목록 조회
-		selectResveList: function(pageNo) {
+		selectResveList: function() {
 			
 			var deferred = $.Deferred();
 			
@@ -50,9 +87,9 @@ var resveList = {
 				url: ROOT + '/resve/selectResveList',
 				data: resveList.list.params,
 				success: function(res) {
-					console.log('resveList',res);
+					console.log('resveList', res);
 					if (res.status === 200) {
-						deferred.resolve(retData);
+						deferred.resolve(res);
 					} else {
 						deferred.reject("");
 					}
@@ -71,10 +108,43 @@ var resveList = {
 		renderResveList: function() {
 			$.when(resveList.list.selectResveList()).done(function(result) {
 
-				for (var i in result) {
-
+				$('tbody#resveList').empty();
+				
+				var resveList = result.list;
+				var resveListHtml = [];
+				
+				/*
+				<tr>
+					<td>2019-08-19</td>
+					<td>10:00 ~ 11:00</td>
+					<td>티타워</td>
+					<td>James(남)</td>
+					<td>A</td>
+					<td>2019-08-19</td>
+					<td>예약 완료</td>
+					<td>
+						<button class="t-btn">예약취소</button>
+					</td>
+				</tr>
+				*/
+				
+				for (var i in resveList) {			
+					resveListHtml.push('<tr>');
+					resveListHtml.push('	<td>' + resveList[i].RESVE_DE + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].RESVE_TM_TXT + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].BLD_NM + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].NCNM + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].BED_NM + '</td>');
+					resveListHtml.push('	<td>' + resveList[i].REG_DT + '</td>');
+					resveListHtml.push('	<td>' + '상태' + '</td>');
+					resveListHtml.push('	<td>');
+					resveListHtml.push('		<button class="t-btn">' + '버튼' + '</button>');
+					resveListHtml.push('	</td>');
+					resveListHtml.push('</tr>');
 				}
-				$('').html();
+				
+				$('tbody#resveList').html(resveListHtml.join(''));
+				
 			});
 		}
 		

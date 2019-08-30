@@ -43,6 +43,23 @@ public class CodeService {
 	}
 	
 	
+	/**
+	 * 
+	 * @설명 : 공통코드 전체 조회
+	 * @작성일 : 2019.08.30
+	 * @작성자 : LEE.J.H.
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectAllCodeList(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemList(codeDAO.selectAllCodeList(param));
+		
+		return result;
+	}
+	
+	
 	
 	
 }

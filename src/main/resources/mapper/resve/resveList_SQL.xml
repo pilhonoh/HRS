@@ -5,7 +5,34 @@
 
 	<!-- 예약리스트 조회 -->
 	<select id="selectResveList" parameterType="map" resultType="hashmap">
-		
+		SELECT RESVE_NO,
+			   RESVE_DE,
+			   RESVE_TM,
+			   (SELECT CODE_NM FROM CMMN_CODE WHERE CODE = RESVE_TM) AS RESVE_TM_TXT,
+			   BLD_CODE,
+			   (SELECT CODE_NM FROM CMMN_CODE WHERE CODE = BLD_CODE) AS BLD_NM,
+			   MSSR_EMPNO,
+			   (SELECT NCNM FROM MASSEUR WHERE EMPNO = MSSR_EMPNO) AS NCNM,
+			   BED_CODE,
+			   (SELECT CODE_NM FROM CMMN_CODE WHERE CODE = BED_CODE) AS BED_NM,
+			   RESVE_EMPNO,
+			   WAIT_EMPNO, 
+			   REG_EMPNO, 
+			   REG_DT, 
+			   UPDT_EMPNO, 
+			   UPDT_DT
+		FROM RESVE_STTUS
+		WHERE (RESVE_EMPNO = #{empNo} OR WAIT_EMPNO = #{empNo})
 	</select>
+	
+	
+	<!-- 예약리스트 전체 ROW COUNT 값 조회 -->
+	<select id="selectResveListTotalCount" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM RESVE_STTUS
+		WHERE (RESVE_EMPNO = #{empNo} OR WAIT_EMPNO = #{empNo})
+	</select>
+	
+	
 	
 </mapper>

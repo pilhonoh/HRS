@@ -21,12 +21,13 @@ public class ResveListDAO {
 	@Resource(name="sqlSession")
 	private SqlSession sqlSession;
 	
+	
 
 	/**
 	 * 
 	 * @설명 : 예약현황리스트 조회 
 	 * @작성일 : 2019.08.29
-	 * @작성자 : P149080
+	 * @작성자 : LEE.J.H
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -34,5 +35,20 @@ public class ResveListDAO {
 	public List selectResveList(DataEntity param) {
 		return sqlSession.selectList("resveListMapper.selectResveList", param);
 	}
+	
+	
+	/**
+	 * 
+	 * @설명 : 예약현황리스트 TOTAL COUNT 조회 
+	 * @작성일 : 2019.08.30
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public int selectResveListTotalCount(DataEntity param) {
+		return sqlSession.selectOne("resveListMapper.selectResveListTotalCount", param);
+	}
+	
 	
 }

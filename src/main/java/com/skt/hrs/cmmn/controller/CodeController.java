@@ -49,5 +49,21 @@ public class CodeController {
 		return codeService.selectUserMenuList(param);
 	}
 	
+	
+	/**
+	 * 
+	 * @설명 : 공통코드 전체 목록 조회
+	 * @작성일 : 2019.08.30
+	 * @작성자 : LEE.J.H
+	 * @param req
+	 * @return
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/allCodeList")
+	public @ResponseBody ResponseResult selectAllCodeList(HttpServletRequest req) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);		
+		return codeService.selectAllCodeList(param);
+	}
+	
 
 }
