@@ -28,7 +28,7 @@ public class ResveListService {
 	 * 
 	 * @설명 : 예약현황리스트 조회
 	 * @작성일 : 2019.08.29
-	 * @작성자 : P149080
+	 * @작성자 : LEE.J.H
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -36,6 +36,22 @@ public class ResveListService {
 	public ResponseResult selectResveList(DataEntity param) {
 		ResponseResult result = new ResponseResult();
 		result.setItemList(resveListDAO.selectResveList(param));
+		return result;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @설명 : 예약현황리스트 TOTAL COUNT 조회
+	 * @작성일 : 2019.08.30
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public int selectResveListTotalCount(DataEntity param) {
+		int result = resveListDAO.selectResveListTotalCount(param);
 		return result;
 	}
 	

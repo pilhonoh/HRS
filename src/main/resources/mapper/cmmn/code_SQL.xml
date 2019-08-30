@@ -10,4 +10,9 @@
 			AND CODE_TYS=#{codeTys}
 		</if>
 	</select>
+	
+	<select id="cmmnCodeMapper.selectAllCodeList" parameterType="map" resultType="hashmap">
+	SELECT * FROM CMMN_CODE
+	</select>
+	
 </mapper>

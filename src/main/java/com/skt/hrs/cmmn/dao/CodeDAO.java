@@ -35,4 +35,19 @@ public class CodeDAO {
 		return sqlSession.selectList("cmmnCodeMapper.selectCodeList", param);
 	}
 	
+	
+	/**
+	 * 
+	 * @설명 : 공통코드 전체 조회 
+	 * @작성일 : 2019.08.30
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectAllCodeList(DataEntity param) {
+		return sqlSession.selectList("cmmnCodeMapper.selectAllCodeList", param);
+	}
+	
+	
 }
