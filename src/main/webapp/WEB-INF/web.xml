@@ -79,7 +79,10 @@
 			<include-prelude>/WEB-INF/views/define.jspf</include-prelude>
 		</jsp-property-group>
 	</jsp-config>
-
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>	
+	</welcome-file-list>
 
 	<!-- error 페이지 설정 -->
 	<error-page>

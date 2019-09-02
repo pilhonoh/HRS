@@ -21,6 +21,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			LoginVo loginVo = new LoginVo();
 			loginVo.setEmpno("P149365");
 			loginVo.setHname("구성원1");
+			
+//			loginVo.setEmpno("P149080");
+//			loginVo.setHname("구성원2");
+			
 			loginVo.setAuth("AUT04");	//구성원
 			loginVo.settSex("M");
 			session.setAttribute("LoginVo", loginVo);

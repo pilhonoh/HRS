@@ -94,19 +94,24 @@ public class ResveStatusService {
 		
 		ResveViewStatus resultStatus = null;
 		
-		if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
+		if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {
+			//예약불가
+			resultStatus = ResveViewStatus.RESVE_IMPRTY;
+		}else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
 			//예약가능
 			resultStatus = ResveViewStatus.RESVE_POSBL;
 		}else if(!StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
-			//대기가능
-			resultStatus = ResveViewStatus.WAIT_POSBL;
-		}else if(resveEmpno.equals(myEmpno)) {
-			if(lastStatusCode.equals("STS05")) {
-				// 완료
-				resultStatus = ResveViewStatus.COMPT;
+			if(resveEmpno.equals(myEmpno)) {
+				if(lastStatusCode.equals("STS05")) {
+					// 완료
+					resultStatus = ResveViewStatus.COMPT;
+				}else {				
+					//예약완료
+					resultStatus = ResveViewStatus.RESVE_COMPT;
+				}
 			}else {				
-				//예약완료
-				resultStatus = ResveViewStatus.RESVE_COMPT;
+				//대기가능
+				resultStatus = ResveViewStatus.WAIT_POSBL;
 			}
 		}else if(waitEmpno.equals(myEmpno)) {
 			if(lastStatusCode.equals("STS05")) {
