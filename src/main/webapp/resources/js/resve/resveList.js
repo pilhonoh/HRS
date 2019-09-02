@@ -147,6 +147,7 @@ var resveList = {
 				}
 				
 				$('tbody#resveList').html(resveListHtml.join(''));
+				resveList.paging.renderPaging();
 				
 			});
 		}
@@ -181,20 +182,16 @@ var resveList = {
 			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; 
 			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount;
 			
-			/*
-				<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
-				<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
-			
-				<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>
-				<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>
-			*/
+
 			
 			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
 				preStr += '<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>'
 					   +  '<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>';
 			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, first 버튼
 				preStr += '<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>';
-			} if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, next + last 버튼
+			}
+			
+			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, next + last 버튼
 				postStr += '<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>'
 						+  '<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>';
 			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, last 버튼
