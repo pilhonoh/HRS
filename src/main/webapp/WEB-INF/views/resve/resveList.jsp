@@ -117,10 +117,10 @@
 					</tbody>
 				</table>
 
-				<div class="paging_area">
+				<div class="paging_area" id="pagingArea">
+					<!-- 
 					<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
 					<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
-					<!-- 
 					<a href="#none" class="num selected">1</a>
 					<a href="#none" class="num">2</a>
 					<a href="#none" class="num">3</a>
@@ -131,9 +131,9 @@
 					<a href="#none" class="num">8</a>
 					<a href="#none" class="num">9</a>
 					<a href="#none" class="num">10</a>
-					-->
 					<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>
 					<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>
+					-->
 				</div>
 
 				<!-- <br><br><br><br><br><br>
@@ -159,7 +159,7 @@
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">
 				<!--#include file="../popup/pop_대기신청.html" -->
-				<jsp:include page="${JSP}/popup/pop_waitingApply.jsp" />	
+				<jsp:include page="${JSP}/popup/pop_waitingApply.jsp" />
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">
 				<!--#include file="../popup/pop_예약대기취소.html" -->
@@ -167,7 +167,7 @@
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
 				<!--#include file="../popup/pop_시작확인.html" -->
-				<jsp:include page="${JSP}/popup/pop_startConfirm.jsp" />	
+				<jsp:include page="${JSP}/popup/pop_startConfirm.jsp" />
 			</div>
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->

@@ -49,7 +49,7 @@ var resveList = {
 	
 	
 	datepicker: {
-		setDefaultValue: function() {
+		setDefaultValue: function() { //기본 날짜 세팅
 			var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
 			var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
 			
@@ -72,6 +72,7 @@ var resveList = {
 	
 	list: {
 		
+		//목록 조회 시 사용하는 파라미터
 		params: {
 			pageNo: 1,
 			fromDate: '',
@@ -111,30 +112,32 @@ var resveList = {
 
 				$('tbody#resveList').empty();
 				
-				var resveList = result.list;
+				var resultList = result.list;
 				var resveListHtml = [];
 				var btnText = '';
 				var resveDt = '';
 				
-				for (var i in resveList) {
-					var stsCode = resveList[i].LAST_STTUS_CODE;
+				resveList.paging.params.totalCount = result.customs.totalCount;
+				
+				for (var i in resultList) {
+					var stsCode = resultList[i].LAST_STTUS_CODE;
 					if (stsCode == 'STS01') {
 						btnText = '예약취소';
 					} else if (stsCode == 'STS03') {
 						btnText = '대기취소';
 					}
 					
-					var resve_de = resveList[i].RESVE_DE;
+					var resve_de = resultList[i].RESVE_DE;
 					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 					
 					resveListHtml.push('<tr>');
 					resveListHtml.push('	<td>' + resveDt + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].RESVE_TM_TXT + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].BLD_NM + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].NCNM + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].BED_NM + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].REG_DT_TXT + '</td>');
-					resveListHtml.push('	<td>' + resveList[i].STTUS_NM + '</td>');
+					resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
+					resveListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
+					resveListHtml.push('	<td>' + resultList[i].NCNM + '</td>');
+					resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
+					resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');
+					resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
 					resveListHtml.push('	<td>');
 					if (stsCode == 'STS01' || stsCode == 'STS03') {
 						resveListHtml.push('		<button class="t-btn">' + btnText + '</button>');
@@ -150,7 +153,74 @@ var resveList = {
 
 	},
 	
+	
+	paging: {
+		
+		//페이징 처리를 위한 파라미터
+		params: {
+			currentPageIdx: '', //현재 페이지 위치
+			recordPerPage: 6, //페이지 당 레코드 수
+			totalCount: '' //list 의 전체 row count
+		},
+		
+		//페이징 영역 생성
+		renderPaging: function() {
+			
+			var currentIndex = resveList.list.params.pageNo; //현재 페이지 위치
+			var recordPerPage = resveList.paging.params.recordPerPage; //페이지 당 레코드 수
+			var totalCount = resveList.paging.params.totalCount; //list 의 전체 row count
+			var totalIndexCount = Math.ceil(totalCount / recordPerPage); //전체 인덱스 수
+			
+			$("div#pagingArea").empty();
+			var preStr = '';
+			var postStr = '';
+			var pageNumStr = '';
+			
+			var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
+			var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
+			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; 
+			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount;
+			
+			/*
+				<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
+				<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
+			
+				<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>
+				<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>
+			*/
+			
+			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
+				preStr += '<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>'
+					   +  '<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>';
+			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, first 버튼
+				preStr += '<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>';
+			} if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, next + last 버튼
+				postStr += '<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>'
+						+  '<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>';
+			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, last 버튼
+				postStr += '<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>';
+			}			
+
+			for (var i=first; i<(first+last); i++) {
+				if (i != currentIndex) {
+					pageNumStr += '<a href="#none" class="num">' + i + '</a>';
+				} else {
+					pageNumStr += '<a href="#none" class="num selected">' + i + '</a>';
+				}
+			}
+			
+			$("div#pagingArea").append(preStr + pageNumStr + postStr);
+			
+		}
+		
+		
+		
+	},
+	
+	
+	
 	button: {
+		//조회 버튼 클릭 이벤트
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
 				//날짜 validation 실행
@@ -167,6 +237,7 @@ var resveList = {
 			});
 		},
 		
+		//예약취소 버튼 클릭 이벤트
 		resveCancelBtnEvent: function() {
 			$('button .resveCancelBtn').off();
 			$('button .resveCancelBtn').on('click', function(e) {
@@ -174,6 +245,7 @@ var resveList = {
 			});
 		},
 		
+		//대기취소 버튼 클릭 이벤트
 		waitCancelBtnEvent: function() {
 			$('button .waitCancelBtn').off();
 			$('button .waitCancelBtn').on('click', function(e) {
@@ -185,6 +257,7 @@ var resveList = {
 	
 	
 	validation: {
+		//날짜 필드 값 체크
 		dateCheck: function() {
 			var fromDate = $('input#from_date').val().trim().split('-');
 			var toDate = $('input#to_date').val().trim().split('-');
