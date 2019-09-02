@@ -7,21 +7,27 @@ var resveStatus = {
 	},
 	// 초기화
 	init: function(){
-		loadCodeSelect();			// 공통코드 로드
+		loadCodeSelect(function(){
+			resveStatus.fillBeds();		// bed목록 조회
+		});			// 공통코드 로드
 		resveStatus.setHeader();	// 헤더에 카운트표시
-		resveStatus.fillBeds();		// bed목록 조회
+		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
+		
 		resveStatus.calendar.render();	// 달력 렌더링
+		
 		//resveStatus.table.init();	// 예약현황테이블 초기화
-		//resveStatus.table.getStatus();
+		//resveStatus.table.getStatus();		
 		
 		//FIXME : await 적용(ie지원안됨) or promise 적용 or 콜백 형식으로 순차적으로 실행할 필요 있음.
 		setTimeout(function(){
 			$('.month-calendar .today span').trigger('click')
-		},100);
+		},200);
 	},
 	// 헤더세팅
 	setHeader : function(){
-		$.ajax({
+		$('.gnb-menu li:eq(0)').addClass('selected');	//gbn 메뉴 선택표시
+		
+		return $.ajax({
 			url: ROOT + '/resve/monthCnt',
 			data: {},
 			success : function(res){
@@ -39,11 +45,17 @@ var resveStatus = {
 		})
 		
 	},
+	bldOnChange : function(e){
+		console.log(e.target.value)
+		resveStatus.fillBeds(e.target.value);
+	},
 	// 해당사옥의 bed목록 조회
-	fillBeds : function(){		
-		$.ajax({
+	fillBeds : function(bldCode){
+		bldCode = bldCode || $('[data-code-tyl="BLD"').val();
+		
+		return $.ajax({
 			url: ROOT + '/cmmn/codeList',
-			data: {codeTyl: "BED", codeTys: $('[data-code-tyl="BLD"').val()},
+			data: {codeTyl: "BED", codeTys: bldCode},
 			success : function(res){
 				console.log('fillBeds',res);
 				resveStatus.data.beds = res.list;											
