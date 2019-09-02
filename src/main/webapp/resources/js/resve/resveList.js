@@ -74,14 +74,21 @@ var resveList = {
 		
 		//목록 조회 시 사용하는 파라미터
 		params: {
-			pageNo: 1,
-			fromDate: '',
-			toDate: '',
-			statusCode: ''
+			pageNo: 1, //조회할 페이지 번호
+			rowPerPage: 6, //한 페이지 당 조회할 ROW 수
+			fromDate: '', //조회 시작 날짜
+			toDate: '', //조회 끝 날짜
+			statusCode: '', //상태
+			startRow: 0 //조회 시작할 ROW
 		},
 		
 		//예약 목록 조회
 		selectResveList: function() {
+			
+			resveList.list.params.startRow = parseInt((resveList.list.params.pageNo - 1 ) * resveList.list.params.rowPerPage);
+			
+			console.log(resveList.list.params.startRow);
+			console.log(resveList.list.params.rowPerPage);
 			
 			var deferred = $.Deferred();
 			
@@ -159,8 +166,6 @@ var resveList = {
 		
 		//페이징 처리를 위한 파라미터
 		params: {
-			currentPageIdx: '', //현재 페이지 위치
-			recordPerPage: 6, //페이지 당 레코드 수
 			totalCount: '' //list 의 전체 row count
 		},
 		
@@ -168,9 +173,9 @@ var resveList = {
 		renderPaging: function() {
 			
 			var currentIndex = resveList.list.params.pageNo; //현재 페이지 위치
-			var recordPerPage = resveList.paging.params.recordPerPage; //페이지 당 레코드 수
+			var rowPerPage = resveList.list.params.rowPerPage; //페이지 당 레코드 수
 			var totalCount = resveList.paging.params.totalCount; //list 의 전체 row count
-			var totalIndexCount = Math.ceil(totalCount / recordPerPage); //전체 인덱스 수
+			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 			
 			$("div#pagingArea").empty();
 			var preStr = '';
@@ -185,17 +190,17 @@ var resveList = {
 
 			
 			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
-				preStr += '<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>'
-					   +  '<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>';
+				preStr += '<a href="#none" class="first"><img src="' + IMG + '/common/btn_first.gif"></a>'
+					   +  '<a href="#none" class="prev"><img src="' + IMG + '/common/btn_prev.gif"></a>';
 			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, first 버튼
-				preStr += '<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>';
+				preStr += '<a href="#none" class="first"><img src="' + IMG + '/common/btn_first.gif"></a>';
 			}
 			
 			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, next + last 버튼
-				postStr += '<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>'
-						+  '<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>';
+				postStr += '<a href="#none" class="next"><img src="' + IMG + '/common/btn_next.gif"></a>'
+						+  '<a href="#none" class="last"><img src="' + IMG + '/common/btn_last.gif"></a>';
 			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, last 버튼
-				postStr += '<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>';
+				postStr += '<a href="#none" class="last"><img src="' + IMG + '/common/btn_last.gif"></a>';
 			}			
 
 			for (var i=first; i<(first+last); i++) {
@@ -283,7 +288,6 @@ var resveList = {
 			return true;
 		}
 	}
-	
 
 }
 

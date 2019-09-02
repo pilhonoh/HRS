@@ -3,9 +3,38 @@
 
 <mapper namespace="resveListMapper">
 
+
+	<!-- 페이징 처리를 위한 HEADER -->
+	<sql id="COMMON_PAGING_HEADER">
+		SELECT R1.* FROM (
+	</sql>
+	
+	
+	<!-- 페이징 처리를 위한 TAIL -->
+	<sql id="COMMON_PAGING_TAIL">
+		) R1
+		LIMIT #{rowPerPage, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
+		<!-- LIMIT 6 OFFSET 0 -->
+	</sql>
+
+
 	<!-- 예약리스트 조회 -->
 	<select id="selectResveList" parameterType="map" resultType="hashmap">
-		SELECT *,
+		<include refid="COMMON_PAGING_HEADER"/>
+		SELECT
+			A.RESVE_NO,
+			RESVE_DE,
+			RESVE_TM,
+			BLD_CODE,
+			MSSR_EMPNO,
+			BED_CODE,
+			RESVE_EMPNO,
+			WAIT_EMPNO,
+			REG_EMPNO,
+			REG_DT,
+			UPDT_EMPNO,
+			UPDT_DT,
+			LAST_STTUS_CODE,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.RESVE_TM) AS RESVE_TM_TXT,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.BLD_CODE) AS BLD_NM,
 			(SELECT NCNM FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO) AS NCNM,
@@ -32,14 +61,34 @@
 			AND LAST_STTUS_CODE = #{statusCode}
 			</if>
 		ORDER BY A.RESVE_NO
+		<include refid="COMMON_PAGING_TAIL"/>
 	</select>
 	
 	
 	<!-- 예약리스트 전체 ROW COUNT 값 조회 -->
 	<select id="selectResveListTotalCount" parameterType="map" resultType="int">
-		SELECT COUNT(*)
-		FROM RESVE_STTUS
-		WHERE (RESVE_EMPNO = #{empNo} OR WAIT_EMPNO = #{empNo})
+		SELECT
+			COUNT(*)
+		FROM resve_sttus A
+		INNER JOIN (
+			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+			FROM RESVE_HIST T1
+			INNER JOIN (
+				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+				FROM RESVE_HIST	 
+		        WHERE TARGET_EMPNO = #{empNo}
+				GROUP BY RESVE_NO
+			) T2
+			ON T1.RESVE_NO = T2.RESVE_NO
+			AND T1.REG_DT = T2.REG_DT		
+		) B
+		ON A.RESVE_NO = B.RESVE_NO
+		WHERE 1=1
+			AND RESVE_DE BETWEEN #{fromDate} AND #{toDate}
+			<if test='statusCode != null and statusCode != ""'>
+			AND LAST_STTUS_CODE = #{statusCode}
+			</if>
+		ORDER BY A.RESVE_NO
 	</select>
 	
 	

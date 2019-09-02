@@ -75,10 +75,16 @@ public class ResveListController {
 		DataEntity param = HttpUtil.getServletRequestParam(request);
 		
 		param.put("empNo", "P149080"); //테스트를 위해 사번 하드코딩
+
+		int rowPerPage = param.getInt("rowPerPage");
+		int startRow = param.getInt("startRow");
+		
+		param.put("rowPerPage", rowPerPage);
+		param.put("startRow", startRow);
 		
 		ResponseResult result = new ResponseResult();
 		result = resveListService.selectResveList(param);
-		
+
 		int totalCount = resveListService.selectResveListTotalCount(param);
 		result.addCustoms("totalCount", totalCount);
 
