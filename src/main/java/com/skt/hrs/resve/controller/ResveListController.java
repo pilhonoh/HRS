@@ -81,7 +81,7 @@ public class ResveListController {
 		
 		int totalCount = resveListService.selectResveListTotalCount(param);
 		result.addCustoms("totalCount", totalCount);
-				
+
 		return result;
 	}
 	
