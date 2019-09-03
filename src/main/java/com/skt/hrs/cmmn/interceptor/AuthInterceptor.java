@@ -20,7 +20,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		if(session == null || session.getAttribute("LoginVo") == null) {			
 			
 			//TODO: 인증없음 noti필요
-			response.sendRedirect(request.getContextPath());
+			response.sendRedirect("".equals(request.getContextPath()) ? "/" : request.getContextPath());
 		}
 		return true;
 	}
