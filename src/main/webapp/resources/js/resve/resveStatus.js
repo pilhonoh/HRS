@@ -3,25 +3,23 @@
  */
 var resveStatus = {
 	data : {
-		beds : []
+		beds : [],
+		selectedDate : undefined
 	},
 	// 초기화
 	init: function(){
-		loadCodeSelect(function(){
-			resveStatus.fillBeds();		// bed목록 조회
-		});			// 공통코드 로드
-		resveStatus.setHeader();	// 헤더에 카운트표시
-		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
 		
+		resveStatus.setHeader();		// 헤더에 카운트표시		
 		resveStatus.calendar.render();	// 달력 렌더링
-		
-		//resveStatus.table.init();	// 예약현황테이블 초기화
-		//resveStatus.table.getStatus();		
-		
-		//FIXME : await 적용(ie지원안됨) or promise 적용 or 콜백 형식으로 순차적으로 실행할 필요 있음.
-		setTimeout(function(){
-			$('.month-calendar .today span').trigger('click')
-		},200);
+		loadCodeSelect(function(){		// 공통코드 로드
+			resveStatus.fillBeds()		// bed목록 조회
+				.then(function(){
+					$('.month-calendar .today span').trigger('click');
+				})	
+		});			
+				
+		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩		
+					
 	},
 	// 헤더세팅
 	setHeader : function(){
@@ -45,9 +43,13 @@ var resveStatus = {
 		})
 		
 	},
+	// 사옥변경 이벤트 리스너
 	bldOnChange : function(e){
 		console.log(e.target.value)
-		resveStatus.fillBeds(e.target.value);
+		resveStatus.fillBeds(e.target.value)
+			.then(function(){
+				$('.month-calendar .today span').trigger('click');
+			})
 	},
 	// 해당사옥의 bed목록 조회
 	fillBeds : function(bldCode){
@@ -66,9 +68,10 @@ var resveStatus = {
 		});
 	},	
 	// 상단 2주달력
-	calendar: {		
+	calendar: {
+		// 렌더링
 		render : function(){
-			
+								
 			var dates = getAfter2Weeks();
 			var elements = [];
 								
@@ -109,8 +112,9 @@ var resveStatus = {
 				);
 			});
 			
-			$('.month-calendar tbody tr').append(elements);
+			$('.month-calendar tbody tr').append(elements);			
 		},
+		// 클릭이벤트 리스너
 		click: function(e){
 			console.log('click',$(e.target).data('data'));
 			var data = $(e.target).data('data');			
@@ -118,6 +122,7 @@ var resveStatus = {
 			$('.sub-tit h3').text(str);
 			resveStatus.table.init();
 			resveStatus.table.getStatus($(e.target).data('data').yyyymmdd)
+			resveStatus.data.selectedDate = $(e.target).data('data');
 		}
 	},
 	// 예약현황 테이블
@@ -139,6 +144,12 @@ var resveStatus = {
 			})
 			$('.reservation-table tbody').empty().append(trList);	
 		},
+		// 새로고침
+		refresh : function(){
+			resveStatus.table.init();
+			resveStatus.table.getStatus(resveStatus.data.selectedDate.yyyymmdd)
+		},
+		// 예약현황조회
 		getStatus: function(yyyymmdd){
 			if(!yyyymmdd){
 				yyyymmdd = moment().format('YYYYMMDD');
@@ -156,9 +167,9 @@ var resveStatus = {
 					function getButton(status){
 						return {
 							//예약가능
-							'RESVE_POSBL' : '<button class="rv-btn st1" onclick="e_layer_pop01("layer_pop01");">예약가능</button>',	
+							'RESVE_POSBL' : $('<button>').text('예약가능').addClass('rv-btn st1').on('click', resveStatus.pop.regist),	//   '<button class="rv-btn st1" onclick="resveStatus.pop.regist();">예약가능</button>',	
 							//예약완료
-							'RESVE_COMPT' : '<button class="rv-btn st3" onclick="e_layer_pop03("layer_pop03");">예약완료</button>',	
+							'RESVE_COMPT' : $('<button>').text('예약완료').addClass('rv-btn st3').on('click', resveStatus.pop.cancel), //'<button class="rv-btn st3" onclick="e_layer_pop03("layer_pop03");">예약완료</button>',	
 							//예약불가
 							'RESVE_IMPRTY' : '<button class="rv-btn" disabled>예약불가</button>',
 							//대기가능
@@ -183,7 +194,10 @@ var resveStatus = {
 							$div = $('<div class="rv-box">').addClass(stts.MSSR_SEXDSTN == 'F' ? 'woman' : 'man');
 							var $p = $('<p class="name">').append($('<strong>').text(stts.MSSR_NCNM));
 							var $ul = $('<ul class="rv-btn-area">');
-							var $li = $('<li>').append(getButton(stts.LAST_STTUS));
+							var $li = $('<li>')
+										.attr('id', 'resve-'+stts.RESVE_NO)
+										.data('data', stts)
+										.append(getButton(stts.LAST_STTUS));
 							
 							var $td = $('.' + stts.BED_CODE + '-' + stts.RESVE_TM);
 							
@@ -192,7 +206,10 @@ var resveStatus = {
 						}else{
 							//이전근무에 연속해서 그림
 							var $ul = $div.find('ul');
-							var $li = $('<li>').append(getButton(stts.LAST_STTUS));
+							var $li = $('<li>')
+										.attr('id', 'resve-'+stts.RESVE_NO)
+										.data('data', stts)
+										.append(getButton(stts.LAST_STTUS));
 							$ul.append($li);
 							$div.parent('td').attr('colspan', $ul.find('li').length);	// td colspan
 							$('.' + stts.BED_CODE + '-' + stts.RESVE_TM).remove();		// colspan을 했으니 td삭제
@@ -210,6 +227,57 @@ var resveStatus = {
 			});			
 		}
 	},
+	
+	// 예약 등록
+	regist : function(resveNo){
+		$.ajax({
+			url: ROOT + '/resve/regist',
+			type: 'POST',
+			data: {resveNo: resveNo},
+			success : function(res){
+				console.log('regist',res);
+				resveStatus.table.refresh();
+				closeLayerPopup();
+			},
+			error : function(err) {
+				console.error(err)
+			}
+		});
+	},
+	// 예약/대기 취소
+	cancel : function(resveNo, cancelGbn) {
+		$.ajax({
+			url: ROOT + '/resve/cancel',
+			type: 'POST',
+			data: {resveNo: resveNo, cancelGbn: cancelGbn},
+			success : function(res){
+				console.log('cancel',res);
+				resveStatus.table.refresh();
+				closeLayerPopup();			
+			},
+			error : function(err) {
+				console.error(err)
+			}
+		});
+	},
+	
+	// 팝업 호출 
+	pop : {
+		//예약 신청 팝업 호출
+		regist : function(e){
+			var $li = $(e.target).parent('li');			
+			$('#layer_pop01').load(ROOT + '/resve/pop/regist', {resveNo : $li.data('data').RESVE_NO}, function(res){	
+				openLayerPopup('layer_pop01');
+			});
+		},
+		cancel : function(e){			
+			var data = $(e.target).parent('li').data('data');			
+			$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : data.RESVE_NO, cancelGbn: data.LAST_STTUS}, function(res){	
+				openLayerPopup('layer_pop03');
+			});
+		}
+	},
+	
 	
 }
 

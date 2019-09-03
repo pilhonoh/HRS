@@ -55,54 +55,39 @@
 		AND STTS.BED_CODE = BED.CODE
 		WHERE STTS.RESVE_DE = #{resveDe}
 		AND STTS.BLD_CODE = #{bldCode}
-		ORDER BY BED_CODE, RESVE_TM
-			
-	<!-- 
-		SELECT BED.CODE AS BED_CODE,
-			BED.CODE_NM AS BED_NM,
-		    ST.*
-		FROM 
-		/* 사옥의 전체 베드목록 */
-		(
-			SELECT * FROM cmmn_code WHERE CODE_TYL='BED'
-		) BED	
-		LEFT JOIN 
-		/* 예약현황 */
-		(
-			SELECT STTS.RESVE_NO,	/* 예약번호 */
-				STTS.RESVE_DE,		/* 예약일 */
-				STTS.RESVE_TM,		/* 예약시간 */
-				STTS.BLD_CODE,		/* 사옥코드 */
-				STTS.MSSR_EMPNO,	/* 관리사사번 */
-				STTS.BED_CODE,		/* 베드코드 */
-				(SELECT CODE_NM FROM cmmn_code WHERE CODE_TYL='BED' AND CODE_TYS='SK01' AND CODE='A') AS BED_NM,	/* 베드명 */ 
-				STTS.RESVE_EMPNO,	/* 예약자사번 */    
-				STTS.WAIT_EMPNO,	/* 대기자사번 */
-				MSSR.NCNM AS MSSR_NCNM,			/* 관리사닉네임 */
-				MSSR.SEXDSTN AS MSSR_SEXDSTN,	/* 관리사성별 */
-				HIST.LAST_STTUS_CODE			/* 마지막상태코드 */
-			FROM RESVE_STTUS STTS
-			INNER JOIN (
-				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
-				FROM RESVE_HIST T1
-				INNER JOIN (
-					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-					FROM RESVE_HIST	
-					GROUP BY RESVE_NO
-				) T2
-				ON T1.RESVE_NO = T2.RESVE_NO
-				AND T1.REG_DT = T2.REG_DT		
-		    ) HIST
-		    ON STTS.RESVE_NO = HIST.RESVE_NO
-			INNER JOIN MASSEUR MSSR
-			ON STTS.MSSR_EMPNO = MSSR.EMPNO
-			WHERE STTS.RESVE_DE = #{resveDe}
-			AND STTS.BLD_CODE = #{bldCode}
-		) ST	
-		ON BED.CODE_TYS = ST.BLD_CODE
-		AND BED.CODE = ST.BED_CODE
-		ORDER BY BED.CODE_ORDR, ST.RESVE_NO
-	 -->
+		ORDER BY BED_CODE, RESVE_TM	
 	</select>
+	
+	<!-- 예약 단건 조회 -->
+	<select id="resveStatusMapper.selectResveItem" parameterType="map" resultType="hashmap">
+		SELECT 
+			A.*,
+		    B.NCNM AS MSSR_NCNM,
+		    B.SEXDSTN AS MSSR_SEXDSTN,
+		    B.HFFC_YN AS MSSR_HFFC_YN
+		FROM RESVE_STTUS A
+		INNER JOIN MASSEUR B
+		ON A.MSSR_EMPNO = B.EMPNO
+		WHERE RESVE_NO = #{resveNo}		
+	</select>
+	
+	<update id="resveStatusMapper.updateResveStatus" parameterType="map">
+		UPDATE RESVE_STTUS
+		SET 
+		<if test="resveEmpno != null">	<!-- ''(빈문자열)의 경우에도 유효하게 업데이트해야하므로 주의한다. -->			
+			RESVE_EMPNO = #{resveEmpno},
+		</if>
+		<if test="waitEmpno != null">			
+			WAIT_EMPNO = #{waitEmpno},
+		</if>
+			UPDT_EMPNO = #{empno},
+			UPDT_DT = now()
+		WHERE RESVE_NO = #{resveNo}		
+	</update>
+	
+	<insert id="resveStatusMapper.insertResveHist" parameterType="map">
+		INSERT INTO RESVE_HIST (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
+		VALUES (#{resveNo}, #{sttusCode}, #{empno}, now(), #{targetEmpno} )
+	</insert>
 	
 </mapper>

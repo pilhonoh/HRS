@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.contants.ResveViewStatus;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.dao.ResveStatusDAO;
 import com.skt.hrs.utils.StringUtil;
@@ -69,6 +70,100 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 예약 등록
+	 * @작성일 : 2019.09.03
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult registResveStatus(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		Map resveItem = resveStatusDAO.selectResveItem(param);
+		
+		// 예약가능한지 체크		
+		if(resveItem != null) {
+			
+			// 상태체크
+			if(!StringUtil.isEmpty((String) resveItem.get("RESVE_EMPNO"))) {
+				throw new HrsException("invalid request");
+			}		
+			// 시간체크
+			
+			// 성별체크
+			if(resveItem.get("MSSR_SEXDSTN").equals("F")	// 관리사가 여성이고 
+					&& param.get("resveSexdstn").equals("M")) {		// 구성원이 남성이면 불가
+				throw new HrsException("invalid request");
+			}
+			
+			// 현황 update
+			boolean updateResult = resveStatusDAO.updateResveStatus(param);
+			
+			// 이력 insert
+			param.put("sttusCode", "STS01");
+			param.put("targetEmpno", (String)param.get("resveEmpno"));
+			boolean insertResult = resveStatusDAO.insertResveHist(param);
+			
+			result.setItemOne(updateResult && insertResult);
+			
+		}else {
+			throw new HrsException("invalid request");
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 예약/대기 취소 
+	 * @작성일 : 2019.09.03
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult cancelResveStatus(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		Map resveItem = resveStatusDAO.selectResveItem(param);
+		
+		// 취소 가능한지 체크
+		if(resveItem != null) {
+			
+			if(param.getString("cancelGbn").equals(ResveViewStatus.RESVE_COMPT.toString())) {	// 예약취소						
+				//TODO: 시간체크
+				
+				// 현황 update
+				param.put("resveEmpno", "");
+				boolean updateResult = resveStatusDAO.updateResveStatus(param);
+				
+				// 이력 insert
+				param.put("sttusCode", "STS02");	// STS02 : 예약취소
+				param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+				boolean insertResult = resveStatusDAO.insertResveHist(param);
+				
+				result.setItemOne(updateResult && insertResult);
+				
+				//TODO: 대기중인 구성원을 예약상태로 변경
+				
+				//TODO: SMS 등록
+				
+			}else if(param.getString("cancelGbn").equals(ResveViewStatus.WAIT.toString())) {	// 대기취소
+				//TODO: 시간체크
+			}else {
+				throw new HrsException("invalid request");	// 예약or대기 상태가 아닌경우
+			}									
+						
+		}else {
+			throw new HrsException("invalid request");
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * 
 	 * @설명 : 화면에 보이는 상태를 계산하여 반환한다.
 	 * 	 	예약가능 : 예약자, 대기자가 없는 경우 
 	 * 		예약완료 : 본인이 예약자인 경우
@@ -100,7 +195,7 @@ public class ResveStatusService {
 		}else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
 			//예약가능
 			resultStatus = ResveViewStatus.RESVE_POSBL;
-		}else if(!StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
+		}else if(!StringUtil.isEmpty(resveEmpno)) {
 			if(resveEmpno.equals(myEmpno)) {
 				if(lastStatusCode.equals("STS05")) {
 					// 완료
@@ -113,7 +208,7 @@ public class ResveStatusService {
 				//대기가능
 				resultStatus = ResveViewStatus.WAIT_POSBL;
 			}
-		}else if(waitEmpno.equals(myEmpno)) {
+		}else if(!StringUtil.isEmpty(waitEmpno) && waitEmpno.equals(myEmpno)) {
 			if(lastStatusCode.equals("STS05")) {
 				// 완료
 				resultStatus = ResveViewStatus.COMPT;

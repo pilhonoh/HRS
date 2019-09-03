@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.pub.core.entity.DataEntity;
+import com.skt.hrs.cmmn.exception.HrsException;
 
 
 @Repository("resveStatusDAO")
@@ -48,5 +49,56 @@ public class ResveStatusDAO {
 	 */	
 	public List selectResveStatus(DataEntity param) {
 		return sqlSession.selectList("resveStatusMapper.selectResveStatus", param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 예약 단건 조회
+	 * @작성일 : 2019.09.02
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectResveItem(DataEntity param) {
+		return sqlSession.selectOne("resveStatusMapper.selectResveItem", param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 예약상태변경 
+	 * @작성일 : 2019.09.03
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean updateResveStatus(DataEntity param) {
+		int result = sqlSession.update("resveStatusMapper.updateResveStatus", param);
+		if(result == 1) {
+			return true;
+		}else {
+			if(result > 1) {
+				throw new HrsException();
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 예약이력등록 
+	 * @작성일 : 2019.09.03
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean insertResveHist(DataEntity param) {
+		int result = sqlSession.insert("resveStatusMapper.insertResveHist", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -581,6 +581,70 @@ function getAfter2Weeks(fromDate) {
 	return dates;
 }
 
+function openLayerPopup(id){
+	$('.pop-layer').css('display', 'none'); 
+	var temp = $('#' + id);
+	var bg = temp.parents('bg');
+	if (bg) {
+		$('.layer').fadeIn();
+	} else {
+		temp.fadeIn();
+	}
+	temp.css('display', 'block');
+	if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
+	else temp.css('top', '0px');
+	if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
+	else temp.css('left', '0px');
+
+	$("html").attr("style", "overflow-y:hidden");
+	$("html").addClass("scroll");
+
+	temp.find('.layerClose').click(function (e) {
+		if (bg) {
+			$('.layer').fadeOut();
+		} else {
+			temp.fadeOut();
+		}
+		e.preventDefault();
+		$("html").attr("style", "overflow-y:auto");
+		$("html").removeClass("scroll");
+	});
+
+	$('.layer .bg').click(function (e) {
+		$('.layer').fadeOut();
+		e.preventDefault();
+		$("html").attr("style", "overflow-y:scroll");
+		$("html").removeClass("scroll");
+	});
+}
+
+function closeLayerPopup(){
+	var temp = $('.pop-layer'); //$('#' + id);
+	var bg = temp.parents('bg');
+	
+	if (bg) {
+		$('.layer').fadeOut();
+	} else {
+		temp.fadeOut();
+	}	
+	$("html").attr("style", "overflow-y:auto");
+	$("html").removeClass("scroll");
+}
+
+function getRealTime(number){
+	return {
+		1 : { start : '09:30', end : '10:00'},
+		2 : { start : '10:30', end : '11:00'},
+		3 : { start : '11:30', end : '12:00'},
+		4 : { start : '12:30', end : '13:00'},
+		5 : { start : '13:30', end : '14:00'},
+		6 : { start : '14:30', end : '15:00'},
+		7 : { start : '15:30', end : '16:00'},
+		8 : { start : '16:30', end : '17:00'},
+		9 : { start : '17:30', end : '18:00'},
+	}[number]
+}
+
 /*$.async = function(url, param){
 	return new Promise(function(resolve, reject){
 		$.ajax({
