@@ -6,6 +6,7 @@ public class LoginVo {
 	private String hname;	//성명	
 	private String auth;	//권한 (시스템관리자,SKT 담당, 자회사담당, 구성원)
 	private String tSex;	//성별
+	private String place;	//근무장소코드
 	
 	public String getEmpno() {
 		return empno;
@@ -30,6 +31,12 @@ public class LoginVo {
 	}
 	public void settSex(String tSex) {
 		this.tSex = tSex;
+	}
+	public String getPlace() {
+		return place;
+	}
+	public void setPlace(String place) {
+		this.place = place;
 	}	
 	
 }

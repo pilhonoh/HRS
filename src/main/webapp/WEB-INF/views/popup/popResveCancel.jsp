@@ -38,7 +38,7 @@
 	<p class="pop-desc">※ 예약/대기 을(를) 취소 하시겠습니까?</p>
 
 	<div class="pop-btn-area">
-		<button class="pop-btn" onclick="resveStatus.cancel('${resveNo}', '${cancelGbn}')">확인</button>
+		<button id="btnOk" class="pop-btn">확인</button>
 		<button class="pop-btn gray layerClose">취소</button>
 	</div>
 

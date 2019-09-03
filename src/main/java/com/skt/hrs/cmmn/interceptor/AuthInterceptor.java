@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.vo.LoginVo;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -17,17 +18,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		System.out.println("AuthInterceptor URI :" + request.getRequestURI());
 		HttpSession session = request.getSession();
 		if(session == null || session.getAttribute("LoginVo") == null) {			
-			// FIXME: 로그인 개발 후, 수정필요.
-			LoginVo loginVo = new LoginVo();
-			loginVo.setEmpno("P149365");
-			loginVo.setHname("구성원1");
 			
-//			loginVo.setEmpno("P149080");
-//			loginVo.setHname("구성원2");
-			
-			loginVo.setAuth("AUT04");	//구성원
-			loginVo.settSex("M");
-			session.setAttribute("LoginVo", loginVo);
+			//TODO: 인증없음 noti필요
+			response.sendRedirect(request.getContextPath());
 		}
 		return true;
 	}
