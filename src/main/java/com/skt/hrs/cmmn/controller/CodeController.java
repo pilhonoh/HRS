@@ -18,8 +18,8 @@ import com.skt.hrs.cmmn.service.CodeService;
 
 /**
  * 
- * @FileName  : UserController.java
- * @프로그램 설명   : 헬스케어 예약 시스템 사용자 화면  컨트롤러
+ * @FileName  : CodeController.java
+ * @프로그램 설명   : 공통코드 컨트롤러
  * @Date      : 2019. 8. 27. 
  * @작성자      : 
  * @변경이력    :

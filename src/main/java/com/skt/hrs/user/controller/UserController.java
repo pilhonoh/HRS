@@ -42,48 +42,6 @@ public class UserController {
 	UserService userService;
 	
 	
-	/**
-	 * 
-	 * @Method Name : reservStatusView
-	 * @Method 설명      : 사용자 예약 현황 view
-	 * @작성일        : 2019. 8. 27. 
-	 * @작성자        : 
-	 * @변경이력      :
-	 * @param req
-	 * @return ModelAndView
-	 */
-	@RequestMapping(value = "/reservStatus")
-	public ModelAndView reservStatusView(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("user/reservStatus");
-		
-		return mav;
-	}
-	
-	
-	
-	/**
-	 * 
-	 * @Method Name : reservListView
-	 * @Method 설명      : 사용자 예약 리스트 view
-	 * @작성일        : 2019. 8. 27. 
-	 * @작성자        : 
-	 * @변경이력      :
-	 * @param req
-	 * @return ModelAndView
-	 */
-	@RequestMapping(value = "/reservList")
-	public ModelAndView reservListView(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("user/reservList");
-		
-		return mav;
-	}
-	
-	
-	
 	
 
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pub.core.constans.ResultConst;
 import com.pub.core.entity.ResponseResult;
-import com.pub.core.exception.EppltException;
 import com.pub.core.util.JsonUtils;
 
 @ControllerAdvice
@@ -82,7 +81,7 @@ public class GlobalExceptionHandler{
 	 * @변경이력 :
 	 */
 	@ExceptionHandler(value=HrsException.class)
-	public void hrsExceptionHandle(EppltException ex, HttpServletRequest request ,  HttpServletResponse response){
+	public void hrsExceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response){
 		
 		logger.error(getClass().getName(),ex);
 		
@@ -96,7 +95,7 @@ public class GlobalExceptionHandler{
 	}
 	
 	@ExceptionHandler(value=Exception.class)
-	public void exceptionHandle(EppltException ex, HttpServletRequest request ,  HttpServletResponse response){
+	public void exceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response){
 		
 		logger.error(getClass().getName(),ex);
 		

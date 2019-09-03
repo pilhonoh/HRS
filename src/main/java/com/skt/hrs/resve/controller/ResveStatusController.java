@@ -72,12 +72,30 @@ public class ResveStatusController {
 	 * @throws Exception
 	 * @변경이력 :
 	 */
-	
 	@RequestMapping(value = "/pop/regist")
 	public String resveRegistPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		model.addAllAttributes(param);
 		return "popup/popResveRegist";
+	}
+	
+	/**
+	 * 
+	 * @설명 : 대기등록 팝업 view 
+	 * @작성일 : 2019.09.03
+	 * @작성자 : P149365
+	 * @param req
+	 * @param res
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/pop/wait")
+	public String resveWaitPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		model.addAllAttributes(param);
+		return "popup/popResveWait";
 	}
 	
 	/**
@@ -153,6 +171,26 @@ public class ResveStatusController {
 		param.put("empno", loginVo.getEmpno());			//등록자사번
 		param.put("resveSexdstn", loginVo.gettSex());	//예약자성별
 		return resveStatusService.registResveStatus(param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 대기 등록
+	 * @작성일 : 2019.09.03
+	 * @작성자 : P149365
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/wait", method = RequestMethod.POST)
+	public @ResponseBody ResponseResult waitResveStatus(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("waitEmpno", loginVo.getEmpno());	//예약자사번
+		param.put("empno", loginVo.getEmpno());			//등록자사번
+		param.put("waitSexdstn", loginVo.gettSex());	//예약자성별
+		return resveStatusService.waitResveStatus(param);
 	}
 	
 	/**
