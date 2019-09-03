@@ -2,6 +2,7 @@ package com.skt.hrs.resve.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.service.ResveListService;
 
 
@@ -52,9 +54,7 @@ public class ResveListController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		
 		mav.setViewName("resve/resveList");
-		
 		return mav;
 	}
 	
@@ -71,10 +71,12 @@ public class ResveListController {
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/selectResveList")
-	public @ResponseBody ResponseResult selectResveList(HttpServletRequest request) throws Exception {
+	public @ResponseBody ResponseResult selectResveList(HttpServletRequest request, HttpSession sess) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(request);
 		
-		param.put("empNo", "P149080"); //테스트를 위해 사번 하드코딩
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("empNo", loginVo.getEmpno());
+		//param.put("empNo", "P149080"); //테스트를 위해 사번 하드코딩
 
 		int rowPerPage = param.getInt("rowPerPage");
 		int startRow = param.getInt("startRow");

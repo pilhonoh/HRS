@@ -1,13 +1,13 @@
 /**
- * 예약 List
+ * 관리사 스케쥴 List
  */
-var resveList = {
+var scheduleList = {
 	// 초기화
 	init: function() {
 		loadCodeSelect(); //콤보박스 공통코드 세팅
-		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		resveList.list.renderResveList(); //목록 조회 후 렌더
-		resveList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
+		scheduleList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
+		scheduleList.list.renderResveList(); //목록 조회 후 렌더
+		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 	},
 	
 	
@@ -19,7 +19,7 @@ var resveList = {
 				success: function(res) {
 					console.log('allCodeList', res);
 					if (res.status === 200) {
-						resveList.cmmnCode.allCodeList = res.list;
+						scheduleList.cmmnCode.allCodeList = res.list;
 					}
 				},
 				error: function(err) {
@@ -28,10 +28,10 @@ var resveList = {
 			})
 		},
 		codeToName: function(code) {
-			var allCodeList = resveList.cmmnCode.allCodeList;
+			var allCodeList = scheduleList.cmmnCode.allCodeList;
 			
 			if (allCodeList.length == 0) {
-				resveList.cmmnCode.getAllCodeList();
+				scheduleList.cmmnCode.getAllCodeList();
 			}
 			
 			var codeName = '';
@@ -56,8 +56,8 @@ var resveList = {
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			resveList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
-			resveList.list.params.toDate = moment().format('YYYYMMDD');
+			scheduleList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
+			scheduleList.list.params.toDate = moment().format('YYYYMMDD');
 		}
 	},
 	
@@ -89,21 +89,21 @@ var resveList = {
 		//예약 목록 조회
 		selectResveList: function() {
 			
-			resveList.list.params.startRow = parseInt((resveList.list.params.pageNo - 1 ) * resveList.list.params.rowPerPage);
+			scheduleList.list.params.startRow = parseInt((scheduleList.list.params.pageNo - 1 ) * scheduleList.list.params.rowPerPage);
 			
-			console.log(resveList.list.params.startRow);
-			console.log(resveList.list.params.rowPerPage);
+			console.log(scheduleList.list.params.startRow);
+			console.log(scheduleList.list.params.rowPerPage);
 			
 			var deferred = $.Deferred();
 			
 			$.ajax({
 				url: ROOT + '/resve/selectResveList',
-				data: resveList.list.params,
+				data: scheduleList.list.params,
 				success: function(res) {
-					console.log('resveList', res);
+					console.log('scheduleList', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
-						resveList.list.dataList = res.list;
+						scheduleList.list.dataList = res.list;
 						
 					} else {
 						deferred.reject("");
@@ -121,7 +121,7 @@ var resveList = {
 		
 		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성
 		renderResveList: function() {
-			$.when(resveList.list.selectResveList()).done(function(result) {
+			$.when(scheduleList.list.selectResveList()).done(function(result) {
 
 				$('tbody#resveList').empty();
 				
@@ -131,7 +131,7 @@ var resveList = {
 				var btnClass = '';
 				var resveDt = '';
 				
-				resveList.paging.params.totalCount = result.customs.totalCount;
+				scheduleList.paging.params.totalCount = result.customs.totalCount;
 				
 				for (var i in resultList) {
 					var stsCode = resultList[i].LAST_STTUS_CODE;
@@ -163,17 +163,17 @@ var resveList = {
 				}
 				
 				$('tbody#resveList').html(resveListHtml.join(''));
-				resveList.paging.renderPaging();
+				scheduleList.paging.renderPaging();
 				
-				resveList.button.resveCancelBtnEvent();
-				resveList.button.waitCancelBtnEvent();
+				scheduleList.button.resveCancelBtnEvent();
+				scheduleList.button.waitCancelBtnEvent();
 				
 			});
 		},
 		
 		//현재 리스트에서 예약번호로 해당 ROW 의 데이터를 가져옴
 		getRowData: function(resveNo) {
-			var rowDataList = resveList.list.dataList;
+			var rowDataList = scheduleList.list.dataList;
 			var rowData;
 			
 			for (var i in rowDataList) {
@@ -202,9 +202,9 @@ var resveList = {
 		//페이지 이동 영역 생성
 		renderPaging: function() {
 			
-			var currentIndex = resveList.list.params.pageNo; //현재 페이지 위치
-			var rowPerPage = resveList.list.params.rowPerPage; //페이지 당 레코드 수
-			var totalCount = resveList.paging.params.totalCount; //list 의 전체 row count
+			var currentIndex = scheduleList.list.params.pageNo; //현재 페이지 위치
+			var rowPerPage = scheduleList.list.params.rowPerPage; //페이지 당 레코드 수
+			var totalCount = scheduleList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 			
 			$("div#pagingArea").empty();
@@ -217,10 +217,10 @@ var resveList = {
 			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; 
 			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount;
 			
-			resveList.paging.params.first = first;
-			resveList.paging.params.last = last;
-			resveList.paging.params.prev = prev;
-			resveList.paging.params.next = next;
+			scheduleList.paging.params.first = first;
+			scheduleList.paging.params.last = last;
+			scheduleList.paging.params.prev = prev;
+			scheduleList.paging.params.next = next;
 			
 			/*
 			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
@@ -255,70 +255,70 @@ var resveList = {
 			
 			$("div#pagingArea").append(preStr + pageNumStr + postStr);
 			
-			resveList.paging.button.allPagingBtnEventBinding();
+			scheduleList.paging.button.allPagingBtnEventBinding();
 		},
 		
 		button: {
 			allPagingBtnEventBinding: function() {
-				resveList.paging.button.pageNumEvent();
-				resveList.paging.button.prevBtnEvent();
-				resveList.paging.button.nextBtnEvent();
-				resveList.paging.button.firstBtnEvent();
-				resveList.paging.button.lastBtnEvent();
+				scheduleList.paging.button.pageNumEvent();
+				scheduleList.paging.button.prevBtnEvent();
+				scheduleList.paging.button.nextBtnEvent();
+				scheduleList.paging.button.firstBtnEvent();
+				scheduleList.paging.button.lastBtnEvent();
 			},
 			
 			pageNumEvent: function() {
 				$('a.num').off();
 				$('a.num').on('click', function() {
-					if (resveList.list.params.pageNo == parseInt(this.innerHTML)) {
+					if (scheduleList.list.params.pageNo == parseInt(this.innerHTML)) {
 						return false;
 					}
-					resveList.list.params.pageNo = parseInt(this.innerHTML);
-					resveList.list.renderResveList();
+					scheduleList.list.params.pageNo = parseInt(this.innerHTML);
+					scheduleList.list.renderResveList();
 				});
 			},
 			
 			prevBtnEvent: function() {
 				$('a#prevBtn').off();
 				$('a#prevBtn').on('click', function() {
-					if (resveList.list.params.pageNo == resveList.paging.params.prev) {
+					if (scheduleList.list.params.pageNo == scheduleList.paging.params.prev) {
 						return false;
 					}
-					resveList.list.params.pageNo = resveList.paging.params.prev;
-					resveList.list.renderResveList();
+					scheduleList.list.params.pageNo = scheduleList.paging.params.prev;
+					scheduleList.list.renderResveList();
 				});
 			},
 			
 			nextBtnEvent: function() {
 				$('a#nextBtn').off();
 				$('a#nextBtn').on('click', function() {
-					if (resveList.list.params.pageNo == resveList.paging.params.next) {
+					if (scheduleList.list.params.pageNo == scheduleList.paging.params.next) {
 						return false;
 					}
-					resveList.list.params.pageNo = resveList.paging.params.next;
-					resveList.list.renderResveList();
+					scheduleList.list.params.pageNo = scheduleList.paging.params.next;
+					scheduleList.list.renderResveList();
 				});
 			},
 			
 			firstBtnEvent: function() {
 				$('a#firstBtn').off();
 				$('a#firstBtn').on('click', function() {
-					if (resveList.list.params.pageNo == resveList.paging.params.first) {
+					if (scheduleList.list.params.pageNo == scheduleList.paging.params.first) {
 						return false;
 					}
-					resveList.list.params.pageNo = resveList.paging.params.first;
-					resveList.list.renderResveList();
+					scheduleList.list.params.pageNo = scheduleList.paging.params.first;
+					scheduleList.list.renderResveList();
 				});
 			},
 			
 			lastBtnEvent: function() {
 				$('a#lastBtn').off();
 				$('a#lastBtn').on('click', function() {
-					if (resveList.list.params.pageNo == resveList.paging.params.last) {
+					if (scheduleList.list.params.pageNo == scheduleList.paging.params.last) {
 						return false;
 					}
-					resveList.list.params.pageNo = resveList.paging.params.last;
-					resveList.list.renderResveList();
+					scheduleList.list.params.pageNo = scheduleList.paging.params.last;
+					scheduleList.list.renderResveList();
 				});
 			}
 		}
@@ -338,16 +338,16 @@ var resveList = {
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
 				//날짜 validation 실행
-				resveList.validation.dateCheck();
+				scheduleList.validation.dateCheck();
 				
 				//조회 페이지는 1로 초기화 param 세팅
-				resveList.list.params.pageNo = 1;
+				scheduleList.list.params.pageNo = 1;
 				
 				//상태 param 세팅
-				resveList.list.params.statusCode = $('#stsCombo').val();
+				scheduleList.list.params.statusCode = $('#stsCombo').val();
 								
 				//목록 조회 및 렌더 실행
-				resveList.list.renderResveList();
+				scheduleList.list.renderResveList();
 			});
 		},
 		
@@ -357,12 +357,12 @@ var resveList = {
 			$('button.resveCancelBtn').on('click', function(e) {
 				var btn = $(this);
 				
-				console.log(resveList.list.getRowData(btn.data('resveno')));
+				console.log(scheduleList.list.getRowData(btn.data('resveno')));
 				
-				resveList.button.cancelBtnStatus.type = 'resve';
-				resveList.button.cancelBtnStatus.rowData =  resveList.list.getRowData(btn.data('resveno'));
+				scheduleList.button.cancelBtnStatus.type = 'resve';
+				scheduleList.button.cancelBtnStatus.rowData =  scheduleList.list.getRowData(btn.data('resveno'));
 				
-				resveList.popup.showCancelPopup();
+				scheduleList.popup.showCancelPopup();
 			});
 		},
 		
@@ -372,12 +372,12 @@ var resveList = {
 			$('button.waitCancelBtn').on('click', function(e) {
 				var btn = $(this);
 				
-				console.log(resveList.list.getRowData(btn.data('resveno')));
+				console.log(scheduleList.list.getRowData(btn.data('resveno')));
 				
-				resveList.button.cancelBtnStatus.type = 'wait';
-				resveList.button.cancelBtnStatus.rowData =  resveList.list.getRowData(btn.data('resveno'));
+				scheduleList.button.cancelBtnStatus.type = 'wait';
+				scheduleList.button.cancelBtnStatus.rowData =  scheduleList.list.getRowData(btn.data('resveno'));
 				
-				resveList.popup.showCancelPopup();
+				scheduleList.popup.showCancelPopup();
 			});
 		}
 	},
@@ -408,8 +408,8 @@ var resveList = {
 				return false;
 			}
 			
-			resveList.list.params.fromDate = fromdt;
-			resveList.list.params.toDate = todt;
+			scheduleList.list.params.fromDate = fromdt;
+			scheduleList.list.params.toDate = todt;
 			
 			return true;
 		}
@@ -418,7 +418,7 @@ var resveList = {
 	
 	popup: {
 		showCancelPopup: function() {
-			var rowData = resveList.button.cancelBtnStatus.rowData;
+			var rowData = scheduleList.button.cancelBtnStatus.rowData;
 			
 			$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : rowData.RESVE_NO, cancelGbn: rowData.LAST_STTS_CODE}, function(res){	
 				openLayerPopup('layer_pop03');
@@ -439,13 +439,13 @@ var resveList = {
 
 
 $(document).ready(function() {	
-	resveList.init();
+	scheduleList.init();
 });
 
 
 
 $(window).load(function() {
-	resveList.combobox.deleteStsOption();
+	scheduleList.combobox.deleteStsOption();
 });
 
 
