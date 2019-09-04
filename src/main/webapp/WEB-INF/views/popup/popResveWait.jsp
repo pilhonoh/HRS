@@ -51,7 +51,7 @@ $(document).ready(function(){
 	
 	$('#resveWait_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
 	$('#resveWait_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
-	$('#resveWait_bed').text(data.CODE_NM);
+	$('#resveWait_bed').text(data.BED_NM);
 	
 	var realTime = getRealTime(data.RESVE_TM);
 	$('#resveWait_resveTm').text(realTime.start + '~' + realTime.end);

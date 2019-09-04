@@ -25,7 +25,7 @@
 			STTS.BLD_CODE,					/* 사옥코드 */
 			STTS.MSSR_EMPNO,				/* 관리사사번 */
 			STTS.BED_CODE,					/* 베드코드 */		    
-			BED.CODE_NM,					/* 베드명 */
+			BED.CODE_NM AS BED_NM,			/* 베드명 */
 		    BED.CODE_ORDR,					/* 코드순번 */
 			STTS.RESVE_EMPNO,				/* 예약자사번 */    
 			STTS.WAIT_EMPNO,				/* 대기자사번 */

@@ -15,7 +15,7 @@
     </bean>
 
 
-
+	<!-- 
     <bean id="transactionManager_db2" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
     	<property name="dataSource" ref="dataSource_db2" />
     </bean>
@@ -28,5 +28,6 @@
     <bean id="sqlSession_db2" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg index="0" ref="sqlSessionFactory_db2" />
     </bean>
+    -->
     
 </beans>

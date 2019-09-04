@@ -121,8 +121,12 @@
 		    <version>2.8.5</version>
 		</dependency>
 		
-
-
+		<!-- jackson-core-asl -->
+		<dependency>
+		  <groupId>org.codehaus.jackson</groupId>
+		  <artifactId>jackson-core-asl</artifactId>
+		  <version>1.9.13</version>
+		</dependency>
 		
 				
 		<!-- AspectJ -->
@@ -228,6 +232,12 @@
 			<groupId>com.pub.core</groupId>
 			<artifactId>plt.common</artifactId>
 			<version>1.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>cglib</groupId>
+		  <artifactId>cglib</artifactId>
+		  <version>3.2.7</version>
 		</dependency>
 		
 	</dependencies>

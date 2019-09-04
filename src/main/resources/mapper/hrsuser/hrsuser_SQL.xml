@@ -6,14 +6,14 @@
 	<select id="hrsuserMapper.selectUserInfo" parameterType="map" resultType="hashmap">
 		SELECT A.EMPNO,
 			A.HNAME,
-		    A.T_SEX,
+		    CASE WHEN A.T_SEX = '2' THEN 'F' ELSE 'M' END AS T_SEX,
 		    A.PLACE,
 		    B.AUTH_CODE,
 		    B.BLD_CODE
 		FROM inf_person_info_rcv A
 		LEFT JOIN CHARGER B
 		ON A.EMPNO = B.EMPNO
-		WHERE A.EMPNO = #{empno}		
+		WHERE A.EMPNO = #{empno}
 	</select>
 	
 </mapper>

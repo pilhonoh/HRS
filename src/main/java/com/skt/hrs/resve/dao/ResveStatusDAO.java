@@ -79,7 +79,7 @@ public class ResveStatusDAO {
 			return true;
 		}else {
 			if(result > 1) {
-				throw new HrsException();
+				throw new HrsException("error.processFailure", true);
 			}
 		}
 		return false;

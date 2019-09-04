@@ -12,7 +12,9 @@ var resveStatus = {
 		resveStatus.setHeader();		// 헤더에 카운트표시		
 		resveStatus.calendar.render();	// 달력 렌더링
 		loadCodeSelect(function(){		// 공통코드 로드
-			$('[data-code-tyl=BLD] option[value='+SESSION.PLACE+']').attr('selected', true);	// default사옥선택
+			if(SESSION.PLACE){				
+				$('[data-code-tyl=BLD] option[value='+SESSION.PLACE+']').attr('selected', true);	// default사옥선택
+			}
 			resveStatus.fillBeds()		// bed목록 조회
 				.then(function(){
 					$('.month-calendar .today span').trigger('click');
@@ -35,6 +37,8 @@ var resveStatus = {
 					$('.header .user-desc #resveCnt').text(res.item.RESVE_CNT);
 					$('.header .user-desc #waitCnt').text(res.item.WAIT_CNT);
 					$('.header .user-desc').show();
+				}else{
+					alert(res.message)
 				}
 				
 			},
@@ -61,7 +65,11 @@ var resveStatus = {
 			data: {codeTyl: "BED", codeTys: bldCode},
 			success : function(res){
 				console.log('fillBeds',res);
-				resveStatus.data.beds = res.list;											
+				if(res.status === 200){					
+					resveStatus.data.beds = res.list;											
+				}else{
+					alert(res.message)
+				}
 			},
 			error : function(err) {
 				console.error(err)
@@ -159,71 +167,79 @@ var resveStatus = {
 				url: ROOT + '/resve/getStatus',
 				data: {resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
 				success : function(res){
-					console.log('getStatus',res);				
-					var list = res.list;
+					console.log('getStatus',res);
 					
-					var last = undefined;
-					var $div;
-					
-					function getButton(status){
-						return {
-							//예약가능
-							'RESVE_POSBL' : $('<button>').text('예약가능').addClass('rv-btn st1').on('click', resveStatus.pop.regist),	//   '<button class="rv-btn st1" onclick="resveStatus.pop.regist();">예약가능</button>',	
-							//예약완료
-							'RESVE_COMPT' : $('<button>').text('예약완료').addClass('rv-btn st3').on('click', resveStatus.pop.cancel), //'<button class="rv-btn st3" onclick="e_layer_pop03("layer_pop03");">예약완료</button>',	
-							//예약불가
-							'RESVE_IMPRTY' : $('<button>').text('예약불가').addClass('rv-btn').attr('disabled', true), // '<button class="rv-btn" disabled>예약불가</button>',
-							//대기가능
-							'WAIT_POSBL' : $('<button>').text('대기가능').addClass('rv-btn st2').on('click', resveStatus.pop.wait), //'<button class="rv-btn st2" onclick="e_layer_pop02("layer_pop02");">대기가능</button>',
-							//대기중
-							'WAIT' : $('<button>').text('대기중').addClass('rv-btn st4').on('click', resveStatus.pop.cancel), //'<button class="rv-btn st4" onclick="e_layer_pop03("layer_pop03");">대기중</button>',
-							//예약취소
-							'RESVE_CANCL' : '',
-							//대기취소
-							'WAIT_CANCL' : '',
-							//완료
-							'COMPT' : '<button class="rv-btn st5">케어완료</button>'				
-						}[status]
-					}
-					
-					list.forEach(function(stts){
+					if(res.status === 200){
 						
-						if(!last || 									// last가 없거나
-							last.RESVE_TM != (stts.RESVE_TM-1) || 		// last가 현재시간-1이 아니거나(연속되지않거나) (같은날 떨어진근무)
-							last.BED_CODE != stts.BED_CODE){			// 베드가 다른경우							
-							//근무를 새로 그림
-							$div = $('<div class="rv-box">').addClass(stts.MSSR_SEXDSTN == 'F' ? 'woman' : 'man');
-							var $p = $('<p class="name">').append($('<strong>').text(stts.MSSR_NCNM));
-							var $ul = $('<ul class="rv-btn-area">');
-							var $li = $('<li>')
-										.attr('id', 'resve-'+stts.RESVE_NO)
-										.data('data', stts)
-										.append(getButton(stts.LAST_STTUS));
-							
-							var $td = $('.' + stts.BED_CODE + '-' + stts.RESVE_TM);
-							
-							$td.empty().append($div.append($p).append($ul.append($li)));
-							
-						}else{
-							//이전근무에 연속해서 그림
-							var $ul = $div.find('ul');
-							var $li = $('<li>')
-										.attr('id', 'resve-'+stts.RESVE_NO)
-										.data('data', stts)
-										.append(getButton(stts.LAST_STTUS));
-							$ul.append($li);
-							$div.parent('td').attr('colspan', $ul.find('li').length);	// td colspan
-							$('.' + stts.BED_CODE + '-' + stts.RESVE_TM).remove();		// colspan을 했으니 td삭제
-							$div.removeClass('colspan' + ($ul.find('li').length-1))		// div colspan
-								.addClass('colspan' + $ul.find('li').length);
+						var list = res.list;
+						
+						var last = undefined;
+						var $div;
+						
+						function getButton(status){
+							return {
+								//예약가능
+								'RESVE_POSBL' : $('<button>').text('예약가능').addClass('rv-btn st1').on('click', resveStatus.pop.regist),	//   '<button class="rv-btn st1" onclick="resveStatus.pop.regist();">예약가능</button>',	
+								//예약완료
+								'RESVE_COMPT' : $('<button>').text('예약완료').addClass('rv-btn st3').on('click', resveStatus.pop.cancel), //'<button class="rv-btn st3" onclick="e_layer_pop03("layer_pop03");">예약완료</button>',	
+								//예약불가
+								'RESVE_IMPRTY' : $('<button>').text('예약불가').addClass('rv-btn').attr('disabled', true), // '<button class="rv-btn" disabled>예약불가</button>',
+								//대기가능
+								'WAIT_POSBL' : $('<button>').text('대기가능').addClass('rv-btn st2').on('click', resveStatus.pop.wait), //'<button class="rv-btn st2" onclick="e_layer_pop02("layer_pop02");">대기가능</button>',
+								//대기중
+								'WAIT' : $('<button>').text('대기중').addClass('rv-btn st4').on('click', resveStatus.pop.cancel), //'<button class="rv-btn st4" onclick="e_layer_pop03("layer_pop03");">대기중</button>',
+								//예약취소
+								'RESVE_CANCL' : '',
+								//대기취소
+								'WAIT_CANCL' : '',
+								//완료
+								'COMPT' : '<button class="rv-btn st5">케어완료</button>'				
+							}[status]
 						}
 						
-						last = stts;
-					})
+						list.forEach(function(stts){
+							
+							if(!last || 									// last가 없거나
+								last.RESVE_TM != (stts.RESVE_TM-1) || 		// last가 현재시간-1이 아니거나(연속되지않거나) (같은날 떨어진근무)
+								last.BED_CODE != stts.BED_CODE){			// 베드가 다른경우							
+								//근무를 새로 그림
+								$div = $('<div class="rv-box">').addClass(stts.MSSR_SEXDSTN == 'F' ? 'woman' : 'man');
+								var $p = $('<p class="name">').append($('<strong>').text(stts.MSSR_NCNM));
+								var $ul = $('<ul class="rv-btn-area">');
+								var $li = $('<li>')
+											.attr('id', 'resve-'+stts.RESVE_NO)
+											.data('data', stts)
+											.append(getButton(stts.LAST_STTUS));
+								
+								var $td = $('.' + stts.BED_CODE + '-' + stts.RESVE_TM);
+								
+								$td.empty().append($div.append($p).append($ul.append($li)));
+								
+							}else{
+								//이전근무에 연속해서 그림
+								var $ul = $div.find('ul');
+								var $li = $('<li>')
+											.attr('id', 'resve-'+stts.RESVE_NO)
+											.data('data', stts)
+											.append(getButton(stts.LAST_STTUS));
+								$ul.append($li);
+								$div.parent('td').attr('colspan', $ul.find('li').length);	// td colspan
+								$('.' + stts.BED_CODE + '-' + stts.RESVE_TM).remove();		// colspan을 했으니 td삭제
+								$div.removeClass('colspan' + ($ul.find('li').length-1))		// div colspan
+									.addClass('colspan' + $ul.find('li').length);
+							}
+							
+							last = stts;
+						})										
+					}else{
+						alert(res.message)
+					}
+					
+					
 					
 				},
 				error : function(err) {
-					console.error(err)
+					console.error(err.responseJSON)					
 				}
 			});			
 		}
@@ -237,8 +253,13 @@ var resveStatus = {
 			data: {resveNo: resveNo},
 			success : function(res){
 				console.log('regist',res);
-				resveStatus.table.refresh();
-				closeLayerPopup();
+				
+				if(res.status === 200){																					
+					resveStatus.table.refresh();
+					closeLayerPopup();
+				}else{
+					alert(res.message)
+				}
 			},
 			error : function(err) {
 				console.error(err)
@@ -252,8 +273,12 @@ var resveStatus = {
 			data: {resveNo: resveNo},
 			success : function(res){
 				console.log('wait',res);
-				resveStatus.table.refresh();
-				closeLayerPopup();
+				if(res.status === 200){					
+					resveStatus.table.refresh();
+					closeLayerPopup();
+				}else{
+					alert(res.message)
+				}
 			},
 			error : function(err) {
 				console.error(err)
@@ -268,8 +293,12 @@ var resveStatus = {
 			data: {resveNo: resveNo, cancelGbn: cancelGbn},
 			success : function(res){
 				console.log('cancel',res);
-				resveStatus.table.refresh();
-				closeLayerPopup();			
+				if(res.status === 200){					
+					resveStatus.table.refresh();
+					closeLayerPopup();			
+				}else{
+					alert(res.message)
+				}
 			},
 			error : function(err) {
 				console.error(err)

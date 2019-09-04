@@ -3,26 +3,35 @@ package com.skt.hrs.cmmn.exception;
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pub.core.constans.ResultConst;
+import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.JsonUtils;
+import com.skt.hrs.utils.StringUtil;
 
 @ControllerAdvice
 @RestController
 public class GlobalExceptionHandler{
 	
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	/**
 	 * 
@@ -81,17 +90,22 @@ public class GlobalExceptionHandler{
 	 * @변경이력 :
 	 */
 	@ExceptionHandler(value=HrsException.class)
-	public void hrsExceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response){
+	public void hrsExceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response, Locale locale){
 		
 		logger.error(getClass().getName(),ex);
 		
 		
 		ResponseResult result = new ResponseResult();
-		result.setStatus(ex.getErrorCode() > 0 ? ex.getErrorCode() : ResultConst.CODE.ERROR.toInt());
+		result.setStatus(ex.getErrorCode() > 0 ? ex.getErrorCode() : ResultConst.CODE.ERROR.toInt());		
 		result.setMessageCode(ex.getMessageCode());
-		result.setMessage(ex.getErrorMessage());
+		if(!StringUtil.isEmpty(ex.getMessageCode())) {			
+			result.setMessage(messageSource.getMessage(ex.getMessageCode(), null, locale));
+		}else {
+			result.setMessage(ex.getMessage());
+		}
 		
 		exceptionRequestHandle(request, response ,result, "hrsex");
+			
 	}
 	
 	@ExceptionHandler(value=Exception.class)
@@ -119,12 +133,13 @@ public class GlobalExceptionHandler{
 		if("XMLHttpRequest".equals(headerInfo)){
 			response.setContentType("application/json;charset=UTF-8");
 			response.setStatus(HttpStatus.OK.value());
+			//response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			result.setResultCode(ResultConst.CODE.ERROR.toInt());
 			
 			Writer writer=null;
 			try {
 				writer = response.getWriter();
-				writer.write(JsonUtils.objectToString(result));
+				writer.write(JsonUtils.objectToString(result));				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}finally{
