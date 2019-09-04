@@ -6,7 +6,7 @@ var scheduleList = {
 	init: function() {
 		loadCodeSelect(); //콤보박스 공통코드 세팅
 		scheduleList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		scheduleList.list.renderResveList(); //목록 조회 후 렌더
+		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 	},
 	
@@ -61,15 +61,7 @@ var scheduleList = {
 		}
 	},
 	
-	
-	combobox: {
-		deleteStsOption: function() {
-			$('select#stsCombo option[value="STS00"]').remove(); //'미예약' 삭제
-			$('select#stsCombo option[value="STS99"]').remove(); //'근무취소' 삭제
-		}
-	},
-	
-	
+
 	
 	list: {
 		
@@ -79,7 +71,8 @@ var scheduleList = {
 			rowPerPage: 6, //한 페이지 당 조회할 ROW 수
 			fromDate: '', //조회 시작 날짜
 			toDate: '', //조회 끝 날짜
-			statusCode: '', //상태
+			bldCode: '', //사옥코드
+			mssrEmpno: '', //관리사 사번
 			startRow: 0 //조회 시작할 ROW
 		},
 		
@@ -87,17 +80,14 @@ var scheduleList = {
 		dataList: [],
 		
 		//예약 목록 조회
-		selectResveList: function() {
+		selectScheduleList: function() {
 			
 			scheduleList.list.params.startRow = parseInt((scheduleList.list.params.pageNo - 1 ) * scheduleList.list.params.rowPerPage);
-			
-			console.log(scheduleList.list.params.startRow);
-			console.log(scheduleList.list.params.rowPerPage);
 			
 			var deferred = $.Deferred();
 			
 			$.ajax({
-				url: ROOT + '/resve/selectResveList',
+				url: ROOT + '/mssr/selectScheduleList',
 				data: scheduleList.list.params,
 				success: function(res) {
 					console.log('scheduleList', res);
@@ -120,13 +110,13 @@ var scheduleList = {
 		
 		
 		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성
-		renderResveList: function() {
-			$.when(scheduleList.list.selectResveList()).done(function(result) {
+		renderScheduleList: function() {
+			$.when(scheduleList.list.selectScheduleList()).done(function(result) {
 
-				$('tbody#resveList').empty();
+				$('tbody#scheduleList').empty();
 				
 				var resultList = result.list;
-				var resveListHtml = [];
+				var scheduleListHtml = [];
 				var btnText = '';
 				var btnClass = '';
 				var resveDt = '';
@@ -134,39 +124,37 @@ var scheduleList = {
 				scheduleList.paging.params.totalCount = result.customs.totalCount;
 				
 				for (var i in resultList) {
-					var stsCode = resultList[i].LAST_STTUS_CODE;
-					if (stsCode == 'STS01') {
-						btnText = '예약취소';
-						btnClass = 'resveCancelBtn';
-					} else if (stsCode == 'STS03') {
-						btnText = '대기취소';
-						btnClass = 'waitCancelBtn';
-					}
 					
 					var resve_de = resultList[i].RESVE_DE;
 					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 					
-					resveListHtml.push('<tr>');
-					resveListHtml.push('	<td>' + resveDt + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
-					resveListHtml.push('	<td>');
-					if (stsCode == 'STS01' || stsCode == 'STS03') {
-						resveListHtml.push('		<button class="t-btn ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
-					}
-					resveListHtml.push('	</td>');
-					resveListHtml.push('</tr>');
+					/*
+						<tr>
+							<td><input type="checkbox"></td>
+							<td>2019-08-21</td>
+							<td>티타워</td>
+							<td>James</td>
+							<td>남</td>
+							<td>09:30 ~ 11:00</td>
+							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
+						</tr>
+					 */
+					
+					scheduleListHtml.push('<tr>');
+					scheduleListHtml.push('	<td><input type="checkbox"></td>');
+					scheduleListHtml.push('	<td>2019-08-21</td>');
+					scheduleListHtml.push('	<td>티타워</td>');
+					scheduleListHtml.push('	<td>James</td>');
+					scheduleListHtml.push('	<td>남</td>');
+					scheduleListHtml.push('	<td>09:30 ~ 11:00</td>');
+					scheduleListHtml.push('	<td><button class="t-btn cr01">수정</button></td>');
+					scheduleListHtml.push('</tr>');
 				}
 				
-				$('tbody#resveList').html(resveListHtml.join(''));
+				$('tbody#scheduleList').html(scheduleListHtml.join(''));
 				scheduleList.paging.renderPaging();
 				
-				scheduleList.button.resveCancelBtnEvent();
-				scheduleList.button.waitCancelBtnEvent();
+				scheduleList.button.scheduleModifyBtnEvent();
 				
 			});
 		},
@@ -274,7 +262,7 @@ var scheduleList = {
 						return false;
 					}
 					scheduleList.list.params.pageNo = parseInt(this.innerHTML);
-					scheduleList.list.renderResveList();
+					scheduleList.list.renderScheduleList();
 				});
 			},
 			
@@ -329,11 +317,6 @@ var scheduleList = {
 	
 	button: {
 		
-		cancelBtnStatus: {
-			type: '', //예약취소(resve) or 대기취소(wait)
-			rowData: {} //취소버튼의 rowData
-		},
-		
 		//조회 버튼 클릭 이벤트
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
@@ -343,43 +326,21 @@ var scheduleList = {
 				//조회 페이지는 1로 초기화 param 세팅
 				scheduleList.list.params.pageNo = 1;
 				
-				//상태 param 세팅
-				scheduleList.list.params.statusCode = $('#stsCombo').val();
-								
+				//사옥 param 세팅
+				scheduleList.list.params.bldCode = $('#bldCombo').val();
+				
+				//관리사 param 세팅
+				scheduleList.list.params.mssrEmpno = $('#mssrCombo').val();
+				
 				//목록 조회 및 렌더 실행
 				scheduleList.list.renderResveList();
 			});
 		},
 		
-		//예약취소 버튼 클릭 이벤트
-		resveCancelBtnEvent: function() {
-			$('button.resveCancelBtn').off();
-			$('button.resveCancelBtn').on('click', function(e) {
-				var btn = $(this);
-				
-				console.log(scheduleList.list.getRowData(btn.data('resveno')));
-				
-				scheduleList.button.cancelBtnStatus.type = 'resve';
-				scheduleList.button.cancelBtnStatus.rowData =  scheduleList.list.getRowData(btn.data('resveno'));
-				
-				scheduleList.popup.showCancelPopup();
-			});
-		},
-		
-		//대기취소 버튼 클릭 이벤트
-		waitCancelBtnEvent: function() {
-			$('button.waitCancelBtn').off();
-			$('button.waitCancelBtn').on('click', function(e) {
-				var btn = $(this);
-				
-				console.log(scheduleList.list.getRowData(btn.data('resveno')));
-				
-				scheduleList.button.cancelBtnStatus.type = 'wait';
-				scheduleList.button.cancelBtnStatus.rowData =  scheduleList.list.getRowData(btn.data('resveno'));
-				
-				scheduleList.popup.showCancelPopup();
-			});
+		scheduleModifyBtnEvent: function() {
+			alert('modify button click');
 		}
+
 	},
 	
 	
@@ -417,21 +378,7 @@ var scheduleList = {
 	
 	
 	popup: {
-		showCancelPopup: function() {
-			var rowData = scheduleList.button.cancelBtnStatus.rowData;
-			
-			$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : rowData.RESVE_NO, cancelGbn: rowData.LAST_STTS_CODE}, function(res){	
-				openLayerPopup('layer_pop03');
-			});
-		},
-		
-		confirmBtn: function() {
-			
-		},
-		
-		cancelBtn: function() {
-			
-		}
+
 	}
 
 }
@@ -443,9 +390,5 @@ $(document).ready(function() {
 });
 
 
-
-$(window).load(function() {
-	scheduleList.combobox.deleteStsOption();
-});
 
 

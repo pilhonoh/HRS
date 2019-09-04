@@ -44,10 +44,9 @@
 									</td>
 									<th><strong class="stit">검색조건</strong></th>
 									<td>
-										<select style="width:120px;">
-											<option>사옥</option>
+										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
 										</select>
-										<select style="width:120px;">
+										<select style="width:120px;" id="mssrCombo">
 											<option>관리사</option>
 										</select>
 									</td>
@@ -88,7 +87,7 @@
 							<th>수정</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="scheduleList">
 						<tr>
 							<td><input type="checkbox"></td>
 							<td>2019-08-21</td>
@@ -137,7 +136,7 @@
 					</tbody>
 				</table>
 
-				<div class="paging_area">
+				<div class="paging_area" id="pagingArea">
 					<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
 					<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
 					<a href="#none" class="num selected">1</a>
@@ -158,7 +157,7 @@
 			</div><!-- //content -->
 
 			<footer class="footer">
-				<!--#include file="../include/footer.html"-->
+				<jsp:include page="${JSP}/include/footer.jsp" />
 			</footer><!-- //footer -->
 
 		</div><!-- //wrap -->
