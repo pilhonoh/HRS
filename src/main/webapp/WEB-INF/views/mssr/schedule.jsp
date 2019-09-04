@@ -47,7 +47,7 @@
 										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
 										</select>
 										<select style="width:120px;" id="mssrCombo">
-											<option>관리사</option>
+											<option value="">관리사</option>
 										</select>
 									</td>
 								</tr>
@@ -55,7 +55,7 @@
 						</table>
 					</div><!-- //searchTableArea -->
 					<div class="search_btn_area">
-						<button class="search_btn"><i class="xi-search xi-x"></i>검색</button>
+						<button class="search_btn" id="listBtn"><i class="xi-search xi-x"></i>검색</button>
 					</div><!-- //search_btn_area -->
 				</div><!-- // search_field_wrap -->
 

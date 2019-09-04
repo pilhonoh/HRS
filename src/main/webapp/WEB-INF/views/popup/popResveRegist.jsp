@@ -3,11 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <div class="pop-head">
-	<h2>헬스케어 예약 신청</h2>
+	<h2>헬스케어 <span>예약</span> 신청</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
 <div class="pop-container">	
 	<!-- 팝업 컨텐츠 S -->
+	
+	<p class="pop-desc icon01"><strong>예약</strong> 하시겠습니까?</p>
+	
 	<table class="tbl-style">
 		<colgroup>
 			<col style="width:30%;">
@@ -32,8 +35,6 @@
 			</tr>
 		</tbody>
 	</table>
-
-	<p class="pop-desc">※ 위 시각으로 예약 하시겠습니까?</p>
 
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>
