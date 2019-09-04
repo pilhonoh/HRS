@@ -5,6 +5,7 @@ var scheduleList = {
 	// 초기화
 	init: function() {
 		loadCodeSelect(); //콤보박스 공통코드 세팅
+		scheduleList.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 		scheduleList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
 		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
@@ -61,7 +62,63 @@ var scheduleList = {
 		}
 	},
 	
+	
+	
+	combobox: {
+		bldComboEventBinding: function() {
+			$('#bldCombo').on('change', function() {
+				var bldCode = $(this).val();
+				scheduleList.combobox.setMssrCombo(bldCode);
+			})
+		},
+		
+		
+		getMssrList: function(bldCode) {
+			var deferred = $.Deferred();
+			
+			$.ajax({
+				url: ROOT + '/mssr/getMssrList',
+				type: 'POST',
+				data: {
+					bldCode: bldCode
+				},
+				success: function(res) {
+					deferred.resolve(res.list);
+				},
+				error: function(err) {
+					console.error(err);
+					deferred.reject('');
+				}
+			});
+			
+			return deferred.promise();
+		},
+		
+		
+		setMssrCombo: function(bldCode) {
+			
+			$.when(scheduleList.combobox.getMssrList(bldCode)).done(function(result) {
+				
+				$('#mssrCombo').empty();
+				var mssrComboHtml = ['<option value="">관리사</option>'];
+								
+				if (result.length > 0 && bldCode) {
+					for (var i in result) {
+						mssrComboHtml.push('<option value="' + result[i].EMPNO + '">' + result[i].NCNM + '</option>');
+					}
+				}
+					
+				$('#mssrCombo').html(mssrComboHtml.join(''));
+				
+			});
+			
+		}
+		
 
+		
+	},
+	
+	
 	
 	list: {
 		
@@ -333,7 +390,7 @@ var scheduleList = {
 				scheduleList.list.params.mssrEmpno = $('#mssrCombo').val();
 				
 				//목록 조회 및 렌더 실행
-				scheduleList.list.renderResveList();
+				scheduleList.list.renderScheduleList();
 			});
 		},
 		

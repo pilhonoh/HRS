@@ -2,6 +2,7 @@ package com.skt.hrs.mssr.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.mssr.service.MssrService;
 
 
@@ -55,6 +57,22 @@ public class MssrController {
 		
 		mav.setViewName("mssr/schedule");
 		return mav;
+	}
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 목록 조회
+	 * @작성일 : 2019.09.04
+	 * @작성자 : LEE.J.H
+	 * @param req
+	 * @return
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/getMssrList")
+	public @ResponseBody ResponseResult getMssrList(HttpServletRequest req) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		return mssrService.getMssrList(param);
 	}
 	
 	

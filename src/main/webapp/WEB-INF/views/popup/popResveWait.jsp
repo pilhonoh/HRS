@@ -8,6 +8,8 @@
 </div>
 <div class="pop-container">	
 	<!-- 팝업 컨텐츠 S -->
+	<p class="pop-desc icon02"><strong>대기</strong> 하시겠습니까?</p>
+	
 	<table class="tbl-style">
 		<colgroup>
 			<col style="width:30%;">
@@ -32,8 +34,6 @@
 			</tr>
 		</tbody>
 	</table>
-
-	<p class="pop-desc">※ 위 시각으로 대기 하시겠습니까?</p>
 
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>

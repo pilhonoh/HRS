@@ -21,7 +21,18 @@ public class MssrDAO {
 	@Resource(name="sqlSession")
 	private SqlSession sqlSession;
 	
-	
+	/**
+	 * 
+	 * @설명 : 관리사 목록 조회 
+	 * @작성일 : 2019.09.04
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List getMssrList(DataEntity param) {
+		return sqlSession.selectList("mssrMapper.getMssrList", param);
+	}
 
 	
 }

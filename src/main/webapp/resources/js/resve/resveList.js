@@ -102,12 +102,12 @@ var resveList = {
 						resveList.list.dataList = res.list;
 						
 					} else {
-						deferred.reject("");
+						deferred.reject('');
 					}
 				},
 				error: function(err) {
 					console.error(err);
-					deferred.reject("");
+					deferred.reject('');
 				}
 			})
 			
@@ -434,9 +434,11 @@ var resveList = {
 				type: 'POST',
 				data: {resveNo: resveNo, cancelGbn: cancelGbn},
 				success : function(res){
-					console.log('cancel',res);
-					resveList.list.renderResveList();
-					closeLayerPopup();			
+					if (res.status === 200) {
+						console.log('cancel',res);
+						resveList.list.renderResveList();
+						closeLayerPopup();
+					}
 				},
 				error : function(err) {
 					console.error(err)

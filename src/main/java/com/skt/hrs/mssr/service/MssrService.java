@@ -22,6 +22,22 @@ public class MssrService {
 	
 	@Resource(name="mssrDAO")
 	private MssrDAO mssrDAO;
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 목록 조회
+	 * @작성일 : 2019.09.04
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult getMssrList(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemList(mssrDAO.getMssrList(param));
+		return result;
+	}
 
 
 	

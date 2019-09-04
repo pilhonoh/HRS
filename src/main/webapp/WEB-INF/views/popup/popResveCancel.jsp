@@ -7,8 +7,9 @@
 	<h2>헬스케어 예약/대기 취소</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
-<div class="pop-container">	
+<div class="pop-container">
 	<!-- 팝업 컨텐츠 S -->
+	<p class="pop-desc icon03"><strong>예약/대기</strong> 을(를) 취소 하시겠습니까?</p>
 
 	<table class="tbl-style">
 		<colgroup>
@@ -34,8 +35,6 @@
 			</tr>
 		</tbody>
 	</table>
-
-	<p class="pop-desc">※ 예약/대기 을(를) 취소 하시겠습니까?</p>
 
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>
