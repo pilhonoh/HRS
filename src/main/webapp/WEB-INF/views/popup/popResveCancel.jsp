@@ -47,17 +47,18 @@
 <script>
 
 var resveNo = '${resveNo}';
-var data = $('#resve-'+resveNo).data('data');
+var data = $('#resve-'+resveNo).data('data') || resveList.button.cancelBtnStatus.rowData;
+
+
 
 $(document).ready(function(){		
 	
 	$('#resveCancel_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
 	$('#resveCancel_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
-	$('#resveCancel_bed').text(data.CODE_NM);
+	$('#resveCancel_bed').text(data.BED_NM);
 	
 	var realTime = getRealTime(data.RESVE_TM);
 	$('#resveCancel_resveTm').text(realTime.start + '~' + realTime.end);
-				
 })
 
 </script>

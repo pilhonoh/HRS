@@ -88,11 +88,7 @@ var resveList = {
 		
 		//예약 목록 조회
 		selectResveList: function() {
-			
 			resveList.list.params.startRow = parseInt((resveList.list.params.pageNo - 1 ) * resveList.list.params.rowPerPage);
-			
-			console.log(resveList.list.params.startRow);
-			console.log(resveList.list.params.rowPerPage);
 			
 			var deferred = $.Deferred();
 			
@@ -420,17 +416,32 @@ var resveList = {
 		showCancelPopup: function() {
 			var rowData = resveList.button.cancelBtnStatus.rowData;
 			
-			$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : rowData.RESVE_NO, cancelGbn: rowData.LAST_STTS_CODE}, function(res){	
+			$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : rowData.RESVE_NO, cancelGbn: rowData.LAST_STTS_CODE}, function(res) {
+				$('#layer_pop03 #btnOk').on('click', function() {
+					resveList.popup.confirmBtn(rowData.RESVE_NO, rowData.LAST_STTUS_CODE);
+				});
 				openLayerPopup('layer_pop03');
 			});
 		},
 		
-		confirmBtn: function() {
+		//예약취소, 대기취소 팝업 확인 버튼 클릭 시
+		confirmBtn: function(resveNo, sttsCode) {
+			//현황 화면에서 사용하는 코드네임으로 변경
+			var cancelGbn = (sttsCode == 'STS01' ? 'RESVE_COMPT' : 'WAIT');
 			
-		},
-		
-		cancelBtn: function() {
-			
+			$.ajax({
+				url: ROOT + '/resve/cancel',
+				type: 'POST',
+				data: {resveNo: resveNo, cancelGbn: cancelGbn},
+				success : function(res){
+					console.log('cancel',res);
+					resveList.list.renderResveList();
+					closeLayerPopup();			
+				},
+				error : function(err) {
+					console.error(err)
+				}
+			});
 		}
 	}
 

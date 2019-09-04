@@ -13,7 +13,7 @@
 	<body>	
 		<div class="wrap">
 
-			<header class="header">				
+			<header class="header">
 				<jsp:include page="${JSP}/include/header.jsp" />
 			</header><!-- //header -->
 
@@ -77,7 +77,7 @@
 							<th>비고</th>
 						</tr>
 					</thead>
-					<tbody id="resvelist">
+					<tbody id="resveList">
 						<!-- 
 						<tr>
 							<td>2019-08-19</td>
