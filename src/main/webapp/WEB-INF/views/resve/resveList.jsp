@@ -153,21 +153,18 @@
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
 			<div class="bg"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">
-				<!--#include file="../popup/pop_예약신청.html" -->
-				<!-- <jsp:include page="${JSP}/popup/pop_reservApply.jsp" /> -->
+			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">				
+				
 			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">
-				<!--#include file="../popup/pop_대기신청.html" -->
-				<!-- <jsp:include page="${JSP}/popup/pop_waitingApply.jsp" /> -->
+			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">				
+				<jsp:include page="../popup/pop_waitingApply.jsp" />
 			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">
-				<!--#include file="../popup/pop_예약대기취소.html" -->
-				<!-- <jsp:include page="${JSP}/popup/pop_reservWaitingCancel.jsp" /> -->
+			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">	
+				<jsp:include page="../popup/pop_waitingApply.jsp" />			
 			</div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
 				<!--#include file="../popup/pop_시작확인.html" -->
-				<!-- <jsp:include page="${JSP}/popup/pop_startConfirm.jsp" /> -->
+				<jsp:include page="../popup/pop_startConfirm.jsp" />
 			</div>
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
