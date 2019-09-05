@@ -324,7 +324,7 @@ var scheduleList = {
 						return false;
 					}
 					scheduleList.list.params.pageNo = scheduleList.paging.params.prev;
-					scheduleList.list.renderResveList();
+					scheduleList.list.renderScheduleList();
 				});
 			},
 			
@@ -335,7 +335,7 @@ var scheduleList = {
 						return false;
 					}
 					scheduleList.list.params.pageNo = scheduleList.paging.params.next;
-					scheduleList.list.renderResveList();
+					scheduleList.list.renderScheduleList();
 				});
 			},
 			
@@ -346,7 +346,7 @@ var scheduleList = {
 						return false;
 					}
 					scheduleList.list.params.pageNo = scheduleList.paging.params.first;
-					scheduleList.list.renderResveList();
+					scheduleList.list.renderScheduleList();
 				});
 			},
 			
@@ -357,7 +357,7 @@ var scheduleList = {
 						return false;
 					}
 					scheduleList.list.params.pageNo = scheduleList.paging.params.last;
-					scheduleList.list.renderResveList();
+					scheduleList.list.renderScheduleList();
 				});
 			}
 		}
@@ -389,7 +389,8 @@ var scheduleList = {
 		},
 		
 		scheduleModifyBtnEvent: function() {
-			alert('modify button click');
+			console.log('modBtnEventOff...');
+			console.log('modBtnEventBinding...');
 		}
 
 	},

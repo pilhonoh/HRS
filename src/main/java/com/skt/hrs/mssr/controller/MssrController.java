@@ -51,7 +51,7 @@ public class MssrController {
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/schedule")
-	public ModelAndView resveStatueView(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView mssrScheduleView(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -106,7 +106,7 @@ public class MssrController {
 
 		return result;
 	}
-	
+
 	
 
 }
