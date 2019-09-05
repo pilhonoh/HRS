@@ -28,7 +28,7 @@
 			SELECT COUNT(RESVE_NO)
 			FROM resve_sttus 		
 			WHERE RESVE_DE = #{resveDe}
-			AND WAIT_EMPNO = #{empno}
+			AND RESVE_EMPNO = #{empno}
 		    AND CANCL_YN != 'Y'
 		) AS RESVE_CNT ,
 		(

@@ -335,24 +335,42 @@ var resveStatus = {
 	// 팝업 호출 
 	pop : {
 		// 예약신청 팝업 호출
-		regist : function(e){
-			var $li = $(e.target).parent('li');			
-			$('#layer_pop01').load(ROOT + '/resve/pop/regist', {resveNo : $li.data('data').RESVE_NO}, function(res){
-				$('#layer_pop01 #btnOk').on('click', function(){
-					resveStatus.regist(data.RESVE_NO);
-				});	
-				openLayerPopup('layer_pop01');
+		regist : function(e){			
+			var filtered = $('li[id^=resve]').filter(function(i, li){
+				var status = $(li).data().data.LAST_STTUS;
+				return status == "RESVE_COMPT" || status == "WAIT";				
 			});
+			if(filtered.length == 0){
+				var $li = $(e.target).parent('li');			
+				$('#layer_pop01').load(ROOT + '/resve/pop/regist', {resveNo : $li.data('data').RESVE_NO}, function(res){
+					$('#layer_pop01 #btnOk').on('click', function(){
+						resveStatus.regist(data.RESVE_NO);
+					});	
+					openLayerPopup('layer_pop01');
+				});
+			}else{
+				alert("금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다.");
+			}
+			
 		},
 		// 대기신청 팝업 호출
 		wait : function(e){
-			var $li = $(e.target).parent('li');			
-			$('#layer_pop02').load(ROOT + '/resve/pop/wait', {resveNo : $li.data('data').RESVE_NO}, function(res){
-				$('#layer_pop02 #btnOk').on('click', function(){
-					resveStatus.wait(data.RESVE_NO);
-				});	
-				openLayerPopup('layer_pop02');
+			var filtered = $('li[id^=resve]').filter(function(i, li){
+				var status = $(li).data().data.LAST_STTUS;
+				return status == "RESVE_COMPT" || status == "WAIT";				
 			});
+			if(filtered.length == 0){
+				var $li = $(e.target).parent('li');			
+				$('#layer_pop02').load(ROOT + '/resve/pop/wait', {resveNo : $li.data('data').RESVE_NO}, function(res){
+					$('#layer_pop02 #btnOk').on('click', function(){
+						resveStatus.wait(data.RESVE_NO);
+					});	
+					openLayerPopup('layer_pop02');
+				});
+			}else{
+				alert("금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다.");
+			}
+			
 		},
 		// 예약/대기 취소 팝업 호출
 		cancel : function(e){			
