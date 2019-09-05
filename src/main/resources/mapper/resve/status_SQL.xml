@@ -4,18 +4,88 @@
 <mapper namespace="resveStatusMapper">
 
 	<!-- 사용자의 이번달 예약/대기 건수 -->
-	<select id="resveStatusMapper.selectMonthCount" parameterType="map" resultType="hashmap">
+	<select id="resveStatusMapper.selectMonthCount" parameterType="map" resultType="hashmap">			
 		SELECT (
-			SELECT COUNT(RESVE_NO) from resve_sttus
-			WHERE RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
-		    AND RESVE_EMPNO = #{empno}
-		) AS RESVE_CNT,
+			SELECT COUNT(STTS.RESVE_NO)
+			FROM resve_sttus STTS
+			INNER JOIN (
+				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+				FROM RESVE_HIST T1
+				INNER JOIN (
+					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+					FROM RESVE_HIST	
+					GROUP BY RESVE_NO
+				) T2
+				ON T1.RESVE_NO = T2.RESVE_NO
+				AND T1.REG_DT = T2.REG_DT		
+			) HIST
+			ON STTS.RESVE_NO = HIST.RESVE_NO
+			WHERE STTS.RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
+			AND HIST.LAST_STTUS_CODE != 'STS99'
+			AND STTS.RESVE_EMPNO = #{empno}
+		) AS RESVE_CNT ,
 		(
-			SELECT COUNT(RESVE_NO) from resve_sttus
-			WHERE RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
-		    AND WAIT_EMPNO = #{empno}
+			SELECT COUNT(STTS.RESVE_NO)
+			FROM resve_sttus STTS
+			INNER JOIN (
+				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+				FROM RESVE_HIST T1
+				INNER JOIN (
+					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+					FROM RESVE_HIST	
+					GROUP BY RESVE_NO
+				) T2
+				ON T1.RESVE_NO = T2.RESVE_NO
+				AND T1.REG_DT = T2.REG_DT		
+			) HIST
+			ON STTS.RESVE_NO = HIST.RESVE_NO
+			WHERE STTS.RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
+			AND HIST.LAST_STTUS_CODE != 'STS99'
+			AND STTS.WAIT_EMPNO = #{empno}
 		) AS WAIT_CNT
-	</select>	
+	</select>
+	
+	<!-- 사용자의 특정일 예약/대기 건수 -->
+	<select id="resveStatusMapper.selectDayCount" parameterType="map" resultType="hashmap">	
+		SELECT (
+			SELECT COUNT(STTS.RESVE_NO)
+			FROM resve_sttus STTS
+			INNER JOIN (
+				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+				FROM RESVE_HIST T1
+				INNER JOIN (
+					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+					FROM RESVE_HIST	
+					GROUP BY RESVE_NO
+				) T2
+				ON T1.RESVE_NO = T2.RESVE_NO
+				AND T1.REG_DT = T2.REG_DT		
+			) HIST
+			ON STTS.RESVE_NO = HIST.RESVE_NO
+			WHERE STTS.RESVE_DE = #{resveDe}
+			AND STTS.RESVE_EMPNO = #{empno}
+		    AND HIST.LAST_STTUS_CODE != 'STS99'
+		) AS RESVE_CNT ,
+		(
+			SELECT COUNT(STTS.RESVE_NO)
+			FROM resve_sttus STTS
+			INNER JOIN (
+				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+				FROM RESVE_HIST T1
+				INNER JOIN (
+					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+					FROM RESVE_HIST	
+					GROUP BY RESVE_NO
+				) T2
+				ON T1.RESVE_NO = T2.RESVE_NO
+				AND T1.REG_DT = T2.REG_DT		
+			) HIST
+			ON STTS.RESVE_NO = HIST.RESVE_NO
+			WHERE STTS.RESVE_DE = #{resveDe}
+			AND STTS.WAIT_EMPNO = #{empno}
+		    AND HIST.LAST_STTUS_CODE != 'STS99'
+		) AS WAIT_CNT
+	</select>
 	
 	<!-- 예약현황 조회 -->
 	<select id="resveStatusMapper.selectResveStatus" parameterType="map" resultType="hashmap">

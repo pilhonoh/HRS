@@ -193,7 +193,7 @@ var resveStatus = {
 								//대기취소
 								'WAIT_CANCL' : '',
 								//완료
-								'COMPT' : '<button class="rv-btn st5">케어완료</button>'				
+								'COMPT' : $('<button>').text('케어완료').addClass('rv-btn st5') //'<button class="rv-btn st5">케어완료</button>'				
 							}[status]
 						}
 						

@@ -90,14 +90,22 @@ public class ResveStatusService {
 		// 예약가능한지 체크		
 		if(resveItem != null) {
 			
+			param.put("resveDe", resveItem.get("RESVE_DE"));
+			Map dayCount = resveStatusDAO.selectDayCount(param);
+			
+			// 금일 예약건이 존재하는경우
+			if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("RESVE_CNT").toString())) {
+				throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
+			}
+			
 			// 상태체크
 			if(!StringUtil.isEmpty((String) resveItem.get("RESVE_EMPNO"))) {				
 				throw new HrsException("error.notAvailable", true);
 			}		
-			// 시간체크
+			// 시간체크 (현재시간<= 예약시간-20분)
 			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-			if(DateUtil.isPast(resveDt)) {
-				throw new HrsException("error.notAvailable", true);
+			if(!DateUtil.isPastBefore20min(resveDt)) {				
+				throw new HrsException("error.over20min", true);
 			}
 			// 성별체크
 			if(resveItem.get("MSSR_SEXDSTN").equals("F")	// 관리사가 여성이고 
@@ -105,7 +113,7 @@ public class ResveStatusService {
 				throw new HrsException("error.notAvailable", true);
 			}
 			
-			// 현황 update
+			// 현황 update			
 			boolean updateResult = resveStatusDAO.updateResveStatus(param);
 			
 			// 이력 insert
@@ -147,14 +155,22 @@ public class ResveStatusService {
 		// 대기가능한지 체크		
 		if(resveItem != null) {
 			
+			param.put("resveDe", resveItem.get("RESVE_DE"));
+			Map dayCount = resveStatusDAO.selectDayCount(param);
+			
+			// 금일 예약건이 존재하는경우
+			if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("RESVE_CNT").toString())) {		
+				throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
+			}
+			
 			// 상태체크
 			if(!StringUtil.isEmpty((String) resveItem.get("WAIT_EMPNO"))) {
 				throw new HrsException("error.notAvailable", true);
 			}		
-			// 시간체크
+			// 시간체크 (현재시간<= 예약시간-20분)
 			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-			if(DateUtil.isPast(resveDt)) {
-				throw new HrsException("error.notAvailable", true);
+			if(!DateUtil.isPastBefore20min(resveDt)) {
+				throw new HrsException("error.over20min", true);
 			}
 			
 			// 성별체크
@@ -176,6 +192,9 @@ public class ResveStatusService {
 			if(!(updateResult && insertResult)) {
 				throw new HrsException("error.processFailure", true);
 			}
+			
+			// SMS 등록
+			
 		}else {
 			throw new HrsException("error.invalidRequest", true);
 		}
@@ -203,10 +222,10 @@ public class ResveStatusService {
 		if(resveItem != null) {
 			
 			if(param.getString("cancelGbn").equals(ResveViewStatus.RESVE_COMPT.toString())) {	// 예약취소						
-				// 시간체크
+				// 시간체크 (현재시간<= 예약시간-20분)
 				Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-				if(DateUtil.isPast(resveDt)) {
-					throw new HrsException("error.notAvailable", true);
+				if(!DateUtil.isPastBefore20min(resveDt)) {
+					throw new HrsException("error.over20min", true);
 				}
 				
 				
@@ -222,6 +241,12 @@ public class ResveStatusService {
 					param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 					boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
 
+					/**************************************************************
+					 * 	대기 -> 예약 자동등록
+					 * 	- 예약자가 취소하면 대기자는 자동으로 예약자로 변경된다.
+					 *  - 자동등록으로 변경된 예약자는 예약취소를 할 수 없다.
+					 *  - 대신, 노쇼에 따른 패널티도 없다.
+					 **************************************************************/
 					// 이력 insert (대기취소)
 					param.put("sttusCode", "STS04");	// STS04 : 대기취소
 					param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
@@ -315,9 +340,18 @@ public class ResveStatusService {
 		// 예약 시간
 		Date resveDt = DateUtil.hrsDtToRealDt(item.get("RESVE_DE").toString(), item.get("RESVE_TM").toString());
 
-		// 시간이 지난경우 예약불가
-		if(DateUtil.isPast(resveDt)) {		
-			resultStatus = ResveViewStatus.RESVE_IMPRTY;	// 예약불가
+		// 시간이 지난경우
+		if(!DateUtil.isPastBefore20min(resveDt)) {		
+			// 예약자가 자신이고 완료상태라면
+			if(!StringUtil.isEmpty(resveEmpno)) {
+				if(resveEmpno.equals(myEmpno)&& lastStatusCode.equals("STS05")) {					
+					resultStatus = ResveViewStatus.COMPT;	// 완료
+				}else {
+					resultStatus = ResveViewStatus.RESVE_COMPT;	// 예약완료 -> 사후완료처리를 위하여.
+				}
+			}else {				
+				resultStatus = ResveViewStatus.RESVE_IMPRTY;	// 예약불가
+			}
 		}
 		// 남성구성원인경우 여성관리사 예약불가
 		else if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {	

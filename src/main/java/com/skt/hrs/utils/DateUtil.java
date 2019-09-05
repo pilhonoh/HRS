@@ -18,7 +18,7 @@ public class DateUtil {
 	 * @변경이력 :
 	 */
 	public static Date hrsDtToRealDt(String yyyymmdd, String hrsTm) {
-		try {						
+		try {
 			Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0830");
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(startDate);
@@ -42,5 +42,24 @@ public class DateUtil {
 		Date nowDt = new Date();
 		return compareDate.getTime() <= nowDt.getTime();
 	}
+	
+	/**
+	 * 
+	 * @설명 : 예약시간-20분 보다 과거인지 판단 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : P149365
+	 * @param compareDate
+	 * @return
+	 * @변경이력 :
+	 */
+	public static boolean isPastBefore20min(Date compareDate) {
+		Calendar cal = Calendar.getInstance(); 
+		cal.setTime(compareDate);
+		cal.add(Calendar.MINUTE, -20);
+		cal.add(Calendar.SECOND, 59);	//09:30 건에 대하여 09:10:59초까지 가능하게 함 
+		Date before20Min = cal.getTime();
+		return new Date().getTime() <= before20Min.getTime(); 
+	}
+	
 		
 }

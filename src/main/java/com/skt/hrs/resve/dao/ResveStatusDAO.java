@@ -40,6 +40,19 @@ public class ResveStatusDAO {
 	
 	/**
 	 * 
+	 * @설명 : 사용자의 특정일 예약/대기 건수 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectDayCount(DataEntity param) {
+		return sqlSession.selectOne("resveStatusMapper.selectDayCount", param);
+	}
+	
+	/**
+	 * 
 	 * @설명 : 예약현황 조회 
 	 * @작성일 : 2019.08.29
 	 * @작성자 : P149365
