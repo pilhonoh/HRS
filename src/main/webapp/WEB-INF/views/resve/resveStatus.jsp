@@ -76,9 +76,9 @@
 				<div class="rv-desc-list">
 					<ul>
 						<li> 당일로 부터 <strong>2주까지만 예약</strong>이 가능 합니다.</li>
-						<li>신청 내역은 급여에서 <strong>한건당 1,000원이 차감</strong>됩니다.</li>
-						<li>예약 <strong>취소는 시작 10분전 까지만</strong> 가능합니다.</li>
-						<li>예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 <strong>“예약 가능 SMS가 자동 발송</strong>됩니다.</li>
+						<li>신청 내역은 급여에서 <strong>한건당 5,000원이 차감</strong>됩니다.</li>
+						<li>예약 <strong>취소는 시작 20분전 까지만</strong> 가능합니다.</li>
+						<li>예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 예약상태로 변경되며, <strong>“예약 완료“ SMS가 자동 발송</strong>됩니다.</li>
 					</ul>
 				</div>				
 				
@@ -93,18 +93,16 @@
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
 			<div class="bg"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">				
-				
-			</div>
+			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01"></div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">				
 				<jsp:include page="../popup/pop_waitingApply.jsp" />
 			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">				
-			</div>
+			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03"></div>
 			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
 				<!--#include file="../popup/pop_시작확인.html" -->
 				<jsp:include page="../popup/pop_startConfirm.jsp" />
 			</div>
+			<div class="pop-layer size1 bounceInDown animated" id="layer_pop05"></div>
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 

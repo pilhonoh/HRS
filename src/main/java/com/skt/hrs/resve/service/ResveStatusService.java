@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
-import com.skt.hrs.cmmn.contants.ResveViewStatus;
+import com.skt.hrs.cmmn.contants.ResveStatusConst;
+//import com.skt.hrs.cmmn.contants.ResveViewStatus;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.dao.ResveStatusDAO;
@@ -26,6 +27,7 @@ import com.skt.hrs.utils.StringUtil;
 
 
 @Service("resveStatusService")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ResveStatusService {
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -80,7 +82,7 @@ public class ResveStatusService {
 	 * @param param
 	 * @return
 	 * @변경이력 :
-	 */
+	 */	
 	@Transactional
 	public ResponseResult registResveStatus(DataEntity param) {
 		ResponseResult result = new ResponseResult();
@@ -113,12 +115,14 @@ public class ResveStatusService {
 				throw new HrsException("error.notAvailable", true);
 			}
 			
-			// 현황 update			
+			// 현황 update	
+			param.put("updtEmpno", param.get("empno"));
 			boolean updateResult = resveStatusDAO.updateResveStatus(param);
 			
 			// 이력 insert
-			param.put("sttusCode", "STS01");
+			param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_COMPT.toString());
 			param.put("targetEmpno", (String)param.get("resveEmpno"));
+			param.put("regEmpno", param.get("empno"));
 			boolean insertResult = resveStatusDAO.insertResveHist(param);
 			
 			result.setItemOne(updateResult && insertResult);
@@ -149,7 +153,7 @@ public class ResveStatusService {
 	@Transactional
 	public ResponseResult waitResveStatus(DataEntity param) {
 		ResponseResult result = new ResponseResult();
-		
+				
 		Map resveItem = resveStatusDAO.selectResveItem(param);
 		
 		// 대기가능한지 체크		
@@ -180,11 +184,13 @@ public class ResveStatusService {
 			}
 			
 			// 현황 update
+			param.put("updtEmpno", param.get("empno"));
 			boolean updateResult = resveStatusDAO.updateResveStatus(param);
 			
 			// 이력 insert
-			param.put("sttusCode", "STS03");
+			param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_COMPT.toString());
 			param.put("targetEmpno", (String)param.get("waitEmpno"));
+			param.put("regEmpno", param.get("empno"));
 			boolean insertResult = resveStatusDAO.insertResveHist(param);
 			
 			result.setItemOne(updateResult && insertResult);
@@ -221,7 +227,7 @@ public class ResveStatusService {
 		// 취소 가능한지 체크
 		if(resveItem != null) {
 			
-			if(param.getString("cancelGbn").equals(ResveViewStatus.RESVE_COMPT.toString())) {	// 예약취소						
+			if(param.getString("cancelGbn").equals(ResveStatusConst.VIEWSTATUS.RESVE_COMPT.toString())) {	// 예약취소						
 				// 시간체크 (현재시간<= 예약시간-20분)
 				Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
 				if(!DateUtil.isPastBefore20min(resveDt)) {
@@ -234,11 +240,13 @@ public class ResveStatusService {
 					// 현황 update
 					param.put("resveEmpno", (String)resveItem.get("WAIT_EMPNO"));
 					param.put("waitEmpno", "");
+					param.put("updtEmpno", "SYSTEM");
 					boolean updateResult = resveStatusDAO.updateResveStatus(param);
 					
 					// 이력 insert (예약취소)
-					param.put("sttusCode", "STS02");	// STS02 : 예약취소
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
 					param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+					param.put("regEmpno", param.get("empno"));
 					boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
 
 					/**************************************************************
@@ -248,12 +256,13 @@ public class ResveStatusService {
 					 *  - 대신, 노쇼에 따른 패널티도 없다.
 					 **************************************************************/
 					// 이력 insert (대기취소)
-					param.put("sttusCode", "STS04");	// STS04 : 대기취소
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
 					param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+					param.put("regEmpno", "SYSTEM");
 					boolean insertResult2 =  resveStatusDAO.insertResveHist(param);
 					
 					// 이력 insert (예약등록)
-					param.put("sttusCode", "STS01");	// STS01 : 예약등록
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_COMPT.toString());	// STS01 : 예약등록
 					param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
 					boolean insertResult3 =  resveStatusDAO.insertResveHist(param);
 										
@@ -262,10 +271,11 @@ public class ResveStatusService {
 				}else {
 					// 현황 update
 					param.put("resveEmpno", "");
+					param.put("updtEmpno", param.get("empno"));
 					boolean updateResult = resveStatusDAO.updateResveStatus(param);
 					
 					// 이력 insert
-					param.put("sttusCode", "STS02");	// STS02 : 예약취소
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
 					param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 					boolean insertResult = resveStatusDAO.insertResveHist(param);
 										
@@ -281,7 +291,7 @@ public class ResveStatusService {
 				
 				resResult.setItemOne(result);
 				
-			}else if(param.getString("cancelGbn").equals(ResveViewStatus.WAIT.toString())) {	// 대기취소
+			}else if(param.getString("cancelGbn").equals(ResveStatusConst.VIEWSTATUS.WAIT.toString())) {	// 대기취소
 				// 시간체크
 				Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
 				if(DateUtil.isPast(resveDt)) {
@@ -290,11 +300,13 @@ public class ResveStatusService {
 				
 				// 현황 update
 				param.put("waitEmpno", "");
+				param.put("updtEmpno", param.get("empno"));
 				boolean updateResult = resveStatusDAO.updateResveStatus(param);
 				
 				// 이력 insert
-				param.put("sttusCode", "STS04");	// STS02 : 예약취소
+				param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
 				param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+				param.put("regEmpno", param.get("empno"));
 				boolean insertResult = resveStatusDAO.insertResveHist(param);
 									
 				result = updateResult && insertResult;
@@ -307,6 +319,53 @@ public class ResveStatusService {
 		}
 		
 		return resResult;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 완료처리 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	@Transactional
+	public ResponseResult completeResveStatus(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+				
+		Map resveItem = resveStatusDAO.selectResveItem(param);
+		
+		// 완료 가능한지 체크		
+		if(resveItem != null) {
+			
+			// 시간체크 (사후처리 포함하여 당일까지만 완료처리 가능)
+			if(!DateUtil.getYYYYYMMDD().equals(resveItem.get("RESVE_DE").toString())) {
+				new HrsException("error.onlySameday", true);	//완료처리는 당일만 가능합니다.
+			}			
+			
+			// 현황 update
+			param.put("updtEmpno", param.get("empno"));
+			param.put("comptYn", 'Y');
+			boolean updateResult = resveStatusDAO.updateResveStatus(param);
+			
+			// 이력 insert
+			param.put("sttusCode", ResveStatusConst.DBSTATUS.COMPT.toString());
+			param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+			param.put("regEmpno", param.get("empno"));
+			boolean insertResult = resveStatusDAO.insertResveHist(param);
+			
+			result.setItemOne(updateResult && insertResult);
+			
+			if(!(updateResult && insertResult)) {
+				throw new HrsException("error.processFailure", true);
+			}			
+			
+		}else {
+			throw new HrsException("error.invalidRequest", true);
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -335,59 +394,70 @@ public class ResveStatusService {
 		String mySexdstn = loginVo.gettSex();
 		
 				
-		ResveViewStatus resultStatus = ResveViewStatus.RESVE_IMPRTY;
+		ResveStatusConst.VIEWSTATUS resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;
 		
 		// 예약 시간
 		Date resveDt = DateUtil.hrsDtToRealDt(item.get("RESVE_DE").toString(), item.get("RESVE_TM").toString());
 
 		// 시간이 지난경우
 		if(!DateUtil.isPastBefore20min(resveDt)) {		
-			// 예약자가 자신이고 완료상태라면
+			
 			if(!StringUtil.isEmpty(resveEmpno)) {
-				if(resveEmpno.equals(myEmpno)&& lastStatusCode.equals("STS05")) {					
-					resultStatus = ResveViewStatus.COMPT;	// 완료
+				// 예약자가 자신이고 
+				if(resveEmpno.equals(myEmpno)) {
+					// 완료상태라면
+					if(lastStatusCode.equals(ResveStatusConst.DBSTATUS.COMPT.toString())) {						
+						resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
+					}else {
+						// 예약일이 오늘이라면
+						if(item.get("RESVE_DE").toString().equals(DateUtil.getYYYYYMMDD())) {						
+							resultStatus = ResveStatusConst.VIEWSTATUS.NOSHOW_COMPT;	// 노쇼 당일처리가능
+						}else {
+							resultStatus = ResveStatusConst.VIEWSTATUS.NOSHOW;	// 노쇼
+						}
+					}
 				}else {
-					resultStatus = ResveViewStatus.RESVE_COMPT;	// 예약완료 -> 사후완료처리를 위하여.
+					resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
 				}
 			}else {				
-				resultStatus = ResveViewStatus.RESVE_IMPRTY;	// 예약불가
+				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
 			}
 		}
 		// 남성구성원인경우 여성관리사 예약불가
 		else if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {	
-			resultStatus = ResveViewStatus.RESVE_IMPRTY;	// 예약불가
+			resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
 		}
 		// 예약,대기자가 없는경우
 		else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
-			resultStatus = ResveViewStatus.RESVE_POSBL;		// 예약가능
+			resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_POSBL;		// 예약가능
 		}
 		// 예약자는 있고, 대기자가 없는경우
 		else if(!StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
 			// 예약자가 자신이라면
 			if(resveEmpno.equals(myEmpno)) {
-				if(lastStatusCode.equals("STS05")) {
-					resultStatus = ResveViewStatus.COMPT;	// 완료
+				if(lastStatusCode.equals(ResveStatusConst.DBSTATUS.COMPT.toString())) {
+					resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
 				}else {				
-					resultStatus = ResveViewStatus.RESVE_COMPT;	// 예약완료
+					resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_COMPT;	// 예약완료
 				}
 			}
 			// 예약자가 자신이 아니라면
 			else {								
-				resultStatus = ResveViewStatus.WAIT_POSBL;	// 대기가능
+				resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
 			}
 		}
 		// 예약자가 있고, 대기자가 나라면
 		else if(!StringUtil.isEmpty(waitEmpno) && waitEmpno.equals(myEmpno)) {
-			if(lastStatusCode.equals("STS05")) {				
-				resultStatus = ResveViewStatus.COMPT;	// 완료
+			if(lastStatusCode.equals(ResveStatusConst.DBSTATUS.COMPT.toString())) {				
+				resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
 			}else {								
-				resultStatus = ResveViewStatus.WAIT;	// 대기중
+				resultStatus = ResveStatusConst.VIEWSTATUS.WAIT;	// 대기중
 			}
 		}
 		// 예약자, 대기자가 있고 둘다 자신이 아니라면
 		else if(!StringUtil.isEmpty(resveEmpno) && !resveEmpno.equals(myEmpno) &&
 			!StringUtil.isEmpty(waitEmpno) && !waitEmpno.equals(myEmpno)) {			
-			resultStatus = ResveViewStatus.RESVE_IMPRTY;	// 예약불가
+			resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
 		}
 		
 		return resultStatus.toString();

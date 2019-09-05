@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CodeService;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.service.ResveStatusService;
+import com.skt.hrs.utils.DateUtil;
 
 
 
@@ -97,6 +99,29 @@ public class ResveStatusController {
 		model.addAllAttributes(param);
 		return "popup/popResveWait";
 	}
+	
+	/**
+	 * 
+	 * @설명 : 사후완료처리 팝업
+	 * @작성일 : 2019.09.05
+	 * @작성자 : P149365
+	 * @param req
+	 * @param res
+	 * @param model
+	 * @return
+	 * @throws Exception
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/pop/noshowConfirm")
+	public String noshowConfirmPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		model.addAllAttributes(param);
+//		if(!DateUtil.getYYYYYMMDD().equals(param.getString("RESVE_DE"))) {
+//			throw new HrsException("사후 완료처리는 당일만 가능합니다.");
+//		}
+		return "popup/popNoshowConfirm";
+	}
+	
 	
 	/**
 	 * 
@@ -211,4 +236,21 @@ public class ResveStatusController {
 		return resveStatusService.cancelResveStatus(param);
 	}
 
+	/**
+	 * 
+	 * @설명 : 완료처리 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : P149365
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/complete", method = RequestMethod.POST)
+	public @ResponseBody ResponseResult noshowConfirm(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("empno", loginVo.getEmpno());			//등록자사번
+		return resveStatusService.completeResveStatus(param);
+	}
 }

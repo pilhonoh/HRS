@@ -10,6 +10,18 @@ public class DateUtil {
 
 	/**
 	 * 
+	 * @설명 : 오늘날짜를 YYYYMMDD형식으로 리턴
+	 * @작성일 : 2019.09.05
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	public static String getYYYYYMMDD() {
+		return new SimpleDateFormat("yyyyMMdd").format(new Date());
+	}
+	
+	/**
+	 * 
 	 * @설명 : HRS 시스템의 시간(1~9)를 실제 시간으로 변경 
 	 * @작성일 : 2019.09.04
 	 * @작성자 : P149365

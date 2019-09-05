@@ -6,85 +6,39 @@
 	<!-- 사용자의 이번달 예약/대기 건수 -->
 	<select id="resveStatusMapper.selectMonthCount" parameterType="map" resultType="hashmap">			
 		SELECT (
-			SELECT COUNT(STTS.RESVE_NO)
-			FROM resve_sttus STTS
-			INNER JOIN (
-				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
-				FROM RESVE_HIST T1
-				INNER JOIN (
-					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-					FROM RESVE_HIST	
-					GROUP BY RESVE_NO
-				) T2
-				ON T1.RESVE_NO = T2.RESVE_NO
-				AND T1.REG_DT = T2.REG_DT		
-			) HIST
-			ON STTS.RESVE_NO = HIST.RESVE_NO
-			WHERE STTS.RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
-			AND HIST.LAST_STTUS_CODE != 'STS99'
-			AND STTS.RESVE_EMPNO = #{empno}
+			SELECT COUNT(RESVE_NO)
+			FROM resve_sttus	
+			WHERE RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
+			AND RESVE_EMPNO = #{empno}
+			AND CANCL_YN != 'Y' 
 		) AS RESVE_CNT ,
 		(
-			SELECT COUNT(STTS.RESVE_NO)
-			FROM resve_sttus STTS
-			INNER JOIN (
-				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
-				FROM RESVE_HIST T1
-				INNER JOIN (
-					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-					FROM RESVE_HIST	
-					GROUP BY RESVE_NO
-				) T2
-				ON T1.RESVE_NO = T2.RESVE_NO
-				AND T1.REG_DT = T2.REG_DT		
-			) HIST
-			ON STTS.RESVE_NO = HIST.RESVE_NO
-			WHERE STTS.RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')
-			AND HIST.LAST_STTUS_CODE != 'STS99'
-			AND STTS.WAIT_EMPNO = #{empno}
+			SELECT COUNT(RESVE_NO)
+			FROM resve_sttus	
+			WHERE RESVE_DE LIKE CONCAT(DATE_FORMAT(now(),'%Y%m'),'%')	
+			AND WAIT_EMPNO = #{empno}
+		    AND CANCL_YN != 'Y'
+		    AND COMPT_YN != 'Y'
 		) AS WAIT_CNT
 	</select>
 	
 	<!-- 사용자의 특정일 예약/대기 건수 -->
 	<select id="resveStatusMapper.selectDayCount" parameterType="map" resultType="hashmap">	
 		SELECT (
-			SELECT COUNT(STTS.RESVE_NO)
-			FROM resve_sttus STTS
-			INNER JOIN (
-				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
-				FROM RESVE_HIST T1
-				INNER JOIN (
-					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-					FROM RESVE_HIST	
-					GROUP BY RESVE_NO
-				) T2
-				ON T1.RESVE_NO = T2.RESVE_NO
-				AND T1.REG_DT = T2.REG_DT		
-			) HIST
-			ON STTS.RESVE_NO = HIST.RESVE_NO
-			WHERE STTS.RESVE_DE = #{resveDe}
-			AND STTS.RESVE_EMPNO = #{empno}
-		    AND HIST.LAST_STTUS_CODE != 'STS99'
+			SELECT COUNT(RESVE_NO)
+			FROM resve_sttus 		
+			WHERE RESVE_DE = #{resveDe}
+			AND WAIT_EMPNO = #{empno}
+		    AND CANCL_YN != 'Y'
 		) AS RESVE_CNT ,
 		(
-			SELECT COUNT(STTS.RESVE_NO)
-			FROM resve_sttus STTS
-			INNER JOIN (
-				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
-				FROM RESVE_HIST T1
-				INNER JOIN (
-					SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-					FROM RESVE_HIST	
-					GROUP BY RESVE_NO
-				) T2
-				ON T1.RESVE_NO = T2.RESVE_NO
-				AND T1.REG_DT = T2.REG_DT		
-			) HIST
-			ON STTS.RESVE_NO = HIST.RESVE_NO
-			WHERE STTS.RESVE_DE = #{resveDe}
-			AND STTS.WAIT_EMPNO = #{empno}
-		    AND HIST.LAST_STTUS_CODE != 'STS99'
-		) AS WAIT_CNT
+			SELECT COUNT(RESVE_NO)
+			FROM resve_sttus	
+			WHERE RESVE_DE = #{resveDe}
+			AND WAIT_EMPNO = #{empno}
+			AND CANCL_YN != 'Y'
+		    AND COMPT_YN != 'Y'
+		) AS WAIT_CNT		
 	</select>
 	
 	<!-- 예약현황 조회 -->
@@ -141,6 +95,7 @@
 		WHERE RESVE_NO = #{resveNo}		
 	</select>
 	
+	<!-- 예약현황 update -->
 	<update id="resveStatusMapper.updateResveStatus" parameterType="map">
 		UPDATE RESVE_STTUS
 		SET 
@@ -150,14 +105,21 @@
 		<if test="waitEmpno != null">			
 			WAIT_EMPNO = #{waitEmpno},
 		</if>
-			UPDT_EMPNO = #{empno},
+		<if test="comptYn != null and comptYn != ''">	<!-- 완료여부 -->
+			COMPT_YN = #{comptYn},
+		</if>
+		<if test="canclYn != null and canclYn != ''">	<!-- 취소여부 -->			
+			CANCL_YN = #{canclYn},
+		</if>
+			UPDT_EMPNO = #{updtEmpno},
 			UPDT_DT = now()
 		WHERE RESVE_NO = #{resveNo}		
 	</update>
 	
+	<!-- 예약이력 insert -->
 	<insert id="resveStatusMapper.insertResveHist" parameterType="map">
 		INSERT INTO RESVE_HIST (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
-		VALUES (#{resveNo}, #{sttusCode}, #{empno}, now(), #{targetEmpno} )
+		VALUES (#{resveNo}, #{sttusCode}, #{regEmpno}, now(), #{targetEmpno} )
 	</insert>
 	
 </mapper>

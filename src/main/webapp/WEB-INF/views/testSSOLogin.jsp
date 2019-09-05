@@ -12,8 +12,8 @@
 
 		<div class="wrap">
 			<form action="" method="post">
-				<input id="id149365" name="id" type="radio" value="P149365" /><label for="id149365">홍길동 (P149365, 남, SKT-타워)</label><br/>
-				<input id="id149080" name="id" type="radio" value="P149080" /><label for="id149080">이순신 (P149080, 남, SKT-타워)</label><p/>			
+				<input id="id149365" name="id" type="radio" value="P149365" checked /><label for="id149365">유준희 (P149365, 남, SKT-타워)</label><br/>
+				<input id="id149080" name="id" type="radio" value="P149080" /><label for="id149080">이중현 (P149080, 남, SKT-타워)</label><p/>			
 				<input id="id1" name="id" type="radio" value="P150001" /><label for="id1">구성원1 (P150001, 남, SKT-타워)</label><br/>
 				<input id="id2" name="id" type="radio" value="P150002" /><label for="id2">구성원2 (P150002, 여, SKT-타워)</label><br/>
 				<input id="id3" name="id" type="radio" value="P150003" /><label for="id3">구성원3 (P150003, 남, 분당사옥)</label><br/>
