@@ -38,6 +38,41 @@ public class MssrService {
 		result.setItemList(mssrDAO.getMssrList(param));
 		return result;
 	}
+	
+	
+	
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 리스트 조회
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectScheduleList(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemList(mssrDAO.selectScheduleList(param));
+		return result;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 리스트 TOTAL COUNT 조회
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public int selectScheduleListTotalCount(DataEntity param) {
+		int result = mssrDAO.selectScheduleListTotalCount(param);
+		return result;
+	}
 
 
 	

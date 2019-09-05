@@ -76,5 +76,37 @@ public class MssrController {
 	}
 	
 	
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 리스트 조회
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/selectScheduleList")
+	public @ResponseBody ResponseResult selectScheduleList(HttpServletRequest request, HttpSession sess) throws Exception {
+		DataEntity param = HttpUtil.getServletRequestParam(request);
+
+		int rowPerPage = param.getInt("rowPerPage");
+		int startRow = param.getInt("startRow");
+		
+		param.put("rowPerPage", rowPerPage);
+		param.put("startRow", startRow);
+		
+		ResponseResult result = new ResponseResult();
+		result = mssrService.selectScheduleList(param);
+
+		int totalCount = mssrService.selectScheduleListTotalCount(param);
+		result.addCustoms("totalCount", totalCount);
+
+		return result;
+	}
+	
+	
 
 }
