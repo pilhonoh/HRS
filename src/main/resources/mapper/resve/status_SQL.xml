@@ -48,7 +48,10 @@
 			STTS.RESVE_TM,					/* 예약시간 */
 			STTS.BLD_CODE,					/* 사옥코드 */
 			STTS.MSSR_EMPNO,				/* 관리사사번 */
-			STTS.BED_CODE,					/* 베드코드 */		    
+			STTS.BED_CODE,					/* 베드코드 */
+			<!-- STTS.CANCL_YN,					/* 근무취소여부 */ -->
+			STTS.COMPT_YN,					/* 케어완료여부 */
+			STTS.SUCCS_YN,					/* 승계여부 */		    
 			BED.CODE_NM AS BED_NM,			/* 베드명 */
 		    BED.CODE_ORDR,					/* 코드순번 */
 			STTS.RESVE_EMPNO,				/* 예약자사번 */    
@@ -77,8 +80,9 @@
 		) BED
 		ON STTS.BLD_CODE = BED.CODE_TYS
 		AND STTS.BED_CODE = BED.CODE
-		WHERE STTS.RESVE_DE = #{resveDe}
+		WHERE STTS.RESVE_DE = #{resveDe}		
 		AND STTS.BLD_CODE = #{bldCode}
+		AND STTS.CANCL_YN != 'Y'
 		ORDER BY BED_CODE, RESVE_TM	
 	</select>
 	
@@ -113,6 +117,9 @@
 		</if>
 		<if test="canclYn != null and canclYn != ''">	<!-- 취소여부 -->			
 			CANCL_YN = #{canclYn},
+		</if>
+		<if test="succsYn != null and succsYn != ''">	<!-- 승계여부 -->			
+			SUCCS_YN = #{succsYn},
 		</if>
 			UPDT_EMPNO = #{updtEmpno},
 			UPDT_DT = now()

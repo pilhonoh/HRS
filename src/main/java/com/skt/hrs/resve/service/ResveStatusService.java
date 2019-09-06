@@ -267,17 +267,23 @@ public class ResveStatusService {
 			}
 			
 			
-			//대기자가 있다면 대기중인 구성원을 예약상태로 변경
+			//대기자가 있다면 예약승계 (대기중인 구성원을 예약상태로 변경)
 			if(resveItem.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(resveItem.get("WAIT_EMPNO").toString())) {
 				
 				/*****************************
 				 *  입력
-				 ****************************/
+				 *  
+				 *  예약승계 (자동등록)
+				 * 	  - 예약자가 취소하면 대기자는 자동으로 예약자로 변경된다.
+				 *	  - 자동등록으로 변경된 예약자는 예약취소를 할 수 없다.
+				 *	  - 대신, 노쇼에 따른 패널티도 없다
+				 ****************************/				
 				
 				// 현황 update
 				param.put("resveEmpno", (String)resveItem.get("WAIT_EMPNO"));
 				param.put("waitEmpno", "");
 				param.put("updtEmpno", "SYSTEM");
+				param.put("succsYn", "Y");	//승계여부
 				boolean updateResult = resveStatusDAO.updateResveStatus(param);
 				
 				// 이력 insert (예약취소)
@@ -285,12 +291,7 @@ public class ResveStatusService {
 				param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 				param.put("regEmpno", param.get("empno"));
 				boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
-
-				
-				//대기 -> 예약 자동등록
-				// - 예약자가 취소하면 대기자는 자동으로 예약자로 변경된다.
-				// - 자동등록으로 변경된 예약자는 예약취소를 할 수 없다.
-				// - 대신, 노쇼에 따른 패널티도 없다.
+								
 
 				// 이력 insert (대기취소)
 				param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
@@ -475,6 +476,7 @@ public class ResveStatusService {
 		String lastStatusCode = (String) item.get("LAST_STTUS_CODE");
 		String myEmpno = loginVo.getEmpno();
 		String mySexdstn = loginVo.gettSex();
+		String succsYn = (String) item.get("SUCCS_YN");	//승계여부
 		
 				
 		ResveStatusConst.VIEWSTATUS resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;
@@ -531,7 +533,11 @@ public class ResveStatusService {
 				else {
 					// 대기자가 없다면
 					if(StringUtil.isEmpty(waitEmpno)) {	
-						resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+						if("Y".equals(succsYn)) {
+							resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	//예약불가 (승계된 예약은 취소할수 없으므로)
+						}else {							
+							resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+						}
 						
 					}else {
 						// 대기자가 나라면
