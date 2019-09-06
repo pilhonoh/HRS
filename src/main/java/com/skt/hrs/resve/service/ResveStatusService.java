@@ -367,7 +367,7 @@ public class ResveStatusService {
 		
 		return result;
 	}
-	
+		
 	/**
 	 * 
 	 * @설명 : 화면에 보이는 상태를 계산하여 반환한다.
@@ -400,7 +400,7 @@ public class ResveStatusService {
 		Date resveDt = DateUtil.hrsDtToRealDt(item.get("RESVE_DE").toString(), item.get("RESVE_TM").toString());
 
 		// 시간이 지난경우
-		if(!DateUtil.isPastBefore20min(resveDt)) {		
+		if(!DateUtil.isPastBefore20min(resveDt)) {
 			
 			if(!StringUtil.isEmpty(resveEmpno)) {
 				// 예약자가 자신이고 
@@ -423,42 +423,45 @@ public class ResveStatusService {
 				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
 			}
 		}
-		// 남성구성원인경우 여성관리사 예약불가
-		else if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {	
-			resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
-		}
-		// 예약,대기자가 없는경우
-		else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
-			resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_POSBL;		// 예약가능
-		}
-		// 예약자는 있고, 대기자가 없는경우
-		else if(!StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
-			// 예약자가 자신이라면
-			if(resveEmpno.equals(myEmpno)) {
-				if(lastStatusCode.equals(ResveStatusConst.DBSTATUS.COMPT.toString())) {
-					resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
-				}else {				
-					resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_COMPT;	// 예약완료
+		// 시간이 지나지 않음
+		else {
+			
+			// 남성구성원인경우 여성관리사 예약불가
+			if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {	
+				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+			}
+			// 예약,대기자가 없는경우
+			else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
+				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_POSBL;		// 예약가능
+			}
+			// 예약자는 있는경우
+			else if(!StringUtil.isEmpty(resveEmpno)) {
+				// 예약자가 자신이라면
+				if(resveEmpno.equals(myEmpno)) {
+					if(lastStatusCode.equals(ResveStatusConst.DBSTATUS.COMPT.toString())) {
+						resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
+					}else {				
+						resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_COMPT;	// 예약완료
+					}
+				}
+				// 예약자가 자신이 아니라면
+				else {
+					// 대기자가 없다면
+					if(StringUtil.isEmpty(waitEmpno)) {	
+						resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+						
+					}else {
+						// 대기자가 나라면
+						if(waitEmpno.equals(myEmpno)) {
+							resultStatus = ResveStatusConst.VIEWSTATUS.WAIT;	// 대기중
+						}else {							
+							resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+						}
+					}
 				}
 			}
-			// 예약자가 자신이 아니라면
-			else {								
-				resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
-			}
 		}
-		// 예약자가 있고, 대기자가 나라면
-		else if(!StringUtil.isEmpty(waitEmpno) && waitEmpno.equals(myEmpno)) {
-			if(lastStatusCode.equals(ResveStatusConst.DBSTATUS.COMPT.toString())) {				
-				resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
-			}else {								
-				resultStatus = ResveStatusConst.VIEWSTATUS.WAIT;	// 대기중
-			}
-		}
-		// 예약자, 대기자가 있고 둘다 자신이 아니라면
-		else if(!StringUtil.isEmpty(resveEmpno) && !resveEmpno.equals(myEmpno) &&
-			!StringUtil.isEmpty(waitEmpno) && !waitEmpno.equals(myEmpno)) {			
-			resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
-		}
+		
 		
 		return resultStatus.toString();
 	}

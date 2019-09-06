@@ -114,7 +114,9 @@ var resveStatus = {
 				
 				// 데이터 및 클릭 이벤트 바인딩
 				$span.data('data', d);
-				$span.on('click', resveStatus.calendar.click);
+				
+				if(d.weekday != 6 && d.weekday !=7) 
+					$span.on('click', resveStatus.calendar.click);
 				
 				elements.push(
 					$td.append($div.append($em).append($span))					
@@ -338,7 +340,11 @@ var resveStatus = {
 		regist : function(e){			
 			var filtered = $('li[id^=resve]').filter(function(i, li){
 				var status = $(li).data().data.LAST_STTUS;
-				return status == "RESVE_COMPT" || status == "WAIT";				
+				return status == "RESVE_COMPT" || 	//예약완료
+					status == "WAIT" || 			//대기중
+					status == 'COMPT' || 			//완료
+					status == 'NOSHOW_COMPT' || 	//사후확인가능
+					status == 'NOSHOW';				//노쇼
 			});
 			if(filtered.length == 0){
 				var $li = $(e.target).parent('li');			
@@ -357,7 +363,11 @@ var resveStatus = {
 		wait : function(e){
 			var filtered = $('li[id^=resve]').filter(function(i, li){
 				var status = $(li).data().data.LAST_STTUS;
-				return status == "RESVE_COMPT" || status == "WAIT";				
+				return status == "RESVE_COMPT" || 	//예약완료
+					status == "WAIT" || 			//대기중
+					status == 'COMPT' || 			//완료
+					status == 'NOSHOW_COMPT' || 	//사후확인가능
+					status == 'NOSHOW';				//노쇼
 			});
 			if(filtered.length == 0){
 				var $li = $(e.target).parent('li');			
