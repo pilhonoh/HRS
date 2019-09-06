@@ -199,11 +199,11 @@ var scheduleList = {
 					
 					scheduleListHtml.push('<tr>');
 					scheduleListHtml.push('	<td><input type="checkbox"></td>');
-					scheduleListHtml.push('	<td>2019-08-21</td>');
-					scheduleListHtml.push('	<td>티타워</td>');
-					scheduleListHtml.push('	<td>James</td>');
-					scheduleListHtml.push('	<td>남</td>');
-					scheduleListHtml.push('	<td>09:30 ~ 11:00</td>');
+					scheduleListHtml.push('	<td>' + resveDt + '</td>');
+					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
+					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
+					scheduleListHtml.push('	<td>' + resultList[i].MSSR_SEXDSTN + '</td>');
+					scheduleListHtml.push('	<td>' + resultList[i].RESVE_TM_LIST + '</td>');
 					scheduleListHtml.push('	<td><button class="t-btn cr01">수정</button></td>');
 					scheduleListHtml.push('</tr>');
 				}
