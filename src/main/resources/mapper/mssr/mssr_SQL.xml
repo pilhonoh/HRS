@@ -64,7 +64,7 @@
 			<if test='mssrEmpno != null and mssrEmpno != ""'>
 			AND MSSR_EMPNO = #{mssrEmpno}
 			</if>
-		GROUP BY A.RESVE_DE, A.BLD_CODE, A.MSSR_EMPNO
+		GROUP BY A.RESVE_DE, A.BLD_CODE, A.MSSR_EMPNO, BED_CODE
 		ORDER BY A.RESVE_DE
 		<include refid="COMMON_PAGING_TAIL"/>
 	</select>
