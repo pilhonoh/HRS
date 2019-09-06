@@ -122,7 +122,7 @@
 	<!-- 예약이력 insert -->
 	<insert id="insertResveHist" parameterType="map">
 		INSERT INTO RESVE_HIST (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
-		VALUES (#{resveNo}, #{sttusCode}, #{regEmpno}, now(), #{targetEmpno} )
+		VALUES (#{resveNo}, #{sttusCode}, #{regEmpno}, now(3), #{targetEmpno} )
 	</insert>
 	
 </mapper>
