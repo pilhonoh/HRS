@@ -4,7 +4,7 @@
 <mapper namespace="resveStatusMapper">
 
 	<!-- 사용자의 이번달 예약/대기 건수 -->
-	<select id="resveStatusMapper.selectMonthCount" parameterType="map" resultType="hashmap">			
+	<select id="selectMonthCount" parameterType="map" resultType="hashmap">			
 		SELECT (
 			SELECT COUNT(RESVE_NO)
 			FROM resve_sttus	
@@ -23,7 +23,7 @@
 	</select>
 	
 	<!-- 사용자의 특정일 예약/대기 건수 -->
-	<select id="resveStatusMapper.selectDayCount" parameterType="map" resultType="hashmap">	
+	<select id="selectDayCount" parameterType="map" resultType="hashmap">	
 		SELECT (
 			SELECT COUNT(RESVE_NO)
 			FROM resve_sttus 		
@@ -42,13 +42,16 @@
 	</select>
 	
 	<!-- 예약현황 조회 -->
-	<select id="resveStatusMapper.selectResveStatus" parameterType="map" resultType="hashmap">
+	<select id="selectResveStatus" parameterType="map" resultType="hashmap">
 		SELECT STTS.RESVE_NO,				/* 예약번호 */
 			STTS.RESVE_DE,					/* 예약일 */
 			STTS.RESVE_TM,					/* 예약시간 */
 			STTS.BLD_CODE,					/* 사옥코드 */
 			STTS.MSSR_EMPNO,				/* 관리사사번 */
-			STTS.BED_CODE,					/* 베드코드 */		    
+			STTS.BED_CODE,					/* 베드코드 */
+			<!-- STTS.CANCL_YN,					/* 근무취소여부 */ -->
+			STTS.COMPT_YN,					/* 케어완료여부 */
+			STTS.SUCCS_YN,					/* 승계여부 */		    
 			BED.CODE_NM AS BED_NM,			/* 베드명 */
 		    BED.CODE_ORDR,					/* 코드순번 */
 			STTS.RESVE_EMPNO,				/* 예약자사번 */    
@@ -77,18 +80,22 @@
 		) BED
 		ON STTS.BLD_CODE = BED.CODE_TYS
 		AND STTS.BED_CODE = BED.CODE
-		WHERE STTS.RESVE_DE = #{resveDe}
+		WHERE STTS.RESVE_DE = #{resveDe}		
 		AND STTS.BLD_CODE = #{bldCode}
+		AND STTS.CANCL_YN != 'Y'
 		ORDER BY BED_CODE, RESVE_TM	
 	</select>
 	
 	<!-- 예약 단건 조회 -->
-	<select id="resveStatusMapper.selectResveItem" parameterType="map" resultType="hashmap">
+	<select id="selectResveItem" parameterType="map" resultType="hashmap">
 		SELECT 
 			A.*,
 		    B.NCNM AS MSSR_NCNM,
 		    B.SEXDSTN AS MSSR_SEXDSTN,
-		    B.HFFC_YN AS MSSR_HFFC_YN
+		    B.HFFC_YN AS MSSR_HFFC_YN,
+		    (SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BLD' AND CODE = A.BLD_CODE) AS BLD_NM,
+    		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BED' AND CODE_TYS=A.BLD_CODE AND CODE = A.BED_CODE) AS BED_NM,
+    		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='RVT' AND CODE = A.RESVE_TM) AS RESVE_TM_STR
 		FROM RESVE_STTUS A
 		INNER JOIN MASSEUR B
 		ON A.MSSR_EMPNO = B.EMPNO
@@ -96,7 +103,7 @@
 	</select>
 	
 	<!-- 예약현황 update -->
-	<update id="resveStatusMapper.updateResveStatus" parameterType="map">
+	<update id="updateResveStatus" parameterType="map">
 		UPDATE RESVE_STTUS
 		SET 
 		<if test="resveEmpno != null">	<!-- ''(빈문자열)의 경우에도 유효하게 업데이트해야하므로 주의한다. -->			
@@ -111,15 +118,18 @@
 		<if test="canclYn != null and canclYn != ''">	<!-- 취소여부 -->			
 			CANCL_YN = #{canclYn},
 		</if>
+		<if test="succsYn != null and succsYn != ''">	<!-- 승계여부 -->			
+			SUCCS_YN = #{succsYn},
+		</if>
 			UPDT_EMPNO = #{updtEmpno},
 			UPDT_DT = now()
 		WHERE RESVE_NO = #{resveNo}		
 	</update>
 	
 	<!-- 예약이력 insert -->
-	<insert id="resveStatusMapper.insertResveHist" parameterType="map">
+	<insert id="insertResveHist" parameterType="map">
 		INSERT INTO RESVE_HIST (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
-		VALUES (#{resveNo}, #{sttusCode}, #{regEmpno}, now(), #{targetEmpno} )
+		VALUES (#{resveNo}, #{sttusCode}, #{regEmpno}, now(3), #{targetEmpno} )
 	</insert>
 	
 </mapper>

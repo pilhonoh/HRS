@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:batch="http://www.springframework.org/schema/batch" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+		
+
+	<bean id="blacklistFilterJob" class="com.skt.hrs.batch.BlacklistFilterJob"/>
+	
+	<bean id="jobBlacklistFilter" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	    <property name="targetObject" ref="blacklistFilterJob"/>
+	    <property name="targetMethod" value="execute"/>
+	    <property name="concurrent" value="false"/>
+    </bean>	
+    
+    <bean id="blacklistFilterTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	    <property name="jobDetail" ref="jobBlacklistFilter"/>
+		<!-- <property name="cronExpression" value="0 10 0 * * ?" /> --> <!-- 매일 0시10분 -->
+		<property name="cronExpression" value="0/3 * * * * ?" />	<!-- 테스트 3초간격 -->
+	</bean>	
+	
+	<bean id="jobScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	    <property name="triggers">
+	        <list><!-- <ref bean="blacklistFilterTrigger" /> --></list>
+	    </property>
+	</bean>
+
+</beans>		

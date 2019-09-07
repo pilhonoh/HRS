@@ -37,7 +37,8 @@
 			/WEB-INF/spring/applicationContext.xml,
 			<!-- /WEB-INF/spring/security-context.xml,  -->
 			classpath:config/spring/context-datasource.xml,
-			classpath:config/spring/context-mapper.xml
+			classpath:config/spring/context-mapper.xml,
+			classpath:config/spring/context-batch.xml
 		</param-value>
 	</context-param>
 	
@@ -68,9 +69,11 @@
 	
 	
 	<!-- 이중 로그인을 막기 위한 리스너 클래스 -->
+	<!-- 
 	<listener>
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
-	</listener>
+	</listener> 
+	-->
 
 	<!-- 모든 jsp에 include -->
 	<jsp-config>

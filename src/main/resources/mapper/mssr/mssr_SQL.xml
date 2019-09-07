@@ -27,7 +27,83 @@
 		</if>
 	</select>
 	
-
 	
+	<!-- 관리사 스케쥴 리스트 조회 -->
+	<select id="selectScheduleList" parameterType="map" resultType="hashmap">
+		<include refid="COMMON_PAGING_HEADER"/>
+		SELECT 
+			A.*,
+			B.LAST_STTUS_CODE,
+			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.BLD_CODE) AS BLD_NM,
+			(SELECT NCNM FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO) AS MSSR_NCNM,
+			(SELECT SEXDSTN FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO) AS MSSR_SEXDSTN,
+			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.BED_CODE AND CODE_TYS = A.BLD_CODE) AS BED_NM,
+			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = LAST_STTUS_CODE) AS STTUS_NM,
+			GROUP_CONCAT(A.RESVE_TM ORDER BY RESVE_TM SEPARATOR ',') AS RESVE_TM_LIST
+		FROM resve_sttus A
+		INNER JOIN (
+			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+			FROM RESVE_HIST T1
+			INNER JOIN (
+				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+				FROM RESVE_HIST
+				GROUP BY RESVE_NO
+			) T2
+			ON T1.RESVE_NO = T2.RESVE_NO
+			AND T1.REG_DT = T2.REG_DT		
+		) B
+		ON A.RESVE_NO = B.RESVE_NO
+		WHERE 1=1
+			<![CDATA[
+			AND B.LAST_STTUS_CODE <> 'STS99'
+			]]>
+			AND RESVE_DE BETWEEN #{fromDate} AND #{toDate}
+			<if test='bldCode != null and bldCode != ""'>
+			AND BLD_CODE = #{bldCode}
+			</if>
+			<if test='mssrEmpno != null and mssrEmpno != ""'>
+			AND MSSR_EMPNO = #{mssrEmpno}
+			</if>
+		GROUP BY A.RESVE_DE, A.BLD_CODE, A.MSSR_EMPNO, BED_CODE
+		ORDER BY A.RESVE_DE
+		<include refid="COMMON_PAGING_TAIL"/>
+	</select>
+	
+	
+	<!-- 관리사 스케쥴 리스트 전체 ROW COUNT 값 조회 -->
+	<select id="selectScheduleListTotalCount" parameterType="map" resultType="int">
+	SELECT count(*) 
+	FROM (
+		SELECT
+			A.*
+		FROM resve_sttus A
+		INNER JOIN (
+			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+			FROM RESVE_HIST T1
+			INNER JOIN (
+				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
+				FROM RESVE_HIST
+				GROUP BY RESVE_NO
+			) T2
+			ON T1.RESVE_NO = T2.RESVE_NO
+			AND T1.REG_DT = T2.REG_DT		
+		) B
+		ON A.RESVE_NO = B.RESVE_NO
+		WHERE 1=1
+			<![CDATA[
+			AND B.LAST_STTUS_CODE <> 'STS99'
+			]]>
+			AND RESVE_DE BETWEEN #{fromDate} AND #{toDate}
+			<if test='bldCode != null and bldCode != ""'>
+			AND BLD_CODE = #{bldCode}
+			</if>
+			<if test='mssrEmpno != null and mssrEmpno != ""'>
+			AND MSSR_EMPNO = #{mssrEmpno}
+			</if>
+		GROUP BY A.RESVE_DE, A.BLD_CODE, A.MSSR_EMPNO
+		ORDER BY A.RESVE_DE
+	) C
+	</select>
+
 	
 </mapper>

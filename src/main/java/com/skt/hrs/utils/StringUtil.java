@@ -245,4 +245,12 @@ public class StringUtil {
 
 		return convert;
 	}
+	
+	public static String substringByte(String str, int size) {		
+		byte[] bytes = str.getBytes();
+		if(bytes.length > size ) {    
+			str = new String(bytes, 0, size );
+		}
+		return str;
+	}
 }

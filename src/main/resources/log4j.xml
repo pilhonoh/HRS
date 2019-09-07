@@ -10,8 +10,22 @@
 		</layout>
 	</appender>
 	
+	<!-- blacklist filter batch log -->
+	<appender name="blacklistFilterAppender" class="org.apache.log4j.FileAppender">  
+        <param name="file" value="C:/blacklist-filter-job.log"/> <!-- TODO: 로그위치 -->  
+        <param name="Append" value="true"/> 
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%p] %m %n"/>  
+        </layout>         
+    </appender>
+    
+    <logger name="blacklistFilterJobLogger">
+    	<level value="debug" />    	
+    	<appender-ref ref="blacklistFilterAppender" />
+    </logger>
+	
 	<!-- Application Loggers -->
-	<logger name="kr.ac.skku">
+	<logger name="com.skt.hrs">
 		<level value="info" />
 	</logger>
 	
@@ -34,7 +48,7 @@
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="debug" />
 		<appender-ref ref="console" />
 	</root>
 	

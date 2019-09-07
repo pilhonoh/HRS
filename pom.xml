@@ -45,14 +45,8 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
-			<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-context-support</artifactId>
-		    <version>${org.springframework-version}</version>
-		</dependency>
-		
 		<!-- Spring Security -->
-	    <dependency>
+	    <!-- <dependency>
 	        <groupId>org.springframework.security</groupId>
 	        <artifactId>spring-security-core</artifactId>
 	        <version>${spring.security.version}</version>
@@ -71,7 +65,7 @@
 	        <groupId>org.springframework.security</groupId>
 	        <artifactId>spring-security-taglibs</artifactId>
 	        <version>${spring.security.version}</version>
-	    </dependency>
+	    </dependency> -->
 	    
 	    
 	    
@@ -237,6 +231,7 @@
 			<version>1.0</version>
 		</dependency>
 		
+		<!-- transaction proxy class -->
 		<dependency>
 		  <groupId>cglib</groupId>
 		  <artifactId>cglib</artifactId>
@@ -267,10 +262,18 @@
 		
 		<!-- quartz -->
 		<dependency>
-		    <groupId>org.quartz-scheduler</groupId>
-		    <artifactId>quartz</artifactId>
-		    <version>2.3.0</version>
+		  <groupId>org.quartz-scheduler</groupId>
+		  <artifactId>quartz</artifactId>
+		  <version>2.3.0</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+
+		
 	</dependencies>
     <build>
         <plugins>
