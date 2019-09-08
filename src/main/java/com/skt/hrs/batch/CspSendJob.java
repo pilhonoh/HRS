@@ -50,11 +50,11 @@ public class CspSendJob {
 				List<Map<String, String>> undeliveredMemos 		= getUndeliveredDatas(list, CspContents.MEMO);
 	
 				sender = new CspSender(CspContents.SMS.value());
-				final String CONSUMER_ID = "C00411";
+				final String CONSUMER_ID = "C00479";
 				for (Map<String, String> sms : undeliveredMessages) {
 					String[][] paramLt = { 
 						 {"CONSUMER_ID"		, CONSUMER_ID } // 서비스 ID (*필수값)
-						,{"RPLY_PHON_NUM"	, sms.get("6100-0021") } //발신전화번호 (*필수값)
+						,{"RPLY_PHON_NUM"	, sms.get("0261000021") } //발신전화번호 (*필수값)
 						,{"TITLE"			, sms.get("MSSG_BODY") } //내용 (*필수값)
 						,{"PHONE"			, sms.get("MOVETELNO") } // 수신전화 (*필수값)
 					};
@@ -78,9 +78,9 @@ public class CspSendJob {
 						undeliveredSmsCnt, 
 						(undeliveredMessages.size() - undeliveredSmsCnt) );
 
-				logger.info(":::::{} MEMO/SMS/MAIL job {} ", 
-						CspSendJob.class.getSimpleName(),
-						"실행에 성공하였습니다" + " ::::: ");
+//				logger.info(":::::{} SMS/MAIL job {} ", 
+//						CspSendJob.class.getSimpleName(),
+//						"실행에 성공하였습니다" + " ::::: ");
 				
 
 		} catch (Exception e) {
