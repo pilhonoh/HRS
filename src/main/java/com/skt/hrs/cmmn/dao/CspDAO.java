@@ -1,5 +1,7 @@
 package com.skt.hrs.cmmn.dao;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
@@ -36,6 +38,31 @@ public class CspDAO {
 		}
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @설명 : SMS, EMAIL 발신대상 select 
+	 * @작성일 : 2019.09.07
+	 * @작성자 : 김대종
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectCspSendList() {
+		return sqlSession.selectList("cmmnCspMapper.selectCspSendList");
+	}
+	
+	
+	public boolean updateCspSendLog(CspVo vo) {
+		int result = sqlSession.update("cmmnCspMapper.updateCspSendLog", vo);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
 	
 	
 }

@@ -2,6 +2,7 @@ package com.skt.hrs.cmmn.service;
 
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -69,5 +70,28 @@ public class CspService {
 		return result;
 	}
 	
+	/**
+	  * 
+	 * @설명 : CSP 발송 리스트
+	 * @작성일 : 2019.09.07
+	 * @작성자 : djkim
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectCspSendList(){
+		ResponseResult result = new ResponseResult();
+		result.setItemList(cspDAO.selectCspSendList());
+		return result;
+	}
 	
+	public ResponseResult updateCspLog(String no, String sendRslt) {
+		ResponseResult result = new ResponseResult();
+		CspVo cspVo = new CspVo();
+		cspVo.setNo(Integer.parseInt(no));
+		cspVo.setSendRslt(sendRslt);
+		
+		result.setItemOne(cspDAO.updateCspSendLog(cspVo));
+		
+		return result;
+	}
 }

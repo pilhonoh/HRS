@@ -57,7 +57,6 @@
 		</mvc:interceptor>
 		
 	</mvc:interceptors>
-	
-	<import resource="classpath:/config/spring/hrs-batch.xml"/>
+
 
 </beans:beans>

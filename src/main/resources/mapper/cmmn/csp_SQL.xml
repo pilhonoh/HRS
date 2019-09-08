@@ -13,6 +13,41 @@
 		)
 	</insert>
 	
+	<select id="selectCspSendList"  parameterType="map" resultType="hashmap">
+		<![CDATA[
+			SELECT 
+			     NO
+				,RCV_EMPNO
+				,CSP_TYPE
+				,RESVE_NO
+				,MSSG_HEAD
+				,MSSG_BODY
+				,SEND_YN
+				,SEND_DT
+				,SEND_RSLT
+				,REG_DT
+			    ,U.MOVETELNO AS MOVETELNO
+			    ,U.EMAIL AS EMAIL
+			FROM CSP_SEND_HIST C LEFT JOIN INF_PERSON_INFO_RCV U ON C.RCV_EMPNO = U.EMPNO
+			WHERE 1=1
+			AND SEND_YN = 'N' 
+		]]>
+	</select>
 	
-	
+	<update id="updateCspSendLog" parameterType="com.skt.hrs.cmmn.vo.CspVo">
+		UPDATE CSP_SEND_HIST
+			SET   
+				<choose>
+					<when test='sendRslt == "S"'>
+						 SEND_YN = 'Y'
+			    		,SEND_DT = NOW()
+			    		,SEND_RSLT = #{sendRslt}
+					</when>
+					<otherwise>
+						SEND_RSLT = #{sendRslt}
+					</otherwise>
+				</choose>
+			WHERE 1=1
+			AND NO = #{no}
+	</update>
 </mapper>

@@ -35,8 +35,8 @@
 		<bean id="CspSendTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"> 
 			<!-- CSP 연동 SMS/쪽지/Mail JOB -->
 		    <property name="jobDetail" ref="jobCspSendDetail" />
-		    <property name="startDelay" value="${SCHEDULE.START_DELAY}" />
-		    <property name="repeatInterval" value="${SCHEDULE.INTERVAL}"></property>
+		    <property name="startDelay" value="3000" />
+		    <property name="repeatInterval" value="60000"></property>
 		</bean>
 		<!-- Trigger 목록 end-->
 		
