@@ -187,18 +187,7 @@ var scheduleList = {
 					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 					
 					var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
-					
-					/*
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2019-08-21</td>
-							<td>티타워</td>
-							<td>James</td>
-							<td>남</td>
-							<td>09:30 ~ 11:00</td>
-							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>
-					 */
+					var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
 					
 					scheduleListHtml.push('<tr>');
 					scheduleListHtml.push('	<td><input type="checkbox"></td>');
@@ -206,7 +195,7 @@ var scheduleList = {
 					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].RESVE_TM_LIST + '</td>');
+					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
 					scheduleListHtml.push('	<td><button class="t-btn cr01">수정</button></td>');
 					scheduleListHtml.push('</tr>');
 				}
@@ -232,6 +221,50 @@ var scheduleList = {
 			}
 			
 			return rowData;
+		},
+		
+		//리스트 DB 의 시간 데이터(1,2,3...) 를 실제 시간 범위로 변경하여 표시하는 함수
+		convertTime: function(timeList) {
+			
+			var tList = timeList.split(',');
+			var tListLength = tList.length;
+
+			var returnTime = '';
+			var firstNum = parseInt(tList[0]);
+			var lastNum = parseInt(tList[tListLength-1]);
+			var countNum = parseInt(tList[0]);
+			
+			for (var i in tList) {
+				
+				if (firstNum == countNum) {
+					returnTime = getRealTime(tList[i]).start;
+				}
+				
+				if (countNum == lastNum) {
+					returnTime = returnTime + '~' + getRealTime(tList[i]).end;
+					break;
+				}
+				
+				if (firstNum != (parseInt(i)+1) && ((i+1) != tListLength)) {
+	
+					/*
+					console.log("firstNum: " + firstNum);
+					console.log("countNum: " + countNum);
+					console.log("lastNum: " + lastNum);
+					console.log("i: " + i);
+					console.log("tListLength: " + tListLength);
+					console.log("tList[i]: " + tList[i]);
+					*/
+					
+					if ((countNum+i) < tList[i]) {
+						returnTime += '~' + getRealTime(tList[i-1]).end + '<br/>' + getRealTime(tList[i]).start;
+						firstNum = tList[i+1];
+					}
+					
+				}				
+				countNum = parseInt(countNum) + 1 + (tList[i]-countNum);
+			}
+			return returnTime;
 		}
 
 	},
