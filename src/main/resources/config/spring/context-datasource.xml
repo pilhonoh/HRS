@@ -8,7 +8,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 	
-	<util:properties id="config" location="classpath:/config/spring/config.properties" />
+	<util:properties id="prop" location="classpath:config/spring/config.properties" /> 
 
 	<!-- 개발 DB -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
