@@ -223,10 +223,11 @@ var scheduleList = {
 			return rowData;
 		},
 		
-		//리스트 DB 의 시간 데이터(1,2,3...) 를 실제 시간 범위로 변경하여 표시하는 함수
-		convertTime: function(timeList) {
+		//리스트 조회 시 가져온 시간 데이터[ex)1,2,4,5 ...] 를
+		//실제 시간 범위[09:30~11:00  12:30~14:00 ...]로 변경하여 표시하는 함수
+		convertTime: function(timeListStr) {
 			
-			var tList = timeList.split(',');
+			var tList = timeListStr.split(',');
 			var tListLength = tList.length;
 
 			var returnTime = '';
@@ -261,8 +262,12 @@ var scheduleList = {
 						firstNum = tList[i+1];
 					}
 					
-				}				
+				}
 				countNum = parseInt(countNum) + 1 + (tList[i]-countNum);
+				
+				if (countNum > lastNum) {
+					returnTime = returnTime + '~' + getRealTime(tList[i]).end;
+				}
 			}
 			return returnTime;
 		}
