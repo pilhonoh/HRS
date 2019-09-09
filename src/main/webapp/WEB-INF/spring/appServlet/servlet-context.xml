@@ -58,5 +58,6 @@
 		
 	</mvc:interceptors>
 
-
+	<beans:import resource="classpath:/config/spring/context-batch.xml"/>
+	
 </beans:beans>

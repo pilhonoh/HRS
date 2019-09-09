@@ -190,6 +190,8 @@ public class ResveStatusController {
 	public @ResponseBody ResponseResult registResveStatus(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		
+		// resveEmpno와 empno가 같지만, 타인의 예약 등을 대비하여 일단 분리한다.		
 		param.put("resveEmpno", loginVo.getEmpno());	//예약자사번
 		param.put("empno", loginVo.getEmpno());			//등록자사번
 		param.put("resveSexdstn", loginVo.gettSex());	//예약자성별

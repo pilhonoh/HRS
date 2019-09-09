@@ -20,6 +20,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		if(session == null || session.getAttribute("LoginVo") == null) {			
 			
 			//TODO: 인증없음 noti필요
+			//TODO:  직접 URL입력해도 ssoLogin타도록.
 			response.sendRedirect("".equals(request.getContextPath()) ? "/" : request.getContextPath());
 		}
 		return true;

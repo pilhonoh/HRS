@@ -22,6 +22,25 @@ public class DateUtil {
 	
 	/**
 	 * 
+	 * @설명 : 
+	 * @작성일 : 2019.09.09
+	 * @작성자 : P149365
+	 * @param yyyymmdd
+	 * @return
+	 * @변경이력 :
+	 */
+	public static String yyyymmdd2HumanReadable(String yyyymmdd) {
+		try{
+			Date date = new SimpleDateFormat("yyyyMMdd").parse(yyyymmdd);
+			return new SimpleDateFormat("yyyy-MM-dd").format(date);
+		}catch(Exception e) {
+			throw new HrsException("invalid date");
+		}
+		
+	}
+	
+	/**
+	 * 
 	 * @설명 : HRS 시스템의 시간(1~9)를 실제 시간으로 변경 
 	 * @작성일 : 2019.09.04
 	 * @작성자 : P149365

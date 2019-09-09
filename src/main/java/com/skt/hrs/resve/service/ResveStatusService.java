@@ -1,6 +1,7 @@
 package com.skt.hrs.resve.service;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.cmmn.vo.LoginVo;
+import com.skt.hrs.resve.dao.ResveBlacklistDAO;
 import com.skt.hrs.resve.dao.ResveStatusDAO;
 import com.skt.hrs.utils.DateUtil;
 import com.skt.hrs.utils.StringUtil;
@@ -38,11 +41,14 @@ public class ResveStatusService {
 	@Resource(name="resveStatusDAO")
 	private ResveStatusDAO resveStatusDAO;
 	
-	//@Resource(name="cspDAO")
-	//private CspDAO cspDAO;
+	@Resource(name="resveBlacklistDAO")
+	private ResveBlacklistDAO blacklistDAO;
 	
 	@Autowired
 	private CspService cspService;
+	
+	@Autowired
+	MessageSource messageSource;
 
 	
 	/**
@@ -101,8 +107,19 @@ public class ResveStatusService {
 		/*****************************
 		 *  VALIDATION
 		 ****************************/
-		if(resveItem == null) 
+		if(resveItem == null ) 
 			throw new HrsException("error.invalidRequest", true);
+		
+		if("Y".equals(resveItem.get("CANCL_YN").toString())) {
+			throw new HrsException("error.canceledResve", true);	//이미 근무취소 처리되었습니다. 
+		}
+		
+		if("Y".equals(resveItem.get("COMPT_YN").toString())) {
+			throw new HrsException("error.completeResve", true);	//이미 완료된 예약입니다.
+		}
+		
+		// 블랙리스트 확인
+		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("resveEmpno"));
 		
 		
 		param.put("resveDe", resveItem.get("RESVE_DE"));
@@ -153,7 +170,7 @@ public class ResveStatusService {
 		 ****************************/
 		// SMS 등록		
 		resveItem.put("targetEmpno", param.get("targetEmpno"));
-		cspService.insertCspSMS(resveItem, "csp.sms.resveComplete", Locale.KOREAN);
+		cspService.insertCspSMS(resveItem, "csp.sms.resveComplete", Locale.forLanguageTag(param.getString("_ep_locale")));
 		
 		
 		return result;
@@ -181,6 +198,17 @@ public class ResveStatusService {
 		if(resveItem == null)
 			throw new HrsException("error.invalidRequest", true);
 		
+		if("Y".equals(resveItem.get("CANCL_YN").toString())) {
+			throw new HrsException("error.canceledResve", true);	//이미 근무취소 처리되었습니다. 
+		}
+		
+		if("Y".equals(resveItem.get("COMPT_YN").toString())) {
+			throw new HrsException("error.completeResve", true);	//이미 완료된 예약입니다.
+		}
+		
+		// 블랙리스트 확인
+		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("waitEmpno"));
+				
 		param.put("resveDe", resveItem.get("RESVE_DE"));
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 		
@@ -229,7 +257,7 @@ public class ResveStatusService {
 		 ****************************/
 		// SMS 등록	
 		resveItem.put("targetEmpno", param.get("targetEmpno"));
-		cspService.insertCspSMS(resveItem, "csp.sms.waitComplete", Locale.KOREAN);
+		cspService.insertCspSMS(resveItem, "csp.sms.waitComplete", Locale.forLanguageTag(param.getString("_ep_locale")));
 		
 		
 		return result;
@@ -246,13 +274,30 @@ public class ResveStatusService {
 	 */
 	@Transactional
 	public ResponseResult cancelResveStatus(DataEntity param) {
+		Locale locale = Locale.forLanguageTag(param.getString("_ep_locale"));
+
 		ResponseResult resResult = new ResponseResult();
+		
 		boolean result = false;
 		
 		Map resveItem = resveStatusDAO.selectResveItem(param);
 		
 		if(resveItem == null)
 			throw new HrsException("error.invalidRequest", true);
+		
+		if("Y".equals(resveItem.get("CANCL_YN").toString())) {
+			throw new HrsException("error.canceledResve", true);	//이미 근무취소 처리되었습니다. 
+		}
+		
+		if("Y".equals(resveItem.get("COMPT_YN").toString())) {
+			throw new HrsException("error.completeResve", true);	//이미 완료된 예약입니다.
+		}
+		
+		if("Y".equals(resveItem.get("SUCCS_YN").toString())) {
+			throw new HrsException("error.canNotSuccessionCancel", true);	//승계된 예약은 취소하실 수 없습니다.
+		}
+		
+		
 		
 		// 예약취소
 		if(param.getString("cancelGbn").equals(ResveStatusConst.VIEWSTATUS.RESVE_COMPT.toString())) {					
@@ -311,10 +356,10 @@ public class ResveStatusService {
 				 ****************************/
 				// 예약취소 sms
 				resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", Locale.KOREAN);
+				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
 				// 예약승계 sms
 				resveItem.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
-				cspService.insertCspSMS(resveItem, "csp.sms.resveSuccesssion", Locale.KOREAN);
+				cspService.insertCspSMS(resveItem, "csp.sms.resveSuccession", locale);
 				
 			}else {
 				/*****************************
@@ -338,7 +383,7 @@ public class ResveStatusService {
 				 ****************************/
 				// 예약취소 sms
 				resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", Locale.KOREAN);
+				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
 			}
 			
 									
@@ -388,7 +433,7 @@ public class ResveStatusService {
 			 ****************************/
 			// 대기취소 sms
 			resveItem.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
-			cspService.insertCspSMS(resveItem, "csp.sms.waitCancel", Locale.KOREAN);
+			cspService.insertCspSMS(resveItem, "csp.sms.waitCancel", locale);
 			
 		}else {
 			throw new HrsException("error.notAvailable", true);	// 예약or대기 상태가 아닌경우
@@ -419,6 +464,14 @@ public class ResveStatusService {
 		 ****************************/
 		if(resveItem == null)
 			throw new HrsException("error.invalidRequest", true);
+		
+		if("Y".equals(resveItem.get("CANCL_YN").toString())) {
+			throw new HrsException("error.canceledResve", true);	//이미 근무취소 처리되었습니다. 
+		}
+		
+		if("Y".equals(resveItem.get("COMPT_YN").toString())) {
+			throw new HrsException("error.completeResve", true);	//이미 완료된 예약입니다.
+		}
 				
 		// 시간체크 (사후처리 포함하여 당일까지만 완료처리 가능)
 		if(!DateUtil.getYYYYYMMDD().equals(resveItem.get("RESVE_DE").toString())) {
@@ -555,5 +608,33 @@ public class ResveStatusService {
 		return resultStatus.toString();
 	}
 	
+	/**
+	 * 
+	 * @설명 : 블랙리스트 여부 체크 
+	 * @작성일 : 2019.09.09
+	 * @작성자 : P149365
+	 * @param resveNo
+	 * @param empno
+	 * @변경이력 :
+	 */
+	private void checkBlacklist(String resveDe, String empno) {
+		DataEntity param = new DataEntity();
+		param.put("resveDe", resveDe);	//예약대상일
+		param.put("empno", empno);		//예약자사번
+		
+		// 블랙리스트 확인
+		Map blacklistMap = blacklistDAO.selectBlacklistByEmpno(param);		
+		if(blacklistMap != null) {
+			//"홍길동님은 2019년9월12일 SKT타월 C베드 예약으로 인한 패널티대상으로\n2019년 10월 3일까지 예약이 불가합니다.";			
+			String message = messageSource.getMessage("error.paneltyTarget", new String[] {
+					blacklistMap.get("EMPNM").toString(),
+				DateUtil.yyyymmdd2HumanReadable(blacklistMap.get("RESVE_DE").toString()),					
+				blacklistMap.get("BLD_NM").toString(),
+				blacklistMap.get("BED_NM").toString(),
+				blacklistMap.get("PANELTY_END_DT").toString(),
+			}, Locale.forLanguageTag(param.getString("_ep_locale")));
+			throw new HrsException(message);
+		}
+	}
 	
 }
