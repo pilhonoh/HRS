@@ -279,8 +279,8 @@ var scheduleList = {
 		//페이징 처리를 위한 파라미터
 		params: {
 			totalCount: null, //list 의 전체 row count
-			first: null, //첫페이지
-			last: null, //마지막페이지
+			first: null, //현재 보여질 첫페이지
+			last: null, //현재 보여질 마지막페이지
 			prev: null, //이전페이지
 			next: null //다음페이지
 		},
@@ -292,22 +292,26 @@ var scheduleList = {
 			var rowPerPage = scheduleList.list.params.rowPerPage; //페이지 당 레코드 수
 			var totalCount = scheduleList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
+			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
 			
 			$("div#pagingArea").empty();
 			var preStr = '';
 			var postStr = '';
 			var pageNumStr = '';
 			
-			var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
-			var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
-			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; 
-			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount;
+			
+			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; //이전 블록의 시작페이지
+			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount; //다음 블록의 시작 페이지
+			//var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
+			//var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
+			var first = (currentBlock - 1) * 10 + 1; //현재 블록의 시작 페이지
+			var last = currentBlock * 10; //현재 블록의 끝 페이지
+			
 			
 			scheduleList.paging.params.first = first;
 			scheduleList.paging.params.last = last;
 			scheduleList.paging.params.prev = prev;
 			scheduleList.paging.params.next = next;
-			
 			
 			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
 				preStr += '<a href="#none" class="first" id="firstBtn"><img src="' + IMG + '/common/btn_first.gif"></a>'
@@ -324,8 +328,11 @@ var scheduleList = {
 				postStr += '<a href="#none" class="last" id="lastBtn"><img src="' + IMG + '/common/btn_last.gif"></a>';
 			}
 
-
 			for (var i=first; i<(first+last); i++) {
+				if (i > totalIndexCount) {
+					break;
+				}
+				
 				if (i != currentIndex) {
 					pageNumStr += '<a href="#none" class="num">' + i + '</a>';
 				} else {
@@ -349,10 +356,11 @@ var scheduleList = {
 			
 			pageNumEvent: function() {
 				$('a.num').off();
-				$('a.num').on('click', function() {
+				$('a.num').on('click', function() {	
 					if (scheduleList.list.params.pageNo == parseInt(this.innerHTML)) {
 						return false;
 					}
+					
 					scheduleList.list.params.pageNo = parseInt(this.innerHTML);
 					scheduleList.list.renderScheduleList();
 				});
@@ -383,10 +391,11 @@ var scheduleList = {
 			firstBtnEvent: function() {
 				$('a#firstBtn').off();
 				$('a#firstBtn').on('click', function() {
-					if (scheduleList.list.params.pageNo == scheduleList.paging.params.first) {
+					if (scheduleList.list.params.pageNo == 1) {
 						return false;
 					}
-					scheduleList.list.params.pageNo = scheduleList.paging.params.first;
+				
+					scheduleList.list.params.pageNo = 1;
 					scheduleList.list.renderScheduleList();
 				});
 			},
@@ -394,10 +403,15 @@ var scheduleList = {
 			lastBtnEvent: function() {
 				$('a#lastBtn').off();
 				$('a#lastBtn').on('click', function() {
-					if (scheduleList.list.params.pageNo == scheduleList.paging.params.last) {
+					var rowPerPage = scheduleList.list.params.rowPerPage; //페이지 당 레코드 수
+					var totalCount = scheduleList.paging.params.totalCount; //list 의 전체 row count
+					var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
+					
+					if (scheduleList.list.params.pageNo == totalIndexCount) {
 						return false;
 					}
-					scheduleList.list.params.pageNo = scheduleList.paging.params.last;
+					
+					scheduleList.list.params.pageNo = totalIndexCount;
 					scheduleList.list.renderScheduleList();
 				});
 			}

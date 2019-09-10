@@ -206,16 +206,19 @@ var resveList = {
 			var rowPerPage = resveList.list.params.rowPerPage; //페이지 당 레코드 수
 			var totalCount = resveList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
+			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
 			
 			$("div#pagingArea").empty();
 			var preStr = '';
 			var postStr = '';
 			var pageNumStr = '';
 			
-			var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
-			var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
-			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; 
-			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount;
+			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; //이전 블록의 시작페이지
+			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount; //다음 블록의 시작 페이지
+			//var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
+			//var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
+			var first = (currentBlock - 1) * 10 + 1; //현재 블록의 시작 페이지
+			var last = currentBlock * 10; //현재 블록의 끝 페이지
 			
 			resveList.paging.params.first = first;
 			resveList.paging.params.last = last;
@@ -239,6 +242,10 @@ var resveList = {
 
 
 			for (var i=first; i<(first+last); i++) {
+				if (i > totalIndexCount) {
+					break;
+				}
+				
 				if (i != currentIndex) {
 					pageNumStr += '<a href="#none" class="num">' + i + '</a>';
 				} else {
@@ -296,10 +303,10 @@ var resveList = {
 			firstBtnEvent: function() {
 				$('a#firstBtn').off();
 				$('a#firstBtn').on('click', function() {
-					if (resveList.list.params.pageNo == resveList.paging.params.first) {
+					if (resveList.list.params.pageNo == 1) {
 						return false;
 					}
-					resveList.list.params.pageNo = resveList.paging.params.first;
+					resveList.list.params.pageNo = 1;
 					resveList.list.renderResveList();
 				});
 			},
@@ -307,10 +314,14 @@ var resveList = {
 			lastBtnEvent: function() {
 				$('a#lastBtn').off();
 				$('a#lastBtn').on('click', function() {
-					if (resveList.list.params.pageNo == resveList.paging.params.last) {
+					var rowPerPage = resveList.list.params.rowPerPage; //페이지 당 레코드 수
+					var totalCount = resveList.paging.params.totalCount; //list 의 전체 row count
+					var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
+					
+					if (resveList.list.params.pageNo == totalIndexCount) {
 						return false;
 					}
-					resveList.list.params.pageNo = resveList.paging.params.last;
+					resveList.list.params.pageNo = totalIndexCount;
 					resveList.list.renderResveList();
 				});
 			}

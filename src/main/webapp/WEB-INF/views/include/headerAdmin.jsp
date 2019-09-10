@@ -12,8 +12,8 @@ var SESSION = {
 <div class="inner">
 	<h1 class="logo">SKT헬스케어</h1>
 	<ul class="gnb-menu admin">
-		<li class="selected"><a href="#none">관리사 등록</a></li>
-		<li><a href="${ROOT}/mssr/schedule">관리사 스케쥴 관리</a></li>
+		<li><a href="#none">관리사 등록</a></li>
+		<li class="selected"><a href="${ROOT}/mssr/schedule">관리사 스케쥴 관리</a></li>
 		<li><a href="#none">예약 정보 변경</a></li>
 		<li><a href="#none">예약 현황 조회</a></li>
 		<li><a href="#none">담당자 등록</a></li>
