@@ -62,7 +62,7 @@
 				<div class="sub-tit">
 					<div class="f-right">
 						<button class="btn">삭제</button>
-						<button class="btn" onclick="e_layer_pop06('layer_pop06');">등록</button>						
+						<button class="btn" id ="createBtn">등록</button>						
 					</div>
 				</div>
 
@@ -165,22 +165,6 @@
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
 			<div class="bg"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">
-				<!--#include file="../popup/pop_예약신청.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">
-				<!--#include file="../popup/pop_대기신청.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">
-				<!--#include file="../popup/pop_예약대기취소.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
-				<!--#include file="../popup/pop_시작확인.html" -->	
-			</div>
-
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop05">
-				<!--#include file="../popup/pop_관리사등록수정.html" -->	
-			</div>
 			<div class="pop-layer size2 bounceInDown animated" id="layer_pop06">
 				<!--#include file="../popup/pop_관리사근무등록.html" -->	
 			</div>

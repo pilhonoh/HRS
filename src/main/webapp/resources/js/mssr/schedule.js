@@ -9,6 +9,8 @@ var scheduleList = {
 		scheduleList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
 		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
+		scheduleList.button.scheduleCreateBtnEvent();
+		
 	},
 	
 	
@@ -442,7 +444,13 @@ var scheduleList = {
 				scheduleList.list.renderScheduleList();
 			});
 		},
-		
+		//관리사스케줄등록
+		scheduleCreateBtnEvent: function(){
+		  $("button#createBtn").on('click',function(){
+			  scheduleList.popup.showScheduleSavePopup();  
+		  });	
+			
+		},
 		scheduleModifyBtnEvent: function() {
 			console.log('modBtnEventOff...');
 			console.log('modBtnEventBinding...');
@@ -485,12 +493,21 @@ var scheduleList = {
 	
 	
 	popup: {
+		showScheduleSavePopup: function() {
+			//var rowData = resveList.button.cancelBtnStatus.rowData;
+			
+			$('#layer_pop06').load(ROOT + '/mssr/pop/scheduleCreate',null, function(res) {
+				
+				/*$('#layer_pop06 #btnOk').on('click', function() {
+					resveList.popup.confirmBtn(rowData.RESVE_NO, rowData.LAST_STTUS_CODE);
+				});*/
+				openLayerPopup('layer_pop06');
+			});
+		}
 
 	}
 
 }
-
-
 
 $(document).ready(function() {	
 	scheduleList.init();
