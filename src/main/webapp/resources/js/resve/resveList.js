@@ -125,6 +125,7 @@ var resveList = {
 				var resveListHtml = [];
 				var btnText = '';
 				var btnClass = '';
+				var btnStyle = '';
 				var resveDt = '';
 				
 				resveList.paging.params.totalCount = result.customs.totalCount;
@@ -137,6 +138,7 @@ var resveList = {
 					} else if (stsCode == 'STS03') {
 						btnText = '대기취소';
 						btnClass = 'waitCancelBtn';
+						btnStyle = 'cr01';
 					}
 					
 					var resve_de = resultList[i].RESVE_DE;
@@ -152,7 +154,7 @@ var resveList = {
 					resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
 					resveListHtml.push('	<td>');
 					if (stsCode == 'STS01' || stsCode == 'STS03') {
-						resveListHtml.push('		<button class="t-btn ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
+						resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
 					}
 					resveListHtml.push('	</td>');
 					resveListHtml.push('</tr>');

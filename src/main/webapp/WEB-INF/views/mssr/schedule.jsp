@@ -16,7 +16,7 @@
 
 			<header class="header">
 				<!--#include file="../include/header.html"-->
-				<jsp:include page="${JSP}/include/header.jsp" />
+				<jsp:include page="${JSP}/include/headerAdmin.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
