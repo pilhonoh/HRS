@@ -158,6 +158,8 @@ var resveList = {
 					}
 					resveListHtml.push('	</td>');
 					resveListHtml.push('</tr>');
+					
+					btnStyle = '';
 				}
 				
 				$('tbody#resveList').html(resveListHtml.join(''));

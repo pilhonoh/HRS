@@ -6,11 +6,12 @@
 	<h2>헬스케어 <span>예약</span> 신청</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
-<div class="pop-container">	
+<div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 	
 	<p class="pop-desc icon01"><strong>예약</strong> 하시겠습니까?</p>
 	
+	<!-- 
 	<table class="tbl-style">
 		<colgroup>
 			<col style="width:30%;">
@@ -35,6 +36,15 @@
 			</tr>
 		</tbody>
 	</table>
+	-->
+	
+	<ul class="reservation-list">
+		<li><span class="icon01" id="resveRegist_resveDe"></span></li>
+		<li><span class="icon02" id="resveRegist_resveTm"></span></li>
+		<li><span class="icon03" id="resveRegist_mssr"></span></li>
+		<li><span class="icon04" id="resveRegist_bed"></span></li>
+	</ul>
+	
 
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>

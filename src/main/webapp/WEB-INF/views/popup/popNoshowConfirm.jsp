@@ -7,9 +7,10 @@
 	<h2>헬스케어 사후 완료</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
-<div class="pop-container">	
+<div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 
+	<!-- 
 	<table class="tbl-style">
 		<colgroup>
 			<col style="width:30%;">
@@ -34,6 +35,15 @@
 			</tr>
 		</tbody>
 	</table>
+	-->
+	
+	<ul class="reservation-list">
+		<li><span class="icon01" id="noshowConfirm_resveDe"></span></li>
+		<li><span class="icon02" id="noshowConfirm_resveTm"></span></li>
+		<li><span class="icon03" id="noshowConfirm_mssr"></span></li>
+		<li><span class="icon04" id="noshowConfirm_bed"></span></li>
+	</ul>
+	
 
 	<p class="pop-desc">※ 헬스케어 예약을 완료처리 하시겠습니까?</p>
 
