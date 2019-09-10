@@ -1,8 +1,12 @@
 $(function(){				
 
 	//include header
-//	$('.header').load("../include/header.html", function(){
-//	});
+	//$('.header').load("../include/header.html", function(){
+	//});
+
+	//include header
+	//$('.header.admin').load("../include/header_admin.html", function(){
+	//});
 
 	// 달력UI
 	$(".datepicker").datepicker({
@@ -24,16 +28,14 @@ $(function(){
 	});	
 
 	//include header
-//	$('.footer').load("../include/footer.html", function(){
-//	});
-	
+	//$('.footer').load("../include/footer.html", function(){
+	//});
 
 	moment.locale('ko', {
 	    weekdays: ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],
 	    weekdaysShort: ["일","월","화","수","목","금","토"],
 	});
 	moment.locale('en');
-
 });
 
 //layer popup 
@@ -629,6 +631,7 @@ function closeLayerPopup(){
 	}	
 	$("html").attr("style", "overflow-y:auto");
 	$("html").removeClass("scroll");
+	temp.empty();
 }
 
 function getRealTime(number){

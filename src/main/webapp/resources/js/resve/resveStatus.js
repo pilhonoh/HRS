@@ -129,8 +129,14 @@ var resveStatus = {
 		click: function(e){
 			console.log('click',$(e.target).data('data'));
 			var data = $(e.target).data('data');			
-			var str = moment(data.date).locale('ko').format('YYYY년 M월 DD일(ddd)') + ' 예약 : ' + $('[data-code-tyl="BLD"] option:selected').text();
-			$('.sub-tit h3').text(str);
+			
+			// 예전퍼블
+			//var str = moment(data.date).locale('ko').format('YYYY년 M월 DD일(ddd)') + ' 예약 : ' + $('[data-code-tyl="BLD"] option:selected').text();
+			//$('.sub-tit h3').text(str);
+						
+			$('.cal-day.selected').removeClass('selected');
+			$(e.target).parents('div:eq(0)').addClass('selected');
+			
 			resveStatus.table.init();
 			resveStatus.table.getStatus($(e.target).data('data').yyyymmdd)
 			resveStatus.data.selectedDate = $(e.target).data('data');
@@ -176,8 +182,9 @@ var resveStatus = {
 						var list = res.list;
 						
 						var last = undefined;
-						var $div;
+						//var $div;
 						
+						/*
 						function getButton(status){
 							return {
 								//예약가능
@@ -202,39 +209,102 @@ var resveStatus = {
 								'NOSHOW' : $('<button>').text('예약완료').addClass('rv-btn'),
 							}[status]
 						}
+						*/
 						
+						function getButton(status){
+							return {
+								//예약가능
+								'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o"></i>').text('예약가능').addClass('rbtn cr1').on('click', resveStatus.pop.regist),	
+								//예약완료
+								'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check"></i>').text('예약완료').addClass('rbtn cr3').on('click', resveStatus.pop.cancel),	
+								//예약불가
+								'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not'), 
+								//대기가능
+								'WAIT_POSBL' : $('<button>').append('<i class="xi-time-o"></i>').text('대기가능').addClass('rbtn cr4').on('click', resveStatus.pop.wait),
+								//대기중
+								'WAIT' : $('<button>').append('<i class="xi-spinner-1"></i>').text('대기중').addClass('rbtn cr2').on('click', resveStatus.pop.cancel),
+								//예약취소
+								'RESVE_CANCL' : '',
+								//대기취소
+								'WAIT_CANCL' : '',
+								//완료
+								'COMPT' :  $('<span>').text('케어완료').addClass('reservation-not'),
+								//노쇼 완료가능
+								'NOSHOW_COMPT' : $('<button>').append('<i class="xi-calendar-check"></i>').text('예약완료').addClass('rbtn cr3').on('click', resveStatus.pop.noshowConfirm),
+								//노쇼
+								'NOSHOW' : $('<button>').append('<i class="xi-calendar-check"></i>').text('예약완료').addClass('rbtn cr3'),
+							}[status]
+						}
+						
+						/*
+						<tr>
+							<th>A</th>
+							<td class="start">
+								<p class="top"><span class="women">고소영</span><p>
+								<span class="reservation-not">예약불가</span>
+							</td>
+							<td class="on">
+								<p class="top"><p>
+								<button class="rbtn cr1" onclick="e_layer_pop01('layer_pop01');"><i class="xi-check-circle-o"></i>예약가능</button>
+							</td>
+							<td class="on">
+								<p class="top"><p>
+								<button class="rbtn cr2" onclick="e_layer_pop03('layer_pop03');"><i class="xi-spinner-1"></i>대기중</button>
+							</td>
+							<td class="on">
+								<p class="top"><p>
+								<button class="rbtn cr3" onclick="e_layer_pop03('layer_pop03');"><i class="xi-calendar-check"></i>예약완료</button>
+							</td>
+							<td>
+								<p class="top"><p>
+							</td>
+							<td class="start">
+								<p class="top"><span class="men">장동건</span><p>
+								<button class="rbtn cr4" onclick="e_layer_pop02('layer_pop02');"><i class="xi-time-o"></i>대기가능</button>
+							</td>
+							<td class="on">
+								<p class="top"><p>
+								<span class="reservation-not">예약불가</span>
+							</td>
+							<td class="on">
+								<p class="top"><p>
+								<span class="reservation-not">예약불가</span>
+							</td>
+							<td class="on">
+								<p class="top"><p>
+								<span class="reservation-not">예약불가</span>
+							</td>
+						</tr>
+						*/
 						list.forEach(function(stts){
+							
+							var $td = $('.' + stts.BED_CODE + '-' + stts.RESVE_TM).data('data', stts)
+										.attr('id', 'resve-'+stts.RESVE_NO);
+							
+							var $p = $('<p class="top">');
+							var $span_name = $('<span>').addClass(stts.MSSR_SEXDSTN == 'F' ? 'women' : 'men').text(stts.MSSR_NCNM);
+							var $status = getButton(stts.LAST_STTUS);
+							
+							
 							
 							if(!last || 									// last가 없거나
 								last.RESVE_TM != (stts.RESVE_TM-1) || 		// last가 현재시간-1이 아니거나(연속되지않거나) (같은날 떨어진근무)
 								last.MSSR_EMPNO != stts.MSSR_EMPNO ||		// 관리사가 다른경우							
 								last.BED_CODE != stts.BED_CODE){			// 베드가 다른경우							
-								//근무를 새로 그림
-								$div = $('<div class="rv-box">').addClass(stts.MSSR_SEXDSTN == 'F' ? 'woman' : 'man');
-								var $p = $('<p class="name">').append($('<strong>').text(stts.MSSR_NCNM));
-								var $ul = $('<ul class="rv-btn-area">');
-								var $li = $('<li>')
-											.attr('id', 'resve-'+stts.RESVE_NO)
-											.data('data', stts)
-											.append(getButton(stts.LAST_STTUS));
 								
-								var $td = $('.' + stts.BED_CODE + '-' + stts.RESVE_TM);
 								
-								$td.empty().append($div.append($p).append($ul.append($li)));
+								$td.addClass('start');
+								$p.append($span_name);
+								
 								
 							}else{
-								//이전근무에 연속해서 그림
-								var $ul = $div.find('ul');
-								var $li = $('<li>')
-											.attr('id', 'resve-'+stts.RESVE_NO)
-											.data('data', stts)
-											.append(getButton(stts.LAST_STTUS));
-								$ul.append($li);
-								$div.parent('td').attr('colspan', $ul.find('li').length);	// td colspan
-								$('.' + stts.BED_CODE + '-' + stts.RESVE_TM).remove();		// colspan을 했으니 td삭제
-								$div.removeClass('colspan' + ($ul.find('li').length-1))		// div colspan
-									.addClass('colspan' + $ul.find('li').length);
+								
+								$td.addClass('on');
+								
 							}
+							
+							$td.empty().append($p).append($status)
+							
 							
 							last = stts;
 						})										
@@ -338,8 +408,9 @@ var resveStatus = {
 	pop : {
 		// 예약신청 팝업 호출
 		regist : function(e){			
-			var filtered = $('li[id^=resve]').filter(function(i, li){
-				var status = $(li).data().data.LAST_STTUS;
+			var filtered = $('td[id^=resve-]').filter(function(i, td){
+				console.log($(td))
+				var status = $(td).data().data.LAST_STTUS;
 				return status == "RESVE_COMPT" || 	//예약완료
 					status == "WAIT" || 			//대기중
 					status == 'COMPT' || 			//완료
@@ -347,8 +418,8 @@ var resveStatus = {
 					status == 'NOSHOW';				//노쇼
 			});
 			if(filtered.length == 0){
-				var $li = $(e.target).parent('li');			
-				$('#layer_pop01').load(ROOT + '/resve/pop/regist', {resveNo : $li.data('data').RESVE_NO}, function(res){
+				var $td = $(e.target).parent('td');			
+				$('#layer_pop01').load(ROOT + '/resve/pop/regist', {resveNo : $td.data('data').RESVE_NO}, function(res){
 					$('#layer_pop01 #btnOk').on('click', function(){
 						resveStatus.regist(data.RESVE_NO);
 					});	
@@ -361,8 +432,8 @@ var resveStatus = {
 		},
 		// 대기신청 팝업 호출
 		wait : function(e){
-			var filtered = $('li[id^=resve]').filter(function(i, li){
-				var status = $(li).data().data.LAST_STTUS;
+			var filtered = $('td[id^=resve]').filter(function(i, td){
+				var status = $(td).data().data.LAST_STTUS;
 				return status == "RESVE_COMPT" || 	//예약완료
 					status == "WAIT" || 			//대기중
 					status == 'COMPT' || 			//완료
@@ -370,8 +441,8 @@ var resveStatus = {
 					status == 'NOSHOW';				//노쇼
 			});
 			if(filtered.length == 0){
-				var $li = $(e.target).parent('li');			
-				$('#layer_pop02').load(ROOT + '/resve/pop/wait', {resveNo : $li.data('data').RESVE_NO}, function(res){
+				var $td = $(e.target).parent('td');			
+				$('#layer_pop02').load(ROOT + '/resve/pop/wait', {resveNo : $td.data('data').RESVE_NO}, function(res){
 					$('#layer_pop02 #btnOk').on('click', function(){
 						resveStatus.wait(data.RESVE_NO);
 					});	
@@ -384,7 +455,7 @@ var resveStatus = {
 		},
 		// 예약/대기 취소 팝업 호출
 		cancel : function(e){			
-			var data = $(e.target).parent('li').data('data');			
+			var data = $(e.target).parent('td').data('data');			
 			$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : data.RESVE_NO, cancelGbn: data.LAST_STTUS}, function(res){
 				$('#layer_pop03 #btnOk').on('click', function(){
 					resveStatus.cancel(data.RESVE_NO, data.LAST_STTUS);
@@ -394,7 +465,7 @@ var resveStatus = {
 		},
 		// 예약 사후완료 처리
 		noshowConfirm : function(e){
-			var data = $(e.target).parent('li').data('data');			
+			var data = $(e.target).parent('td').data('data');			
 			$('#layer_pop05').load(ROOT + '/resve/pop/noshowConfirm', {resveNo : data.RESVE_NO}, function(res){
 				$('#layer_pop05 #btnOk').on('click', function(){
 					resveStatus.complete(data.RESVE_NO);
