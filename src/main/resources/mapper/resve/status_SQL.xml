@@ -102,6 +102,21 @@
 		WHERE RESVE_NO = #{resveNo}		
 	</select>
 	
+	<!-- 30분전 SMS알림용 쿼리 -->
+	<select id="selectResveNotifyList" resultType="hashmap">
+		SELECT * FROM RESVE_STTUS 
+		WHERE RESVE_DE=DATE_FORMAT(NOW(),'%Y%m%d')
+		AND RESVE_TM = (
+			SELECT CODE
+			FROM CMMN_CODE
+			WHERE CODE_TYL = 'RVT'
+			AND LEFT(CODE_NM,2) = DATE_FORMAT(NOW(), '%H')
+		)
+		AND CANCL_YN != 'Y'
+		AND RESVE_EMPNO != '' 
+		AND RESVE_EMPNO IS NOT NULL
+	</select>
+	
 	<!-- 예약현황 update -->
 	<update id="updateResveStatus" parameterType="map">
 		UPDATE RESVE_STTUS

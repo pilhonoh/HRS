@@ -19,7 +19,8 @@
 		AND CANCL_YN != 'Y'
 		AND COMPT_YN != 'Y'
 		AND SUCCS_YN != 'Y'
-		AND (RESVE_EMPNO != '' OR RESVE_EMPNO != NULL)
+		AND RESVE_EMPNO != '' 
+		AND RESVE_EMPNO IS NOT NULL
 	</insert>
 	
 	<!-- 사번으로 블랙리스트대상인지 확인 -->

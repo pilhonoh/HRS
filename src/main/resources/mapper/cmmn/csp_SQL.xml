@@ -31,11 +31,12 @@
 			FROM CSP_SEND_HIST C LEFT JOIN INF_PERSON_INFO_RCV U ON C.RCV_EMPNO = U.EMPNO
 			WHERE 1=1
 			AND SEND_YN = 'N' 
+			AND RETRY_CNT < 3
 		]]>
 	</select>
 	
 	<update id="updateCspSendLog" parameterType="com.skt.hrs.cmmn.vo.CspVo">
-		UPDATE CSP_SEND_HIST
+		UPDATE CSP_SEND_HIST A
 			SET   
 				<choose>
 					<when test='sendRslt == "S"'>
@@ -45,6 +46,7 @@
 					</when>
 					<otherwise>
 						SEND_RSLT = #{sendRslt}
+					   ,RETRY_CNT = A.RETRY_CNT +1
 					</otherwise>
 				</choose>
 			WHERE 1=1
