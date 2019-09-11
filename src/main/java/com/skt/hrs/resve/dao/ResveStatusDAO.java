@@ -79,6 +79,18 @@ public class ResveStatusDAO {
 	
 	/**
 	 * 
+	 * @설명 : 예약 30분전 알림 목록 조회 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectResveNotifyList() {
+		return sqlSession.selectList("resveStatusMapper.selectResveNotifyList");
+	}
+	
+	/**
+	 * 
 	 * @설명 : 예약상태변경 
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365

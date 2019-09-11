@@ -91,6 +91,22 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 예약 30분전 알림 목록 조회 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectResveNotifyList() {
+		ResponseResult result = new ResponseResult();
+		
+		List<Map> list = resveStatusDAO.selectResveNotifyList();
+		result.setItemList(list);
+		return result;
+	}
+	
+	/**
+	 * 
 	 * @설명 : 예약 등록
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
@@ -636,5 +652,7 @@ public class ResveStatusService {
 			throw new HrsException(message);
 		}
 	}
+	
+	
 	
 }

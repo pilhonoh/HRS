@@ -11,7 +11,7 @@ $(function(){
 	// 달력UI
 	$(".datepicker").datepicker({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-		buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
+		buttonImage: "../images/common/ico_date.png", // 버튼 이미지.
 		dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 		changeMonth: true ,
 		changeYear: true,
@@ -30,6 +30,23 @@ $(function(){
 	//include header
 	//$('.footer').load("../include/footer.html", function(){
 	//});
+	
+	$.ajaxSetup({
+		dataFilter: function(data,type){
+			if(type == 'html')
+				return data;
+			
+			var json = JSON.parse(data);
+			if(json.status == 200){				
+				return data;
+			}else{
+				alert(json.message);
+				if(json.status == 403){
+					location.href = '/';
+				}
+			}
+		}
+	})
 
 	moment.locale('ko', {
 	    weekdays: ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],
