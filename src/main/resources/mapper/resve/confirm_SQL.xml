@@ -15,4 +15,23 @@
 		AND A.BLD_CODE=#{bldCode}
 		AND A.CANCL_YN != 'Y'
 	</select>
+	
+	<!-- 완료처리 대상 예약조회 -->
+	<select id="selectConfirmTarget" parameterType="map" resultType="hashmap">
+		SELECT A.*,
+			B.NCNM AS MSSR_NCNM,
+			B.SEXDSTN AS MSSR_SEXDSTN,
+			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BED' AND CODE_TYS=A.BLD_CODE AND CODE = A.BED_CODE) AS BED_NM
+		FROM RESVE_STTUS A
+		INNER JOIN MASSEUR B
+		ON A.MSSR_EMPNO = B.EMPNO
+		WHERE A.RESVE_NO = (
+			SELECT MIN(RESVE_NO)
+			FROM RESVE_STTUS
+			WHERE RESVE_DE = #{resveDe}
+			AND RESVE_EMPNO = #{resveEmpno}
+			AND CANCL_YN != 'Y'
+			AND COMPT_YN != 'Y'
+		)
+	</select>
 </mapper>

@@ -84,6 +84,9 @@ public class ResveStatusService {
 		for(Map item : list) {
 			item.put("LAST_STTUS",  getViewStatus(item, loginVo));
 			item.remove("LAST_STTUS_CODE");
+			//누가 예약/대기했는지 클라이언트로 전송하지않음
+			item.remove("RESVE_EMPNO");	
+			item.remove("WAIT_EMPNO");
 		}
 		result.setItemList(list);
 		return result;
@@ -539,19 +542,23 @@ public class ResveStatusService {
 	 * @변경이력 :
 	 */
 	private String getViewStatus(Map item, LoginVo loginVo) {
-		String resveEmpno = (String) item.get("RESVE_EMPNO");
-		String waitEmpno = (String) item.get("WAIT_EMPNO");
-		String mssrSexdstn = (String) item.get("MSSR_SEXDSTN");
-		String lastStatusCode = (String) item.get("LAST_STTUS_CODE");
-		String myEmpno = loginVo.getEmpno();
-		String mySexdstn = loginVo.gettSex();
-		String succsYn = (String) item.get("SUCCS_YN");	//승계여부
+		String resveDe = (String) item.get("RESVE_DE");					//예약일
+		String resveTm = (String) item.get("RESVE_TM");					//예약시간
+		String resveEmpno = (String) item.get("RESVE_EMPNO");			//예약자사번
+		String waitEmpno = (String) item.get("WAIT_EMPNO");				//대기자사번
+		String mssrSexdstn = (String) item.get("MSSR_SEXDSTN");			//관리사성별
+		String lastStatusCode = (String) item.get("LAST_STTUS_CODE");	//마지막상태코드
+		String myEmpno = loginVo.getEmpno();							//로그인사번
+		String mySexdstn = loginVo.gettSex();							//로그인성별
+		String succsYn = (String) item.get("SUCCS_YN");					//승계여부
+		String comptYn = (String) item.get("COMPT_YN");					//완료여부
+		
 		
 				
 		ResveStatusConst.VIEWSTATUS resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;
 		
 		// 예약 시간
-		Date resveDt = DateUtil.hrsDtToRealDt(item.get("RESVE_DE").toString(), item.get("RESVE_TM").toString());
+		Date resveDt = DateUtil.hrsDtToRealDt(resveDe, resveTm);
 
 		// 시간이 지난경우
 		if(!DateUtil.isPastBefore20min(resveDt)) {
@@ -564,7 +571,7 @@ public class ResveStatusService {
 						resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
 					}else {
 						// 예약일이 오늘이라면
-						if(item.get("RESVE_DE").toString().equals(DateUtil.getYYYYYMMDD())) {						
+						if(resveDe.equals(DateUtil.getYYYYYMMDD())) {						
 							resultStatus = ResveStatusConst.VIEWSTATUS.NOSHOW_COMPT;	// 노쇼 당일처리가능
 						}else {
 							resultStatus = ResveStatusConst.VIEWSTATUS.NOSHOW;	// 노쇼
@@ -604,8 +611,12 @@ public class ResveStatusService {
 					if(StringUtil.isEmpty(waitEmpno)) {	
 						if("Y".equals(succsYn)) {
 							resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	//예약불가 (승계된 예약은 취소할수 없으므로)
-						}else {							
-							resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+						}else {
+							if("Y".equals(comptYn)) {
+								resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+							}else {								
+								resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+							}
 						}
 						
 					}else {

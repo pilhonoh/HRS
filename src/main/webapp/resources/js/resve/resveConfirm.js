@@ -1,7 +1,7 @@
 var resveConfirm = {
 	data : {
 		beds : [],
-		bldCode: $('#bldCode').val()||'SK01',
+		bldCode: undefined,
 		selectedDate: undefined
 	},
 	init: function(){
@@ -9,7 +9,19 @@ var resveConfirm = {
 		resveConfirm.fillBeds(resveConfirm.data.bldCode)
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
-			})
+			});
+		$('#btnConfirm').on('click', resveConfirm.pop.confirm);
+		$('#txtResveEmpno').on('keypress', function(e){
+			if(e.keyCode == 13) resveConfirm.pop.confirm();
+		});
+		
+	},
+	setHeader: function(yyyymmdd){
+		var m = moment(yyyymmdd) || moment();
+		
+		$('.tit-date span').empty().append(m.format('YYYY년 MM월 '))
+		.append($('<em>').text(m.format('DD일('+ m.locale('ko').format('ddd')+') 예약')))
+		.append('입니다.');
 	},
 	// 해당사옥의 bed목록 조회
 	fillBeds : function(bldCode){				
@@ -25,6 +37,37 @@ var resveConfirm = {
 			}
 		});
 	},	
+	// 케어 시작 (완료처리)
+	start: function(resveNo){
+		$.ajax({
+			url: ROOT + '/confirm/start',
+			type: 'POST',
+			data: {resveNo: resveNo},
+			success: function(res){				
+				resveConfirm.table.refresh();
+				closeLayerPopup();
+			},
+			error: function(err){
+				console.error(err)
+			}
+		})
+	},
+	// 팝업
+	pop : {
+		confirm : function(e){
+			if($('#txtResveEmpno').val().trim() == ""){
+				alert('사번을 입력하세요');
+			}else{
+				$('#layer_pop01').load(ROOT + '/confirm/pop/start',{
+					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
+					resveDe: resveConfirm.data.selectedDate.yyyymmdd
+				}, function(res, state, xhr){						
+					openLayerPopup('layer_pop01');
+				});
+			}
+			
+		}
+	}
 	
 };
 
@@ -83,12 +126,13 @@ resveConfirm.calendar = {
 		$('.cal-day.selected').removeClass('selected');
 		$(e.target).parents('div:eq(0)').addClass('selected');
 		resveConfirm.data.selectedDate = $(e.target).data('data');
-		
+		resveConfirm.setHeader($(e.target).data('data').yyyymmdd);
 		resveConfirm.table.init();
 		resveConfirm.table.getResve($(e.target).data('data').yyyymmdd);
 	}
 }
 
+// 현황테이블
 resveConfirm.table = {
 	init: function(){
 		var bedList = resveConfirm.data.beds;
@@ -115,7 +159,7 @@ resveConfirm.table = {
 			yyyymmdd = moment().format('YYYYMMDD');
 		}
 		$.ajax({
-			url: ROOT + '/resve/getResve',
+			url: ROOT + '/confirm/getResve',
 			data: {resveDe: yyyymmdd, bldCode: resveConfirm.data.bldCode},
 			success: function(res){
 				console.log('getResve', res);
@@ -163,12 +207,13 @@ resveConfirm.table = {
 				});
 			},
 			error : function(err) {
-				console.error(err.responseJSON)			
+				console.error(err.responseJSON)
 			}
 		})
-	}
-	
+	}	
 }
-$(document).ready(function(){	
+
+$(document).ready(function(){
+	resveConfirm.data.bldCode = $('#bldCode').val()||'SK01';
 	resveConfirm.init();
 })

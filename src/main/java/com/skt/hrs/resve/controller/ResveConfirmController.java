@@ -6,13 +6,19 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.pub.core.util.JsonUtils;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.resve.service.ResveConfirmService;
+import com.skt.hrs.resve.service.ResveStatusService;
+import com.skt.hrs.utils.StringUtil;
 
 /**
  * 
@@ -23,11 +29,14 @@ import com.skt.hrs.resve.service.ResveConfirmService;
  * @변경이력    :
  */
 @Controller
-@RequestMapping(value = "/resve")
+@RequestMapping(value = "/confirm")
 public class ResveConfirmController {
 	
 	@Autowired
 	ResveConfirmService resveConfirmService;
+	
+	@Autowired
+	ResveStatusService resveStatusService;
 
 	/**
 	 * 
@@ -40,12 +49,47 @@ public class ResveConfirmController {
 	 * @throws Exception
 	 * @변경이력 :
 	 */
-	@RequestMapping(value = "/confirm")
+	@RequestMapping(value = "")
 	public String resveConfirmView(HttpServletRequest req, HttpServletResponse res) throws Exception {		
 		return "resve/resveConfirm";
 	}
 	
+	/**
+	 * 
+	 * @설명 :  케어시작 팝업호출
+	 * @작성일 : 2019.09.11
+	 * @작성자 : P149365
+	 * @param req
+	 * @param res
+	 * @return
+	 * @throws Exception
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/pop/start")
+	public String resveConfirmPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {	
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		if(param.get("resveEmpno") == null && StringUtil.isEmpty(param.get("resveEmpno").toString())) {
+			throw new HrsException("error.invalidRequest", true);
+		}
+		if(param.get("resveDe") == null && StringUtil.isEmpty(param.get("resveDe").toString())) {
+			throw new HrsException("error.invalidRequest", true);
+		}
+		ResponseResult result = resveConfirmService.selectConfirmTarget(param);
+		
+		model.addAttribute("item", JsonUtils.objectToString(result.getItem()));
+		return "popup/popStartConfirm";
+	}
 	
+	/**
+	 * 
+	 * @설명 : 예약현황 조회
+	 * @작성일 : 2019.09.11
+	 * @작성자 : P149365
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
 	@RequestMapping(value = "/getResve")
 	public @ResponseBody ResponseResult selectResveConfirm(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
@@ -54,5 +98,22 @@ public class ResveConfirmController {
 		//사옥 체크?
 		
 		return resveConfirmService.selectWorkList(param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 완료처리
+	 * @작성일 : 2019.09.11
+	 * @작성자 : P149365
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/start", method = RequestMethod.POST)
+	public @ResponseBody ResponseResult selectConfirmTarget(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+				
+		return resveStatusService.completeResveStatus(param);
 	}
 }

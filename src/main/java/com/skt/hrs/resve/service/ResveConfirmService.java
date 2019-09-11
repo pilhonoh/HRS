@@ -44,14 +44,34 @@ public class ResveConfirmService {
 		for(Map item : list) {
 			item.put("LAST_STTUS",  getViewStatus(item));
 			item.remove("LAST_STTUS_CODE");
+			//누가 예약/대기했는지 클라이언트로 전송하지않음
+			item.remove("RESVE_EMPNO");	
+			item.remove("WAIT_EMPNO");
 		}
 		result.setItemList(list);		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 완료처리 대상 예약조회 
+	 * @작성일 : 2019.09.11
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectConfirmTarget(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		Map item = resveConfirmDAO.selectConfirmTarget(param);
+		result.setItemOne(item);
 		return result;
 	}
 
 	/**
 	 * 
-	 * @설명 : 
+	 * @설명 : 케어확인 화면 상태계산
 	 * @작성일 : 2019.09.10
 	 * @작성자 : P149365
 	 * @param item
@@ -76,8 +96,12 @@ public class ResveConfirmService {
 				}
 			}
 		}else {
-			if(!StringUtil.isEmpty(item.get("RESVE_EMPNO").toString())) {
-				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_COMPT;	//예약완료
+			if(item.get("RESVE_EMPNO")!= null && !StringUtil.isEmpty(item.get("RESVE_EMPNO").toString())) {
+				if("Y".equals(item.get("COMPT_YN"))) {
+					resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;		//케어완료 (케어 시간이 되지않아도 케어완료 가능한가?)
+				}else {
+					resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_COMPT;	//예약완료
+				}
 			}else {
 				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_POSBL;	//예약가능
 			}

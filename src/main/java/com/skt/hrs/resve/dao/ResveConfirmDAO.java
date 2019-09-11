@@ -38,5 +38,17 @@ public class ResveConfirmDAO {
 		return sqlSession.selectList("resveConfirmMapper.selectWorkList", param);
 	}
 	
+	/**
+	 * 
+	 * @설명 : 완료처리 대상 예약조회 
+	 * @작성일 : 2019.09.11
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectConfirmTarget(DataEntity param) {
+		return sqlSession.selectOne("resveConfirmMapper.selectConfirmTarget", param);
+	}
 	
 }
