@@ -11,10 +11,10 @@ var SESSION = {
 </script>
 
 <div class="inner">
-	<h1 class="logo">SKT헬스케어</h1>
+	<a href="${ROOT}/resve/status"><h1 class="logo">SKT헬스케어</h1></a>
 	<ul class="gnb-menu">
 		<li><a href="${ROOT}/resve/status"><i class="xi-calendar-check"></i>예약하기</a></li>
-		<li><a href="${ROOT}/resve/list"><i class="xi-document"></i>예약신청</a></li>
+		<li><a href="${ROOT}/resve/list"><i class="xi-document"></i>예약현황</a></li>
 		<li><a href="${ROOT}/mssr/schedule"><i class="xi-cog"></i>관리자</a></li>		
 	</ul>
 	<p class="user-desc">

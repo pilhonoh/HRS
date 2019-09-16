@@ -20,7 +20,7 @@
 			<div class="content">
 				
 				<div class="sub-tit">
-					<h2>예약 리스트</h2>
+					<h2>예약현황</h2>
 				</div>
 				
 				<div class="search_field_wrap">

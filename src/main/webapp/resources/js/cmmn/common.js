@@ -11,7 +11,7 @@ $(function(){
 	// 달력UI
 	$(".datepicker").datepicker({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-		buttonImage: "../images/common/ico_date.png", // 버튼 이미지.
+		buttonImage: "../resources/images/common/ico_date.png", // 버튼 이미지.
 		dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 		changeMonth: true ,
 		changeYear: true,
@@ -291,7 +291,7 @@ function e_layer_pop06(id) {
 		// 달력UI
 		$(".datepicker").datepicker({
 			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-			buttonImage: "../../resource/images/common/ico_date.png", // 버튼 이미지.
+			buttonImage: "../resources/images/common/ico_date.png", // 버튼 이미지.
 			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 			changeMonth: true ,
 			changeYear: true,
