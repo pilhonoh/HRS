@@ -60,7 +60,7 @@
 
 				<div class="sub-tit">
 					<div class="f-right">
-						<button class="btn">삭제</button>
+						<button class="btn" id="deleteBtn">삭제</button>
 						<button class="btn" id ="createBtn">등록</button>						
 					</div>
 				</div>
