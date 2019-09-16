@@ -56,7 +56,7 @@ var resveConfirm = {
 	pop : {
 		confirm : function(e){
 			if($('#txtResveEmpno').val().trim() == ""){
-				alert('사번을 입력하세요');
+				alertPopup('사번을 입력하세요');
 			}else{
 				$('#layer_pop01').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 

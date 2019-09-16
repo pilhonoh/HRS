@@ -89,7 +89,15 @@
 	<!-- error 페이지 설정 -->
 	<error-page>
 		<error-code>403</error-code>
-		<location>/WEB-INF/view/noAuthority.jsp</location>
+		<location>/error/403</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/404</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/500</location>
 	</error-page>
 
 	<resource-ref>

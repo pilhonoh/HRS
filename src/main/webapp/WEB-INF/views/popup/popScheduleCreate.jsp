@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <jsp:include page="${JSP}/include/resource.jsp" />
-<script src="${LIB}/moment/moment.min.js"></script>	
 <div class="pop-head">
 	<h2>관리사 근무 등록</h2>
 	<a href="#none" class="close layerClose">닫기</a> 

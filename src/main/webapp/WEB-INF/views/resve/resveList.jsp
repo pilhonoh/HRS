@@ -6,8 +6,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<jsp:include page="${JSP}/include/resource.jsp" />
-		<script src="${LIB}/moment/moment.min.js"></script>	
+		<jsp:include page="${JSP}/include/resource.jsp" />		
 		<script src="${JS}/resve/resveList.js"></script>
 	</head>
 	<body>	
@@ -20,7 +19,7 @@
 			<div class="content">
 				
 				<div class="sub-tit">
-					<h2>예약 리스트</h2>
+					<h2>예약현황</h2>
 				</div>
 				
 				<div class="search_field_wrap">
@@ -152,20 +151,7 @@
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
-			<div class="bg"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">				
-				
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">				
-				<jsp:include page="../popup/pop_waitingApply.jsp" />
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">	
-				<jsp:include page="../popup/pop_waitingApply.jsp" />			
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
-				<!--#include file="../popup/pop_시작확인.html" -->
-				<jsp:include page="../popup/pop_startConfirm.jsp" />
-			</div>
+			<jsp:include page="${JSP}/include/layer.jsp" />
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 

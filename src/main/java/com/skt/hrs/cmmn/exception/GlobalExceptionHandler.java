@@ -147,7 +147,7 @@ public class GlobalExceptionHandler{
 			}
 		}else{
 			try {
-				response.sendRedirect("/cmmn/error.html?ex="+pageName);
+				response.sendRedirect("/error.html?ex="+pageName);
 			} catch (IOException e1) {
 				logger.error("exceptionRequestHandle sendRedirect error ", e1);
 			}

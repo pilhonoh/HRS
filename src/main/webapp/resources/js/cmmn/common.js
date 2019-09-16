@@ -11,7 +11,7 @@ $(function(){
 	// 달력UI
 	$(".datepicker").datepicker({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-		buttonImage: "../images/common/ico_date.png", // 버튼 이미지.
+		buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
 		dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 		changeMonth: true ,
 		changeYear: true,
@@ -37,12 +37,12 @@ $(function(){
 				return data;
 			
 			var json = JSON.parse(data);
-			if(json.status == 200){				
+			if(json.status == 200){		
 				return data;
 			}else{
-				alert(json.message);
+				alertPopup(json.message);
 				if(json.status == 403){
-					location.href = '/';
+					location.href = '/error/403';
 				}
 			}
 		}
@@ -291,7 +291,7 @@ function e_layer_pop06(id) {
 		// 달력UI
 		$(".datepicker").datepicker({
 			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-			buttonImage: "../../resource/images/common/ico_date.png", // 버튼 이미지.
+			buttonImage: "../resources/images/common/ico_date.png", // 버튼 이미지.
 			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 			changeMonth: true ,
 			changeYear: true,
@@ -665,23 +665,10 @@ function getRealTime(number){
 	}[number]
 }
 
-/*$.async = function(url, param){
-	return new Promise(function(resolve, reject){
-		$.ajax({
-			url: url,
-			data: param,
-			success: function(res){
-				if(res.status == 200){
-					resolve({list: res.list, item: res.item});
-				}else{
-					reject(res)
-				}
-			},
-			error: function(error){
-				reject(error)
-			}
-			
-		});
-	})	
+function alertPopup(title, contents){
+	$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
+		$('.alert-message h3').html(title.replace(/\n/g, '<br/>'));
+		$('.alert-message p').text(contents);
+		openLayerPopup('layer_pop_alert');
+	});
 }
-*/

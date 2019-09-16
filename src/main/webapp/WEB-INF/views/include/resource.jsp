@@ -13,6 +13,11 @@
 <link href="${CSS}/reset.css" rel="stylesheet">
 <link href="${CSS}/common.css" rel="stylesheet">
 <!-- SCRIPT -->
+<script>
+var ROOT = '${ROOT}';
+var IMG = '${IMG}';
+</script>
 <script src="${LIB}/jquery/jquery-1.12.3.js"></script>
 <script src="${LIB}/jquery-ui/jquery-ui.min.js"></script>
+<script src="${LIB}/moment/moment.min.js"></script>
 <script src="${JS}/cmmn/common.js"></script>

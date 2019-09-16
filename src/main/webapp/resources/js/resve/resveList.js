@@ -144,6 +144,8 @@ var resveList = {
 					var resve_de = resultList[i].RESVE_DE;
 					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 					
+					
+					
 					resveListHtml.push('<tr>');
 					resveListHtml.push('	<td>' + resveDt + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
@@ -154,7 +156,14 @@ var resveList = {
 					resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
 					resveListHtml.push('	<td>');
 					if (stsCode == 'STS01' || stsCode == 'STS03') {
-						resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
+						var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
+						var cancelDt = moment(resveDt + " " +resve_tm_start).subtract(20, 'minutes').toDate();
+						
+						//케어시작 20분전까지 취소가능
+						if(cancelDt >= new Date()){						
+							resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
+						}						
+											
 					}
 					resveListHtml.push('	</td>');
 					resveListHtml.push('</tr>');
@@ -398,17 +407,17 @@ var resveList = {
 			var todt = toDate[0] + toDate[1] + toDate[2];
 			
 			if (fromdt.length !== 8) {
-				alert('시작날짜 형식이 잘못되었습니다.');
+				alertPopup('시작날짜 형식이 잘못되었습니다.');
 				return false;
 			}
 			
 			if (todt.length !== 8) {
-				alert('종료날짜 형식이 잘못되었습니다.');
+				alertPopup('종료날짜 형식이 잘못되었습니다.');
 				return false;
 			}
 			
 			if (fromdt > todt) {
-				alert('시작날짜가 종료날짜가 클 수 없습니다.');
+				alertPopup('시작날짜가 종료날짜가 클 수 없습니다.');
 				return false;
 			}
 			
@@ -446,6 +455,7 @@ var resveList = {
 						console.log('cancel',res);
 						resveList.list.renderResveList();
 						closeLayerPopup();
+						header.getMonthCount();
 					}
 				},
 				error : function(err) {

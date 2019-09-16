@@ -1181,3 +1181,89 @@ button.ui-datepicker-trigger {
 .reservation-list li span.icon04 {
 	background:url('../images/common/pop_list_icon04.png') no-repeat 0 50%;
 }
+
+/* alert popup */
+.alert-message {
+	text-align:center;
+}
+.alert-message h3 {
+	font-size:18px;
+	font-weight:900;
+	color:#4c4c4c;
+	padding-top:55px;
+}
+.alert-message h3.alert {
+	background:url('../images/common/pop_alert.png') no-repeat 50% 0;
+}
+.alert-message h3.alert span {
+	color:#ea002c;
+}
+.alert-message h3.confirm { 
+	background:url('../images/common/pop_confirm.png') no-repeat 50% 0;
+}
+.alert-message h3.confirm span {
+	color:#41b96d;
+}
+.alert-message p {
+	font-size:14px;
+	color:#7f7f7f;
+	margin-top:10px;
+	padding-top:10px;
+	position:relative;
+}
+.alert-message p:after {
+	content:"";
+	width:20px;
+	height:1px;
+	background:#444;
+	position:absolute;
+	top:0;
+	left:50%;
+	margin-left:-10px;
+}
+
+/* 에러 */
+.error-wrap {
+	width:500px;
+	margin:150px auto 0;
+}
+.error-cont {
+	background:url('../images/common/error_icon.png') no-repeat 50% 0;
+	padding-top:100px;
+	text-align:center;
+}
+.error-cont .fs1 { 
+	font-size:22px;
+	color:#4c4c4c;
+	font-weight:normal;
+}
+.error-cont .fs2 { 
+	font-size:31px;
+	color:#4c4c4c;
+}
+.error-cont .fs2 span {
+	color:#ff7a0f;
+}
+.error-cont .fs3 { 
+	font-size:15px;
+	color:#999;	
+	line-height:22px;
+	margin-top:20px;
+	padding-top:20px;
+	position:relative;
+}
+.error-cont .fs3:after {
+	content:"";
+	width:18px;
+	height:2px;
+	background:#474747;
+	position:absolute;
+	top:0;
+	left:50%;
+	margin-left:-9px;
+}
+.error-cont .fs3 strong {
+	font-size:15px;
+	color:#4d4844;
+	font-weight:bold;
+}

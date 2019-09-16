@@ -9,7 +9,6 @@ var resveStatus = {
 	// 초기화
 	init: function(){
 		
-		resveStatus.setHeader();		// 헤더에 카운트표시		
 		resveStatus.calendar.render();	// 달력 렌더링
 		loadCodeSelect(function(){		// 공통코드 로드
 			if(SESSION.PLACE){				
@@ -24,29 +23,9 @@ var resveStatus = {
 		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩		
 					
 	},
-	// 헤더세팅
-	setHeader : function(){
-		$('.gnb-menu li:eq(0)').addClass('selected');	//gbn 메뉴 선택표시
-		
-		return $.ajax({
-			url: ROOT + '/resve/monthCnt',
-			data: {},
-			success : function(res){
-				console.log('monthCht',res);
-				$('.header .user-desc #resveCnt').text(res.item.RESVE_CNT);
-				$('.header .user-desc #waitCnt').text(res.item.WAIT_CNT);
-				$('.header .user-desc').show();
-				
-			},
-			error : function(err) {
-				console.error(err)
-			}
-		})
-		
-	},
 	// 사옥변경 이벤트 리스너
 	bldOnChange : function(e){
-		console.log(e.target.value)
+		
 		resveStatus.fillBeds(e.target.value)
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
@@ -156,7 +135,8 @@ var resveStatus = {
 		// 새로고침
 		refresh : function(){
 			resveStatus.table.init();
-			resveStatus.table.getStatus(resveStatus.data.selectedDate.yyyymmdd)
+			resveStatus.table.getStatus(resveStatus.data.selectedDate.yyyymmdd);
+			header.getMonthCount();
 		},
 		// 예약현황조회
 		getStatus: function(yyyymmdd){
@@ -304,7 +284,7 @@ var resveStatus = {
 		// 예약신청 팝업 호출
 		regist : function(e){			
 			var filtered = $('td[id^=resve-]').filter(function(i, td){
-				console.log($(td))
+				
 				var status = $(td).data().data.LAST_STTUS;
 				return status == "RESVE_COMPT" || 	//예약완료
 					status == "WAIT" || 			//대기중
@@ -321,7 +301,7 @@ var resveStatus = {
 					openLayerPopup('layer_pop01');
 				});
 			}else{
-				alert("금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다.");
+				alertPopup("금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다.");
 			}
 			
 		},
@@ -344,7 +324,7 @@ var resveStatus = {
 					openLayerPopup('layer_pop02');
 				});
 			}else{
-				alert("금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다.");
+				alertPopup("금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다.");
 			}
 			
 		},

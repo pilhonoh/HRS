@@ -6,8 +6,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<jsp:include page="${JSP}/include/resource.jsp" />
-		<script src="${LIB}/moment/moment.min.js"></script>
+		<jsp:include page="${JSP}/include/resource.jsp" />		
 		<script src="${JS}/resve/resveStatus.js"></script>
 	</head>
 	<body>
@@ -94,12 +93,7 @@
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
-			<div class="bg"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop05"></div>
+			<jsp:include page="${JSP}/include/layer.jsp" />
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 

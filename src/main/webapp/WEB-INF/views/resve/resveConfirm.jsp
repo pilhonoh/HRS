@@ -6,8 +6,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<jsp:include page="${JSP}/include/resource.jsp" />
-		<script src="${LIB}/moment/moment.min.js"></script>	
+		<jsp:include page="${JSP}/include/resource.jsp" />		
 		<script src="${JS}/resve/resveConfirm.js"></script>	
 		<script>
 			var ROOT = '${ROOT}';

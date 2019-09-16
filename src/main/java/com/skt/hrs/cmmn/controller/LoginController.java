@@ -1,5 +1,7 @@
 package com.skt.hrs.cmmn.controller;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,13 +11,16 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.pub.core.constans.ResultConst;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.pub.core.util.JsonUtils;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.user.service.UserService;
 import com.skt.hrs.utils.StringUtil;
@@ -55,7 +60,7 @@ public class LoginController {
 	
 	/**
 	 * 
-	 * @설명 : SSO 로그인 처리 
+	 * @설명 : (테스트) SSO 로그인 처리. testLogin에서 호출됨.
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
 	 * @param req
@@ -63,26 +68,63 @@ public class LoginController {
 	 * @변경이력 :
 	 */	
 	@RequestMapping(value = "/ssoLogin")
-	public String ssoLogin(HttpServletRequest req, HttpSession sess) {
+	public String ssoLogin(HttpServletRequest req, HttpServletResponse res, HttpSession sess) {
 			
+		//String paramUserid = getUserId(req);
 		String paramUserid = req.getHeader("SM_USER");
 		
 		DataEntity param = new DataEntity();
 		param.put("empno", paramUserid);
-		//TODO: user정보 검색
+
 		ResponseResult result = userService.selectUserInfo(param);
 		Map user = result.getItem();
-		//TODO: 세션에 세팅
-		LoginVo loginVo = new LoginVo();
-		loginVo.setEmpno(user.get("EMPNO").toString());
-		loginVo.setHname(user.get("HNAME").toString());
-		loginVo.setPlace(user.get("PLACE").toString());
-		loginVo.settSex(user.get("T_SEX").toString());
-		loginVo.setAuth( user.get("AUTH") == null ? 
-				"" : user.get("AUTH").toString());	//구성원
-		sess.setAttribute("LoginVo", loginVo);
+
+		if(user != null) {
+			LoginVo loginVo = new LoginVo();
+			loginVo.setEmpno(user.get("EMPNO").toString());
+			loginVo.setHname(user.get("HNAME").toString());
+			loginVo.setPlace(user.get("PLACE").toString());
+			loginVo.settSex(user.get("T_SEX").toString());
+			loginVo.setAuth( user.get("AUTH_CODE") == null ? 
+					"" : user.get("AUTH_CODE").toString());	//구성원
+			sess.setAttribute("LoginVo", loginVo);
+			
+			// forward로 넘어온경우
+			//return "redirect:" + (String)req.getAttribute( "javax.servlet.forward.request_uri" );
+			return "redirect:/resve/status";
+		}else {
+			
+			String headerInfo = req.getHeader("X-Requested-With");
+			
+			
+			res.setContentType("application/json;charset=UTF-8");
+			
+			if ("XMLHttpRequest".equals(headerInfo)) {
+				res.setContentType("application/json;charset=UTF-8");
+				res.setStatus(HttpStatus.OK.value());				
+				result = new ResponseResult();
+				result.setResultCode(ResultConst.CODE.FORBIDDEN.toInt());
+				result.setStatus(ResultConst.CODE.FORBIDDEN.toInt());
+				result.setMessage("Login first.");
+				Writer writer = null;
+				try {
+					writer = res.getWriter();
+					writer.write(JsonUtils.objectToString(result));
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (writer != null) {
+						try {writer.close();} catch (IOException e) {}
+					};					
+				}
+				return null;
+			}else {				
+				return "redirect:/error/403" ;
+			}
+		}
 		
-		return "redirect:/resve/status";
 				
 	}
+	
+	
 }
