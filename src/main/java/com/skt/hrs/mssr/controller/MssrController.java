@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -111,7 +110,7 @@ public class MssrController {
     
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴  등록 팝업
+	 * @설명 : 관리사 스케쥴  등록
 	 * @작성일 : 2019.09.09
 	 * @작성자 : LEE.Y.H
 	 * @param request
@@ -125,44 +124,6 @@ public class MssrController {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		model.addAllAttributes(param);
 		return "popup/popScheduleCreate";
-	}
-	
-	/**
-	 * 
-	 * @설명 : 관리사 스케쥴  등록
-	 * @작성일 : 2019.09.03
-	 * @작성자 : P149365
-	 * @param req
-	 * @param sess
-	 * @return
-	 * @변경이력 :
-	 */
-	@RequestMapping(value = "/scheduleCreate", method = RequestMethod.POST)
-	public @ResponseBody ResponseResult scheduleCreate(HttpServletRequest req, HttpSession sess) {
-		DataEntity param = HttpUtil.getServletRequestParam(req);
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
-		param.put("regEmpNo", loginVo.getEmpno()); //등록자사번
-				
-		return mssrService.insertSchedule(param);
-	}
-
-	/**
-	 * 
-	 * @설명 : 관리사 스케쥴  등록
-	 * @작성일 : 2019.09.03
-	 * @작성자 : P149365
-	 * @param req
-	 * @param sess
-	 * @return
-	 * @변경이력 :
-	 */
-	@RequestMapping(value = "/scheduleDelete", method = RequestMethod.POST)
-	public @ResponseBody ResponseResult scheduleDelete(HttpServletRequest req, HttpSession sess) {
-		DataEntity param = HttpUtil.getServletRequestParam(req);
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
-		param.put("regEmpNo", loginVo.getEmpno()); //등록자사번
-				
-		return mssrService.deleteResve(param);
 	}
 
 }

@@ -92,51 +92,5 @@ public class DateUtil {
 		return new Date().getTime() <= before20Min.getTime(); 
 	}
 	
-	/**
-	 * 
-	 * @설명 :  일자 계산  
-	 * @작성일 : 2019.09.15
-	 * @작성자 : P150113
-	 * @param strart
-	 * @param end
-	 * @return
-	 * @변경이력 :
-	 */
-	public static int getDateDiff(String strart,  String end) {
-		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");  
-	    long diff = 0;
-		try {
-			Date startDate = dateFormater.parse(strart);
-			Date endDate = dateFormater.parse(end);
-            diff = endDate.getTime() - startDate.getTime();
-            return (int)diff/(24 * 60 * 60 * 1000);
-	    }catch(Exception e) {
-			throw new HrsException("invalid date");
 		
-	    }
-	}
-	
-	/**
-	 * 
-	 * @설명 :  일자 계산  
-	 * @작성일 : 2019.09.15
-	 * @작성자 : P150113
-	 * @param strart
-	 * @param end
-	 * @return
-	 * @변경이력 :
-	 */
-	public static String getDateAdd(String yyyymmdd,  int day) {
-		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");  
-		Calendar cal = Calendar.getInstance(); 
-		try {
-			Date startDate = dateFormater.parse(yyyymmdd);
-			cal.setTime(startDate);
-			cal.add(Calendar.DATE, day);
-			return new SimpleDateFormat("yyyyMMdd").format(cal.getTime()) ;       
-	    }catch(Exception e) {
-			throw new HrsException("invalid date");
-		
-	    }
-	}
 }

@@ -31,7 +31,7 @@ $(function(){
 	//$('.footer').load("../include/footer.html", function(){
 	//});
 	
-/*	$.ajaxSetup({
+	$.ajaxSetup({
 		dataFilter: function(data,type){
 			if(type == 'html')
 				return data;
@@ -46,7 +46,7 @@ $(function(){
 				}
 			}
 		}
-	})*/
+	})
 
 	moment.locale('ko', {
 	    weekdays: ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],

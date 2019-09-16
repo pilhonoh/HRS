@@ -104,39 +104,6 @@
 		ORDER BY A.RESVE_DE
 	) C
 	</select>
-     <!-- 관리사 스케쥴 등록 -->
-     <insert id="insertSchedule"  useGeneratedKeys="true" keyProperty="RESVE_NO"  parameterType="map" >     
-       	INSERT INTO RESVE_STTUS ( RESVE_DE, RESVE_TM, BLD_CODE, MSSR_EMPNO, BED_CODE, REG_EMPNO, REG_DT)
-						 VALUES ( #{resveDate}, #{resveTime}, #{bldCode}, #{mssrCode}, #{bedCode}, #{regEmpNo}, now(3))
-		<selectKey keyProperty="RESVE_NO"  resultType="int" order="AFTER">
-		  SELECT LAST_INSERT_ID()
-		</selectKey>				 
-     </insert>
-	 <!-- 관리사 예약 상태 등록  -->
-     <insert id="insertResveHist"  parameterType="map">
-       	INSERT INTO RESVE_HIST ( RESVE_NO , STTUS_CODE  ,REG_EMPNO , REG_DT)
-						 VALUES ( #{RESVE_NO}, #{sttusCode}, #{regEmpNo}, now(3))
-     </insert>
-     
-     <update id="deleteResve">
-        UPDATE RESVE_STTUS
-           SET CANCL_YN = #{canclYn}
-             , UPDT_EMPNO = #{regEmpNo}
- 			 , UPDT_DT =  now(3)
-        WHERE RESVE_NO = #{resveNo}
-        
-        UPDATE RESVE_HIST
-           SET STTUS_CODE = #{sttusCode}
-             , UPDT_EMPNO = #{regEmpNo}
- 			 , UPDT_DT =  now(3)
-        WHERE RESVE_NO = #{resveNo}
-        
-     </update>
-     
-     
-     
-     
-     
-     
-     
+
+	
 </mapper>
