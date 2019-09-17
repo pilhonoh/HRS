@@ -10,6 +10,8 @@ var scheduleList = {
 		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		scheduleList.button.scheduleCreateBtnEvent();
+		scheduleList.button.scheduleDeleteBtnEvent();
+		
 		
 	},
 	
@@ -116,11 +118,7 @@ var scheduleList = {
 			
 		}
 		
-
-		
 	},
-	
-	
 	
 	list: {
 		
@@ -192,7 +190,8 @@ var scheduleList = {
 					var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
 					
 					scheduleListHtml.push('<tr>');
-					scheduleListHtml.push('	<td><input type="checkbox"></td>');
+					scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO+'"></td>');
+				/*	scheduleListHtml.push('	<td>'+ resultList[i].RESVE_NO+'</td>');*/
 					scheduleListHtml.push('	<td>' + resveDt + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
@@ -454,8 +453,30 @@ var scheduleList = {
 		scheduleModifyBtnEvent: function() {
 			console.log('modBtnEventOff...');
 			console.log('modBtnEventBinding...');
+		},
+		scheduleDeleteBtnEvent:function(){
+			  
+			  $("button#deleteBtn").on('click',function(){
+				  var resveNo =[] ;
+				  $('tbody#scheduleList input:checkbox:checked').each(function(){
+					  resveNo.push($(this).val());
+				   });
+				
+			  $.ajax({
+						url: ROOT + '/mssr/scheduleDelete',
+						type: 'POST',
+						data:{resvs:resveNo},
+						success : function(res){
+							console.log('delete',res);				
+							scheduleList.button.listBtnClickEvent();
+						},
+						error : function(err) {
+							console.error(err)
+						}
+					});
+			  });	
+			
 		}
-
 	},
 	
 	

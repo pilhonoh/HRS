@@ -63,5 +63,55 @@ public class MssrDAO {
 		return sqlSession.selectOne("mssrMapper.selectScheduleListTotalCount", param);
 	}
 
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 등록 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean insertSchedule(DataEntity param) {
+		 int result = sqlSession.insert("mssrMapper.insertSchedule", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상태 등록 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean insertResveHist(DataEntity param) {
+		 int result = sqlSession.insert("mssrMapper.insertResveHist", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상태 변경
+	 * @작성일 : 2019.09.10
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean deleteResve(DataEntity param) {
+		int result = sqlSession.update("mssrMapper.deleteResve", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
 	
 }
