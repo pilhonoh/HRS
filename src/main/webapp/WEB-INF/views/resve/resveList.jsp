@@ -22,15 +22,24 @@
 					<h2>예약현황</h2>
 				</div>
 				
+				<div class="rv-desc-list st2">
+					<ul>
+							<li class="icon01">당일로 부터 <strong>2주까지만 예약</strong>이 가능 합니다.</li>
+							<li class="icon02">신청 내역은 급여에서 <strong>한건당 5,000원이 차감</strong>됩니다.</li>
+							<li class="icon03">예약 <strong>취소는 시작 20분전 까지만</strong> 가능합니다.</li>
+							<li class="icon04">예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 예약상태로 변경되며, <strong>“대기상태 변경“ SMS가 자동 발송</strong>됩니다.</li>
+					</ul>
+				</div>
+				
 				<div class="search_field_wrap">
 					<div class="search_field_area">
 						<table class="search_field">
-							<colgroup>
-								<col width="90px">
-								<col width="*">
-								<col width="90px">
-								<col width="*">
-							</colgroup>
+<%-- 							<colgroup> --%>
+<%-- 								<col width="90px"> --%>
+<%-- 								<col width="*"> --%>
+<%-- 								<col width="90px"> --%>
+<%-- 								<col width="*"> --%>
+<%-- 							</colgroup> --%>
 							<tbody>
 								<tr>
 									<th><strong class="stit">기간</strong></th>
