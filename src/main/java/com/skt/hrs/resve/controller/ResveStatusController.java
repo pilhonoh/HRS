@@ -73,9 +73,11 @@ public class ResveStatusController {
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/pop/regist")
-	public String resveRegistPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+	public String resveRegistPopupView(HttpServletRequest req, HttpSession sess, Model model) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		model.addAllAttributes(param);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");		
+		resveStatusService.checkBlacklist(param.getString("resveDe"), loginVo.getEmpno());
 		return "popup/popResveRegist";
 	}
 	
@@ -92,9 +94,11 @@ public class ResveStatusController {
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/pop/wait")
-	public String resveWaitPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {
+	public String resveWaitPopupView(HttpServletRequest req, HttpSession sess, Model model) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		model.addAllAttributes(param);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");		
+		resveStatusService.checkBlacklist(param.getString("resveDe"), loginVo.getEmpno());
 		return "popup/popResveWait";
 	}
 	

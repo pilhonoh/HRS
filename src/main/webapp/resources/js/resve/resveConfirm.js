@@ -56,7 +56,9 @@ var resveConfirm = {
 	pop : {
 		confirm : function(e){
 			if($('#txtResveEmpno').val().trim() == ""){
-				alertPopup('사번을 입력하세요');
+				alertPopup('사번을 입력하세요.');
+			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
+				alertPopup('확인처리는 케어시작 당일에만 가능합니다.');
 			}else{
 				$('#layer_pop01').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
@@ -121,8 +123,7 @@ resveConfirm.calendar = {
 		$('.month-calendar tbody tr').append(elements);			
 	},
 	click: function(e){
-		var data = $(e.target).data('data');
-		
+		var data = $(e.target).data('data');		
 		$('.cal-day.selected').removeClass('selected');
 		$(e.target).parents('div:eq(0)').addClass('selected');
 		resveConfirm.data.selectedDate = $(e.target).data('data');
@@ -170,9 +171,9 @@ resveConfirm.table = {
 				function getButton(status){
 					return {
 						//예약가능
-						'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o"></i>').text('예약가능').addClass('rbtn cr1'),	
-						//예약완료
-						'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check"></i>').text('예약완료').addClass('rbtn cr3'),	
+						'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o">').append('예약가능').addClass('rbtn cr1'),	
+						//예약완료->예약중
+						'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약중').addClass('rbtn cr3'),	
 						//예약불가
 						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not'), 											
 						//완료
@@ -213,7 +214,25 @@ resveConfirm.table = {
 	}	
 }
 
+
+function checkDateChange(){
+	var today = moment().format('YYYYMMDD');
+	var min = moment().format('mm')
+	var selectedDay = resveConfirm.data.selectedDate.yyyymmdd;
+	
+	console.log(today, selectedDay);
+	
+	if(selectedDay < today){
+		location.reload();	// 날짜가 바뀌었으면 페이지 리로드		
+	}else if(Number(min) % 10 == 0){
+		resveConfirm.table.refresh();	//상태 리프레시
+		console.info('status resfresh!!');
+	}
+	
+}
+
 $(document).ready(function(){
 	resveConfirm.data.bldCode = $('#bldCode').val()||'SK01';
 	resveConfirm.init();
+	window.timer = setInterval(checkDateChange, 1000*60);	//1분마다 체크
 })

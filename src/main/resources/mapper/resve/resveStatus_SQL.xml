@@ -89,7 +89,19 @@
 	<!-- 예약 단건 조회 -->
 	<select id="selectResveItem" parameterType="map" resultType="hashmap">
 		SELECT 
-			A.*,
+			A.RESVE_NO,
+		    A.RESVE_DE,
+		    A.RESVE_TM,
+		    A.BLD_CODE,
+		    A.MSSR_EMPNO,
+		    A.BED_CODE,
+		    A.RESVE_EMPNO,
+		    A.WAIT_EMPNO,
+		    A.REG_DT,
+		    A.UPDT_DT,
+		    A.CANCL_YN,
+		    A.COMPT_YN,
+		    A.SUCCS_YN,
 		    B.NCNM AS MSSR_NCNM,
 		    B.SEXDSTN AS MSSR_SEXDSTN,
 		    B.HFFC_YN AS MSSR_HFFC_YN,

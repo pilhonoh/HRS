@@ -14,16 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.pub.core.constans.ResultConst;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
-import com.pub.core.util.HttpUtil;
 import com.pub.core.util.JsonUtils;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.user.service.UserService;
-import com.skt.hrs.utils.StringUtil;
 
 /**
  * 
@@ -71,7 +68,9 @@ public class LoginController {
 	public String ssoLogin(HttpServletRequest req, HttpServletResponse res, HttpSession sess) {
 			
 		//String paramUserid = getUserId(req);
-		String paramUserid = req.getHeader("SM_USER");
+		String paramUserid = req.getHeader("TEST_SM_USER");
+		
+		logger.debug("**************** USER *************** => " + paramUserid);
 		
 		DataEntity param = new DataEntity();
 		param.put("empno", paramUserid);

@@ -21,10 +21,9 @@
 				<input id="id3" name="id" type="radio" value="P150003" /><label for="id3">구성원3 (P150003, 남, 분당사옥)</label><br/>
 				<input id="id4" name="id" type="radio" value="P150004" /><label for="id4">구성원4 (P150004, 여, 분당사옥)</label><br/>
 				<input id="id5" name="id" type="radio" value="P100000" /><label for="id5">담당자</label><p/>
-				<input id="id" name="id" type="radio" /><label for="id">직접입력</label> &nbsp;<input id="myid" type="text" placeholder="사번"></input>
+				<input id="id" name="id" type="radio" /><label for="id">직접입력</label> &nbsp;<input id="myid" type="text" placeholder="사번" onclick="setCheck();"></input>
 				<p/>
-				<a href="javascript:login()">테스트 로그인</a>
-				<p/>				
+				<a href="javascript:login()">테스트 로그인</a>				
 			</form>
 		</div>		
 
@@ -55,8 +54,14 @@
 			    }
 			}
 			request.open("POST", "${ROOT}/ssoLogin", true);
-			request.setRequestHeader("SM_USER", id);			
+			request.setRequestHeader("TEST_SM_USER", id);			
 			request.send();
 		}
+		
+		function setCheck(){			
+			document.getElementById('id').checked = true;
+		}
+		
+		
 	</script>
 </html>

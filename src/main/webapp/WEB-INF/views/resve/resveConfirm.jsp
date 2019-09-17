@@ -91,10 +91,7 @@
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
-			<div class="bg"></div>			
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">
-				<!--#include file="../popup/pop_시작확인.html" -->	
-			</div>
+			<jsp:include page="${JSP}/include/layer.jsp" />
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 

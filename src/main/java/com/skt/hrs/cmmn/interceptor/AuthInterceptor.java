@@ -41,10 +41,10 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 			String paramUserid = getUserId(request);
 			
 			//19사번 P사번 접근불가
-			if(paramUserid.startsWith("P") || paramUserid.startsWith("19")) {
-				response.sendRedirect("/error/403");
-				return false;
-			}
+//			if(paramUserid.startsWith("P") || paramUserid.startsWith("19")) {
+//				response.sendRedirect("/error/403");
+//				return false;
+//			}
 			
 			DataEntity param = new DataEntity();
 			param.put("empno", paramUserid);

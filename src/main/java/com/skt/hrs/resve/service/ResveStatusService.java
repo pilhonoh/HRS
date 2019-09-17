@@ -86,8 +86,10 @@ public class ResveStatusService {
 			//누가 예약/대기했는지 클라이언트로 전송하지않음
 			item.remove("RESVE_EMPNO");	
 			item.remove("WAIT_EMPNO");
-		}
-		result.setItemList(list);
+		}		
+		
+		result.setItemList(list);	//예약현황		
+		
 		return result;
 	}
 	
@@ -643,7 +645,7 @@ public class ResveStatusService {
 	 * @param empno
 	 * @변경이력 :
 	 */
-	private void checkBlacklist(String resveDe, String empno) {
+	public void checkBlacklist(String resveDe, String empno) {
 		DataEntity param = new DataEntity();
 		param.put("resveDe", resveDe);	//예약대상일
 		param.put("empno", empno);		//예약자사번
@@ -657,7 +659,7 @@ public class ResveStatusService {
 				DateUtil.yyyymmdd2HumanReadable(blacklistMap.get("RESVE_DE").toString()),					
 				blacklistMap.get("BLD_NM").toString(),
 				blacklistMap.get("BED_NM").toString(),
-				blacklistMap.get("PANELTY_END_DT").toString(),
+				blacklistMap.get("PANELTY_END_DT_STR").toString(),
 			}, Locale.forLanguageTag(param.getString("_ep_locale")));
 			throw new HrsException(message);
 		}

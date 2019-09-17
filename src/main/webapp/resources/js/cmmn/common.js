@@ -33,18 +33,21 @@ $(function(){
 	
 	$.ajaxSetup({
 		dataFilter: function(data,type){
-			if(type == 'html')
-				return data;
-			
-			var json = JSON.parse(data);
-			if(json.status == 200){		
-				return data;
-			}else{
-				alertPopup(json.message);
-				if(json.status == 403){
-					location.href = '/error/403';
+						
+			try{
+				var json = JSON.parse(data);
+				if(json.status == 200){		
+					return data;
+				}else{
+					alertPopup(json.message);
+					if(json.status == 403){
+						location.href = '/error/403';
+					}
 				}
+			}catch(err){
+				return data;
 			}
+			
 		}
 	})
 

@@ -12,7 +12,7 @@
 	
 	<!-- blacklist filter batch log -->
 	<appender name="blacklistFilterAppender" class="org.apache.log4j.DailyRollingFileAppender">          
-        <param name="file" value="/logs/blacklistFilter.log"/>  
+        <param name="file" value="/data/logs/blacklistFilter.log"/>  
         <param name="Append" value="true"/>  
         <param name="DatePattern" value="'.'yyMMdd"/>  
         <layout class="org.apache.log4j.PatternLayout">  
@@ -22,7 +22,7 @@
     
     <!--  30분전 알림 daily log -->  
     <appender name="resveNotiJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
-        <param name="file" value="/logs/resveNoti.log"/>  
+        <param name="file" value="/data/logs/resveNoti.log"/>  
         <param name="Append" value="true"/>  
         <param name="DatePattern" value="'.'yyMMdd"/>  
         <layout class="org.apache.log4j.PatternLayout">  
