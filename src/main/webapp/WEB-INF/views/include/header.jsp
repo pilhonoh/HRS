@@ -26,7 +26,7 @@ var header = {
 }
 $(document).ready(function(){		
 	$('.gnb-menu li').each(function(i,e){		
-		if($(this).find('a').attr('href') == (ROOT + location.pathname)){
+		if($(this).find('a').attr('href') == location.pathname){
 			$(this).addClass('selected');	//gbn 메뉴 선택표시
 		}		
 	})

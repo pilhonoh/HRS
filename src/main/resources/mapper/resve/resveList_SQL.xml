@@ -12,7 +12,7 @@
 	
 	<!-- 페이징 처리를 위한 TAIL -->
 	<sql id="COMMON_PAGING_TAIL">
-		) R1
+		) R1 ORDER BY RESVE_DE DESC 
 		LIMIT #{rowPerPage, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
 	</sql>
 
@@ -89,7 +89,7 @@
 			<if test='statusCode != null and statusCode != ""'>
 			AND LAST_STTUS_CODE = #{statusCode}
 			</if>
-		ORDER BY A.RESVE_DE
+		ORDER BY A.RESVE_DE DESC
 	</select>
 	
 	
