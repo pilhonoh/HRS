@@ -190,26 +190,36 @@ var popinit = {
 					
 				});
 			},
-		   rowAddClickEvent:function(){
+		   rowAddClickEvent:function(){			   
 				$("#scheduleCreate_rowAddBtn").on("click",function(){
-				var trCnt =$(".trschedule").length
-			    $clone = $("#tr0").clone(true,true);
-			    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
-			    $clone.find(".t-btn").text("삭제").attr({"id":this.id+trCnt ,"name":"delBtn" ,"data-rowid":"tr"+trCnt});	
-			    $clone.find("input").each(function(){
-					$(this).attr('id',this.id+trCnt)
-				 });
-			    $clone.find("select").each(function(){
-			    	$(this).attr('id',this.id+trCnt)
-				});
-			    $("#scheduleCreate_enter tbody").append( $clone.wrapAll("<div/>").parent().html());
-			    $("button[name='delBtn']").on("click",function(){ 
-			    	var rowid = $(this).data("rowid");
-			    	$("#"+rowid).remove();
-			    });
 
-		   });
-		}
+					var trCnt =$(".trschedule").length
+				    $clone = $("#tr0").clone(true,true);
+					
+					$clone.find('.ui-datepicker-trigger').remove();					
+					$clone.find('.hasDatepicker').removeClass("hasDatepicker");
+					
+				    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
+				    $clone.find(".t-btn").text("삭제").attr({"id":this.id+trCnt ,"name":"delBtn" ,"data-rowid":"tr"+trCnt});	
+				    $clone.find("input").each(function(){
+						$(this).attr('id',this.id+trCnt);						
+					 });
+				    $clone.find("select").each(function(){
+				    	$(this).attr('id',this.id+trCnt)
+					});				    
+				    
+				    $("#scheduleCreate_enter tbody").append( $clone.wrapAll("<div/>").parent().html());
+				    $("button[name='delBtn']").on("click",function(){ 
+				    	var rowid = $(this).data("rowid");
+				    	$("#"+rowid).remove();
+				    });
+	
+				    
+				    //datepicker 초기화
+				    $("#scheduleCreate_enter tbody").find('.datepicker').datepicker("destroy").datepicker();
+			   });				
+				
+			}
 		
 	}
 }

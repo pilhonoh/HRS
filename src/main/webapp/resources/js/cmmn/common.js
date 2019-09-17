@@ -9,7 +9,7 @@ $(function(){
 	//});
 
 	// 달력UI
-	$(".datepicker").datepicker({
+	$.datepicker.setDefaults({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
 		buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
 		dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
@@ -27,6 +27,28 @@ $(function(){
 		closeText: '닫기',  // 닫기 버튼 패널
 	});	
 
+	$(".datepicker").datepicker();
+
+//	$('body').on('focus',".datepicker", function(){
+//	    $(this).datepicker({
+//			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
+//			buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
+//			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
+//			changeMonth: true ,
+//			changeYear: true,
+//			nextText: '다음 달', // next 아이콘의 툴팁.
+//			prevText: '이전 달', // prev 아이콘의 툴팁.
+//			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+//			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+//			dayNames: ['일','월','화','수','목','금','토'],
+//			dayNamesShort: ['일','월','화','수','목','금','토'],
+//			dayNamesMin: ['일','월','화','수','목','금','토'],
+//			showButtonPanel: true,
+//			currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
+//			closeText: '닫기',  // 닫기 버튼 패널
+//		})
+//	});
+	
 	//include header
 	//$('.footer').load("../include/footer.html", function(){
 	//});
