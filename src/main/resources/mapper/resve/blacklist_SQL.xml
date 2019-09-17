@@ -5,6 +5,7 @@
 	
 	<!-- 블랙리스트 insert -->
 	<insert id="insertBlacklist" parameterType="int">		
+		<!-- 노쇼일 다음날부터 2주
 		INSERT INTO RESVE_BLCLST (RESVE_NO, RESVE_EMPNO, START_DT, END_DT, REG_DT)
 		SELECT RESVE_NO, 
 			RESVE_EMPNO, 
@@ -12,9 +13,49 @@
 		    DATE_ADD(
 		    	DATE_ADD(STR_TO_DATE(CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), '00000'), '%Y%m%d%H%i%s'), INTERVAL #{weeks} WEEK),
 		    	INTERVAL -1 SECOND
-		    ), <!-- 예약일로부터 2주후 -1초(2주후 전일 23:59:59까지) -->
+		    ), 예약일로부터 2주후 -1초(2주후 전일 23:59:59까지)
 		    NOW()
 		FROM RESVE_STTUS
+		WHERE RESVE_DE = DATE_FORMAT(SUBDATE(CURRENT_DATE, 1),'%Y%m%d')
+		AND CANCL_YN != 'Y'
+		AND COMPT_YN != 'Y'
+		AND SUCCS_YN != 'Y'
+		AND RESVE_EMPNO != '' 
+		AND RESVE_EMPNO IS NOT NULL 
+		-->
+		<!-- 노쇼일에 블랙리스트 등록하되, 마지막예약일 다음날부터 2주 -->
+		INSERT INTO RESVE_BLCLST (RESVE_NO, RESVE_EMPNO, START_DT, END_DT, REG_DT)
+		SELECT RESVE_NO, 			<!-- /* 예약번호 */ -->
+			RESVE_EMPNO, 			<!-- /* 예약자사번 */ -->
+			(
+				SELECT DATE_ADD(STR_TO_DATE(CONCAT(RESVE_DE, '00000'), '%Y%m%d%H%i%s'), INTERVAL 1 DAY)		<!-- /* 마지막 예약일 다음날부터 */ -->
+				FROM RESVE_STTUS
+				WHERE RESVE_NO = (
+					SELECT MAX(RESVE_NO)
+					FROM RESVE_STTUS
+					WHERE RESVE_EMPNO = A.RESVE_EMPNO
+					AND CANCL_YN != 'Y'
+					AND COMPT_YN != 'Y'
+					AND SUCCS_YN != 'Y'
+				)	
+		    ) AS PANELTY_START,		<!-- /* 패널티 시작시각 */ -->
+			DATE_ADD(
+				DATE_ADD((
+					SELECT DATE_ADD(STR_TO_DATE(CONCAT(RESVE_DE, '00000'), '%Y%m%d%H%i%s'), INTERVAL 1 DAY)	<!-- /* (마지막예약일 다음날) - (weeks주) - (1초) */ -->
+					FROM RESVE_STTUS
+					WHERE RESVE_NO = (
+						SELECT MAX(RESVE_NO)
+						FROM RESVE_STTUS
+						WHERE RESVE_EMPNO = A.RESVE_EMPNO
+						AND CANCL_YN != 'Y'
+						AND COMPT_YN != 'Y'
+						AND SUCCS_YN != 'Y'
+					)
+		        ), INTERVAL #{weeks} WEEK),
+				INTERVAL -1 SECOND
+			) AS PANELTY_END,		<!-- /* 패널티 종료시각 */ -->
+			NOW()					<!-- /* 등록일 */ -->
+		FROM RESVE_STTUS A
 		WHERE RESVE_DE = DATE_FORMAT(SUBDATE(CURRENT_DATE, 1),'%Y%m%d')
 		AND CANCL_YN != 'Y'
 		AND COMPT_YN != 'Y'
