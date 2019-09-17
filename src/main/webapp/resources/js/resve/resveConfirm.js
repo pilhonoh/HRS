@@ -58,7 +58,7 @@ var resveConfirm = {
 			if($('#txtResveEmpno').val().trim() == ""){
 				alertPopup('사번을 입력하세요.');
 			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
-				alertPopup('확인처리는 케어시작 당일에만 가능합니다.');
+				alertPopup('본인 확인은 케어시작 당일에만 가능합니다.');
 			}else{
 				$('#layer_pop01').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
