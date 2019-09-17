@@ -58,9 +58,11 @@
 }
 
 .gnb-menu {
-	position:absolute;
+	/* position:absolute;
 	bottom:10px;
-	left:250px;
+	left:250px; */
+	display:inline-block;
+	margin-top:20px;
 }
 .gnb-menu li { 
 	float:left;
@@ -101,6 +103,7 @@
 }
 .gnb-menu.admin li a {
 	font-size:15px;
+	font-weight:700;
 }
 
 
@@ -997,6 +1000,9 @@ button.ui-datepicker-trigger {
 	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
 	width:60%;
 }
+.rv-desc-list.st2 {
+	margin:0 0 20px;
+}
 
 
 
@@ -1043,34 +1049,33 @@ button.ui-datepicker-trigger {
 	background:#ff7a00;
 }
 
-.number-search {
-	height:140px;
+.number-search {	
 	box-sizing:border-box;
 	border:1px solid #ddd;
 	background:#333 url('../images/common/search_bg_img.png') no-repeat 50%;
 	border-radius:10px;
 	text-align:center;
-	padding-top:48px;
 	margin-top:10px;
+	padding:15px 0;
 }
 .number-search label {
 	display:inline-block;
 	vertical-align:middle;
-	line-height:42px;
+	line-height:40px;
 	font-size:20px;
 	font-weight:900;
 	color:#fff;
 	margin-right:20px;
 }
 .number-search input[type="text"] {
-	height:45px;
+	height:40px;
 	width:500px;
-	font-size:14px;
+	font-size:15px;
 	padding:0 15px;
 	border-radius:2px;
 }
 .number-search button {
-	height:45px;
+	height:40px;
 	background:#fff;
 	color:#ff7a00;
 	font-size:16px;
@@ -1090,11 +1095,11 @@ button.ui-datepicker-trigger {
 
 /* 사번입력 */
 .content.staff {
-	padding:20px 0;
+	padding:10px 0;
 }
 .tit-head {
 	position:relative;
-	padding:0 0 20px;
+	padding:0 0 10px;
 }
 .tit-head .logo {
 	top:-5px;
@@ -1123,7 +1128,7 @@ button.ui-datepicker-trigger {
 
 .month-area.st2 { 
 	border:1px solid #ddd;
-	padding:0 0 10px;
+	padding:0 0 5px;
 	position:relative;
 	border-radius: 10px;
 }
@@ -1266,4 +1271,26 @@ button.ui-datepicker-trigger {
 	font-size:15px;
 	color:#4d4844;
 	font-weight:bold;
+}
+
+.rbtn .img-icon01 {
+	display:inline-block;
+	width:15px;
+	height:15px;
+	background:url('../images/common/img_icon01.png') no-repeat 50%;
+}
+
+.user-info { 
+	display:inline-block;
+	height:32px;
+	line-height:30px;
+	border-radius:32px;
+	width:100px;
+	text-align:center;
+	font-size:13px;
+	color:#ff7a00;
+	font-weight:700;
+	border:1px solid #ff7a00;	
+	margin-top:5px;
+	box-sizing:border-box;;
 }
