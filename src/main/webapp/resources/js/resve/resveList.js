@@ -4,7 +4,7 @@
 var resveList = {
 	// 초기화
 	init: function() {
-		loadCodeSelect(); //콤보박스 공통코드 세팅
+		loadCodeSelect(resveList.combobox.deleteStsOption); //콤보박스 공통코드 세팅
 		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
 		resveList.list.renderResveList(); //목록 조회 후 렌더
 		resveList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
@@ -480,8 +480,8 @@ $(document).ready(function() {
 
 
 
-$(window).load(function() {
-	resveList.combobox.deleteStsOption();
-});
+//$(window).load(function() {
+//	resveList.combobox.deleteStsOption();
+//});
 
 
