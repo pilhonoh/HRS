@@ -46,14 +46,22 @@
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<beans:bean id="authInterceptor" class="com.skt.hrs.cmmn.interceptor.AuthInterceptor" />
-	
+	<beans:bean id="loginInterceptor" class="com.skt.hrs.cmmn.interceptor.LoginInterceptor" />
 	<mvc:interceptors>		
+		<!-- 로그인처리 -->
 		<mvc:interceptor>
 			<mvc:mapping path="/**/*" />
 			<mvc:exclude-mapping path="/resources/**" />	<!-- 리소스 파일 제외 -->
 			<mvc:exclude-mapping path="/error/**" />		<!-- 에러페이지 제외 -->
 			<mvc:exclude-mapping path="/ssoLogin" />		<!-- 로그인처리 제외 -->
 			<mvc:exclude-mapping path="/testLogin" />
+			<beans:ref bean="loginInterceptor" />
+		</mvc:interceptor>
+		<!-- 담당자권한체크 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/mssr/*" />
+			<mvc:exclude-mapping path="/resources/**" />	<!-- 리소스 파일 제외 -->
+			<mvc:exclude-mapping path="/error/**" />		<!-- 에러페이지 제외 -->			
 			<beans:ref bean="authInterceptor" />
 		</mvc:interceptor>
 		
