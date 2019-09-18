@@ -7,10 +7,10 @@
 	<h2>헬스케어 시작 확인</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
-<div class="pop-container">	
+<div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 
-	<p class="pop-desc icon04">※ 헬스케어 이용을 시작 하시겠습니까?</p>
+	<p class="pop-desc icon04">※ 헬스케어 이용을 <strong>시작</strong> 하시겠습니까?</p>
 
 	<ul class="reservation-list">
 		<li><span class="icon01" id="resveConfirm_resveDe"></span></li>

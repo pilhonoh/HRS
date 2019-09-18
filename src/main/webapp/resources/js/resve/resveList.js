@@ -51,7 +51,7 @@ var resveList = {
 	datepicker: {
 		setDefaultValue: function() { //기본 날짜 세팅
 			//var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
-			var fromDate = moment().subtract(2, 'w').format('YYYY-MM-DD'); //2주전 날짜
+			var fromDate = moment().format('YYYY-MM-DD'); //2주전 날짜
 			//var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
 			var toDate = moment().add(2, 'w').format('YYYY-MM-DD'); //2주후 날짜
 			
@@ -61,7 +61,7 @@ var resveList = {
 			//resveList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
 			//resveList.list.params.toDate = moment().format('YYYYMMDD');
 
-			resveList.list.params.fromDate = moment().subtract(2, 'w').format('YYYYMMDD');
+			resveList.list.params.fromDate = moment().format('YYYYMMDD');
 			resveList.list.params.toDate = moment().add(2, 'w').format('YYYYMMDD');
 		}
 	},
