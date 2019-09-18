@@ -17,8 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.pub.core.util.JsonUtils;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.mssr.service.MssrService;
+import com.skt.hrs.utils.StringUtil;
 
 
 
@@ -164,5 +167,33 @@ public class MssrController {
 				
 		return mssrService.deleteResve(param);
 	}
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴  수정
+	 * @작성일 : 2019.09.17
+	 * @작성자 : LEE.Y.H
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
+	
+	@RequestMapping(value = "/pop/scheduleModify")
+	public String resveConfirmPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {	
+		DataEntity param = HttpUtil.getServletRequestParam(req);	
+		model.addAttribute("item", JsonUtils.objectToString(param));
+		return "popup/popScheduleModify";
+	}
+	
+	@RequestMapping(value = "/selectScheduleDetail")
+	public @ResponseBody ResponseResult selectScheduleDetail(HttpServletRequest request, HttpSession sess) throws Exception {
+		DataEntity param = HttpUtil.getServletRequestParam(request);
+		ResponseResult result = new ResponseResult();
+		result = mssrService.selectScheduleDetail(param);
+
+		return result;
+	}
+	
 
 }

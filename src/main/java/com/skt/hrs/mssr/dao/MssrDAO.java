@@ -1,6 +1,7 @@
 package com.skt.hrs.mssr.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -48,6 +49,7 @@ public class MssrDAO {
 	public List selectScheduleList(DataEntity param) {
 		return sqlSession.selectList("mssrMapper.selectScheduleList", param);
 	}
+	
 	
 	
 	/**
@@ -99,7 +101,7 @@ public class MssrDAO {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴 상태 변경
+	 * @설명 : 관리사 스케쥴 삭제 변경
 	 * @작성일 : 2019.09.10
 	 * @작성자 : LEE.Y.H
 	 * @param param
@@ -113,5 +115,32 @@ public class MssrDAO {
 		}
 		return false;
 	}
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 기본 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectScheduleMaster(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectScheduleMaster", param);
+	}
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상세 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectScheduleDetail(DataEntity param) {
+		return sqlSession.selectList("mssrMapper.selectScheduleDetail", param);
+	}
+	
 	
 }

@@ -16,6 +16,9 @@ import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.mssr.dao.MssrDAO;
 import com.skt.hrs.utils.DateUtil;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.pub.core.util.JsonUtils;
 
 
@@ -64,7 +67,56 @@ public class MssrService {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @설명 :  관리사 근무시간 기본 사항
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectScheduleMaster(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		Map item = mssrDAO.selectScheduleMaster(param);
+		result.setItemOne(item);
+		return result;
+	}
 	
+	/**
+	 * 
+	 * @설명 : 관리사 근무시간 상세사항
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectScheduleDetail(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemList(mssrDAO.selectScheduleDetail(param));
+		return result;
+	}
+  
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 리스트 조회
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	
+	
+	
+	
+	
+	public ResponseResult selectSchedulItemDetail (DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemList(mssrDAO.selectScheduleDetail(param));
+		return result;
+	}
 	
 	/**
 	 * 
@@ -94,32 +146,41 @@ public class MssrService {
 	public ResponseResult insertSchedule(DataEntity param) {
 		
 		ResponseResult result = new ResponseResult();
-		String startDate = param.getString("startDate");
-		String endDate = param.getString("endDate");
-		int startTime = param.getInt("startTimeCode");
-		int endTime = param.getInt("endTimeCode");
-	
+		String startDate ="";
+		String endDate = "";
+		int startTime = 0;
+		int endTime = 0;
+		long days = 0;
 	    boolean  insertResult = false;
-		/*
-		 * ArrayList list =
-		 * (ArrayList)JsonUtils.stringToJsonClass(param.getString("params"),
-		 * ArrayList.class);
-		 * 
-		 * for (int i = 0; i < list.size(); i++) { list.get(i) long days =
-		 * DateUtil.getDateDiff(startDate, endDate);
-		 * param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString()); for (int i
-		 * = 0; i <= days; i++) {
-		 * param.put("resveDate",DateUtil.getDateAdd(startDate,i)); for (int j =
-		 * startTime ; j <= endTime; j++) { param.put("resveTime",j); insertResult =
-		 * mssrDAO.insertSchedule(param);
-		 * 
-		 * if(!(insertResult)) { throw new HrsException("error.processFailure", true); }
-		 * 
-		 * insertResult = mssrDAO.insertResveHist(param); if(!(insertResult)) { throw
-		 * new HrsException("error.processFailure", true); } }
-		 * 
-		 * } }
-		 */
+        ArrayList list = (ArrayList)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
+        HashMap<String,String > paramsMap = new HashMap<String,String >() ;
+        param.remove("params");
+    	 for (int k = 0; k < list.size(); k++) {
+    		 paramsMap =(HashMap<String, String>) (list.get(k)) ;
+    		 startDate =paramsMap.get("startDate");
+     		 endDate = paramsMap.get("endDate") ;
+     		 startTime = Integer.parseInt(paramsMap.get("startTimeCode")) ;
+     		 endTime =  Integer.parseInt(paramsMap.get("endTimeCode"));
+        	 days = DateUtil.getDateDiff(startDate, endDate );
+            param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
+	        for (int i = 0; i <= days; i++) {
+				param.put("resveDate",DateUtil.getDateAdd(startDate,i));
+				for (int j = startTime ; j <= endTime; j++) {
+					param.put("resveTime",j);
+					insertResult = mssrDAO.insertSchedule(param); 
+					
+					if(!(insertResult)) { 
+						throw new HrsException("error.processFailure", true);
+					 } 
+					 
+					insertResult = mssrDAO.insertResveHist(param); 
+					if(!(insertResult)) { 
+						throw new HrsException("error.processFailure", true);
+					 } 
+				}
+				
+			}
+        }
 		result.setItemOne(insertResult);
 		// data적용 성공여부
 		
@@ -129,13 +190,8 @@ public class MssrService {
 	@Transactional
 	public  ResponseResult deleteResve(DataEntity param) {
 		ResponseResult result = new ResponseResult();
-		String[] resveNo = null;
-		if(param.get("resvs[]") instanceof String[] ) {
-		   resveNo = (String[]) param.get("resvs[]");
-		}else {
-			resveNo = new String [] {param.getString("resvs[]")};	
-		}
-		param.remove("resvs[]");
+		String[] resveNo = param.getString("params").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
+		param.remove("params");
 		param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
 		param.put("canclYn","Y");
 		boolean updateResult = false;

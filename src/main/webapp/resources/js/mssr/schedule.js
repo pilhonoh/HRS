@@ -190,20 +190,20 @@ var scheduleList = {
 					var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
 					
 					scheduleListHtml.push('<tr>');
-					scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO+'"></td>');
+					scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
 				/*	scheduleListHtml.push('	<td>'+ resultList[i].RESVE_NO+'</td>');*/
 					scheduleListHtml.push('	<td>' + resveDt + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
 					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
-					scheduleListHtml.push('	<td><button class="t-btn cr01">수정</button></td>');
+					scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
 					scheduleListHtml.push('</tr>');
 				}
 				
 				$('tbody#scheduleList').html(scheduleListHtml.join(''));
 				scheduleList.paging.renderPaging();
-				
+
 				scheduleList.button.scheduleModifyBtnEvent();
 				
 			});
@@ -447,12 +447,15 @@ var scheduleList = {
 		scheduleCreateBtnEvent: function(){
 		  $("button#createBtn").on('click',function(){
 			  scheduleList.popup.showScheduleSavePopup();  
-		  });	
-			
+		  });
+		  
+		 
 		},
 		scheduleModifyBtnEvent: function() {
-			console.log('modBtnEventOff...');
-			console.log('modBtnEventBinding...');
+			 $("button[name='modifyBtn']").on('click',function(){
+				  var resveNo = $(this).data("resveno")
+				  scheduleList.popup.showRowScheduleSavePopup(resveNo);  
+			  });	
 		},
 		scheduleDeleteBtnEvent:function(){
 			  
@@ -465,7 +468,7 @@ var scheduleList = {
 			  $.ajax({
 						url: ROOT + '/mssr/scheduleDelete',
 						type: 'POST',
-						data:{resvs:resveNo},
+						data: {params:JSON.stringify(resveNo)} ,
 						success : function(res){
 							console.log('delete',res);				
 							scheduleList.button.listBtnClickEvent();
@@ -515,14 +518,14 @@ var scheduleList = {
 	
 	popup: {
 		showScheduleSavePopup: function() {
-			//var rowData = resveList.button.cancelBtnStatus.rowData;
 			
 			$('#layer_pop06').load(ROOT + '/mssr/pop/scheduleCreate',null, function(res) {
-				
-				/*$('#layer_pop06 #btnOk').on('click', function() {
-					resveList.popup.confirmBtn(rowData.RESVE_NO, rowData.LAST_STTUS_CODE);
-				});*/
 				openLayerPopup('layer_pop06');
+			});
+		},
+        showRowScheduleSavePopup: function(resveno) {	
+			$('#layer_pop07').load(ROOT + '/mssr/pop/scheduleModify',scheduleList.list.getRowData(resveno), function(res) {
+				//openLayerPopup('layer_pop07');
 			});
 		}
 
