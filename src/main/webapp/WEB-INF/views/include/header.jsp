@@ -22,7 +22,24 @@ var header = {
 				console.error(err)
 			}
 		})
+	},
+	get2WeeksCount : function(){
+		$.ajax({
+			url: ROOT + '/resve/2WeeksCnt',
+			data: {},
+			success : function(res){
+				console.log('monthCht',res);
+				$('.header .user-desc #resveCnt').text(res.item.RESVE_CNT);
+				$('.header .user-desc #waitCnt').text(res.item.WAIT_CNT);
+				$('.header .user-desc').show();
+				
+			},
+			error : function(err) {
+				console.error(err)
+			}
+		})
 	}
+	
 }
 $(document).ready(function(){		
 	$('.gnb-menu li').each(function(i,e){		
@@ -31,7 +48,7 @@ $(document).ready(function(){
 		}		
 	})
 	
-	header.getMonthCount();
+	header.get2WeeksCount();
 })
 
 </script>

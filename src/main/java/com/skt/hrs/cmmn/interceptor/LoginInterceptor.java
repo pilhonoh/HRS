@@ -20,6 +20,7 @@ import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.JsonUtils;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.user.service.UserService;
+import com.skt.hrs.utils.StringUtil;
 
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
@@ -33,12 +34,23 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
-		logger.info("LoginInterceptor URI :" + request.getRequestURI());
+		logger.info("LoginInterceptor URI : " + request.getRequestURI());
 		
 		HttpSession session = request.getSession();
+		
+		// 세션이 없다면
 		if(session == null || session.getAttribute("LoginVo") == null) {			
+			logger.info("SESSION => null");
 			
+			// SSO id 조회
 			String paramUserid = getUserId(request);
+			logger.info("SSO ID => " + (StringUtil.isEmpty(paramUserid) ? "null" : paramUserid));
+			
+			// SSO id가 없으면 거부
+			if(StringUtil.isEmpty(paramUserid)) {
+				forbidden(request, response);
+				return false;
+			}
 			
 			//19사번 P사번 접근불가
 //			if(paramUserid.startsWith("P") || paramUserid.startsWith("19")) {
@@ -46,12 +58,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 //				return false;
 //			}
 			
+			// SSO id로 사용자 조회하여 로그인처리
 			DataEntity param = new DataEntity();
 			param.put("empno", paramUserid);
 
 			ResponseResult result = userService.selectUserInfo(param);
 			Map user = result.getItem();				
-			
+						
 			if(user != null) {
 				LoginVo loginVo = new LoginVo();
 				loginVo.setEmpno(user.get("EMPNO").toString());
@@ -64,33 +77,40 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				sess.setAttribute("LoginVo", loginVo);
 								
 			}else {
-				String headerInfo = request.getHeader("X-Requested-With");
-				if ("XMLHttpRequest".equals(headerInfo)) {
-					response.setContentType("application/json;charset=UTF-8");
-					response.setStatus(HttpStatus.OK.value());
-					result = new ResponseResult();
-					result.setResultCode(ResultConst.CODE.FORBIDDEN.toInt());
-					result.setStatus(ResultConst.CODE.FORBIDDEN.toInt());
-					result.setMessage("Login first.");
-					Writer writer = null;
-					try {
-						writer = response.getWriter();
-						writer.write(JsonUtils.objectToString(result));
-					} catch (IOException e) {
-						e.printStackTrace();
-					} finally {
-						if (writer != null) {
-							try {writer.close();} catch (IOException e) {}
-						};
-					}
-				} else {
-
-					response.sendRedirect("/error/403");
-				}
+				forbidden(request, response);
+				return false;
 			}
 			
-		}
+		}		
+		logger.info("SESSION => " + ((LoginVo) session.getAttribute("LoginVo")).getEmpno());
 		return true;
+	}
+	
+	private void forbidden(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ResponseResult result = new ResponseResult();
+		String headerInfo = request.getHeader("X-Requested-With");
+		if ("XMLHttpRequest".equals(headerInfo)) {
+			response.setContentType("application/json;charset=UTF-8");
+			response.setStatus(HttpStatus.OK.value());
+			result = new ResponseResult();
+			result.setResultCode(ResultConst.CODE.FORBIDDEN.toInt());
+			result.setStatus(ResultConst.CODE.FORBIDDEN.toInt());
+			result.setMessage("Login first.");
+			Writer writer = null;
+			try {
+				writer = response.getWriter();
+				writer.write(JsonUtils.objectToString(result));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (writer != null) {
+					try {writer.close();} catch (IOException e) {}
+				};
+			}
+		} else {
+
+			response.sendRedirect("/error/403");
+		}
 	}
 	
 	/**
@@ -125,6 +145,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			// local에서 admin_login을 통해서 들어오지 않았다는 뜻
 			// window 로긴 계정을 얻는다
 			// paramUserid = "P021090";
+			
+			/* ---------- window 계정 얻는부분 -----------
 			paramUserid = System.getProperty("user.name");
 
 			if (paramUserid.indexOf("\\") != -1) {
@@ -134,6 +156,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 					paramUserid = arrParamUserid[1];
 				}
 			}
+			---------------------------------------------*/
 
 		}
 		/*

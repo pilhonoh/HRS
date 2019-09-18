@@ -69,6 +69,25 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 사용자의 향후 2주간 예약/대기 건수 조회 
+	 * @작성일 : 2019.09.18
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult select2WeeksCount(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		// 현재시간 이후 resveTm을 구해서 조건에 추가한다.
+		param.put("nextResveTm", DateUtil.getNextResveTm());				
+		result.setItemOne(resveStatusDAO.select2WeeksCount(param));
+		  
+		return result;
+	}
+	
+	/**
+	 * 
 	 * @설명 : 예약현황 조회 
 	 * @작성일 : 2019.08.29
 	 * @작성자 : P149365
@@ -143,10 +162,11 @@ public class ResveStatusService {
 		
 		
 		param.put("resveDe", resveItem.get("RESVE_DE"));
+		param.put("nextResveTm", DateUtil.getNextResveTm());
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 		
 		// 금일 예약건이 존재하는경우
-		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("RESVE_CNT").toString())) {
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
 			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
 		}
 		
@@ -230,10 +250,11 @@ public class ResveStatusService {
 		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("waitEmpno"));
 				
 		param.put("resveDe", resveItem.get("RESVE_DE"));
+		param.put("nextResveTm", DateUtil.getNextResveTm());
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 		
 		// 금일 예약건이 존재하는경우
-		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("RESVE_CNT").toString())) {		
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {		
 			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
 		}
 		

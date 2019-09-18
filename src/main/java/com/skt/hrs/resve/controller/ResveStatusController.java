@@ -164,6 +164,24 @@ public class ResveStatusController {
 	
 	/**
 	 * 
+	 * @설명 : 사용자의 향후 2주간 예약/대기 건수 조회 
+	 * @작성일 : 2019.09.18
+	 * @작성자 : P149365
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/2WeeksCnt")
+	public @ResponseBody ResponseResult select2WeeksCount(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("empno", loginVo.getEmpno());
+		return resveStatusService.select2WeeksCount(param);
+	}
+	
+	/**
+	 * 
 	 * @설명 : 현황조회
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365

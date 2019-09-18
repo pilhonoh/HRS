@@ -460,7 +460,7 @@ var resveList = {
 						console.log('cancel',res);
 						resveList.list.renderResveList();
 						closeLayerPopup();
-						header.getMonthCount();
+						header.get2WeeksCount();
 					}
 				},
 				error : function(err) {

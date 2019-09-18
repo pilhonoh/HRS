@@ -210,7 +210,7 @@ resveStatus.table = {
 	refresh : function(){
 		resveStatus.table.init();
 		resveStatus.table.getStatus(resveStatus.data.selectedDate.yyyymmdd);
-		header.getMonthCount();
+		header.get2WeeksCount();
 	},
 	// 예약현황조회
 	getStatus: function(yyyymmdd){
@@ -296,9 +296,10 @@ resveStatus.pop  =  {
 	// 예약신청 팝업 호출
 	regist : function(e){
 		
+		var data = $(e.target).parents('td').data('data');		
+
 		// 시간체크
-		var targetData = $(e.target).parents('td').data('data');
-		if(!checkBefore20min(targetData.RESVE_DE, targetData.RESVE_TM)){
+		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
 			alertPopup('시작시간 20분 전 까지만 가능합니다.');
 			return false;
 		}
@@ -306,7 +307,7 @@ resveStatus.pop  =  {
 		// 기존예약체크
 		var filtered = $('td[id^=resve-]').filter(function(i, td){
 			
-			var status = $(td).data().data.LAST_STTUS;
+			var status = $(td).data('data').LAST_STTUS;
 			return status == "RESVE_COMPT" || 	//예약완료
 				status == "WAIT" || 			//대기중
 				status == 'COMPT' || 			//완료
@@ -318,12 +319,11 @@ resveStatus.pop  =  {
 			return false;
 			
 		}
-		
-		var $td = $(e.target).parent('td');			
+			
 		$('#layer_pop01').load(
 			ROOT + '/resve/pop/regist', 
 			{
-				resveNo : $td.data('data').RESVE_NO, 
+				resveNo : data.RESVE_NO, 
 				resveDe: resveStatus.data.selectedDate.yyyymmdd
 			}, 
 			function(res){
@@ -338,16 +338,17 @@ resveStatus.pop  =  {
 	// 대기신청 팝업 호출
 	wait : function(e){
 		
+		var data = $(e.target).parents('td').data('data');
+
 		// 시간체크
-		var targetData = $(e.target).parents('td').data('data');
-		if(!checkBefore20min(targetData.RESVE_DE, targetData.RESVE_TM)){
+		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
 			alertPopup('시작시간 20분 전 까지만 가능합니다.');
 			return false;
 		}
 		
 		// 기존예약체크
 		var filtered = $('td[id^=resve]').filter(function(i, td){
-			var status = $(td).data().data.LAST_STTUS;
+			var status = $(td).data('data').LAST_STTUS;
 			return status == "RESVE_COMPT" || 	//예약완료
 				status == "WAIT" || 			//대기중
 				status == 'COMPT' || 			//완료
@@ -360,12 +361,11 @@ resveStatus.pop  =  {
 			
 		}
 		
-		
-		var $td = $(e.target).parent('td');		
+				
 		$('#layer_pop02').load(
 			ROOT + '/resve/pop/wait', 
 			{
-				resveNo : $td.data('data').RESVE_NO, 
+				resveNo : data.RESVE_NO, 
 				resveDe: resveStatus.data.selectedDate.yyyymmdd
 			}, 
 			function(res){
@@ -378,18 +378,40 @@ resveStatus.pop  =  {
 		
 	},
 	// 예약/대기 취소 팝업 호출
-	cancel : function(e){			
-		var data = $(e.target).parent('td').data('data');			
+	cancel : function(e){
+		
+		var data = $(e.target).parents('td').data('data');
+
+		// 시간체크
+		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
+			alertPopup('시작시간 20분 전 까지만 가능합니다.');
+			return false;
+		}
+						
 		$('#layer_pop03').load(ROOT + '/resve/pop/cancel', {resveNo : data.RESVE_NO, cancelGbn: data.LAST_STTUS}, function(res){
 			$('#layer_pop03 #btnOk').on('click', function(){
 				resveStatus.cancel(data.RESVE_NO, data.LAST_STTUS);
-			});				
+			});
 			openLayerPopup('layer_pop03');
 		});
 	},
 	// 예약 사후완료 처리
-	noshowConfirm : function(e){			
-		var data = $(e.target).parent('td').data('data');			
+	noshowConfirm : function(e){	
+		
+		var data = $(e.target).parents('td').data('data');
+
+		// 시간체크 (20분전부터 시작시간 전까지는 alert, 시작시간 이후에는 사후완료)
+		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
+			
+			var resveDatetime = moment(data.RESVE_DE + " " + getRealTime(data.RESVE_TM).start, 'YYYYMMDD HH:mm').toDate();	// 케어시작시간 date타입
+
+			// 20분전 ~ 케어시작시간 사이라면 alert
+			if(new Date() < resveDatetime){				
+				alertPopup('시작시간 20분 전 까지만 가능합니다.');
+				return false;
+			}
+		}
+				
 		$('#layer_pop05').load(ROOT + '/resve/pop/noshowConfirm', {resveNo : data.RESVE_NO}, function(res){
 			$('#layer_pop05 #btnOk').on('click', function(){
 				resveStatus.complete(data.RESVE_NO);
@@ -401,12 +423,15 @@ resveStatus.pop  =  {
 
 
 
-// 예약,대기 가능한 시간인지 체크 (대상시각 20분전)
+// 예약,대기,취소 가능한 시간인지 체크 (대상시각 20분전)
 function checkBefore20min(resveDe, resveTm){
 	resveTm = getRealTime(resveTm).start;
-	var targetDate = moment(resveDe + " " + resveTm,  'YYYYMMDD HH:mm').subtract(20,'minutes').toDate();	//예약시간 20분전
-	
-	return new Date() < targetDate;
+	var targetDate = moment(resveDe + " " + resveTm, 'YYYYMMDD HH:mm').subtract(20,'minutes').toDate();	//예약시간 20분전
+	var now = new Date();
+	console.info("현재", now);
+	console.info("시작20분전", targetDate);
+	console.info("가능여부", now < targetDate);
+	return now < targetDate;
 }
 
 

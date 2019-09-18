@@ -62,6 +62,34 @@ public class DateUtil {
 	
 	/**
 	 * 
+	 * @설명 : 현재시간 이후의 resveTm(1~9) 조회 
+	 * @작성일 : 2019.09.18
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	public static int getNextResveTm() {
+		try {
+			SimpleDateFormat f = new SimpleDateFormat("HHmm");
+			Date time = f.parse(f.format(new Date()));
+			Date startDate = f.parse("0830");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(startDate);
+			int i=1;
+			for(; i<=9; i++) {				
+				cal.add(Calendar.HOUR, 1);
+				if(cal.getTime().compareTo(time) > 0) {
+					break;
+				}
+			}
+			return i;
+		}catch(Exception e) {
+			throw new HrsException("invalid date");
+		}
+	}
+	
+	/**
+	 * 
 	 * @설명 : 현재시점에서의 과거 여부
 	 * @작성일 : 2019.09.04
 	 * @작성자 : P149365

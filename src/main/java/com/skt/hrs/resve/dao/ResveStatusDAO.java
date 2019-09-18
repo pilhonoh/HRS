@@ -40,6 +40,19 @@ public class ResveStatusDAO {
 	
 	/**
 	 * 
+	 * @설명 : 사용자의 향후 2주간 예약/대기 건수 조회 
+	 * @작성일 : 2019.09.18
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map select2WeeksCount(DataEntity param) {
+		return sqlSession.selectOne("resveStatusMapper.select2WeeksCount", param);
+	}
+	
+	/**
+	 * 
 	 * @설명 : 사용자의 특정일 예약/대기 건수 조회 
 	 * @작성일 : 2019.09.05
 	 * @작성자 : P149365
