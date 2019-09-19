@@ -176,7 +176,7 @@ public class ResveStatusService {
 		}		
 		// 시간체크 (현재시간<= 예약시간-20분)
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-		if(!DateUtil.isPastBefore20min(resveDt)) {				
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {				
 			throw new HrsException("error.over20min", true);
 		}
 		// 성별체크
@@ -264,7 +264,7 @@ public class ResveStatusService {
 		}		
 		// 시간체크 (현재시간<= 예약시간-20분)
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-		if(!DateUtil.isPastBefore20min(resveDt)) {
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 			throw new HrsException("error.over20min", true);
 		}
 		
@@ -346,9 +346,9 @@ public class ResveStatusService {
 			/*****************************
 			 *  VALIDATION
 			 ****************************/
-			// 시간체크 (현재시간<= 예약시간-20분)
+			// 시간체크
 			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-			if(!DateUtil.isPastBefore20min(resveDt)) {
+			if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 				throw new HrsException("error.over20min", true);
 			}
 			
@@ -361,15 +361,24 @@ public class ResveStatusService {
 				 *  
 				 *  예약승계 (자동등록)
 				 * 	  - 예약자가 취소하면 대기자는 자동으로 예약자로 변경된다.
-				 *	  - 자동등록으로 변경된 예약자는 예약취소를 할 수 없다.
+				 *   * 케어시작 30~20분 전에 예약을 취소한경우
+				 *	  - 자동승계로 변경된 예약자는 예약취소를 할 수 없다.
 				 *	  - 대신, 노쇼에 따른 패널티도 없다
+				 *   * 케어시작 30분 전에 예약을 취소한경우
+				 *    - 자동승계로 변경된 예약자도 예약취소 및 패널티 적용
 				 ****************************/				
 				
 				// 현황 update
 				param.put("resveEmpno", (String)resveItem.get("WAIT_EMPNO"));
 				param.put("waitEmpno", "");
 				param.put("updtEmpno", "SYSTEM");
-				param.put("succsYn", "Y");	//승계여부
+				
+				// 승계여부 계산
+				// 케어시작 30분전 보다 과거이면 정상예약
+				// 케어시작 30~20분 사이이면 승계예약
+				if(!DateUtil.isPastBeforeMin(resveDt, 30)) {					
+					param.put("succsYn", "Y");	//승계여부
+				}
 				boolean updateResult = resveStatusDAO.updateResveStatus(param);
 				
 				// 이력 insert (예약취소)
@@ -582,8 +591,8 @@ public class ResveStatusService {
 		// 예약 시간
 		Date resveDt = DateUtil.hrsDtToRealDt(resveDe, resveTm);
 
-		// 시간이 지난경우
-		if(!DateUtil.isPastBefore20min(resveDt)) {
+		// 시간이 지난경우 (20분전보다 과거가 아닌경우)
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 			
 			if(!StringUtil.isEmpty(resveEmpno)) {
 				// 예약자가 자신이고 

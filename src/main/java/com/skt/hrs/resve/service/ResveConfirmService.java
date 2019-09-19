@@ -84,8 +84,8 @@ public class ResveConfirmService {
 		// 예약 시간
 		Date resveDt = DateUtil.hrsDtToRealDt(item.get("RESVE_DE").toString(), item.get("RESVE_TM").toString());
 		
-		// 시간이 지난경우
-		if(!DateUtil.isPastBefore20min(resveDt)) {
+		// 시간이 지난경우 (20분전 보다 과거가 아닌경우)
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 			if("Y".equals(item.get("COMPT_YN"))) {
 				resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	//케어완료
 			}else{

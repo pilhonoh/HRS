@@ -72,9 +72,10 @@ public class ResveListController {
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/pop/detailHist")
-	public String detailHistPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {	
+	public String detailHistPopupView(HttpServletRequest req, HttpServletResponse res, HttpSession sess, Model model) throws Exception {	
 		DataEntity param = HttpUtil.getServletRequestParam(req);
-		
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("empno", loginVo.getEmpno());
 		ResponseResult result = resveListService.selectResveDetailList(param);
 		
 		model.addAttribute("list", result.getList());
