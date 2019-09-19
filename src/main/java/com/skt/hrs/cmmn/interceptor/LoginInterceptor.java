@@ -22,14 +22,18 @@ import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.user.service.UserService;
 import com.skt.hrs.utils.StringUtil;
 
+/**
+ * SSO 로그인 처리 인터셉터
+ * @author P149365
+ *
+ */
 public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	UserService userService;
-	
-	
+		
 	@Override	
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -50,13 +54,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			if(StringUtil.isEmpty(paramUserid)) {
 				forbidden(request, response);
 				return false;
-			}
-			
-			//19사번 P사번 접근불가
-//			if(paramUserid.startsWith("P") || paramUserid.startsWith("19")) {
-//				response.sendRedirect("/error/403");
-//				return false;
-//			}
+			}					
 			
 			// SSO id로 사용자 조회하여 로그인처리
 			DataEntity param = new DataEntity();
@@ -66,26 +64,39 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			Map user = result.getItem();				
 						
 			if(user != null) {
+				
+				String authCode = user.get("AUTH_CODE") == null ? "" : user.get("AUTH_CODE").toString();				
+				
 				LoginVo loginVo = new LoginVo();
 				loginVo.setEmpno(user.get("EMPNO").toString());
 				loginVo.setHname(user.get("HNAME").toString());
 				loginVo.setPlace(user.get("PLACE").toString());
 				loginVo.settSex(user.get("T_SEX").toString());
-				loginVo.setAuth( user.get("AUTH_CODE") == null ? "" : user.get("AUTH_CODE").toString());
+				loginVo.setAuth(authCode);
 				
-				HttpSession sess = request.getSession();
-				sess.setAttribute("LoginVo", loginVo);
-								
+				//HttpSession sess = request.getSession();
+				session.setAttribute("LoginVo", loginVo);							
+																
 			}else {
 				forbidden(request, response);
 				return false;
 			}
 			
-		}		
+		}
 		logger.info("SESSION => " + ((LoginVo) session.getAttribute("LoginVo")).getEmpno());
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @설명 : 권한없음 처리 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : P149365
+	 * @param request
+	 * @param response
+	 * @throws Exception
+	 * @변경이력 :
+	 */
 	private void forbidden(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ResponseResult result = new ResponseResult();
 		String headerInfo = request.getHeader("X-Requested-With");

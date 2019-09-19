@@ -58,9 +58,11 @@
 	<bean id="jobScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    <property name="triggers">
 	        <list>
-	        	<!-- <ref bean="blacklistFilterTrigger" /> -->
-	        	<!-- <ref bean="cspSendTrigger" /> -->
-	        	<!-- <ref bean="resveNotifyTrigger" /> -->
+	        	<!-- 
+	        	<ref bean="blacklistFilterTrigger" />
+	        	<ref bean="cspSendTrigger" />
+	        	<ref bean="resveNotifyTrigger" /> 
+	        	-->
 	        </list>
 	    </property>
 	    <property name="quartzProperties">
