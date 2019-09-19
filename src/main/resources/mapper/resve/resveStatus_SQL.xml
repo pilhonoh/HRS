@@ -34,7 +34,7 @@
 		(
 			SELECT COUNT(RESVE_NO)
 			FROM RESVE_STTUS			
-			WHERE CONCAT(RESVE_DE, RESVE_TM) <![CDATA[>=]]> CONCAT(DATE_FORMAT(CURRENT_DATE, '%Y%m%d'), #{nextResveTm})	<!-- 현재시간보다 크고 -->
+			WHERE CONCAT(RESVE_DE, LPAD(RESVE_TM, 2,'0')) <![CDATA[>=]]> CONCAT(DATE_FORMAT(CURRENT_DATE, '%Y%m%d'), LPAD(#{nextResveTm}, 2,'0'))	<!-- 현재시간보다 크고 -->
 			AND RESVE_DE <![CDATA[<]]> DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL 13 DAY), '%Y%m%d') <!-- 2주후까지 -->
 			AND WAIT_EMPNO = #{empno}
 		    AND CANCL_YN != 'Y'
