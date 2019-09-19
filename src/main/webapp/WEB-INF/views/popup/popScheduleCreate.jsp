@@ -2,15 +2,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%-- <jsp:include page="${JSP}/include/resource.jsp" /> --%>
+
 <div class="pop-head">
 	<h2>관리사 근무 등록</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
 <div class="pop-container">	
 	<!-- 팝업 컨텐츠 S -->
- <script src="/resources/vendor/moment/moment.min.js"></script>	
-   <script src="/resources/js/cmmn/common.js"></script>
 	<table id="scheduleCreate_enter" class="tbl-style">
 		<colgroup>
 			<col style="width:20%;">
@@ -184,7 +182,9 @@ var popSchCreate = {
 							closeLayerPopup();
 						},
 						error : function(err) {
-							console.error(err)
+							var json = JSON.parse(err.responseText);
+							alertPopup(json.message);
+							//console.error(err)
 						}
 					}); 
 					
@@ -217,6 +217,7 @@ var popSchCreate = {
 				    
 				    //datepicker 초기화
 				    $("#scheduleCreate_enter tbody").find('.datepicker').datepicker("destroy").datepicker();
+				    
 			   });				
 				
 			}

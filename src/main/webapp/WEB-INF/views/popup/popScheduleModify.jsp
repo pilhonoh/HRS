@@ -123,12 +123,12 @@ var popSchModify= {
 				        scheduleListHtml.push('<button class="t-btn cr01" id="scheduleModify_rowAddBtn">추가</button></td></tr>');
 					}
 					else{
-						scheduleListHtml.push('<tr id="tr'+i+'" data-rowid = "'+i+'" class="trscheduleModfiy"><th>근무 시간</th>');
+					 	scheduleListHtml.push('<tr id="tr'+i+'" data-rowid = "'+i+'" class="trscheduleModfiy"><th>근무 시간</th>');
 						scheduleListHtml.push('<td>');
 						scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+i+'"></select>'); 
 						scheduleListHtml.push('<em class="fromto"> ~ </em>');
 						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleModify_endTime'+i+'"></select>')
-						scheduleListHtml.push('<button name="delBtn" class="t-btn cr01" data-rowid ="tr'+i+'" id="scheduleModify_rowAddBtn'+i+'">삭제</button></td></tr>');
+						scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(\"tr"+i+"\")' id='scheduleModify_rowAddBtn"+i+"'>삭제</button></td></tr>"); 
 					}
 				}			
 				$('#scheduleBody').append(scheduleListHtml.join(''));
@@ -223,22 +223,24 @@ var popSchModify= {
 				    $clone = $(".trscheduleModfiy").eq(0).clone();
 				    console.log($clone.html());
 				    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
-				    $clone.find(".t-btn").text("삭제").attr({"id":this.id+trCnt ,"name":"delBtn" ,"data-rowid":"tr"+trCnt});	
+				    $clone.find(".t-btn").text("삭제").attr({"id":this.id+trCnt,  "onclick": fnRowDelete("tr"+trCnt)});	
 				    $clone.find("select").each(function(){
 				    	$(this).attr('id',this.id+trCnt)
 					});				    
 				    
 				    $("#scheduleModify_enter tbody").append( $clone.wrapAll("<div/>").parent().html());
-				    $("button[name='delBtn']").on("click",function(){ 
-				    	var rowid = $(this).data("rowid");
-				    	$("#"+rowid).remove();
-				    });		
 			   });				
 				
 			}
 	}
 		
 }
+
+function fnRowDelete(id){
+	
+	$("#"+id ).remove();
+};
+
 function getParams(){
 	var params = [] 
 	$(".trscheduleModfiy").each(function(){
@@ -278,14 +280,7 @@ function getParams(){
 		      deleteTime:DeleTime = defData.filter(x => ! diff2.includes(x))         	    
      }
      
-   /* var setArray = defData.diff(setTimesheet)
-    console.log(defData)
-    console.log(setTimesheet)
-    console.log(setArray)
-    */
-   //var delArray
-	
-	//return params.slice().sort(function(a,b){return a-b}).reduce(function(a,b){if(a.slice(-1)[0]!==b)a.push(b);return a;},[]);
+
 } 
 
 $(document).ready(function(){		

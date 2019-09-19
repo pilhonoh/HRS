@@ -140,8 +140,6 @@
         WHERE RESVE_NO = #{RESVE_NO}
      </update>
      
-     
-     
 
      
      

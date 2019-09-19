@@ -142,5 +142,16 @@ public class MssrDAO {
 		return sqlSession.selectList("mssrMapper.selectScheduleDetail", param);
 	}
 	
-	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상세 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectResveItem(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectScheduleDetail", param);
+	}
 }

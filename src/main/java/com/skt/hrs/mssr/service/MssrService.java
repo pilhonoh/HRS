@@ -166,9 +166,10 @@ public class MssrService {
      		 endTime =  Integer.parseInt(paramsMap.get("endTimeCode"));
         	 days = DateUtil.getDateDiff(startDate, endDate );
              param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
-             param.put("fromDate",startDate); 
-             param.put("toDate",endDate);  
+             param.put("fromDate",startDate.replaceAll("-", "")); 
+             param.put("toDate",endDate.replaceAll("-", ""));  
              int cnt = mssrDAO.selectScheduleListTotalCount(param);
+            
              if(cnt > 1) { 
 					throw new HrsException("error.processFailure", true);
 			  }
@@ -217,29 +218,42 @@ public class MssrService {
         //HashMap<String,String > paramsMap = new HashMap<String,String >() ;
         param.remove("insertTime");
         param.remove("deleteTime");
-        param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
-        
+       
 		if( !StringUtil.isEmpty(InsertTime[0]) && InsertTime.length >0) {
+			 param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
 			for (int i = 0 ; i < InsertTime.length; i++) {
 				param.put("resveTime",InsertTime[i]);
-				//insertResult = mssrDAO.insertSchedule(param); 
+				insertResult = mssrDAO.insertSchedule(param); 
 				
 				if(!(insertResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 } 
 				 
-				//insertResult = mssrDAO.insertResveHist(param); 
+				insertResult = mssrDAO.insertResveHist(param); 
 				if(!(insertResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 } 
 			}
 		}
-	    
+	    //삭제
 		if (!StringUtil.isEmpty(DeleteTime[0]) && DeleteTime.length>0) {
+			param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
+			param.put("canclYn","Y");
 			for (int i = 0 ; i < DeleteTime.length; i++) {
 				 param.put("resveTime",DeleteTime[i]);
-				 result.setItemList(mssrDAO.selectScheduleDetail(param));
-				 param.remove("resveTime");
+				 Map item = mssrDAO.selectResveItem(param);
+				 param.put("RESVE_NO",item.get("RESVE_NO").toString());
+				
+				 insertResult = mssrDAO.deleteResve(param); 
+				 
+					if(!(insertResult)) { 
+						throw new HrsException("error.processFailure", true);
+					 }		
+					insertResult = mssrDAO.insertResveHist(param); 
+					if(!(insertResult)) { 
+						throw new HrsException("error.processFailure", true);
+					 }	 
+					param.remove("RESVE_NO");
 			}
 		}
 			// data적용 성공여부

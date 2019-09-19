@@ -163,19 +163,7 @@
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
-			<div class="bg"></div>
-			<div class="pop-layer size2 bounceInDown animated" id="layer_pop06">
-				<!--#include file="../popup/pop_관리사근무등록.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop07">
-				<!--#include file="../popup/pop_관리사근무수정.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop08">
-				<!--#include file="../popup/pop_예약정보수정.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop09">
-				<!--#include file="../popup/pop_대기정보수정.html" -->	
-			</div>
+			<jsp:include page="${JSP}/include/layer.jsp" /> 
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 
