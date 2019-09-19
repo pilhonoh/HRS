@@ -10,7 +10,7 @@
 <div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 
-	<p class="pop-desc icon04">헬스케어 이용을 <strong>시작</strong> 하시겠습니까?</p>
+	<p class="pop-desc icon04"><strong id="empnm"></strong>님.<br/> 헬스케어 이용을 <strong>시작</strong> 하시겠습니까?</p>
 
 	<ul class="reservation-list">
 		<li><span class="icon01" id="resveConfirm_resveDe"></span></li>
@@ -36,6 +36,7 @@ $(document).ready(function(){
 		$('#resveConfirm_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
 		$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
 		$('#resveConfirm_bed').text(data.BED_NM);
+		$('#empnm').text(data.RESVE_EMPNM);
 		
 		var realTime = getRealTime(data.RESVE_TM);
 		$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
