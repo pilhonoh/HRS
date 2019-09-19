@@ -414,17 +414,20 @@ var resveList = {
 			var todt = toDate[0] + toDate[1] + toDate[2];
 			
 			if (fromdt.length !== 8) {
-				alertPopup('시작날짜 형식이 잘못되었습니다.');
+				//alertPopup('시작날짜 형식이 잘못되었습니다.');
+				alertPopup(getMessage('error.invalidStartDate'));
 				return false;
 			}
 			
 			if (todt.length !== 8) {
-				alertPopup('종료날짜 형식이 잘못되었습니다.');
+				//alertPopup('종료날짜 형식이 잘못되었습니다.');
+				alertPopup(getMessage('error.invalidEndDate'));
 				return false;
 			}
 			
 			if (fromdt > todt) {
-				alertPopup('시작날짜가 종료날짜가 클 수 없습니다.');
+				//alertPopup('시작날짜가 종료날짜가 클 수 없습니다.');
+				alertPopup(getMessage('error.dateCompareStartEnd'));
 				return false;
 			}
 			

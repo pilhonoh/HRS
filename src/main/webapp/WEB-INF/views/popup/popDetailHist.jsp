@@ -5,16 +5,16 @@
 	<h2>예약 상세이력</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
-<div class="pop-container st2">	
+<div class="pop-container st1">	
 	<!-- 팝업 컨텐츠 S -->
 	<!-- <p class="pop-desc icon02"><strong>대기</strong> 하시겠습니까?</p> -->
 	
 	
 	<table class="tbl-style">
 		<colgroup>
-			<col style="width:30%;">
-			<col>
-			<col style="width:25%;">
+			<col style="width:20%;">
+			<col style="width:35%;">
+			<col style="width:35%;">
 		</colgroup>
 		<tbody>
 			<tr>

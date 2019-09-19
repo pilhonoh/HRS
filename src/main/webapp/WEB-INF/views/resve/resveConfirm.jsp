@@ -6,7 +6,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<jsp:include page="${JSP}/include/resource.jsp" />		
+		<jsp:include page="${JSP}/include/resource.jsp" />
+		<jsp:include page="${JSP}/include/messages.jsp" />
 		<script src="${JS}/resve/resveConfirm.js"></script>	
 		<script>
 			var ROOT = '${ROOT}';
