@@ -5,13 +5,20 @@ var resveConfirm = {
 		selectedDate: undefined
 	},
 	init: function(){
-		resveConfirm.calendar.render();
-		resveConfirm.fillBeds(resveConfirm.data.bldCode)
-			.then(function(){
-				$('.month-calendar .today span').trigger('click');
-				$('.cal-day.sat,.sun').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
-			});		
+		resveConfirm.calendar.render();	// 달력 렌더링
+		loadCodeSelect(function(){		// 공통코드 로드
+			$('[data-code-tyl=BLD] option[value='+resveConfirm.data.bldCode+']')
+				.attr('selected', true);	// default사옥선택
+			
+			resveConfirm.fillBeds(resveConfirm.data.bldCode)	// bed목록 조회
+				.then(function(){
+					$('.month-calendar .today span').trigger('click');
+					$('.cal-day.sat,.sun').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
+				});	
+		});	
+			
 		$('#btnConfirm').on('click', resveConfirm.pop.confirm);
+		$('[data-code-tyl=BLD]').on('change', resveConfirm.bldOnChange);	
 		$('#txtResveEmpno').on('keypress', function(e){
 			if(e.keyCode == 13) resveConfirm.pop.confirm();
 		});
@@ -23,6 +30,14 @@ var resveConfirm = {
 		$('.tit-date span').empty().append(m.format('YYYY년 MM월 '))
 		.append($('<em>').text(m.format('DD일('+ m.locale('ko').format('ddd')+') 예약')))
 		.append('입니다.');
+	},
+	// 사옥변경 이벤트 리스너
+	bldOnChange : function(e){
+		
+		resveConfirm.fillBeds(e.target.value)
+			.then(function(){
+				$('.month-calendar .today span').trigger('click');
+			})
 	},
 	// 해당사옥의 bed목록 조회
 	fillBeds : function(bldCode){				
@@ -175,11 +190,11 @@ resveConfirm.table = {
 				function getButton(status){
 					return {
 						//예약가능
-						'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o">').append('예약가능').addClass('rbtn cr1'),	
+						'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o">').append('예약가능').addClass('rbtn cr1').hide(), // 요청사항으로 인한 hide()	
 						//예약완료->예약중
 						'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약중').addClass('rbtn cr3'),	
 						//예약불가
-						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not'), 											
+						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not').hide(), // 요청사항으로 인한 hide()									
 						//완료
 						'COMPT' :  $('<span>').text('케어완료').addClass('reservation-not')						
 					}[status]

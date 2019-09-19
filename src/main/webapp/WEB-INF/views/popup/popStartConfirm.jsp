@@ -42,6 +42,7 @@ $(document).ready(function(){
 		
 		$('#btnOk').on('click', function(){
 			resveConfirm.start(data.RESVE_NO);
+			$('#txtResveEmpno').val('');
 		});
 	}else{		
 		$('.reservation-list').remove();

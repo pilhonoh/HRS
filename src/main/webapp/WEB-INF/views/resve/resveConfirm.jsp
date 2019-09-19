@@ -14,7 +14,6 @@
 		</script>
 	</head>
 	<body>
-
 		<div class="wrap">
 			<input id="bldCode" type="hidden" value="${sessionScope.LoginVo.place}" />
 			<div class="content staff">
@@ -28,7 +27,11 @@
 						</p>
 					</div>
 
-					<div class="month-area st2">
+					<div class="month-area">
+						<div class="building-select">
+							<select data-code-tyl="BLD"></select>
+							<span class="bar"></span>
+						</div>
 						<div class="calendar-area">
 							<table class="month-calendar">
 								<tbody>
