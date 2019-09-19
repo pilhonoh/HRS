@@ -16,6 +16,7 @@ import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
 import com.pub.core.util.JsonUtils;
 import com.skt.hrs.cmmn.exception.HrsException;
+import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.service.ResveConfirmService;
 import com.skt.hrs.resve.service.ResveStatusService;
 import com.skt.hrs.utils.StringUtil;
@@ -113,7 +114,8 @@ public class ResveConfirmController {
 	@RequestMapping(value = "/start", method = RequestMethod.POST)
 	public @ResponseBody ResponseResult selectConfirmTarget(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
-				
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("empno", loginVo.getEmpno());			//등록자사번		
 		return resveStatusService.completeResveStatus(param);
 	}
 }
