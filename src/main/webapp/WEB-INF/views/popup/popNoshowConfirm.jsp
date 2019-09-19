@@ -4,13 +4,13 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <div class="pop-head">
-	<h2>헬스케어 사후 완료</h2>
+	<h2>헬스케어 사후 케어완료</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
 <div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 
-	<p class="pop-desc icon04">※ 헬스케어 예약을 <strong>완료</strong>처리 하시겠습니까?</p>
+	<p class="pop-desc icon04">예약하신 서비스를 <strong>케어완료</strong>처리 하시겠습니까?</p>
 	
 	<ul class="reservation-list">
 		<li><span class="icon01" id="noshowConfirm_resveDe"></span></li>
