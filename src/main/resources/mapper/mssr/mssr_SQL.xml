@@ -104,6 +104,20 @@
 		ORDER BY A.RESVE_DE
 	) C
 	</select>
+	<select id ="selectScheduleDetail" parameterType="map" resultType="hashmap">
+	   SELECT RESVE_DE AS RESVE_DE 
+			 , NCNM AS MSSR_NCNM
+			 ,RESVE_TM AS RESVE_TM
+			 ,RESVE_NO
+		 FROM RESVE_STTUS A JOIN MASSEUR B 
+		                      ON A.MSSR_EMPNO =B.EMPNO   
+		 WHERE RESVE_DE = #{resveDate}
+		   AND  MSSR_EMPNO = #{mssrCode}
+		   <if test='resveTime !=null  and resveTime != ""' >
+		   AND RESVE_TM = #{resveTime}
+		   AND CANCL_YN ='N'
+		   </if>
+	</select>
      <!-- 관리사 스케쥴 등록 -->
      <insert id="insertSchedule"  useGeneratedKeys="true" keyProperty="RESVE_NO"  parameterType="map" >     
        	INSERT INTO RESVE_STTUS ( RESVE_DE, RESVE_TM, BLD_CODE, MSSR_EMPNO, BED_CODE, REG_EMPNO, REG_DT)
@@ -125,6 +139,8 @@
  			 , UPDT_DT =  now(3)
         WHERE RESVE_NO = #{RESVE_NO}
      </update>
+     
+     
      
 
      

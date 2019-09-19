@@ -15,11 +15,14 @@ import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.mssr.dao.MssrDAO;
 import com.skt.hrs.utils.DateUtil;
+import com.skt.hrs.utils.StringUtil;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.pub.core.util.JsonUtils;
+
 
 
 
@@ -162,8 +165,15 @@ public class MssrService {
      		 startTime = Integer.parseInt(paramsMap.get("startTimeCode")) ;
      		 endTime =  Integer.parseInt(paramsMap.get("endTimeCode"));
         	 days = DateUtil.getDateDiff(startDate, endDate );
-            param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
-	        for (int i = 0; i <= days; i++) {
+             param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
+             param.put("fromDate",startDate); 
+             param.put("toDate",endDate);  
+             int cnt = mssrDAO.selectScheduleListTotalCount(param);
+             if(cnt > 1) { 
+					throw new HrsException("error.processFailure", true);
+			  }
+             
+             for (int i = 0; i <= days; i++) {
 				param.put("resveDate",DateUtil.getDateAdd(startDate,i));
 				for (int j = startTime ; j <= endTime; j++) {
 					param.put("resveTime",j);
@@ -171,8 +181,7 @@ public class MssrService {
 					
 					if(!(insertResult)) { 
 						throw new HrsException("error.processFailure", true);
-					 } 
-					 
+					 } 		 
 					insertResult = mssrDAO.insertResveHist(param); 
 					if(!(insertResult)) { 
 						throw new HrsException("error.processFailure", true);
@@ -181,10 +190,61 @@ public class MssrService {
 				
 			}
         }
+    	
+    	 
 		result.setItemOne(insertResult);
 		// data적용 성공여부
 		
 		return result;
+	}
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 동록
+	 * @작성일 : 2019.09.16
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	@Transactional
+	public ResponseResult scheduleModify(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+	    boolean  insertResult = false;
+	    String[] InsertTime = param.getString("insertTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
+		String[] DeleteTime = param.getString("deleteTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
+        //HashMap<String,String > paramsMap = new HashMap<String,String >() ;
+        param.remove("insertTime");
+        param.remove("deleteTime");
+        param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
+        
+		if( !StringUtil.isEmpty(InsertTime[0]) && InsertTime.length >0) {
+			for (int i = 0 ; i < InsertTime.length; i++) {
+				param.put("resveTime",InsertTime[i]);
+				//insertResult = mssrDAO.insertSchedule(param); 
+				
+				if(!(insertResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 } 
+				 
+				//insertResult = mssrDAO.insertResveHist(param); 
+				if(!(insertResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 } 
+			}
+		}
+	    
+		if (!StringUtil.isEmpty(DeleteTime[0]) && DeleteTime.length>0) {
+			for (int i = 0 ; i < DeleteTime.length; i++) {
+				 param.put("resveTime",DeleteTime[i]);
+				 result.setItemList(mssrDAO.selectScheduleDetail(param));
+				 param.remove("resveTime");
+			}
+		}
+			// data적용 성공여부
+			result.setItemOne(insertResult);
+			return result;
 	}
 
 	@Transactional

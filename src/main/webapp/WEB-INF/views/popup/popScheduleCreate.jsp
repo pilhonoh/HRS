@@ -43,9 +43,9 @@
 					<input type="text"  id = "scheduleCreate_start_date" class="datepicker">
 					<em class="fromto"> ~ </em>
 					<input type="text" id = "scheduleCreate_end_date" class="datepicker">
-					<select style="width:40px" data-code-tyl="RVT" data-empty-str="시작시간" id="scheduleCreate_startTime"></select>
+					<select  data-code-tyl="RVT" data-code-tys="RVTSTART"  id="scheduleCreate_startTime"></select>
 					<em class="fromto"> ~ </em>
-					<select style="width:40px" data-code-tyl="RVT" data-empty-str="종료시간" id="scheduleCreate_endTime"></select>
+					<select data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime"></select>
 					<button class="t-btn cr01" id="scheduleCreate_rowAddBtn">추가</button>
 				</td>
 			</tr>		
@@ -61,14 +61,14 @@
 	<!-- 팝업 컨텐츠 E -->						
 </div><!-- //pop-container -->
 <script>
-var popinit = {
+var popSchCreate = {
 		init: function() {
 			$('select[data-code-tyl]').empty(); 
 			loadCodeSelect(); //콤보박스 공통코드 세팅
-			popinit.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
-			popinit.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
-			popinit.button.popSaveClickEvent();
-			popinit.button.rowAddClickEvent();
+			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
+			popSchCreate.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
+			popSchCreate.button.popSaveClickEvent();
+			popSchCreate.button.rowAddClickEvent();
 		},	
 		cmmnCode: {
 			allCodeList: [],
@@ -78,7 +78,7 @@ var popinit = {
 					success: function(res) {
 						console.log('allCodeList', res);
 						if (res.status === 200) {
-							popinit.cmmnCode.allCodeList = res.list;
+							popSchCreate.cmmnCode.allCodeList = res.list;
 						}
 					},
 					error: function(err) {
@@ -87,10 +87,10 @@ var popinit = {
 				})
 			},
 			codeToName: function(code) {
-				var allCodeList = popinit.cmmnCode.allCodeList;
+				var allCodeList = popSchCreate.cmmnCode.allCodeList;
 				
 				if (allCodeList.length == 0) {
-					popinit.cmmnCode.getAllCodeList();
+					popSchCreate.cmmnCode.getAllCodeList();
 				}
 				
 				var codeName = '';
@@ -117,7 +117,7 @@ var popinit = {
 			bldComboEventBinding: function() {
 				$('#scheduleCreate_bldCombo').on('change', function() {
 					var bldCode = $(this).val();
-					popinit.combobox.setMssrCombo(bldCode);
+					popSchCreate.combobox.setMssrCombo(bldCode);
 				})
 			},		
 			getMssrList: function(bldCode) {
@@ -143,7 +143,7 @@ var popinit = {
 			
 			setMssrCombo: function(bldCode) {
 		
-				$.when(popinit.combobox.getMssrList(bldCode)).done(function(result) {
+				$.when(popSchCreate.combobox.getMssrList(bldCode)).done(function(result) {
 					
 					$('#scheduleCreate_mssrCombo').empty();
 					var mssrComboHtml = ['<option value="">관리사</option>'];
@@ -240,7 +240,7 @@ function getParams(){
 
 $(document).ready(function(){		
 	
-	popinit.init();
+	popSchCreate.init();
 	
 })
   

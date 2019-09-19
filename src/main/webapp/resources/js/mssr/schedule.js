@@ -525,7 +525,7 @@ var scheduleList = {
 		},
         showRowScheduleSavePopup: function(resveno) {	
 			$('#layer_pop07').load(ROOT + '/mssr/pop/scheduleModify',scheduleList.list.getRowData(resveno), function(res) {
-				//openLayerPopup('layer_pop07');
+				openLayerPopup('layer_pop07');
 			});
 		}
 

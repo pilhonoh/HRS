@@ -577,6 +577,7 @@ function loadCodeSelect(cb){
 		var tyl = $(select).data('code-tyl');	//코드타입(대)
 		var tys = $(select).data('code-tys');	//코드타입(소)
 		var empStr = $(select).data('empty-str');
+	    
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
