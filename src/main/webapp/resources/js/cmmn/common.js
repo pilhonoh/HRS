@@ -641,7 +641,7 @@ function openLayerPopup(id){
 	if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
 	else temp.css('left', '0px');
 
-	$("html").attr("style", "overflow-y:hidden");
+	//$("html").attr("style", "overflow-y:hidden");
 	$("html").addClass("scroll");
 
 	temp.find('.layerClose').click(function (e) {

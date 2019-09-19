@@ -7,10 +7,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 
 import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.resve.service.ResveStatusService;
+import com.skt.hrs.utils.DateUtil;
 
 public class ResveNotifyJob {
 
@@ -19,6 +21,10 @@ public class ResveNotifyJob {
 	
 	@Autowired
 	CspService cspService;
+	
+	
+	@Autowired
+	MessageSource messageSource;
 	
 	Logger logger = LoggerFactory.getLogger("resveNotiJobLogger");
 	
@@ -36,7 +42,15 @@ public class ResveNotifyJob {
 						m.get("RESVE_EMPNO"));
 				
 				m.put("targetEmpno", m.get("RESVE_EMPNO"));
-				ResponseResult insertResult = cspService.insertCspSMS(m, "csp.sms.resveNotify", Locale.KOREAN);
+				
+				//헬스케어 T타워 A배드 시작 30분 전입니다.도착 후 본인 확인 바랍니다
+				//헬스케어 {0} {1}베드 시작 30분 전입니다.도착 후 본인 확인 바랍니다
+				String message =  messageSource.getMessage("csp.sms.resveNotify", new String[] {				
+					m.get("BLD_NM").toString(),
+					m.get("BED_NM").toString()
+				}, Locale.KOREAN);
+				
+				ResponseResult insertResult = cspService.insertCspSMS(m, message, Locale.KOREAN);
 				logger.info("CSP테이블 INSERT 결과 : "+ insertResult.getItem());
 			}
 		}catch(Exception e) {
