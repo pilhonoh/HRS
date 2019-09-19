@@ -10,7 +10,7 @@
 <div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 
-	<p class="pop-desc icon04">예약하신 서비스를 <strong>케어완료</strong>처리 하시겠습니까?</p>
+	<p class="pop-desc icon05">예약하신 서비스를 <strong>완료</strong>처리 하시겠습니까?</p>
 	
 	<ul class="reservation-list">
 		<li><span class="icon01" id="noshowConfirm_resveDe"></span></li>
