@@ -98,6 +98,7 @@ public class ResveStatusDAO {
 		return false;
 	}
 	
+//	test
 	/**
 	 * 
 	 * @설명 : 예약이력등록 
