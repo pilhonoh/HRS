@@ -50,5 +50,18 @@ public class ResveListDAO {
 		return sqlSession.selectOne("resveListMapper.selectResveListTotalCount", param);
 	}
 	
+	/**
+	 * 
+	 * @설명 : 예약 상세현황 조회
+	 * @작성일 : 2019.09.18
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectResveDetailList(DataEntity param) {
+		return sqlSession.selectList("resveListMapper.selectResveDetailList", param);
+	}
+	
 	
 }

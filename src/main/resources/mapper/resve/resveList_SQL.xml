@@ -92,6 +92,36 @@
 		ORDER BY A.RESVE_DE DESC
 	</select>
 	
-	
+	<!-- 예약 상세현황 조회 -->
+	<select id="selectResveDetailList" parameterType="map" resultType="hashmap">		
+		SELECT RESVE_NO,
+			STTUS_CODE_NM,
+		    DATE_FORMAT(T.REG_DT, '%Y-%m-%d %H:%i') AS REG_DT_STR,
+		    CASE 
+				WHEN ADM_EMPNO IS NOT NULL THEN '관리자'
+		        WHEN ADM_EMPNO IS NULL THEN
+					CASE REG_EMPNO
+						WHEN #{empno} THEN HNAME
+						WHEN 'SYSTEM' THEN 'SYSTEM'
+						ELSE '구성원'
+					END
+				END AS REG_EMPNM
+		FROM (
+			SELECT HIST.RESVE_NO,
+				STTUS_CODE,
+				(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='STS' AND CODE=HIST.STTUS_CODE) AS STTUS_CODE_NM,
+				HIST.REG_EMPNO,
+				HIST.REG_DT,		
+				PRSN.HNAME,
+				ADM.EMPNO AS ADM_EMPNO
+			FROM RESVE_HIST HIST
+			LEFT JOIN inf_person_info_rcv PRSN
+			ON HIST.REG_EMPNO = PRSN.EMPNO
+			LEFT JOIN CHARGER ADM
+			ON HIST.REG_EMPNO = ADM.EMPNO
+			WHERE RESVE_NO = #{resveNo}		  
+		) T
+		ORDER BY REG_DT
+	</select>
 	
 </mapper>

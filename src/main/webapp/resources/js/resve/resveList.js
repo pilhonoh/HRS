@@ -158,7 +158,8 @@ var resveList = {
 					resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
+					//resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
+					resveListHtml.push('	<td><a href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a></td>');
 					resveListHtml.push('	<td>');
 					if (stsCode == 'STS01' || stsCode == 'STS03') {
 						var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
@@ -169,8 +170,9 @@ var resveList = {
 							resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
 						}						
 											
-					}
+					}					
 					resveListHtml.push('	</td>');
+					//resveListHtml.push('	<td><button class="t-btn" onclick="resveList.popup.detail('+resultList[i].RESVE_NO+')">상세보기</button></td>');
 					resveListHtml.push('</tr>');
 					
 					btnStyle = '';
@@ -466,6 +468,13 @@ var resveList = {
 				error : function(err) {
 					console.error(err)
 				}
+			});
+		},
+		
+		detail : function(resveNo){
+			console.log(resveNo)
+			$('#layer_pop13').load(ROOT + '/resve/pop/detailHist', {resveNo : resveNo}, function(res){				
+				openLayerPopup('layer_pop13');
 			});
 		}
 	}
