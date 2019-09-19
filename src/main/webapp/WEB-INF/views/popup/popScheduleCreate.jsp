@@ -11,7 +11,7 @@
 	<!-- 팝업 컨텐츠 S -->
 	<table id="scheduleCreate_enter" class="tbl-style">
 		<colgroup>
-			<col style="width:20%;">
+			<col style="width:15%;">
 			<col>
 		</colgroup>
 		<tbody>
@@ -24,8 +24,7 @@
 			<tr>
 				<th>베드</th>
 				<td>
-				<select style="width:120px;" data-code-tyl="BED" data-empty-str="베드" id="scheduleCreate_bedCombo">
-					
+					<select style="width:120px;" data-code-tyl="BED" data-empty-str="베드" id="scheduleCreate_bedCombo"></select>
 				</td>
 			</tr>
 			<tr>
@@ -53,7 +52,7 @@
 
 	<div class="pop-btn-area">
 		<button id ="scheduleCreate_saveBtn" class="pop-btn">저장</button>
-		<button class="pop-btn gray">취소</button>
+		<button class="pop-btn gray layerClose">취소</button>
 	</div>
 
 	<!-- 팝업 컨텐츠 E -->						
@@ -61,6 +60,7 @@
 <script>
 var popSchCreate = {
 		init: function() {
+			$(".datepicker").datepicker();
 			$('select[data-code-tyl]').empty(); 
 			loadCodeSelect(); //콤보박스 공통코드 세팅
 			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트

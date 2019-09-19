@@ -13,26 +13,27 @@
 
 		<div class="wrap">
 
-			<header class="header">
-				<!--#include file="../include/header.html"-->
+			<header class="header admin">				
 				<jsp:include page="${JSP}/include/headerAdmin.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
 				
 				<div class="sub-tit">
-					<h2>관리사 스케쥴 조회/등록/변경</h2>
+					<h2>관리사 스케쥴 관리</h2>
 				</div>
 				
 				<div class="search_field_wrap">
 					<div class="search_field_area">
 						<table class="search_field">
-							<colgroup>
-								<col width="90px">
+							<%-- <colgroup>
+								<col width="80px">
 								<col width="*">
-								<col width="90px">
+								<col width="80px">
 								<col width="*">
-							</colgroup>
+								<col width="80px">
+								<col width="*">
+							</colgroup> --%>
 							<tbody>
 								<tr>
 									<th><strong class="stit">기간</strong></th>
@@ -41,10 +42,13 @@
 										<em class="fromto"> ~ </em>
 										<input type="text" class="datepicker" id="to_date">
 									</td>
-									<th><strong class="stit">검색조건</strong></th>
+									<th><strong class="stit">사옥</strong></th>
 									<td>
 										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
-										</select>
+										</select>										
+									</td>
+									<th><strong class="stit">관리사</strong></th>
+									<td>
 										<select style="width:120px;" id="mssrCombo">
 											<option value="">관리사</option>
 										</select>

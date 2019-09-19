@@ -55,8 +55,8 @@ var scheduleList = {
 	
 	datepicker: {
 		setDefaultValue: function() { //기본 날짜 세팅
-			var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
-			var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+			var fromDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+			var toDate = moment().add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
 			
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
@@ -125,7 +125,7 @@ var scheduleList = {
 		//목록 조회 시 사용하는 파라미터
 		params: {
 			pageNo: 1, //조회할 페이지 번호
-			rowPerPage: 6, //한 페이지 당 조회할 ROW 수
+			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
 			fromDate: '', //조회 시작 날짜
 			toDate: '', //조회 끝 날짜
 			bldCode: '', //사옥코드
@@ -457,26 +457,35 @@ var scheduleList = {
 				  scheduleList.popup.showRowScheduleSavePopup(resveNo);  
 			  });	
 		},
+		//TODO: 메시지 처리
 		scheduleDeleteBtnEvent:function(){
 			  
 			  $("button#deleteBtn").on('click',function(){
 				  var resveNo =[] ;
 				  $('tbody#scheduleList input:checkbox:checked').each(function(){
 					  resveNo.push($(this).val());
-				   });
-				
-			  $.ajax({
-						url: ROOT + '/mssr/scheduleDelete',
-						type: 'POST',
-						data: {params:JSON.stringify(resveNo)} ,
-						success : function(res){
-							console.log('delete',res);				
-							scheduleList.button.listBtnClickEvent();
-						},
-						error : function(err) {
-							console.error(err)
-						}
-					});
+				  });
+				  
+				  if(resveNo.length == 0){
+					  alertPopup('삭제할 스케쥴을 선택하세요.');
+					  return false;
+				  }
+				  confirmPopup('총' +resveNo.length+ '건을 삭제하시겠습니까?', function(){					  					
+					  $.ajax({
+							url: ROOT + '/mssr/scheduleDelete',
+							type: 'POST',
+							data: {params:JSON.stringify(resveNo)} ,
+							success : function(res){
+								console.log('delete',res);				
+								scheduleList.button.listBtnClickEvent();
+								alertPopup('삭제되었습니다.');
+							},
+							error : function(err) {
+								console.error(err)
+							}
+					  });
+				  })
+				  
 			  });	
 			
 		}

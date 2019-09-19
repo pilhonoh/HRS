@@ -698,3 +698,18 @@ function alertPopup(title, contents){
 		openLayerPopup('layer_pop_alert');
 	});
 }
+
+function confirmPopup(title, contents, fn){	
+	$('#layer_pop_confirm').load(ROOT + '/resources/html/confirm.html', function(res){		
+		$('.alert-message h3').html(title.replace(/\n/g, '<br/>'));
+		if(contents){
+			if($.isFunction(contents)){
+				fn = contents;
+			}else{
+				$('.alert-message p').text(contents);
+			}
+		}
+		$('#layer_pop_confirm #btnOk').one('click', fn);
+		openLayerPopup('layer_pop_confirm');
+	});
+}

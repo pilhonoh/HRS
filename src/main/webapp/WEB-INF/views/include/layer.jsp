@@ -14,3 +14,4 @@
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop12"></div>
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop13"></div>
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop_alert"></div>
+<div class="pop-layer size1 bounceInDown animated" id="layer_pop_confirm"></div>
