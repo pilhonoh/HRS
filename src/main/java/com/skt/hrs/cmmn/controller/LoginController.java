@@ -64,7 +64,7 @@ public class LoginController {
 	 * @return
 	 * @변경이력 :
 	 */	
-	@RequestMapping(value = "/ssoLogin")
+	@RequestMapping(value = "/testSSOLogin")
 	public String ssoLogin(HttpServletRequest req, HttpServletResponse res, HttpSession sess) {
 			
 		//String paramUserid = getUserId(req);

@@ -59,7 +59,8 @@
 			 
 			var request = new XMLHttpRequest();
 			request.onreadystatechange= function () {
-			    if (request.readyState==4) {			        
+			    if (request.readyState==4) {
+			    	console.log('testLogin', request)
 			    	if(request.responseURL){
 			    		location.href=request.responseURL;
 			    	}else{
@@ -68,7 +69,7 @@
 			    	}
 			    }
 			}
-			request.open("POST", "${ROOT}/ssoLogin", true);
+			request.open("POST", "${ROOT}/testSSOLogin", true);
 			request.setRequestHeader("TEST_SM_USER", id);			
 			request.send();
 		}

@@ -13,6 +13,10 @@ var messages = {
 	'error.canNotSuccessionCancel' : '<spring:message code="error.canNotSuccessionCancel" />',
 	'error.paneltyTarget' : '<spring:message code="error.paneltyTarget" />',
 	'error.resveNotFound' : '<spring:message code="error.resveNotFound" />',
+	'error.requireEmpno' : '<spring:message code="error.requireEmpno" />',
+	'error.invalidStartDate' : '<spring:message code="error.invalidStartDate" />',
+	'error.invalidEndDate' : '<spring:message code="error.invalidEndDate" />',
+	'error.dateCompareStartEnd' : '<spring:message code="error.dateCompareStartEnd" />',
 }
 
 /**
