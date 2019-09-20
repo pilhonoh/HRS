@@ -61,7 +61,14 @@ $(function(){
 				if(json.status == 200){		
 					return data;
 				}else{
-					alertPopup(json.message);
+					alertPopup(json.message, function(){
+						try{
+							resveStatus.table.refresh();
+							resveList.list.renderResveList();
+							scheduleList.list.renderScheduleList();
+						}catch(err){}
+						
+					});
 					if(json.status == 403){
 						location.href = '/error/403';
 					}
