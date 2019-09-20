@@ -21,6 +21,6 @@ var SESSION = {
 	</ul>
 	<p class="user-desc">
 		<strong>${sessionScope.LoginVo.hname}<em>님</em></strong>
-		<span>예약 <em>3</em> 건 / 대기 <em>3</em>건</span>
+		<!-- <span>예약 <em>3</em> 건 / 대기 <em>3</em>건</span> -->
 	</p>
 </div>

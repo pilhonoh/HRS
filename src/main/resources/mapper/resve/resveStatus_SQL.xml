@@ -19,7 +19,27 @@
 			AND WAIT_EMPNO = #{empno}
 		    AND CANCL_YN != 'Y'
 		    AND COMPT_YN != 'Y'
-		) AS WAIT_CNT
+		) AS WAIT_CNT 
+	</select>
+	
+	<!-- 향후 2주간 예약/대기 건수 (당일 이전시간 대기건수는 제외) -->
+	<select id="select2WeeksCount" parameterType="map" resultType="hashmap">	
+		SELECT (
+			SELECT COUNT(RESVE_NO)
+			FROM RESVE_STTUS
+			WHERE RESVE_DE BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y%m%d') AND DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL 13 DAY), '%Y%m%d')
+			AND RESVE_EMPNO = #{empno}
+		    AND CANCL_YN != 'Y'
+		) AS  RESVE_CNT,
+		(
+			SELECT COUNT(RESVE_NO)
+			FROM RESVE_STTUS			
+			WHERE CONCAT(RESVE_DE, LPAD(RESVE_TM, 2,'0')) <![CDATA[>=]]> CONCAT(DATE_FORMAT(CURRENT_DATE, '%Y%m%d'), LPAD(#{nextResveTm}, 2,'0'))	<!-- 현재시간보다 크고 -->
+			AND RESVE_DE <![CDATA[<]]> DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL 13 DAY), '%Y%m%d') <!-- 2주후까지 -->
+			AND WAIT_EMPNO = #{empno}
+		    AND CANCL_YN != 'Y'
+		    AND COMPT_YN != 'Y'
+		) AS  WAIT_CNT 
 	</select>
 	
 	<!-- 사용자의 특정일 예약/대기 건수 -->
@@ -35,6 +55,7 @@
 			SELECT COUNT(RESVE_NO)
 			FROM resve_sttus	
 			WHERE RESVE_DE = #{resveDe}
+			AND RESVE_TM <![CDATA[>=]]> #{nextResveTm}	<!-- 당일 과거의 대기이력은 무시 -->
 			AND WAIT_EMPNO = #{empno}
 			AND CANCL_YN != 'Y'
 		    AND COMPT_YN != 'Y'
@@ -89,7 +110,19 @@
 	<!-- 예약 단건 조회 -->
 	<select id="selectResveItem" parameterType="map" resultType="hashmap">
 		SELECT 
-			A.*,
+			A.RESVE_NO,
+		    A.RESVE_DE,
+		    A.RESVE_TM,
+		    A.BLD_CODE,
+		    A.MSSR_EMPNO,
+		    A.BED_CODE,
+		    A.RESVE_EMPNO,
+		    A.WAIT_EMPNO,
+		    A.REG_DT,
+		    A.UPDT_DT,
+		    A.CANCL_YN,
+		    A.COMPT_YN,
+		    A.SUCCS_YN,
 		    B.NCNM AS MSSR_NCNM,
 		    B.SEXDSTN AS MSSR_SEXDSTN,
 		    B.HFFC_YN AS MSSR_HFFC_YN,
@@ -100,6 +133,24 @@
 		INNER JOIN MASSEUR B
 		ON A.MSSR_EMPNO = B.EMPNO
 		WHERE RESVE_NO = #{resveNo}		
+	</select>
+	
+	<!-- 30분전 SMS알림용 쿼리 -->
+	<select id="selectResveNotifyList" resultType="hashmap">
+		SELECT A.*,
+		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BLD' AND CODE = A.BLD_CODE) AS BLD_NM,
+		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BED' AND CODE_TYS=A.BLD_CODE AND CODE = A.BED_CODE) AS BED_NM
+		FROM RESVE_STTUS A
+		WHERE A.RESVE_DE=DATE_FORMAT(NOW(),'%Y%m%d')
+		AND A.RESVE_TM = (
+			SELECT CODE
+			FROM CMMN_CODE
+			WHERE CODE_TYL = 'RVT'
+			AND LEFT(CODE_NM,2) = DATE_FORMAT(NOW(), '%H')
+		)
+		AND A.CANCL_YN != 'Y'
+		AND A.RESVE_EMPNO != '' 
+		AND A.RESVE_EMPNO IS NOT NULL
 	</select>
 	
 	<!-- 예약현황 update -->

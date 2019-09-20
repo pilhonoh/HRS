@@ -12,7 +12,7 @@
 	
 	<!-- 페이징 처리를 위한 TAIL -->
 	<sql id="COMMON_PAGING_TAIL">
-		) R1
+		) R1 ORDER BY RESVE_DE DESC,REG_DT DESC
 		LIMIT #{rowPerPage, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
 	</sql>
 
@@ -30,7 +30,7 @@
 			RESVE_EMPNO,
 			WAIT_EMPNO,
 			REG_EMPNO,
-			REG_DT,
+			B.REG_DT,
 			UPDT_EMPNO,
 			UPDT_DT,
 			LAST_STTUS_CODE,
@@ -41,10 +41,10 @@
 			(SELECT SEXDSTN FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO) AS MSSR_SEXDSTN,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.BED_CODE AND CODE_TYS = A.BLD_CODE) AS BED_NM,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = LAST_STTUS_CODE) AS STTUS_NM,
-			DATE_FORMAT(REG_DT, '%Y-%m-%d') AS REG_DT_TXT
+			DATE_FORMAT(B.REG_DT, '%Y-%m-%d') AS REG_DT_TXT
 		FROM resve_sttus A
 		INNER JOIN (
-			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
+			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE, T1.REG_DT
 			FROM RESVE_HIST T1
 			INNER JOIN (
 				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
@@ -61,7 +61,7 @@
 			<if test='statusCode != null and statusCode != ""'>
 			AND LAST_STTUS_CODE = #{statusCode}
 			</if>
-		ORDER BY A.RESVE_DE
+		ORDER BY A.RESVE_DE DESC,B.REG_DT DESC
 		<include refid="COMMON_PAGING_TAIL"/>
 	</select>
 	
@@ -89,9 +89,39 @@
 			<if test='statusCode != null and statusCode != ""'>
 			AND LAST_STTUS_CODE = #{statusCode}
 			</if>
-		ORDER BY A.RESVE_DE
+		ORDER BY A.RESVE_DE DESC
 	</select>
 	
-	
+	<!-- 예약 상세현황 조회 -->
+	<select id="selectResveDetailList" parameterType="map" resultType="hashmap">		
+		SELECT RESVE_NO,
+			STTUS_CODE_NM,
+		    DATE_FORMAT(T.REG_DT, '%Y-%m-%d %H:%i') AS REG_DT_STR,
+		    CASE 
+				WHEN ADM_EMPNO IS NOT NULL THEN '관리자'
+		        WHEN ADM_EMPNO IS NULL THEN
+					CASE REG_EMPNO
+						WHEN #{empno} THEN HNAME
+						WHEN 'SYSTEM' THEN 'SYSTEM'
+						ELSE '구성원'
+					END
+				END AS REG_EMPNM
+		FROM (
+			SELECT HIST.RESVE_NO,
+				STTUS_CODE,
+				(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='STS' AND CODE=HIST.STTUS_CODE) AS STTUS_CODE_NM,
+				HIST.REG_EMPNO,
+				HIST.REG_DT,		
+				PRSN.HNAME,
+				ADM.EMPNO AS ADM_EMPNO
+			FROM RESVE_HIST HIST
+			LEFT JOIN inf_person_info_rcv PRSN
+			ON HIST.REG_EMPNO = PRSN.EMPNO
+			LEFT JOIN CHARGER ADM
+			ON HIST.REG_EMPNO = ADM.EMPNO
+			WHERE RESVE_NO = #{resveNo}		  
+		) T
+		ORDER BY REG_DT
+	</select>
 	
 </mapper>

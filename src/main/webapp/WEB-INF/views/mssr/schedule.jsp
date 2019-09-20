@@ -6,34 +6,34 @@
 <!DOCTYPE html>
 <html lang="ko">
 	<head>
-		<jsp:include page="${JSP}/include/resource.jsp" />
-		<script src="${LIB}/moment/moment.min.js"></script>	
+		<jsp:include page="${JSP}/include/resource.jsp" />		
 		<script src="${JS}/mssr/schedule.js"></script>
 	</head>
 	<body>
 
 		<div class="wrap">
 
-			<header class="header">
-				<!--#include file="../include/header.html"-->
+			<header class="header admin">				
 				<jsp:include page="${JSP}/include/headerAdmin.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
 				
 				<div class="sub-tit">
-					<h2>관리사 스케쥴 조회/등록/변경</h2>
+					<h2>관리사 스케쥴 관리</h2>
 				</div>
 				
 				<div class="search_field_wrap">
 					<div class="search_field_area">
 						<table class="search_field">
-							<colgroup>
-								<col width="90px">
+							<%-- <colgroup>
+								<col width="80px">
 								<col width="*">
-								<col width="90px">
+								<col width="80px">
 								<col width="*">
-							</colgroup>
+								<col width="80px">
+								<col width="*">
+							</colgroup> --%>
 							<tbody>
 								<tr>
 									<th><strong class="stit">기간</strong></th>
@@ -42,10 +42,13 @@
 										<em class="fromto"> ~ </em>
 										<input type="text" class="datepicker" id="to_date">
 									</td>
-									<th><strong class="stit">검색조건</strong></th>
+									<th><strong class="stit">사옥</strong></th>
 									<td>
 										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
-										</select>
+										</select>										
+									</td>
+									<th><strong class="stit">관리사</strong></th>
+									<td>
 										<select style="width:120px;" id="mssrCombo">
 											<option value="">관리사</option>
 										</select>
@@ -61,7 +64,7 @@
 
 				<div class="sub-tit">
 					<div class="f-right">
-						<button class="btn">삭제</button>
+						<button class="btn" id ="deleteBtn">삭제</button>
 						<button class="btn" id ="createBtn">등록</button>						
 					</div>
 				</div>
@@ -164,19 +167,7 @@
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
-			<div class="bg"></div>
-			<div class="pop-layer size2 bounceInDown animated" id="layer_pop06">
-				<!--#include file="../popup/pop_관리사근무등록.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop07">
-				<!--#include file="../popup/pop_관리사근무수정.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop08">
-				<!--#include file="../popup/pop_예약정보수정.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop09">
-				<!--#include file="../popup/pop_대기정보수정.html" -->	
-			</div>
+			<jsp:include page="${JSP}/include/layer.jsp" /> 
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 

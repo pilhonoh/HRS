@@ -34,7 +34,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			/WEB-INF/spring/applicationContext.xml,
+			<!-- /WEB-INF/spring/applicationContext.xml, -->
 			<!-- /WEB-INF/spring/security-context.xml,  -->
 			classpath:config/spring/context-datasource.xml,
 			classpath:config/spring/context-mapper.xml,			
@@ -73,7 +73,7 @@
 		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
 	</listener> 
 	-->
-
+	
 	<!-- 모든 jsp에 include -->
 	<jsp-config>
 		<jsp-property-group>
@@ -89,10 +89,23 @@
 	<!-- error 페이지 설정 -->
 	<error-page>
 		<error-code>403</error-code>
-		<location>/WEB-INF/view/noAuthority.jsp</location>
+		<location>/error/403</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/error/404</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/error/500</location>
 	</error-page>
 
-
+	<resource-ref>
+		<description></description>
+		<res-ref-name>jdbc/healthcareDS</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+		<res-auth>Container</res-auth>
+	</resource-ref>
 </web-app>
 
 

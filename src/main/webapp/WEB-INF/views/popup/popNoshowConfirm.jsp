@@ -4,38 +4,13 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <div class="pop-head">
-	<h2>헬스케어 사후 완료</h2>
+	<h2>헬스케어 사후 케어완료</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
 <div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 
-	<!-- 
-	<table class="tbl-style">
-		<colgroup>
-			<col style="width:30%;">
-			<col>
-		</colgroup>
-		<tbody>
-			<tr>
-				<th>예약일</th>
-				<td id="noshowConfirm_resveDe"></td>
-			</tr>
-			<tr>
-				<th>관리사</th>
-				<td id="noshowConfirm_mssr"></td>
-			</tr>
-			<tr>
-				<th>베드</th>
-				<td id="noshowConfirm_bed"></td>
-			</tr>
-			<tr>
-				<th>예약시각</th>
-				<td id="noshowConfirm_resveTm"></td>
-			</tr>
-		</tbody>
-	</table>
-	-->
+	<p class="pop-desc icon05">예약하신 서비스를 <strong>완료</strong>처리 하시겠습니까?</p>
 	
 	<ul class="reservation-list">
 		<li><span class="icon01" id="noshowConfirm_resveDe"></span></li>
@@ -44,9 +19,6 @@
 		<li><span class="icon04" id="noshowConfirm_bed"></span></li>
 	</ul>
 	
-
-	<p class="pop-desc">※ 헬스케어 예약을 완료처리 하시겠습니까?</p>
-
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>
 		<button class="pop-btn gray layerClose">취소</button>

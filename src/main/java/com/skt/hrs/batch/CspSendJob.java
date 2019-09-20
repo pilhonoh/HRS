@@ -27,7 +27,13 @@ public class CspSendJob {
 
 	@Autowired
 	private CspService service;
-
+	
+	@Value("#{prop['CSP.SMS.CONSUMER_ID']}")
+	private String CONSUMER_ID;
+	
+	@Value("#{prop['CSP.SMS.SENDER_NO']}")
+	private String SENDER_NUM;
+	
 	/**
 	 */
 	protected void execute() {
@@ -50,11 +56,11 @@ public class CspSendJob {
 				List<Map<String, String>> undeliveredMemos 		= getUndeliveredDatas(list, CspContents.MEMO);
 	
 				sender = new CspSender(CspContents.SMS.value());
-				final String CONSUMER_ID = "C00479";
+				//final String CONSUMER_ID = "C00479";
 				for (Map<String, String> sms : undeliveredMessages) {
 					String[][] paramLt = { 
 						 {"CONSUMER_ID"		, CONSUMER_ID } // 서비스 ID (*필수값)
-						,{"RPLY_PHON_NUM"	, sms.get("0261000021") } //발신전화번호 (*필수값)
+						,{"RPLY_PHON_NUM"	, SENDER_NUM } //발신전화번호 (*필수값)
 						,{"TITLE"			, sms.get("MSSG_BODY") } //내용 (*필수값)
 						,{"PHONE"			, sms.get("MOVETELNO") } // 수신전화 (*필수값)
 					};
@@ -64,6 +70,11 @@ public class CspSendJob {
 					ResultVo vo = sender.send();
 					service.updateCspLog(String.valueOf(sms.get("NO")), vo.getHEADER().RESULT );
 					undeliveredSmsCnt++;
+					
+					logger.info("==={} : {} " , 
+							"CSP SMS 전송후 결과 코드", 
+							vo.getHEADER().RESULT_CODE);
+					
 				}
 				
 				logger.info("==={} {} : {} " ,
@@ -78,9 +89,9 @@ public class CspSendJob {
 						undeliveredSmsCnt, 
 						(undeliveredMessages.size() - undeliveredSmsCnt) );
 
-//				logger.info(":::::{} SMS/MAIL job {} ", 
-//						CspSendJob.class.getSimpleName(),
-//						"실행에 성공하였습니다" + " ::::: ");
+				logger.info(":::::{} SMS/MAIL job {} ", 
+						CspSendJob.class.getSimpleName(),
+						"실행에 성공하였습니다" + " ::::: ");
 				
 
 		} catch (Exception e) {

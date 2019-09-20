@@ -4,10 +4,19 @@
 <mapper namespace="cmmnCodeMapper">
 
 	<select id="selectCodeList" parameterType="map" resultType="hashmap">
-		SELECT * FROM CMMN_CODE 
-		WHERE CODE_TYL = #{codeTyl}
-		<if test="codeTys != null and codeTys != ''">
-			AND CODE_TYS=#{codeTys}
+		<if test="codeTyl =='RVT'">
+			SELECT  CODE_TYL_NM,
+					CODE,
+			 		CASE #{codeTys} WHEN 'RVTSTART' THEN LEFT(CODE_NM,5) ELSE RIGHT(CODE_NM,5) END AS CODE_NM
+			FROM CMMN_CODE 
+			WHERE CODE_TYL = 'RVT'
+		</if>
+		<if test="codeTyl !='RVT'">
+			SELECT * FROM CMMN_CODE 
+			WHERE CODE_TYL = #{codeTyl}
+			<if test="codeTys != null and codeTys != ''">
+				AND CODE_TYS=#{codeTys}
+			</if>
 		</if>
 	</select>
 	

@@ -1,7 +1,6 @@
 package com.skt.hrs.resve.service;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -70,6 +69,25 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 사용자의 향후 2주간 예약/대기 건수 조회 
+	 * @작성일 : 2019.09.18
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult select2WeeksCount(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		// 현재시간 이후 resveTm을 구해서 조건에 추가한다.
+		param.put("nextResveTm", DateUtil.getNextResveTm());				
+		result.setItemOne(resveStatusDAO.select2WeeksCount(param));
+		  
+		return result;
+	}
+	
+	/**
+	 * 
 	 * @설명 : 예약현황 조회 
 	 * @작성일 : 2019.08.29
 	 * @작성자 : P149365
@@ -84,7 +102,28 @@ public class ResveStatusService {
 		for(Map item : list) {
 			item.put("LAST_STTUS",  getViewStatus(item, loginVo));
 			item.remove("LAST_STTUS_CODE");
-		}
+			//누가 예약/대기했는지 클라이언트로 전송하지않음
+			item.remove("RESVE_EMPNO");	
+			item.remove("WAIT_EMPNO");
+		}		
+		
+		result.setItemList(list);	//예약현황		
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 예약 30분전 알림 목록 조회 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectResveNotifyList() {
+		ResponseResult result = new ResponseResult();
+		
+		List<Map> list = resveStatusDAO.selectResveNotifyList();
 		result.setItemList(list);
 		return result;
 	}
@@ -123,10 +162,11 @@ public class ResveStatusService {
 		
 		
 		param.put("resveDe", resveItem.get("RESVE_DE"));
+		param.put("nextResveTm", DateUtil.getNextResveTm());
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 		
 		// 금일 예약건이 존재하는경우
-		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("RESVE_CNT").toString())) {
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
 			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
 		}
 		
@@ -136,7 +176,7 @@ public class ResveStatusService {
 		}		
 		// 시간체크 (현재시간<= 예약시간-20분)
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-		if(!DateUtil.isPastBefore20min(resveDt)) {				
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {				
 			throw new HrsException("error.over20min", true);
 		}
 		// 성별체크
@@ -210,10 +250,11 @@ public class ResveStatusService {
 		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("waitEmpno"));
 				
 		param.put("resveDe", resveItem.get("RESVE_DE"));
+		param.put("nextResveTm", DateUtil.getNextResveTm());
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 		
 		// 금일 예약건이 존재하는경우
-		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("RESVE_CNT").toString())) {		
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {		
 			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
 		}
 		
@@ -223,7 +264,7 @@ public class ResveStatusService {
 		}		
 		// 시간체크 (현재시간<= 예약시간-20분)
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-		if(!DateUtil.isPastBefore20min(resveDt)) {
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 			throw new HrsException("error.over20min", true);
 		}
 		
@@ -305,9 +346,9 @@ public class ResveStatusService {
 			/*****************************
 			 *  VALIDATION
 			 ****************************/
-			// 시간체크 (현재시간<= 예약시간-20분)
+			// 시간체크
 			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-			if(!DateUtil.isPastBefore20min(resveDt)) {
+			if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 				throw new HrsException("error.over20min", true);
 			}
 			
@@ -320,15 +361,24 @@ public class ResveStatusService {
 				 *  
 				 *  예약승계 (자동등록)
 				 * 	  - 예약자가 취소하면 대기자는 자동으로 예약자로 변경된다.
-				 *	  - 자동등록으로 변경된 예약자는 예약취소를 할 수 없다.
+				 *   * 케어시작 30~20분 전에 예약을 취소한경우
+				 *	  - 자동승계로 변경된 예약자는 예약취소를 할 수 없다.
 				 *	  - 대신, 노쇼에 따른 패널티도 없다
+				 *   * 케어시작 30분 전에 예약을 취소한경우
+				 *    - 자동승계로 변경된 예약자도 예약취소 및 패널티 적용
 				 ****************************/				
 				
 				// 현황 update
 				param.put("resveEmpno", (String)resveItem.get("WAIT_EMPNO"));
 				param.put("waitEmpno", "");
 				param.put("updtEmpno", "SYSTEM");
-				param.put("succsYn", "Y");	//승계여부
+				
+				// 승계여부 계산
+				// 케어시작 30분전 보다 과거이면 정상예약
+				// 케어시작 30~20분 사이이면 승계예약
+				if(!DateUtil.isPastBeforeMin(resveDt, 30)) {					
+					param.put("succsYn", "Y");	//승계여부
+				}
 				boolean updateResult = resveStatusDAO.updateResveStatus(param);
 				
 				// 이력 insert (예약취소)
@@ -523,22 +573,26 @@ public class ResveStatusService {
 	 * @변경이력 :
 	 */
 	private String getViewStatus(Map item, LoginVo loginVo) {
-		String resveEmpno = (String) item.get("RESVE_EMPNO");
-		String waitEmpno = (String) item.get("WAIT_EMPNO");
-		String mssrSexdstn = (String) item.get("MSSR_SEXDSTN");
-		String lastStatusCode = (String) item.get("LAST_STTUS_CODE");
-		String myEmpno = loginVo.getEmpno();
-		String mySexdstn = loginVo.gettSex();
-		String succsYn = (String) item.get("SUCCS_YN");	//승계여부
+		String resveDe = (String) item.get("RESVE_DE");					//예약일
+		String resveTm = (String) item.get("RESVE_TM");					//예약시간
+		String resveEmpno = (String) item.get("RESVE_EMPNO");			//예약자사번
+		String waitEmpno = (String) item.get("WAIT_EMPNO");				//대기자사번
+		String mssrSexdstn = (String) item.get("MSSR_SEXDSTN");			//관리사성별
+		String lastStatusCode = (String) item.get("LAST_STTUS_CODE");	//마지막상태코드
+		String myEmpno = loginVo.getEmpno();							//로그인사번
+		String mySexdstn = loginVo.gettSex();							//로그인성별
+		String succsYn = (String) item.get("SUCCS_YN");					//승계여부
+		String comptYn = (String) item.get("COMPT_YN");					//완료여부
+		
 		
 				
 		ResveStatusConst.VIEWSTATUS resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;
 		
 		// 예약 시간
-		Date resveDt = DateUtil.hrsDtToRealDt(item.get("RESVE_DE").toString(), item.get("RESVE_TM").toString());
+		Date resveDt = DateUtil.hrsDtToRealDt(resveDe, resveTm);
 
-		// 시간이 지난경우
-		if(!DateUtil.isPastBefore20min(resveDt)) {
+		// 시간이 지난경우 (20분전보다 과거가 아닌경우)
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
 			
 			if(!StringUtil.isEmpty(resveEmpno)) {
 				// 예약자가 자신이고 
@@ -548,7 +602,7 @@ public class ResveStatusService {
 						resultStatus = ResveStatusConst.VIEWSTATUS.COMPT;	// 완료
 					}else {
 						// 예약일이 오늘이라면
-						if(item.get("RESVE_DE").toString().equals(DateUtil.getYYYYYMMDD())) {						
+						if(resveDe.equals(DateUtil.getYYYYYMMDD())) {						
 							resultStatus = ResveStatusConst.VIEWSTATUS.NOSHOW_COMPT;	// 노쇼 당일처리가능
 						}else {
 							resultStatus = ResveStatusConst.VIEWSTATUS.NOSHOW;	// 노쇼
@@ -588,8 +642,12 @@ public class ResveStatusService {
 					if(StringUtil.isEmpty(waitEmpno)) {	
 						if("Y".equals(succsYn)) {
 							resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	//예약불가 (승계된 예약은 취소할수 없으므로)
-						}else {							
-							resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+						}else {
+							if("Y".equals(comptYn)) {
+								resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+							}else {								
+								resultStatus = ResveStatusConst.VIEWSTATUS.WAIT_POSBL;	// 대기가능
+							}
 						}
 						
 					}else {
@@ -617,7 +675,7 @@ public class ResveStatusService {
 	 * @param empno
 	 * @변경이력 :
 	 */
-	private void checkBlacklist(String resveDe, String empno) {
+	public void checkBlacklist(String resveDe, String empno) {
 		DataEntity param = new DataEntity();
 		param.put("resveDe", resveDe);	//예약대상일
 		param.put("empno", empno);		//예약자사번
@@ -631,10 +689,12 @@ public class ResveStatusService {
 				DateUtil.yyyymmdd2HumanReadable(blacklistMap.get("RESVE_DE").toString()),					
 				blacklistMap.get("BLD_NM").toString(),
 				blacklistMap.get("BED_NM").toString(),
-				blacklistMap.get("PANELTY_END_DT").toString(),
+				blacklistMap.get("PANELTY_END_DT_STR").toString(),
 			}, Locale.forLanguageTag(param.getString("_ep_locale")));
 			throw new HrsException(message);
 		}
 	}
+	
+	
 	
 }

@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import com.pub.core.entity.ResponseResult;
+import com.skt.hrs.cmmn.contants.CspContents;
 import com.skt.hrs.cmmn.dao.CspDAO;
 import com.skt.hrs.cmmn.vo.CspVo;
 
@@ -33,7 +34,7 @@ public class CspService {
 	
 	/**
 	 * 
-	 * @설명 : 예약완료 CSP입력 
+	 * @설명 : CSP입력 
 	 * @작성일 : 2019.09.06
 	 * @작성자 : P149365
 	 * @param param
@@ -43,24 +44,30 @@ public class CspService {
 	public ResponseResult insertCspSMS(Map param, String messageCode, Locale locale) {
 		ResponseResult result = new ResponseResult();
 		
-		String resveDay = param.get("RESVE_DE").toString();
-		try {		
-			SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
-			SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
-			resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
-		}catch (Exception e) {}
-		
 		CspVo cspVo = new CspVo();
+		String mssg = "";
 		
-		String mssg = messageSource.getMessage(messageCode, new String[] {
-			param.get("BLD_NM").toString(),
-			param.get("BED_NM").toString(),
-			resveDay,
-			param.get("RESVE_TM_STR").toString()
-		}, locale);
+		// 케어 30분전 알림
+		if(messageCode.equals("csp.sms.resveNotify")) {
+			mssg = messageSource.getMessage(messageCode, null, locale);
+		}else {
+			String resveDay = param.get("RESVE_DE").toString();
+			try {		
+				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
+				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
+				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
+			}catch (Exception e) {}
+			
+			mssg = messageSource.getMessage(messageCode, new String[] {
+				param.get("BLD_NM").toString(),
+				param.get("BED_NM").toString(),
+				resveDay,
+				param.get("RESVE_TM_STR").toString()
+			}, locale);
+		}
 		
 		cspVo.setRcvEmpno(param.get("targetEmpno").toString());
-		cspVo.setCspType("S");	//SMS
+		cspVo.setCspType(CspContents.SMS.toString());	//SMS
 		cspVo.setResveNo(Integer.parseInt(param.get("RESVE_NO").toString()));		
 		cspVo.setMssgBody(mssg);
 		

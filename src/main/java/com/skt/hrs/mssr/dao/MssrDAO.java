@@ -1,6 +1,7 @@
 package com.skt.hrs.mssr.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -50,6 +51,7 @@ public class MssrDAO {
 	}
 	
 	
+	
 	/**
 	 * 
 	 * @설명 : 관리사 스케쥴 리스트 TOTAL COUNT 조회 
@@ -63,5 +65,93 @@ public class MssrDAO {
 		return sqlSession.selectOne("mssrMapper.selectScheduleListTotalCount", param);
 	}
 
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 등록 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean insertSchedule(DataEntity param) {
+		 int result = sqlSession.insert("mssrMapper.insertSchedule", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
 	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상태 등록 
+	 * @작성일 : 2019.09.10
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean insertResveHist(DataEntity param) {
+		 int result = sqlSession.insert("mssrMapper.insertResveHist", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 삭제 변경
+	 * @작성일 : 2019.09.10
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean deleteResve(DataEntity param) {
+		int result = sqlSession.update("mssrMapper.deleteResve", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 기본 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectScheduleMaster(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectScheduleMaster", param);
+	}
+	
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상세 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectScheduleDetail(DataEntity param) {
+		return sqlSession.selectList("mssrMapper.selectScheduleDetail", param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 상세 조회 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectResveItem(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectScheduleDetail", param);
+	}
 }

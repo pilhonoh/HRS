@@ -10,6 +10,8 @@ var scheduleList = {
 		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		scheduleList.button.scheduleCreateBtnEvent();
+		scheduleList.button.scheduleDeleteBtnEvent();
+		
 		
 	},
 	
@@ -53,8 +55,8 @@ var scheduleList = {
 	
 	datepicker: {
 		setDefaultValue: function() { //기본 날짜 세팅
-			var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
-			var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+			var fromDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+			var toDate = moment().add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
 			
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
@@ -116,18 +118,14 @@ var scheduleList = {
 			
 		}
 		
-
-		
 	},
-	
-	
 	
 	list: {
 		
 		//목록 조회 시 사용하는 파라미터
 		params: {
 			pageNo: 1, //조회할 페이지 번호
-			rowPerPage: 6, //한 페이지 당 조회할 ROW 수
+			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
 			fromDate: '', //조회 시작 날짜
 			toDate: '', //조회 끝 날짜
 			bldCode: '', //사옥코드
@@ -192,19 +190,20 @@ var scheduleList = {
 					var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
 					
 					scheduleListHtml.push('<tr>');
-					scheduleListHtml.push('	<td><input type="checkbox"></td>');
+					scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
+				/*	scheduleListHtml.push('	<td>'+ resultList[i].RESVE_NO+'</td>');*/
 					scheduleListHtml.push('	<td>' + resveDt + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
 					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
-					scheduleListHtml.push('	<td><button class="t-btn cr01">수정</button></td>');
+					scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
 					scheduleListHtml.push('</tr>');
 				}
 				
 				$('tbody#scheduleList').html(scheduleListHtml.join(''));
 				scheduleList.paging.renderPaging();
-				
+
 				scheduleList.button.scheduleModifyBtnEvent();
 				
 			});
@@ -448,14 +447,48 @@ var scheduleList = {
 		scheduleCreateBtnEvent: function(){
 		  $("button#createBtn").on('click',function(){
 			  scheduleList.popup.showScheduleSavePopup();  
-		  });	
-			
+		  });
+		  
+		 
 		},
 		scheduleModifyBtnEvent: function() {
-			console.log('modBtnEventOff...');
-			console.log('modBtnEventBinding...');
+			 $("button[name='modifyBtn']").on('click',function(){
+				  var resveNo = $(this).data("resveno")
+				  scheduleList.popup.showRowScheduleSavePopup(resveNo);  
+			  });	
+		},
+		//TODO: 메시지 처리
+		scheduleDeleteBtnEvent:function(){
+			  
+			  $("button#deleteBtn").on('click',function(){
+				  var resveNo =[] ;
+				  $('tbody#scheduleList input:checkbox:checked').each(function(){
+					  resveNo.push($(this).val());
+				  });
+				  
+				  if(resveNo.length == 0){
+					  alertPopup('삭제할 스케쥴을 선택하세요.');
+					  return false;
+				  }
+				  confirmPopup('총' +resveNo.length+ '건을 삭제하시겠습니까?', function(){					  					
+					  $.ajax({
+							url: ROOT + '/mssr/scheduleDelete',
+							type: 'POST',
+							data: {params:JSON.stringify(resveNo)} ,
+							success : function(res){
+								console.log('delete',res);				
+								scheduleList.button.listBtnClickEvent();
+								alertPopup('삭제되었습니다.');
+							},
+							error : function(err) {
+								console.error(err)
+							}
+					  });
+				  })
+				  
+			  });	
+			
 		}
-
 	},
 	
 	
@@ -494,14 +527,14 @@ var scheduleList = {
 	
 	popup: {
 		showScheduleSavePopup: function() {
-			//var rowData = resveList.button.cancelBtnStatus.rowData;
 			
 			$('#layer_pop06').load(ROOT + '/mssr/pop/scheduleCreate',null, function(res) {
-				
-				/*$('#layer_pop06 #btnOk').on('click', function() {
-					resveList.popup.confirmBtn(rowData.RESVE_NO, rowData.LAST_STTUS_CODE);
-				});*/
 				openLayerPopup('layer_pop06');
+			});
+		},
+        showRowScheduleSavePopup: function(resveno) {	
+			$('#layer_pop07').load(ROOT + '/mssr/pop/scheduleModify',scheduleList.list.getRowData(resveno), function(res) {
+				openLayerPopup('layer_pop07');
 			});
 		}
 

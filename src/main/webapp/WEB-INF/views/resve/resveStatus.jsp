@@ -7,7 +7,7 @@
 <html lang="ko">
 	<head>
 		<jsp:include page="${JSP}/include/resource.jsp" />
-		<script src="${LIB}/moment/moment.min.js"></script>
+		<jsp:include page="${JSP}/include/messages.jsp" />
 		<script src="${JS}/resve/resveStatus.js"></script>
 	</head>
 	<body>
@@ -94,19 +94,7 @@
 
 		<!-- 레이어팝업 : S -->
 		<div class="layer">
-			<div class="bg"></div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop01">
-				<!--#include file="../popup/pop_예약신청.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop02">
-				<!--#include file="../popup/pop_대기신청.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop03">
-				<!--#include file="../popup/pop_예약대기취소.html" -->	
-			</div>
-			<div class="pop-layer size1 bounceInDown animated" id="layer_pop04">
-				<!--#include file="../popup/pop_시작확인.html" -->	
-			</div>
+			<jsp:include page="${JSP}/include/layer.jsp" />
 		</div><!-- //layer -->
 		<!-- 레이어팝업 : E -->
 

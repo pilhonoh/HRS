@@ -16,6 +16,7 @@ public class CspVo {
 	private Date sendDt;		//발신일시
 	private String sendRslt;	//발신결과
 	private Date regDt;			//등록일시
+	private int retryCnt;		//발신재시도 횟수
 	
 	public int getNo() {
 		return no;
@@ -79,6 +80,12 @@ public class CspVo {
 	}
 	public void setRegDt(Date regDt) {
 		this.regDt = regDt;
+	}
+	public int getRetryCnt() {
+		return retryCnt;
+	}
+	public void setRetryCnt(int retryCnt) {
+		this.retryCnt = retryCnt;
 	}
 	
 	

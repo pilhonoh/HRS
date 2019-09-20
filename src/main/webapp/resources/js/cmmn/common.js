@@ -9,7 +9,7 @@ $(function(){
 	//});
 
 	// 달력UI
-	$(".datepicker").datepicker({
+	$.datepicker.setDefaults({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
 		buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
 		dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
@@ -27,9 +27,51 @@ $(function(){
 		closeText: '닫기',  // 닫기 버튼 패널
 	});	
 
+	$(".datepicker").datepicker();
+
+//	$('body').on('focus',".datepicker", function(){
+//	    $(this).datepicker({
+//			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
+//			buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
+//			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
+//			changeMonth: true ,
+//			changeYear: true,
+//			nextText: '다음 달', // next 아이콘의 툴팁.
+//			prevText: '이전 달', // prev 아이콘의 툴팁.
+//			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+//			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+//			dayNames: ['일','월','화','수','목','금','토'],
+//			dayNamesShort: ['일','월','화','수','목','금','토'],
+//			dayNamesMin: ['일','월','화','수','목','금','토'],
+//			showButtonPanel: true,
+//			currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
+//			closeText: '닫기',  // 닫기 버튼 패널
+//		})
+//	});
+	
 	//include header
 	//$('.footer').load("../include/footer.html", function(){
 	//});
+	
+	$.ajaxSetup({
+		dataFilter: function(data,type){
+						
+			try{
+				var json = JSON.parse(data);
+				if(json.status == 200){		
+					return data;
+				}else{
+					alertPopup(json.message);
+					if(json.status == 403){
+						location.href = '/error/403';
+					}
+				}
+			}catch(err){
+				return data;
+			}
+			
+		}
+	})
 
 	moment.locale('ko', {
 	    weekdays: ["일요일","월요일","화요일","수요일","목요일","금요일","토요일"],
@@ -274,7 +316,7 @@ function e_layer_pop06(id) {
 		// 달력UI
 		$(".datepicker").datepicker({
 			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-			buttonImage: "../../resource/images/common/ico_date.png", // 버튼 이미지.
+			buttonImage: "../resources/images/common/ico_date.png", // 버튼 이미지.
 			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
 			changeMonth: true ,
 			changeYear: true,
@@ -535,6 +577,7 @@ function loadCodeSelect(cb){
 		var tyl = $(select).data('code-tyl');	//코드타입(대)
 		var tys = $(select).data('code-tys');	//코드타입(소)
 		var empStr = $(select).data('empty-str');
+	    
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
@@ -598,7 +641,7 @@ function openLayerPopup(id){
 	if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
 	else temp.css('left', '0px');
 
-	$("html").attr("style", "overflow-y:hidden");
+	//$("html").attr("style", "overflow-y:hidden");
 	$("html").addClass("scroll");
 
 	temp.find('.layerClose').click(function (e) {
@@ -648,23 +691,25 @@ function getRealTime(number){
 	}[number]
 }
 
-/*$.async = function(url, param){
-	return new Promise(function(resolve, reject){
-		$.ajax({
-			url: url,
-			data: param,
-			success: function(res){
-				if(res.status == 200){
-					resolve({list: res.list, item: res.item});
-				}else{
-					reject(res)
-				}
-			},
-			error: function(error){
-				reject(error)
-			}
-			
-		});
-	})	
+function alertPopup(title, contents){
+	$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
+		$('.alert-message h3').html(title.replace(/\n/g, '<br/>'));
+		$('.alert-message p').text(contents);
+		openLayerPopup('layer_pop_alert');
+	});
 }
-*/
+
+function confirmPopup(title, contents, fn){	
+	$('#layer_pop_confirm').load(ROOT + '/resources/html/confirm.html', function(res){		
+		$('.alert-message h3').html(title.replace(/\n/g, '<br/>'));
+		if(contents){
+			if($.isFunction(contents)){
+				fn = contents;
+			}else{
+				$('.alert-message p').text(contents);
+			}
+		}
+		$('#layer_pop_confirm #btnOk').one('click', fn);
+		openLayerPopup('layer_pop_confirm');
+	});
+}

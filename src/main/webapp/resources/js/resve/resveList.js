@@ -4,7 +4,7 @@
 var resveList = {
 	// 초기화
 	init: function() {
-		loadCodeSelect(); //콤보박스 공통코드 세팅
+		loadCodeSelect(resveList.combobox.deleteStsOption); //콤보박스 공통코드 세팅
 		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
 		resveList.list.renderResveList(); //목록 조회 후 렌더
 		resveList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
@@ -50,14 +50,19 @@ var resveList = {
 	
 	datepicker: {
 		setDefaultValue: function() { //기본 날짜 세팅
-			var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
-			var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+			//var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
+			var fromDate = moment().format('YYYY-MM-DD'); //2주전 날짜
+			//var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+			var toDate = moment().add(2, 'w').format('YYYY-MM-DD'); //2주후 날짜
 			
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			resveList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
-			resveList.list.params.toDate = moment().format('YYYYMMDD');
+			//resveList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
+			//resveList.list.params.toDate = moment().format('YYYYMMDD');
+
+			resveList.list.params.fromDate = moment().format('YYYYMMDD');
+			resveList.list.params.toDate = moment().add(2, 'w').format('YYYYMMDD');
 		}
 	},
 	
@@ -144,6 +149,8 @@ var resveList = {
 					var resve_de = resultList[i].RESVE_DE;
 					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 					
+					
+					
 					resveListHtml.push('<tr>');
 					resveListHtml.push('	<td>' + resveDt + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
@@ -151,12 +158,21 @@ var resveList = {
 					resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
+					//resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
+					resveListHtml.push('	<td><a href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a></td>');
 					resveListHtml.push('	<td>');
 					if (stsCode == 'STS01' || stsCode == 'STS03') {
-						resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
-					}
+						var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
+						var cancelDt = moment(resveDt + " " +resve_tm_start).subtract(20, 'minutes').toDate();
+						
+						//케어시작 20분전까지 취소가능
+						if(cancelDt >= new Date()){						
+							resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
+						}						
+											
+					}					
 					resveListHtml.push('	</td>');
+					//resveListHtml.push('	<td><button class="t-btn" onclick="resveList.popup.detail('+resultList[i].RESVE_NO+')">상세보기</button></td>');
 					resveListHtml.push('</tr>');
 					
 					btnStyle = '';
@@ -398,17 +414,20 @@ var resveList = {
 			var todt = toDate[0] + toDate[1] + toDate[2];
 			
 			if (fromdt.length !== 8) {
-				alert('시작날짜 형식이 잘못되었습니다.');
+				//alertPopup('시작날짜 형식이 잘못되었습니다.');
+				alertPopup(getMessage('error.invalidStartDate'));
 				return false;
 			}
 			
 			if (todt.length !== 8) {
-				alert('종료날짜 형식이 잘못되었습니다.');
+				//alertPopup('종료날짜 형식이 잘못되었습니다.');
+				alertPopup(getMessage('error.invalidEndDate'));
 				return false;
 			}
 			
 			if (fromdt > todt) {
-				alert('시작날짜가 종료날짜가 클 수 없습니다.');
+				//alertPopup('시작날짜가 종료날짜가 클 수 없습니다.');
+				alertPopup(getMessage('error.dateCompareStartEnd'));
 				return false;
 			}
 			
@@ -446,11 +465,19 @@ var resveList = {
 						console.log('cancel',res);
 						resveList.list.renderResveList();
 						closeLayerPopup();
+						header.get2WeeksCount();
 					}
 				},
 				error : function(err) {
 					console.error(err)
 				}
+			});
+		},
+		
+		detail : function(resveNo){
+			console.log(resveNo)
+			$('#layer_pop13').load(ROOT + '/resve/pop/detailHist', {resveNo : resveNo}, function(res){				
+				openLayerPopup('layer_pop13');
 			});
 		}
 	}
@@ -465,8 +492,8 @@ $(document).ready(function() {
 
 
 
-$(window).load(function() {
-	resveList.combobox.deleteStsOption();
-});
+//$(window).load(function() {
+//	resveList.combobox.deleteStsOption();
+//});
 
 
