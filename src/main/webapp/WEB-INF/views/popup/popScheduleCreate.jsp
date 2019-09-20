@@ -24,7 +24,7 @@
 			<tr>
 				<th>베드</th>
 				<td>
-					<select style="width:120px;" data-code-tyl="BED" data-empty-str="베드" id="scheduleCreate_bedCombo"></select>
+					<select style="width:120px;" data-code-tyl="BED" data-code-tys="SK01"  data-empty-str="베드" id="scheduleCreate_bedCombo"></select>
 				</td>
 			</tr>
 			<tr>
@@ -61,8 +61,8 @@
 var popSchCreate = {
 		init: function() {
 			$(".datepicker").datepicker();
-			$('select[data-code-tyl]').empty(); 
-			loadCodeSelect(); //콤보박스 공통코드 세팅
+			$('.pop-container select[data-code-tyl]').empty(); 
+			loadCodeSelect(undefined, '.pop-container'); //콤보박스 공통코드 세팅
 			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 			popSchCreate.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
 			popSchCreate.button.popSaveClickEvent();
@@ -116,7 +116,10 @@ var popSchCreate = {
 				$('#scheduleCreate_bldCombo').on('change', function() {
 					var bldCode = $(this).val();
 					popSchCreate.combobox.setMssrCombo(bldCode);
+					loadCodeSelect(undefined, $('#scheduleCreate_bedCombo').parent()); 
+					
 				})
+				
 			},		
 			getMssrList: function(bldCode) {
 				var deferred = $.Deferred();
