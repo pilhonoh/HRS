@@ -103,6 +103,7 @@ public class MssrService {
 	 */
 	public ResponseResult selectScheduleDetail(DataEntity param) {
 		ResponseResult result = new ResponseResult();
+		 param.put("resveTime",null);
 		result.setItemList(mssrDAO.selectScheduleDetail(param));
 		return result;
 	}
@@ -160,6 +161,10 @@ public class MssrService {
 		int startTime = 0;
 		int endTime = 0;
 		long days = 0;
+		int chk =0 ;
+		int timeDup = 0;
+		int bedUse = 0;
+		
 	    boolean  insertResult = false;
         ArrayList list = (ArrayList)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
         HashMap<String,String > paramsMap = new HashMap<String,String >() ;
@@ -174,19 +179,25 @@ public class MssrService {
              param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
              param.put("fromDate",startDate.replaceAll("-", "")); 
              param.put("toDate",endDate.replaceAll("-", ""));  
-             int cnt = mssrDAO.selectScheduleListTotalCount(param);
-            
-             if(cnt > 1) { 
-					String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
-
-					}, Locale.forLanguageTag(param.getString("_ep_locale")));
-					throw new HrsException(message, true);
-			  }  
+          
              
              for (int i = 0; i <= days; i++) {
 				param.put("resveDate",DateUtil.getDateAdd(startDate,i));
 				for (int j = startTime ; j <= endTime; j++) {
-					param.put("resveTime",j);
+					 param.put("resveTime",j);
+					chk = mssrDAO.selectResveCheck(param);			            
+		            if(chk == 10) { 
+		            	timeDup= timeDup +1; 
+					 }
+		             else if(chk==20)
+					 {
+		            	 bedUse= bedUse +1;
+					 } else if(chk==30){
+						 bedUse= bedUse +1;
+						 timeDup= timeDup +1; 
+					 }
+					
+					
 					insertResult = mssrDAO.insertSchedule(param); 
 					
 					if(!(insertResult)) { 
@@ -196,10 +207,14 @@ public class MssrService {
 					if(!(insertResult)) { 
 						throw new HrsException("error.processFailure", true);
 					 } 
-				}
-				
-			}
+				}	
+			}            
         }
+    	
+    	 if(timeDup >0 && bedUse > 0) {
+    			
+    		 throw new HrsException("error.duplicatMssrSchedule", true);
+    	 }
     	
     	 
 		result.setItemOne(insertResult);
@@ -311,7 +326,6 @@ public class MssrService {
 		// data적용 성공여부
 		return result;
 	}
-	
 	
 			
 }

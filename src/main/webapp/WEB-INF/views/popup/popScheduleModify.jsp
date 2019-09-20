@@ -114,6 +114,7 @@ var popSchModify= {
 		renderScheduleList: function() {
 			$.when(popSchModify.selectScheduleList()).done(function(result) {
 				var resultList = result.list;
+				console.log(test,resultList);
 				var scheduleListHtml = [];
 				var optionstring = popSchModify.convertTime(popSchModify.params.timeList)
 				
@@ -302,8 +303,12 @@ $(document).ready(function(){
 	/* popSchModify.convertTime(popSchModify.params.timeList); */
 	$("#tdResveDate").text(data.RESVE_DE);
 	$("#tdMssName").text(data.MSSR_NCNM);
+<<<<<<< Updated upstream
 	$('#tdBedName').text(data.BED_NM)
 	/* popSchModify.selectScheduleList(); */
+=======
+    popSchModify.selectScheduleList(); 
+>>>>>>> Stashed changes
 	popSchModify.renderScheduleList();
 	
 	

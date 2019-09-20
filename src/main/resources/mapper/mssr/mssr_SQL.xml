@@ -125,8 +125,6 @@
         AND MSSR_EMPNO =  #{mssrEmpno}
         AND BLD_CODE   =   #{bldCode}
         AND SUCCS_YN   = 'N'
-        
-     
      </select>
      
      <!-- 관리사 스케쥴 등록 -->
@@ -152,9 +150,16 @@
      </update>
      
 
-     
-     
-     
+      <select id ="selectResveCheck" parameterType="map"  resultType="int">
+		  SELECT  MAX(CASE  WHEN  MSSR_EMPNO  = #{mssrEmpno} THEN 10 ELSE 0 END) 
+		        + MAX(CASE  WHEN  BED_CODE  = #{bedCode} THEN  20 ELSE 0 END) AS RESVE_CHECK 
+				FROM resve_sttus
+			   WHERE RESVE_DE = #{resveDate}
+		         AND RESVE_TM = #{resveTime}
+		         AND BLD_CODE = #{bldCode}
+		         AND  CANCL_YN = 'N'
+     </select>
+
      
      
 </mapper>
