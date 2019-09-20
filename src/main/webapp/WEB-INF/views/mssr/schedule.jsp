@@ -52,7 +52,7 @@
 										<select style="width:120px;" id="mssrCombo">
 											<option value="">관리사</option>
 										</select>
-									</td>
+									</td>									
 								</tr>
 							</tbody>
 						</table>
@@ -75,6 +75,7 @@
 						<col style="width:15%;">
 						<col>
 						<col style="width:15%;">
+						<col style="width:70px;">
 						<col style="width:15%;">
 						<col style="width:15%;">
 						<col style="width:15%;">
@@ -85,13 +86,14 @@
 							<th>근무날짜</th>
 							<th>사옥</th>
 							<th>관리사</th>
+							<th>베드</th>
 							<th>성별</th>
 							<th>근무시간</th>
 							<th>수정</th>
 						</tr>
 					</thead>
 					<tbody id="scheduleList">
-						<tr>
+						<!-- <tr>
 							<td><input type="checkbox"></td>
 							<td>2019-08-21</td>
 							<td>티타워</td>
@@ -135,7 +137,7 @@
 							<td>남</td>
 							<td>09:30 ~ 11:00</td>
 							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 

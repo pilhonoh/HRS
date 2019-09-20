@@ -24,6 +24,10 @@
 				<th>관리사</th>
 				<td id="tdMssName">James</td>
 			</tr>
+			<tr>
+				<th>베드</th>
+				<td id="tdBedName">A</td>
+			</tr>
 		</thead>	
 		<tbody id=scheduleBody>		
 		</tbody>
@@ -298,6 +302,7 @@ $(document).ready(function(){
 	/* popSchModify.convertTime(popSchModify.params.timeList); */
 	$("#tdResveDate").text(data.RESVE_DE);
 	$("#tdMssName").text(data.MSSR_NCNM);
+	$('#tdBedName').text(data.BED_NM)
 	/* popSchModify.selectScheduleList(); */
 	popSchModify.renderScheduleList();
 	

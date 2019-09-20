@@ -195,6 +195,7 @@ var scheduleList = {
 					scheduleListHtml.push('	<td>' + resveDt + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
+					scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
 					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
 					scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
