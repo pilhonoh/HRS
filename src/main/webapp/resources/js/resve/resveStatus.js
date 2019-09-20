@@ -301,7 +301,7 @@ resveStatus.pop  =  {
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
 			//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다');
-			alertPopup(getMessage('error.over20min'));
+			alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 			return false;
 		}
 		
@@ -317,7 +317,7 @@ resveStatus.pop  =  {
 		});
 		if(filtered.length != 0){
 			//alertPopup("예약/대기신청은 1일 1회만 가능합니다.");
-			alertPopup(getMessage('error.duplicateDayResve'));
+			alertPopup(getMessage('error.duplicateDayResve'), resveStatus.table.refresh);
 			return false;
 			
 		}
@@ -345,7 +345,7 @@ resveStatus.pop  =  {
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
 			//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다.');
-			alertPopup(getMessage('error.over20min'));
+			alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 			return false;
 		}
 		
@@ -360,7 +360,7 @@ resveStatus.pop  =  {
 		});
 		if(filtered.length != 0){
 			//alertPopup("예약/대기신청은 1일 1회만 가능합니다.");
-			alertPopup(getMessage('error.duplicateDayResve'));
+			alertPopup(getMessage('error.duplicateDayResve'), resveStatus.table.refresh);
 			return false;
 			
 		}
@@ -389,7 +389,7 @@ resveStatus.pop  =  {
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
 			//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다.');
-			alertPopup(getMessage('error.over20min'));
+			alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 			return false;
 		}
 						
@@ -413,7 +413,7 @@ resveStatus.pop  =  {
 			// 20분전 ~ 케어시작시간 사이라면 alert
 			if(new Date() < resveDatetime){				
 				//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다.');
-				alertPopup(getMessage('error.over20min'));
+				alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 				return false;
 			}
 		}
