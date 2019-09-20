@@ -162,7 +162,7 @@ var popSchCreate = {
 			
 		},
 		 params: {	bldCode: "", //사옥코드
-				    mssrCode:"", //관리사 코드 
+				    mssrEmpno:"", //관리사 코드 
 				    bedCode: "" , //배드  
 			        rowData:null,
 			        rowCnt:""
@@ -176,7 +176,7 @@ var popSchCreate = {
 						url: ROOT + '/mssr/scheduleCreate',
 						type: 'POST',
 						data: {bldCode :  $("#scheduleCreate_bldCombo" ).val(),
-						       mssrCode : $("#scheduleCreate_mssrCombo").val(),
+						       mssrEmpno : $("#scheduleCreate_mssrCombo").val(),
 						       bedCode:   $("#scheduleCreate_bedCombo").val(),
 							   params: JSON.stringify(getParams())},
 						success : function(res){

@@ -112,7 +112,7 @@
 		 FROM RESVE_STTUS A JOIN MASSEUR B 
 		                      ON A.MSSR_EMPNO =B.EMPNO   
 		 WHERE RESVE_DE = #{resveDate}
-		   AND  MSSR_EMPNO = #{mssrCode}
+		   AND  MSSR_EMPNO = #{mssrEmpno}
 		   <if test='resveTime !=null  and resveTime != ""' >
 		   AND RESVE_TM = #{resveTime}
 		   AND CANCL_YN ='N'
@@ -122,7 +122,7 @@
      SELECT GROUP_CONCAT( DISTINCT RESVE_NO SEPARATOR ',' ) AS RESVE_NO 
 	   FROM RESVE_STTUS 
 	  WHERE RESVE_DE   = #{resveDate}
-        AND MSSR_EMPNO =  #{mssrCode}
+        AND MSSR_EMPNO =  #{mssrEmpno}
         AND BLD_CODE   =   #{bldCode}
         AND SUCCS_YN   = 'N'
         
@@ -132,7 +132,7 @@
      <!-- 관리사 스케쥴 등록 -->
      <insert id="insertSchedule"  useGeneratedKeys="true" keyProperty="RESVE_NO"  parameterType="map" >     
        	INSERT INTO RESVE_STTUS ( RESVE_DE, RESVE_TM, BLD_CODE, MSSR_EMPNO, BED_CODE, REG_EMPNO, REG_DT)
-						 VALUES ( #{resveDate}, #{resveTime}, #{bldCode}, #{mssrCode}, #{bedCode}, #{regEmpNo}, now(3))
+						 VALUES ( #{resveDate}, #{resveTime}, #{bldCode}, #{mssrEmpno}, #{bedCode}, #{regEmpNo}, now(3))
 		<selectKey keyProperty="RESVE_NO"  resultType="int" order="AFTER">
 		  SELECT LAST_INSERT_ID()
 		</selectKey>				 

@@ -188,7 +188,7 @@ var popSchModify= {
 				$("#scheduleModify_saveBtn").on("click",function(){			
 					console.log({bldCode :  popSchModify.params.bldCode,
 					       bedCode:   popSchModify.params.bedCode, //배드     
-						   mssrCode : popSchModify.params.mssrCode,
+						   mssrEmpno : popSchModify.params.mssrEmpno,
 						   resveDate : popSchModify.params.resveDate,
 						   insertTime: JSON.stringify(getParamsdiff().insertTime),
 						   deleteTime: JSON.stringify(getParamsdiff().deleteTime)	   
@@ -199,7 +199,7 @@ var popSchModify= {
 						type: 'POST',
 						data: {bldCode :  popSchModify.params.bldCode,
 						       bedCode:   popSchModify.params.bedCode, //배드     
-							   mssrCode : popSchModify.params.mssrCode,
+							   mssrEmpno : popSchModify.params.mssrEmpno,
 							   resveDate : popSchModify.params.resveDate,
 							   insertTime: JSON.stringify(getParamsdiff().insertTime),
 							   deleteTime: JSON.stringify(getParamsdiff().deleteTime)	   
@@ -291,7 +291,7 @@ $(document).ready(function(){
 	popSchModify.params.bldCode = data.BLD_CODE;
 	popSchModify.params.RESVE_NO = data.RESVE_NO;
 	popSchModify.params.resveDate = data.RESVE_DE;
-	popSchModify.params.mssrCode = data.MSSR_EMPNO;
+	popSchModify.params.mssrEmpno = data.MSSR_EMPNO;
 	popSchModify.params.resveTime = data.RESVE_TM;
 	popSchModify.params.bedCode = data.BED_CODE;
 	popSchModify.params.timeList = data.RESVE_TM_LIST;

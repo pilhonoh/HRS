@@ -461,20 +461,22 @@ var scheduleList = {
 		scheduleDeleteBtnEvent:function(){
 			  
 			  $("button#deleteBtn").on('click',function(){
-				  var resveNo =[] ;
+				  var params = [] ;
 				  $('tbody#scheduleList input:checkbox:checked').each(function(){
-					  resveNo.push($(this).val());
+
+					  var data = scheduleList.list.getRowData($(this).val());
+					  params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE});
 				  });
 				  
-				  if(resveNo.length == 0){
+				  if(params.length == 0){
 					  alertPopup('삭제할 스케쥴을 선택하세요.');
 					  return false;
 				  }
-				  confirmPopup('총' +resveNo.length+ '건을 삭제하시겠습니까?', function(){					  					
+				  confirmPopup('총' +params.length+ '건을 삭제하시겠습니까?', function(){					  					
 					  $.ajax({
 							url: ROOT + '/mssr/scheduleDelete',
 							type: 'POST',
-							data: {params:JSON.stringify(resveNo)} ,
+							data:{params:JSON.stringify(params)}  ,
 							success : function(res){
 								console.log('delete',res);				
 								scheduleList.button.listBtnClickEvent();

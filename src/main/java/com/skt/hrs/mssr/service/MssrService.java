@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,7 @@ import com.skt.hrs.utils.StringUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.pub.core.util.JsonUtils;
@@ -36,6 +39,8 @@ public class MssrService {
 	@Resource(name="mssrDAO")
 	private MssrDAO mssrDAO;
 	
+	@Autowired
+	MessageSource messageSource;
 	
 	/**
 	 * 
@@ -172,8 +177,11 @@ public class MssrService {
              int cnt = mssrDAO.selectScheduleListTotalCount(param);
             
              if(cnt > 1) { 
-					throw new HrsException("error.processFailure", true);
-			  }
+					String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
+
+					}, Locale.forLanguageTag(param.getString("_ep_locale")));
+					throw new HrsException(message, true);
+			  }  
              
              for (int i = 0; i <= days; i++) {
 				param.put("resveDate",DateUtil.getDateAdd(startDate,i));
@@ -277,7 +285,7 @@ public class MssrService {
 			 paramsMap =(HashMap<String, String>) (list.get(i)) ;
 		     param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
 			 param.put("resveDate",paramsMap.get("resveDate"));
-			 param.put("mssrCode",paramsMap.get("mssrCode"));
+			 param.put("mssrEmpno",paramsMap.get("mssrEmpno"));
 			 param.put("bldCode",paramsMap.get("bldCode"));
 			 resveMap = mssrDAO.selectResveItemMultString(param);
 		     strResveNo = (String)resveMap.get("RESVE_NO").toString();
