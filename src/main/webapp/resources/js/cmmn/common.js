@@ -572,12 +572,20 @@ function e_layer_pop12(id) {
  * 공통코드 select options 로드
  * @returns
  */
-function loadCodeSelect(cb){
-	$('select[data-code-tyl]').each(function(idx, select){
+function loadCodeSelect(cb, selector){
+	
+	var $container = selector ? $(selector) : $(document);
+	$container.find('select[data-code-tyl]').each(function(idx, select){
 		var tyl = $(select).data('code-tyl');	//코드타입(대)
 		var tys = $(select).data('code-tys');	//코드타입(소)
 		var empStr = $(select).data('empty-str');
-	    
+		
+		if(tyl==='BLD'){
+			$(select).on('change', function(){
+				$('[data-code-tyl=BED]').data('code-tys', $(this).val()).empty();
+			})
+		}
+
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
@@ -591,6 +599,8 @@ function loadCodeSelect(cb){
 						$(select).append($('<option>').val("").text(empStr));
 					}
 					$(select).append(options);
+					
+					
 					
 					if(cb) cb();	//콜백이 있다면 실행
 				}
