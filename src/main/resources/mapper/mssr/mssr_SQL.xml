@@ -65,7 +65,7 @@
 			AND MSSR_EMPNO = #{mssrEmpno}
 			</if>
 		GROUP BY A.RESVE_DE, A.BLD_CODE, A.MSSR_EMPNO, BED_CODE
-		ORDER BY A.RESVE_DE
+		ORDER BY A.RESVE_DE DESC ,A.BLD_CODE
 		<include refid="COMMON_PAGING_TAIL"/>
 	</select>
 	
@@ -101,7 +101,7 @@
 			AND MSSR_EMPNO = #{mssrEmpno}
 			</if>
 		GROUP BY A.RESVE_DE, A.BLD_CODE, A.MSSR_EMPNO
-		ORDER BY A.RESVE_DE
+	    ORDER BY A.RESVE_DE DESC ,A.BLD_CODE
 	) C
 	</select>
 	<select id ="selectScheduleDetail" parameterType="map" resultType="hashmap">
