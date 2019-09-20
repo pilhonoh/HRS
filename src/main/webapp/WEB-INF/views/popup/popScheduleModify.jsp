@@ -206,7 +206,7 @@ var popSchModify= {
 						},
 						success : function(res){
 							console.log('regist',res);				
-							scheduleList.button.listBtnClickEvent();
+							scheduleList.list.renderScheduleList();
 							closeLayerPopup();
 						},
 						error : function(err) {
@@ -293,7 +293,7 @@ $(document).ready(function(){
 	popSchModify.params.resveDate = data.RESVE_DE;
 	popSchModify.params.mssrCode = data.MSSR_EMPNO;
 	popSchModify.params.resveTime = data.RESVE_TM;
-	popSchModify.params.bedCode = data.BED_CODE
+	popSchModify.params.bedCode = data.BED_CODE;
 	popSchModify.params.timeList = data.RESVE_TM_LIST;
 	/* popSchModify.convertTime(popSchModify.params.timeList); */
 	$("#tdResveDate").text(data.RESVE_DE);

@@ -178,11 +178,12 @@ var popSchCreate = {
 							   params: JSON.stringify(getParams())},
 						success : function(res){
 							console.log('regist',res);				
-							scheduleList.button.listBtnClickEvent();
+							scheduleList.list.renderScheduleList();
 							closeLayerPopup();
 						},
 						error : function(err) {
 							var json = JSON.parse(err.responseText);
+							
 							alertPopup(json.message);
 							//console.error(err)
 						}

@@ -154,4 +154,8 @@ public class MssrDAO {
 	public Map selectResveItem(DataEntity param) {
 		return sqlSession.selectOne("mssrMapper.selectScheduleDetail", param);
 	}
+	
+	public Map selectResveItemMultString(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectResveItemMultString", param);
+	}
 }
