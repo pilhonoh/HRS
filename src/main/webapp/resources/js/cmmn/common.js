@@ -25,6 +25,11 @@ $(function(){
 		showButtonPanel: true,
 		currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 		closeText: '닫기',  // 닫기 버튼 패널
+		beforeShowDay: function(date){
+			// 주말 선택불가
+			var day = date.getDay();
+			return [(day != 0 && day != 6)];
+		}	
 	});	
 
 	$(".datepicker").datepicker();
