@@ -701,10 +701,17 @@ function getRealTime(number){
 	}[number]
 }
 
-function alertPopup(title, contents){
+function alertPopup(title, contents, fn){
 	$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
 		$('.alert-message h3').html(title.replace(/\n/g, '<br/>'));
-		$('.alert-message p').text(contents);
+		if(contents){
+			if($.isFunction(contents)){
+				fn = contents;
+			}else{
+				$('.alert-message p').text(contents);
+			}
+		}
+		$('#layer_pop_alert #btnOk').one('click', fn);
 		openLayerPopup('layer_pop_alert');
 	});
 }
