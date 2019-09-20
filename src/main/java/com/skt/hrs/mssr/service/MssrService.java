@@ -179,10 +179,18 @@ public class MssrService {
              param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
              param.put("fromDate",startDate.replaceAll("-", "")); 
              param.put("toDate",endDate.replaceAll("-", ""));  
-          
+           
              
              for (int i = 0; i <= days; i++) {
-				param.put("resveDate",DateUtil.getDateAdd(startDate,i));
+            	 
+            	String workDate = DateUtil.getDateAdd(startDate,i);
+            	
+            	 if(DateUtil.isWeekend(workDate,"yyyyMMdd")) {
+            		 continue;
+            	 };
+            	 
+            	 param.put("resveDate",workDate);
+				
 				for (int j = startTime ; j <= endTime; j++) {
 					 param.put("resveTime",j);
 					chk = mssrDAO.selectResveCheck(param);			            
@@ -212,8 +220,11 @@ public class MssrService {
         }
     	
     	 if(timeDup >0 && bedUse > 0) {
-    			
-    		 throw new HrsException("error.duplicatMssrSchedule", true);
+    		 String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
+    				 Integer.toString(bedUse) ,
+    				 Integer.toString(timeDup)
+ 			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
+    		 throw new HrsException(message);
     	 }
     	
     	 

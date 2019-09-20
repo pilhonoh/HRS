@@ -303,13 +303,12 @@ $(document).ready(function(){
 	/* popSchModify.convertTime(popSchModify.params.timeList); */
 	$("#tdResveDate").text(data.RESVE_DE);
 	$("#tdMssName").text(data.MSSR_NCNM);
-<<<<<<< Updated upstream
+
 	$('#tdBedName').text(data.BED_NM)
 	/* popSchModify.selectScheduleList(); */
-=======
+
     popSchModify.selectScheduleList(); 
->>>>>>> Stashed changes
-	popSchModify.renderScheduleList();
+    popSchModify.renderScheduleList();
 	
 	
 })
