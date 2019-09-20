@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.sql.SQLException;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pub.core.constans.ResultConst;
-import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.JsonUtils;
 import com.skt.hrs.utils.StringUtil;
@@ -136,6 +134,9 @@ public class GlobalExceptionHandler{
 			//response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 			result.setResultCode(ResultConst.CODE.ERROR.toInt());
 			
+			if(StringUtil.isEmpty(result.getMessage())) {
+				result.setMessage(messageSource.getMessage(result.getMessageCode(), null, request.getLocale()));
+			}
 			Writer writer=null;
 			try {
 				writer = response.getWriter();

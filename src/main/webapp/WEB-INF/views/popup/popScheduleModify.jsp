@@ -114,7 +114,7 @@ var popSchModify= {
 		renderScheduleList: function() {
 			$.when(popSchModify.selectScheduleList()).done(function(result) {
 				var resultList = result.list;
-				console.log(test,resultList);
+				
 				var scheduleListHtml = [];
 				var optionstring = popSchModify.convertTime(popSchModify.params.timeList)
 				

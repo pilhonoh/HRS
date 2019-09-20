@@ -13,12 +13,19 @@
 
 		<div class="wrap">
 
-			<header class="header admin">				
-				<jsp:include page="${JSP}/include/headerAdmin.jsp" />
+			<header class="header">				
+				<jsp:include page="${JSP}/include/header.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
-				
+				<ul class="tab-design">
+					<li rel="tab1"><a href="#none">관리사 등록</a></li>
+					<li class="on" rel="tab2"><a href="#none">관리사 스케쥴 관리</a></li>
+					<li rel="tab3"><a href="#none">예약 정보 변경</a></li>
+					<li rel="tab4"><a href="#none">예약 현황 조회</a></li>
+					<li rel="tab5"><a href="#none">담당자 등록</a></li>
+					<li rel="tab6"><a href="#none">공통코드 관리</a></li>
+				</ul>
 				<div class="sub-tit">
 					<h2>관리사 스케쥴 관리</h2>
 				</div>

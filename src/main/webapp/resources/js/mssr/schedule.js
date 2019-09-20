@@ -61,8 +61,8 @@ var scheduleList = {
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			scheduleList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
-			scheduleList.list.params.toDate = moment().format('YYYYMMDD');
+			scheduleList.list.params.fromDate = moment().format('YYYYMMDD');
+			scheduleList.list.params.toDate = moment().add(1, 'M').format('YYYYMMDD');
 		}
 	},
 	
