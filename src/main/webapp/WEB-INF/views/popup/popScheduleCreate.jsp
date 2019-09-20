@@ -37,9 +37,9 @@
 			<tr id ="tr0" class='trschedule' data-rowid = "">
 				<th>근무 일정</th>
 				<td>
-					<input type="text"  id = "scheduleCreate_start_date" class="datepicker">
+					<input type="text"  id = "scheduleCreate_start_date" class="datepicker startDate">
 					<em class="fromto"> ~ </em>
-					<input type="text" id = "scheduleCreate_end_date" class="datepicker">
+					<input type="text" id = "scheduleCreate_end_date" class="datepicker endDate">
 					<select  data-code-tyl="RVT" data-code-tys="RVTSTART"  id="scheduleCreate_startTime"></select>
 					<em class="fromto"> ~ </em>
 					<select data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime"></select>
@@ -60,7 +60,8 @@
 <script>
 var popSchCreate = {
 		init: function() {
-			$(".datepicker").datepicker();
+			//$(".datepicker").datepicker();
+			initDatepicker();
 			$('#scheduleCreate_enter select[data-code-tyl]').empty(); 
 			loadCodeSelect(undefined, '#scheduleCreate_enter'); //콤보박스 공통코드 세팅
 			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
@@ -220,8 +221,8 @@ var popSchCreate = {
 	
 				    
 				    //datepicker 초기화
-				    $("#scheduleCreate_enter tbody").find('.datepicker').datepicker("destroy").datepicker();
-				    
+				    $("#scheduleCreate_enter tbody").find('.datepicker').datepicker("destroy");//.datepicker();
+				    initDatepicker();
 			   });				
 				
 			}
