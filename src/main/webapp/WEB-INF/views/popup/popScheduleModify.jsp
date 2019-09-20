@@ -40,8 +40,8 @@
 var popSchModify= {
 		init: function() {
 	
-			$('select[data-code-tyl]').empty(); 
-			loadCodeSelect(); //콤보박스 공통코드 세팅	
+			$('#scheduleModify_enter select[data-code-tyl]').empty(); 
+			loadCodeSelect(undefined, '#scheduleModify_enter'); //콤보박스 공통코드 세팅	
 			popSchModify.button.popSaveClickEvent();
 		    popSchModify.button.rowAddClickEvent();			
 		},	
@@ -146,7 +146,7 @@ var popSchModify= {
 						    }
 						});	
                     
-			    	}); 
+			    	}, '#scheduleModify_enter'); 
 
 			});
 		},		//리스트 조회 시 가져온 시간 데이터[ex)1,2,4,5 ...] 를

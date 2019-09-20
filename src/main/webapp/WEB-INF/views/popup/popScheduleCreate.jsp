@@ -61,8 +61,8 @@
 var popSchCreate = {
 		init: function() {
 			$(".datepicker").datepicker();
-			$('.pop-container select[data-code-tyl]').empty(); 
-			loadCodeSelect(undefined, '.pop-container'); //콤보박스 공통코드 세팅
+			$('#scheduleCreate_enter select[data-code-tyl]').empty(); 
+			loadCodeSelect(undefined, '#scheduleCreate_enter'); //콤보박스 공통코드 세팅
 			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 			popSchCreate.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
 			popSchCreate.button.popSaveClickEvent();
