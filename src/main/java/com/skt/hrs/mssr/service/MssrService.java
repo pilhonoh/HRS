@@ -240,16 +240,18 @@ public class MssrService {
 		if( !StringUtil.isEmpty(InsertTime[0]) && InsertTime.length >0) {
 			 param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
 			for (int i = 0 ; i < InsertTime.length; i++) {
-				param.put("resveTime",InsertTime[i]);
-				insertResult = mssrDAO.insertSchedule(param); 
-				
-				chk = mssrDAO.selectResveCheck(param);			            
+		     param.put("resveTime",InsertTime[i]);
+			
+		     chk = mssrDAO.selectResveCheck(param);
 	             if(chk==20){
 	            	 bedUse= bedUse +1;
 				 } 
 	             else if(chk==30){
 					 bedUse= bedUse +1; 
 				 }
+	             
+	            
+				 insertResult = mssrDAO.insertSchedule(param); 
 				if(!(insertResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 } 

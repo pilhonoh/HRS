@@ -199,8 +199,10 @@ var popSchCreate = {
 				$("#scheduleCreate_rowAddBtn").on("click",function(){
 
 					var trCnt =$(".trschedule").length
-				    $clone = $("#tr0").clone(true,true);
-					
+		
+				    if(trCnt >4){return false}
+					$clone = $("#tr0").clone(true,true);
+					$clone.find("th").text("근무시간 "+trCnt);
 					$clone.find('.ui-datepicker-trigger').remove();					
 					$clone.find('.hasDatepicker').removeClass("hasDatepicker");
 				    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
