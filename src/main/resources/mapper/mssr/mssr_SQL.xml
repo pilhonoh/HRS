@@ -39,7 +39,8 @@
 			(SELECT SEXDSTN FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO) AS MSSR_SEXDSTN,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.BED_CODE AND CODE_TYS = A.BLD_CODE) AS BED_NM,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = LAST_STTUS_CODE) AS STTUS_NM,
-			GROUP_CONCAT(A.RESVE_TM ORDER BY RESVE_TM SEPARATOR ',') AS RESVE_TM_LIST
+			 GROUP_CONCAT(A.RESVE_TM ORDER BY RESVE_TM SEPARATOR ',') AS RESVE_TM_LIST,
+		 	 GROUP_CONCAT(A.RESVE_NO ORDER BY A.RESVE_NO SEPARATOR ',') AS RESVE_NO_LIST  
 		FROM resve_sttus A
 		INNER JOIN (
 			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
@@ -105,10 +106,15 @@
 	) C
 	</select>
 	<select id ="selectScheduleDetail" parameterType="map" resultType="hashmap">
-	   SELECT RESVE_DE AS RESVE_DE 
-			 , NCNM AS MSSR_NCNM
-			 ,RESVE_TM AS RESVE_TM
-			 ,RESVE_NO
+        SELECT A.RESVE_DE    AS resveDate 
+			 , B.NCNM        AS mssrName
+			 , A.RESVE_TM    AS resveTime
+			 , A.RESVE_NO    AS resveNo
+             , A.MSSR_EMPNO  AS  mssrEmpno
+             , A.RESVE_EMPNO AS resveEmpno
+             , A.WAIT_EMPNO  AS waitEmpno
+             , A.BED_CODE    AS bedCode
+             , A.BLD_CODE    AS bldCode
 		 FROM RESVE_STTUS A JOIN MASSEUR B 
 		                      ON A.MSSR_EMPNO =B.EMPNO   
 		 WHERE RESVE_DE = #{resveDate}

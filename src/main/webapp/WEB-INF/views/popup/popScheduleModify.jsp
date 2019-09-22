@@ -94,7 +94,7 @@ var popSchModify= {
 					console.log('selectScheduleDetail', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
-						popSchModify.dataList = res.list;
+						popSchModify.dataList.push (res.list);
 						
 					} else {
 						deferred.reject("");
@@ -114,7 +114,7 @@ var popSchModify= {
 		renderScheduleList: function() {
 			$.when(popSchModify.selectScheduleList()).done(function(result) {
 				var resultList = result.list;
-				
+				console.log("select",popSchModify.dataList)
 				var scheduleListHtml = [];
 				var optionstring = popSchModify.convertTime(popSchModify.params.timeList)
 				
@@ -124,7 +124,7 @@ var popSchModify= {
 						scheduleListHtml.push('<td>');
 						scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime"></select>'); 
 						scheduleListHtml.push('<em class="fromto"> ~ </em>');
-						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleModify_endTime"></select>')
+						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  default-str ="9" id="scheduleModify_endTime"></select>')
 				        scheduleListHtml.push('<button class="t-btn cr01" id="scheduleModify_rowAddBtn">추가</button></td></tr>');
 					}
 					else{
@@ -132,8 +132,8 @@ var popSchModify= {
 						scheduleListHtml.push('<td>');
 						scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+i+'"></select>'); 
 						scheduleListHtml.push('<em class="fromto"> ~ </em>');
-						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleModify_endTime'+i+'"></select>')
-						scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(\"tr"+i+"\")' id='scheduleModify_rowAddBtn"+i+"'>삭제</button></td></tr>"); 
+						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  default-str ="9" id="scheduleModify_endTime'+i+'"></select>')
+						scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
 					}
 				}			
 				$('#scheduleBody').append(scheduleListHtml.join(''));
@@ -223,14 +223,20 @@ var popSchModify= {
 			},
 		   rowAddClickEvent:function(){			   
 				$("#scheduleModify_rowAddBtn").on("click",function(){
-
+                    var rowidrest = null;
+				 
+					
 					var trCnt = $(".trscheduleModfiy").length;
-				    $clone = $(".trscheduleModfiy").eq(0).clone();
+				   if(trCnt >4){return false}
+					
+					$clone = $(".trscheduleModfiy").eq(0).clone();
 				    console.log($clone.html());
 				    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
-				    $clone.find(".t-btn").text("삭제").attr({"id":this.id+trCnt,  "onclick": fnRowDelete("tr"+trCnt)});	
+				    $clone.find("th").text("근무시간 "+trCnt);
+				    $clone.find(".t-btn").text("삭제").attr({"onclick": "fnRowDelete(event);"});	
 				    $clone.find("select").each(function(){
-				    	$(this).attr('id',this.id+trCnt)
+				    	$(this).attr({'id':this.id+trCnt , "default-str":((this.name =="endTime" )? "9":"1" ) });
+				    	
 					});				    
 				    
 				    $("#scheduleModify_enter tbody").append( $clone.wrapAll("<div/>").parent().html());
@@ -241,10 +247,18 @@ var popSchModify= {
 		
 }
 
-function fnRowDelete(id){
+function fnRowDelete(){
+javascript:event.target.parentNode.parentNode.remove()
+	  $("#scheduleBody  tr").each(function(index){
+		     rowidrest = this;
+		     if(index>=1){
+		     $(rowidrest).children("th").text("근무시간 "+index)
+		     $(rowidrest).attr({"id":"tr"+index ,"data-rowid":index});
+		     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "scheduleModify_"+ this.name+ index })  
+		     }
+		});
 	
-	$("#"+id ).remove();
-};
+}
 
 function getParams(){
 	var params = [] 
@@ -277,7 +291,7 @@ function getParams(){
     console.log(setTimesheet);
     console.log(defData);
   
-    
+ 
     var diff2 = defData.filter(x => setTimesheet.includes(x));
       
      return{
@@ -307,7 +321,7 @@ $(document).ready(function(){
 	$('#tdBedName').text(data.BED_NM)
 	/* popSchModify.selectScheduleList(); */
 
-    popSchModify.selectScheduleList(); 
+    //popSchModify.selectScheduleList(); 
     popSchModify.renderScheduleList();
 	
 	

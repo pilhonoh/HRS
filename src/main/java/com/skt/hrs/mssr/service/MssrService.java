@@ -156,81 +156,63 @@ public class MssrService {
 	public ResponseResult insertSchedule(DataEntity param) {
 		
 		ResponseResult result = new ResponseResult();
-		String startDate ="";
-		String endDate = "";
-		int startTime = 0;
-		int endTime = 0;
+		DataEntity paramsMap = new DataEntity();
+		ArrayList<HashMap<String, String>> getListItems = (ArrayList<HashMap<String, String>>)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
+		String startDate ="", endDate = "", workDate="";
 		long days = 0;
-		int chk =0 ;
-		int timeDup = 0;
-		int bedUse = 0;
-		
+		int chk =0 , timeDup = 0, bedUse = 0;
+
 	    boolean  insertResult = false;
-        ArrayList list = (ArrayList)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
-        HashMap<String,String > paramsMap = new HashMap<String,String >() ;
-        param.remove("params");
-    	 for (int k = 0; k < list.size(); k++) {
-    		 paramsMap =(HashMap<String, String>) (list.get(k)) ;
-    		 startDate =paramsMap.get("startDate");
-     		 endDate = paramsMap.get("endDate") ;
-     		 startTime = Integer.parseInt(paramsMap.get("startTimeCode")) ;
-     		 endTime =  Integer.parseInt(paramsMap.get("endTimeCode"));
-        	 days = DateUtil.getDateDiff(startDate, endDate );
-             param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
-             param.put("fromDate",startDate.replaceAll("-", "")); 
-             param.put("toDate",endDate.replaceAll("-", ""));  
-           
-             
-             for (int i = 0; i <= days; i++) {
-            	 
-            	String workDate = DateUtil.getDateAdd(startDate,i);
-            	
-            	 if(DateUtil.isWeekend(workDate,"yyyyMMdd")) {
+        for (int i = 0; i < getListItems.size(); i++) {
+        	paramsMap.putAll(getListItems.get(i));
+        	startDate = paramsMap.getString("startDate");
+        	endDate = paramsMap.getString("endDate");
+        	days = DateUtil.getDateDiff(startDate, endDate );
+        	for (int j = 0; j <= days; j++) {
+        		 workDate = DateUtil.getDateAdd(startDate,j);
+        		 if(DateUtil.isWeekend(workDate,"yyyyMMdd")) {
             		 continue;
             	 };
-            	 
-            	 param.put("resveDate",workDate);
-				
-				for (int j = startTime ; j <= endTime; j++) {
-					 param.put("resveTime",j);
-					chk = mssrDAO.selectResveCheck(param);			            
-		            if(chk == 10) { 
-		            	timeDup= timeDup +1; 
-					 }
-		             else if(chk==20)
-					 {
-		            	 bedUse= bedUse +1;
-					 } else if(chk==30){
-						 bedUse= bedUse +1;
-						 timeDup= timeDup +1; 
-					 }
-					
-					
-					insertResult = mssrDAO.insertSchedule(param); 
-					
-					if(!(insertResult)) { 
-						throw new HrsException("error.processFailure", true);
-					 } 		 
-					insertResult = mssrDAO.insertResveHist(param); 
-					if(!(insertResult)) { 
-						throw new HrsException("error.processFailure", true);
-					 } 
-				}	
-			}            
+        		paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
+             	paramsMap.put("fromDate",startDate.replaceAll("-", "")); 
+             	paramsMap.put("toDate",endDate.replaceAll("-", ""));	
+             	paramsMap.put("resveDate",workDate.replaceAll("-", ""));
+             	
+             	chk = mssrDAO.selectResveCheck(paramsMap);			            
+	            if(chk == 10) { 
+	            	timeDup= timeDup +1; 
+				 }
+	             else if(chk==20){
+	            	 bedUse= bedUse +1;
+				 } 
+	             else if(chk==30){
+					 bedUse= bedUse +1;
+					 timeDup= timeDup +1; 
+				 }
+        	 
+        	 
+        	 insertResult = mssrDAO.insertSchedule(paramsMap); 
+			
+			if(!(insertResult)) { 
+				throw new HrsException("error.processFailure", true);
+			 } 		 
+			insertResult = mssrDAO.insertResveHist(paramsMap); 
+			if(!(insertResult)) { 
+				throw new HrsException("error.processFailure", true);
+			 } 
+          }
         }
     	
-    	 if(timeDup >0 && bedUse > 0) {
+    	 if(timeDup >0 || bedUse > 0) {
     		 String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
-    				 Integer.toString(bedUse) ,
-    				 Integer.toString(timeDup)
+    				 Integer.toString(timeDup) ,
+    				 Integer.toString(bedUse)
  			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
     		 throw new HrsException(message);
     	 }
-    	
     	 
 		result.setItemOne(insertResult);
 		// data적용 성공여부
-		
 		return result;
 	}
 	
@@ -250,6 +232,7 @@ public class MssrService {
 	    boolean  insertResult = false;
 	    String[] InsertTime = param.getString("insertTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
 		String[] DeleteTime = param.getString("deleteTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
+		int chk =0 , timeDup = 0, bedUse = 0;
         //HashMap<String,String > paramsMap = new HashMap<String,String >() ;
         param.remove("insertTime");
         param.remove("deleteTime");
@@ -260,6 +243,13 @@ public class MssrService {
 				param.put("resveTime",InsertTime[i]);
 				insertResult = mssrDAO.insertSchedule(param); 
 				
+				chk = mssrDAO.selectResveCheck(param);			            
+	             if(chk==20){
+	            	 bedUse= bedUse +1;
+				 } 
+	             else if(chk==30){
+					 bedUse= bedUse +1; 
+				 }
 				if(!(insertResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 } 
@@ -270,6 +260,13 @@ public class MssrService {
 				 } 
 			}
 		}
+		 if(timeDup >0 || bedUse > 0) {
+    		 String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
+    				 Integer.toString(timeDup) ,
+    				 Integer.toString(bedUse)
+ 			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
+    		 throw new HrsException(message);
+    	 }
 	    //삭제
 		if (!StringUtil.isEmpty(DeleteTime[0]) && DeleteTime.length>0) {
 			param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
@@ -277,7 +274,7 @@ public class MssrService {
 			for (int i = 0 ; i < DeleteTime.length; i++) {
 				 param.put("resveTime",DeleteTime[i]);
 				 Map item = mssrDAO.selectResveItem(param);
-				 param.put("RESVE_NO",item.get("RESVE_NO").toString());
+				 param.put("RESVE_NO",item.get("resveNo").toString());
 				
 				 insertResult = mssrDAO.deleteResve(param); 
 				 
@@ -298,45 +295,41 @@ public class MssrService {
 
 	@Transactional
 	public  ResponseResult deleteResve(DataEntity param) {
-		ResponseResult result = new ResponseResult();
-		//String[] resveNo = param.getString("params").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
-		  ArrayList list = (ArrayList)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
-	      Map resveMap = null;
-	      String strResveNo = "";
-	      String [] resveNo=null;
-		  HashMap<String,String > paramsMap = new HashMap<String,String >() ;
-		  param.remove("params");
-	      boolean updateResult = false;
-		 for (int i = 0; i < list.size(); i++) {
-			 paramsMap =(HashMap<String, String>) (list.get(i)) ;
-		     param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
-			 param.put("resveDate",paramsMap.get("resveDate"));
-			 param.put("mssrEmpno",paramsMap.get("mssrEmpno"));
-			 param.put("bldCode",paramsMap.get("bldCode"));
-			 resveMap = mssrDAO.selectResveItemMultString(param);
-		     strResveNo = (String)resveMap.get("RESVE_NO").toString();
-		     resveNo = strResveNo.split(","); 
-			 if(resveNo.length == 0 && !StringUtil.isEmpty(strResveNo)) 
-			 {
-				throw new HrsException("error.processFailure", true);
-			 }
-		     for (int j = 0; j < resveNo.length; j++) {
-				param.put("RESVE_NO",resveNo[j]);
-				updateResult = mssrDAO.deleteResve(param); 
+		  ResponseResult result = new ResponseResult(); 
+		  DataEntity paramsMap = new DataEntity();
+		  ArrayList<HashMap<String, String>> getListItems = (ArrayList<HashMap<String, String>>)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
+	      boolean updateResult = false;	 
+		    for (int j = 0; j < getListItems.size(); j++) {
+		    	paramsMap.putAll(getListItems.get(j));
+		    	paramsMap.put("regEmpNo", param.getString("regEmpNo"));
+		    	paramsMap.put("canclYn", "Y");
+		    	paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
+		    	paramsMap.put("canclYn","Y");
+				updateResult = mssrDAO.deleteResve(paramsMap); 
 				if(!(updateResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 }	
 				
-				updateResult = mssrDAO.insertResveHist(param); 
+				updateResult = mssrDAO.insertResveHist(paramsMap); 
 				if(!(updateResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 }
-			} 
-		}
+		
+           } 
+
 		result.setItemOne(updateResult);
 		// data적용 성공여부
 		return result;
 	}
 	
+	/*
+	 * public ArrayList<HashMap<String, String>> getMultParam(DataEntity param ,
+	 * String name) { HashMap<String,String> resultItem = new HashMap<String,String
+	 * >(); ArrayList getListItems =
+	 * (ArrayList)JsonUtils.stringToJsonClass(param.getString(name),
+	 * ArrayList.class); ArrayList <HashMap<String, String>> resultList = new
+	 * ArrayList <HashMap<String, String>> for (int i = 0; i < list.size(); i++) {
+	 * result = (HashMap<String,String >) list.get(i); } ; return result ; }
+	 */
 			
 }
