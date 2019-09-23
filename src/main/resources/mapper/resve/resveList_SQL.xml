@@ -48,8 +48,17 @@
 			FROM RESVE_HIST T1
 			INNER JOIN (
 				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-				FROM RESVE_HIST	 
-		        WHERE TARGET_EMPNO = #{empNo}
+				FROM (
+					SELECT A.*
+					FROM RESVE_HIST A
+					INNER JOIN (
+					SELECT RESVE_NO
+					FROM RESVE_HIST
+					WHERE TARGET_EMPNO = #{empNo}
+					GROUP BY RESVE_NO
+					) B
+					ON A.RESVE_NO = B.RESVE_NO
+		        ) T 		        
 				GROUP BY RESVE_NO
 			) T2
 			ON T1.RESVE_NO = T2.RESVE_NO
