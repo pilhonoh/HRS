@@ -160,8 +160,8 @@
       <select id ="selectResveCheck" parameterType="map"  resultType="hashmap">
 		  SELECT IFNULL( MAX(CASE  WHEN  A.MSSR_EMPNO  = #{mssrEmpno} THEN 10 ELSE 0 END) 
 		        + MAX(CASE  WHEN  A.BED_CODE  = #{bedCode} THEN  20 ELSE 0 END),0) AS RESVE_CHECK 
-		          ,IFNULL(MIN(A.RESVE_DE),'')  AS START_DATE
-                  ,IFNULL(MAX(A.RESVE_DE),'')  AS END_DATE
+		          ,IFNULL(MIN(A.RESVE_DE),#{resveDate})  AS START_DATE
+                  ,IFNULL(MAX(A.RESVE_DE),#{resveDate})  AS END_DATE
                   ,IFNULL(A.BED_CODE,'') AS BED_CODE
                   ,IFNULL(A.RESVE_TM,'')   AS  RESVE_TM
                   ,IFNULL((SELECT NCNM FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO),'') AS MSSR_NCNM

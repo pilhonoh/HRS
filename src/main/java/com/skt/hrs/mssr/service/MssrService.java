@@ -389,7 +389,7 @@ public class MssrService {
 	    Map result = mssrDAO.selectResveCheck(param);
 	    refResult.put("RESVE_CHECK" ,result.get("RESVE_CHECK").toString());
 	    if (result.get("RESVE_CHECK").toString()!= "0") {
-	       refResult.put("END_DATE" ,result.get("END_DATE").toString());
+	       refResult.put("END_DATE" , DateUtil.yyyymmdd2HumanReadable(result.get("END_DATE").toString()));		
 	       refResult.put("MSSR_NCNM" ,  result.get("MSSR_NCNM").toString());
 	       refResult.put("BED_CODE" ,result.get("BED_CODE").toString());
 	    }
