@@ -162,12 +162,15 @@ public class MssrService {
 		
 		ResponseResult result = new ResponseResult();
 		DataEntity paramsMap = new DataEntity();
+		DataEntity chkDataMap = new DataEntity();
 		ArrayList<HashMap<String, String>> getListItems = (ArrayList<HashMap<String, String>>)JsonUtils.stringToJsonClass(param.getString("params"), ArrayList.class);
 		String startDate ="", endDate = "", workDate="";
 		long days = 0;
 		int chk =0 , timeDup = 0, bedUse = 0;
-
-	    boolean  insertResult = false;
+		paramsMap.putAll(getListItems.get(0));
+		chkDataMap.put("RESVE_CHECK","");
+		chkDataMap.put("START_DATE",paramsMap.getString("startDate"));
+		boolean  insertResult = false;
         for (int i = 0; i < getListItems.size(); i++) {
         	paramsMap.putAll(getListItems.get(i));
         	startDate = paramsMap.getString("startDate");
@@ -184,7 +187,8 @@ public class MssrService {
              	paramsMap.put("toDate",endDate.replaceAll("-", ""));	
              	paramsMap.put("resveDate",workDate.replaceAll("-", ""));
              	
-             	chk = mssrDAO.selectResveCheck(paramsMap);			            
+             	dupChk(paramsMap , chkDataMap);
+             	chk = chkDataMap.getInt("RESVE_CHECK");
 	            if(chk == 10) { 
 	            	timeDup= timeDup +1; 
 				 }
@@ -209,14 +213,23 @@ public class MssrService {
           }
         }
     	
-    	 if(timeDup >0 || bedUse > 0) {
-    		 String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
-    				 Integer.toString(timeDup) ,
-    				 Integer.toString(bedUse)
+    	 if(timeDup >0) {
+    		 String message = messageSource.getMessage("error.mssr.duplicateDate", new String[] {
+    				 chkDataMap.getString("START_DATE"),
+    				 chkDataMap.getString("END_DATE"),
+    				
  			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
     		 throw new HrsException(message);
+    	 }else if(bedUse > 0) {
+    		 String message = messageSource.getMessage("error.mssr.duplicateBed", new String[] {
+    				 chkDataMap.getString("END_DATE"),
+    				 chkDataMap.getString("MSSR_NCNM"),
+    				 chkDataMap.getString("BED_CODE"),
+    				
+ 			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
+    		 throw new HrsException(message); 
     	 }
-    	 
+    	  
 		result.setItemOne(insertResult);
 		// data적용 성공여부
 		return result;
@@ -236,19 +249,24 @@ public class MssrService {
 	public ResponseResult scheduleModify(DataEntity param) {
 		ResponseResult result = new ResponseResult();
 	    boolean  insertResult = false;
+	    DataEntity chkDataMap = new DataEntity();
 	    String[] InsertTime = param.getString("insertTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
 		String[] DeleteTime = param.getString("deleteTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
 		int chk =0 , timeDup = 0, bedUse = 0;
         //HashMap<String,String > paramsMap = new HashMap<String,String >() ;
         param.remove("insertTime");
         param.remove("deleteTime");
-       
+        chkDataMap.put("RESVE_CHECK","");
+		chkDataMap.put("START_DATE",param.getString("resveDate"));
+		chkDataMap.put("MSSR_EMPNO","");
+		chkDataMap.put("BED_CODE","");
 		if( !StringUtil.isEmpty(InsertTime[0]) && InsertTime.length >0) {
 			 param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
 			for (int i = 0 ; i < InsertTime.length; i++) {
 		     param.put("resveTime",InsertTime[i]);
 			
-		     chk = mssrDAO.selectResveCheck(param);
+		        dupChk(param , chkDataMap);
+             	chk = chkDataMap.getInt("RESVE_CHECK");
 	             if(chk==20){
 	            	 bedUse= bedUse +1;
 				 } 
@@ -268,13 +286,22 @@ public class MssrService {
 				 } 
 			}
 		}
-		 if(timeDup >0 || bedUse > 0) {
-    		 String message = messageSource.getMessage("error.duplicatMssrSchedule", new String[] {
-    				 Integer.toString(timeDup) ,
-    				 Integer.toString(bedUse)
- 			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
-    		 throw new HrsException(message);
-    	 }
+		if(timeDup >0) {
+   		 String message = messageSource.getMessage("error.mssr.duplicateDate", new String[] {
+   				 chkDataMap.getString("START_DATE"),
+   				 chkDataMap.getString("END_DATE"),
+   				
+			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
+   		 throw new HrsException(message);
+   	 }else if(bedUse > 0) {
+   		 String message = messageSource.getMessage("error.mssr.duplicateBed", new String[] {
+   				 chkDataMap.getString("END_DATE"),
+   				 chkDataMap.getString("MSSR_NCNM"),
+   				 chkDataMap.getString("BED_CODE"),
+   				
+			}, Locale.forLanguageTag(param.getString("_ep_locale")));	
+   		 throw new HrsException(message); 
+   	 }
 	    //삭제
 		if (!StringUtil.isEmpty(DeleteTime[0]) && DeleteTime.length>0) {
 			param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
@@ -358,6 +385,16 @@ public class MssrService {
 	  
   }
 	
-
+  public void dupChk(DataEntity param , DataEntity refResult) {
+	    Map result = mssrDAO.selectResveCheck(param);
+	    refResult.put("RESVE_CHECK" ,result.get("RESVE_CHECK").toString());
+	    if (result.get("RESVE_CHECK").toString()!= "0") {
+	       refResult.put("END_DATE" ,result.get("END_DATE").toString());
+	       refResult.put("MSSR_NCNM" ,  result.get("MSSR_NCNM").toString());
+	       refResult.put("BED_CODE" ,result.get("BED_CODE").toString());
+	    }
+	    
+  }
+  
 			
 }
