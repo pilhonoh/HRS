@@ -10,6 +10,9 @@ var resveConfirm = {
 			$('[data-code-tyl=BLD] option[value='+resveConfirm.data.bldCode+']')
 				.attr('selected', true);	// default사옥선택
 			
+			//default 사옥이 케어가능한 사옥이 아닌경우
+			resveConfirm.data.bldCode = $('select[data-code-tyl=BLD] option:selected').val();
+			
 			resveConfirm.fillBeds(resveConfirm.data.bldCode)	// bed목록 조회
 				.then(function(){
 					$('.month-calendar .today span').trigger('click');

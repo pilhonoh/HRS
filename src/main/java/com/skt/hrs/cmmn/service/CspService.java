@@ -16,6 +16,7 @@ import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.contants.CspContents;
 import com.skt.hrs.cmmn.dao.CspDAO;
 import com.skt.hrs.cmmn.vo.CspVo;
+import com.skt.hrs.utils.DateUtil;
 
 
 
@@ -52,36 +53,18 @@ public class CspService {
 			mssg = messageSource.getMessage(messageCode, null, locale);
 	    	
 		}else if (messageCode.equals("csp.sms.adminResveCancel")) {
-			String resveDay = param.get("RESVE_DE").toString();
-			try {		
-				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
-				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
-				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
-			}catch (Exception e) {}
-			
+			String resveDay = DateUtil.yyyymmdd2HumanReadable(param.get("RESVE_DE").toString());			
 			mssg = messageSource.getMessage(messageCode, new String[] {
 				resveDay
 			}, locale);
 		
 		}else if (messageCode.equals("csp.sms.adminWaitCancel")) { 
-			String resveDay = param.get("RESVE_DE").toString();
-			try {		
-				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
-				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
-				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
-			}catch (Exception e) {}
-			
+			String resveDay = DateUtil.yyyymmdd2HumanReadable(param.get("RESVE_DE").toString());
 			mssg = messageSource.getMessage(messageCode, new String[] {
 				resveDay
 			}, locale);
 		}else{
-			String resveDay = param.get("RESVE_DE").toString();
-			try {		
-				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
-				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
-				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
-			}catch (Exception e) {}
-			
+			String resveDay = DateUtil.yyyymmdd2HumanReadable(param.get("RESVE_DE").toString());						
 			mssg = messageSource.getMessage(messageCode, new String[] {
 				resveDay,
 				param.get("RESVE_TM_STR").toString()

@@ -119,9 +119,10 @@
 			ON HIST.REG_EMPNO = PRSN.EMPNO
 			LEFT JOIN CHARGER ADM
 			ON HIST.REG_EMPNO = ADM.EMPNO
-			WHERE RESVE_NO = #{resveNo}		  
+			WHERE RESVE_NO = #{resveNo}
+			AND STTUS_CODE != 'STS00' <!-- 근무입력 제외 --> 		  
 		) T
-		ORDER BY REG_DT
+		ORDER BY REG_DT DESC	<!-- 최신순 -->
 	</select>
 	
 </mapper>

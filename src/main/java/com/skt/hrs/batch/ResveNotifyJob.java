@@ -12,7 +12,6 @@ import org.springframework.context.MessageSource;
 import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.resve.service.ResveStatusService;
-import com.skt.hrs.utils.DateUtil;
 
 public class ResveNotifyJob {
 
@@ -54,7 +53,7 @@ public class ResveNotifyJob {
 				logger.info("CSP테이블 INSERT 결과 : "+ insertResult.getItem());
 			}
 		}catch(Exception e) {
-			logger.error("{} Reservation Notify Job Error Message : {} ", BlacklistFilterJob.class.getSimpleName(), e.getMessage());
+			logger.error("{} Reservation Notify Job Error Message : {} ", ResveNotifyJob.class.getSimpleName(), e.getMessage());
 		}
 	}
 }

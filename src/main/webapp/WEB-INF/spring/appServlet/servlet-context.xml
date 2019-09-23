@@ -60,6 +60,7 @@
 			<beans:ref bean="loginInterceptor" />
 		</mvc:interceptor>
 		<!-- 예약관련 권한체크 -->
+		<!-- 
 		<mvc:interceptor>
 			<mvc:mapping path="/resve/**" />
 			<mvc:mapping path="/confirm/**" />
@@ -67,7 +68,8 @@
 			<mvc:exclude-mapping path="/error/**" />	
 			<mvc:exclude-mapping path="/cmmn/**" />		
 			<beans:ref bean="resveInterceptor" />
-		</mvc:interceptor>
+		</mvc:interceptor> 
+		-->
 		<!-- 담당자권한체크 -->
 		<mvc:interceptor>
 			<mvc:mapping path="/mssr/*" />
