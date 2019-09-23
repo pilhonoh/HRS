@@ -61,8 +61,8 @@ var scheduleList = {
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			scheduleList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
-			scheduleList.list.params.toDate = moment().format('YYYYMMDD');
+			scheduleList.list.params.fromDate = moment().format('YYYYMMDD');
+			scheduleList.list.params.toDate = moment().add(1, 'M').format('YYYYMMDD');
 		}
 	},
 	
@@ -195,6 +195,7 @@ var scheduleList = {
 					scheduleListHtml.push('	<td>' + resveDt + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
+					scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
 					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
 					scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
@@ -248,15 +249,6 @@ var scheduleList = {
 				}
 				
 				if (firstNum != (parseInt(i)+1) && ((i+1) != tListLength)) {
-	
-					/*
-					console.log("firstNum: " + firstNum);
-					console.log("countNum: " + countNum);
-					console.log("lastNum: " + lastNum);
-					console.log("i: " + i);
-					console.log("tListLength: " + tListLength);
-					console.log("tList[i]: " + tList[i]);
-					*/
 					
 					if ((countNum+i) < tList[i]) {
 						returnTime += '~' + getRealTime(tList[i-1]).end + '<br/>' + getRealTime(tList[i]).start;
@@ -462,10 +454,19 @@ var scheduleList = {
 			  
 			  $("button#deleteBtn").on('click',function(){
 				  var params = [] ;
+				  var data = null;
+				  var resveNoSplit = null;
 				  $('tbody#scheduleList input:checkbox:checked').each(function(){
 
-					  var data = scheduleList.list.getRowData($(this).val());
-					  params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE});
+					  data = scheduleList.list.getRowData($(this).val())
+					  console.log( 'data',data);
+					  console.log( 'data',data);
+					  resveNoSplit = data.RESVE_NO_LIST.split(",")
+					  console.log( 'resv_no',resveNoSplit.length);
+					 for (var i = 0; i < resveNoSplit.length; i++) {
+						 params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE , RESVE_NO:resveNoSplit[i]});	
+					 }
+					 
 				  });
 				  
 				  if(params.length == 0){
@@ -473,13 +474,13 @@ var scheduleList = {
 					  return false;
 				  }
 				  confirmPopup('총' +params.length+ '건을 삭제하시겠습니까?', function(){					  					
-					  $.ajax({
+					$.ajax({
 							url: ROOT + '/mssr/scheduleDelete',
 							type: 'POST',
 							data:{params:JSON.stringify(params)}  ,
 							success : function(res){
 								console.log('delete',res);				
-								scheduleList.button.listBtnClickEvent();
+								scheduleList.list.renderScheduleList();
 								alertPopup('삭제되었습니다.');
 							},
 							error : function(err) {

@@ -13,12 +13,19 @@
 
 		<div class="wrap">
 
-			<header class="header admin">				
-				<jsp:include page="${JSP}/include/headerAdmin.jsp" />
+			<header class="header">				
+				<jsp:include page="${JSP}/include/header.jsp" />
 			</header><!-- //header -->
 
 			<div class="content">
-				
+				<ul class="tab-design">
+					<li rel="tab1"><a href="#none">관리사 등록</a></li>
+					<li class="on" rel="tab2"><a href="#none">관리사 스케쥴 관리</a></li>
+					<li rel="tab3"><a href="#none">예약 정보 변경</a></li>
+					<li rel="tab4"><a href="#none">예약 현황 조회</a></li>
+					<li rel="tab5"><a href="#none">담당자 등록</a></li>
+					<li rel="tab6"><a href="#none">공통코드 관리</a></li>
+				</ul>
 				<div class="sub-tit">
 					<h2>관리사 스케쥴 관리</h2>
 				</div>
@@ -38,9 +45,9 @@
 								<tr>
 									<th><strong class="stit">기간</strong></th>
 									<td>
-										<input type="text" class="datepicker" id="from_date">
+										<input type="text" class="datepicker startDate" id="from_date">
 										<em class="fromto"> ~ </em>
-										<input type="text" class="datepicker" id="to_date">
+										<input type="text" class="datepicker endDate" id="to_date">
 									</td>
 									<th><strong class="stit">사옥</strong></th>
 									<td>
@@ -52,7 +59,7 @@
 										<select style="width:120px;" id="mssrCombo">
 											<option value="">관리사</option>
 										</select>
-									</td>
+									</td>									
 								</tr>
 							</tbody>
 						</table>
@@ -75,6 +82,7 @@
 						<col style="width:15%;">
 						<col>
 						<col style="width:15%;">
+						<col style="width:70px;">
 						<col style="width:15%;">
 						<col style="width:15%;">
 						<col style="width:15%;">
@@ -85,13 +93,14 @@
 							<th>근무날짜</th>
 							<th>사옥</th>
 							<th>관리사</th>
+							<th>베드</th>
 							<th>성별</th>
 							<th>근무시간</th>
 							<th>수정</th>
 						</tr>
 					</thead>
 					<tbody id="scheduleList">
-						<tr>
+						<!-- <tr>
 							<td><input type="checkbox"></td>
 							<td>2019-08-21</td>
 							<td>티타워</td>
@@ -135,7 +144,7 @@
 							<td>남</td>
 							<td>09:30 ~ 11:00</td>
 							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 

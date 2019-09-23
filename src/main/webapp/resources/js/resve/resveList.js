@@ -81,7 +81,7 @@ var resveList = {
 		//목록 조회 시 사용하는 파라미터
 		params: {
 			pageNo: 1, //조회할 페이지 번호
-			rowPerPage: 6, //한 페이지 당 조회할 ROW 수
+			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
 			fromDate: '', //조회 시작 날짜
 			toDate: '', //조회 끝 날짜
 			statusCode: '', //상태

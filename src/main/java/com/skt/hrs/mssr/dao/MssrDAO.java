@@ -154,8 +154,30 @@ public class MssrDAO {
 	public Map selectResveItem(DataEntity param) {
 		return sqlSession.selectOne("mssrMapper.selectScheduleDetail", param);
 	}
-	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 일괄삭제 예약번호 조회
+	 * @작성일 : 2019.09.20
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return RESVE_NO,RESVE_NO.... 문자열 JAVA SPLIT 처리사용
+	 * @변경이력 :
+	 */
 	public Map selectResveItemMultString(DataEntity param) {
 		return sqlSession.selectOne("mssrMapper.selectResveItemMultString", param);
 	}
+	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴 중복 예약 체크 
+	 * @작성일 : 2019.09.20
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return 10: 에약일 시간관리시 예약여부 , 20:예약일 시간 BED 사용여부 
+	 * @변경이력 :
+ 	 */
+	public int selectResveCheck(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectResveCheck", param);
+	}
+	
 }

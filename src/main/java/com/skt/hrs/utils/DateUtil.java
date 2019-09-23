@@ -122,6 +122,35 @@ public class DateUtil {
 	
 	/**
 	 * 
+	 * @설명 : 주말여부 
+	 * @작성일 : 2019.09.20
+	 * @작성자 : P149365
+	 * @param yyyymmmdd
+	 * @param format
+	 * @return boolean
+	 * @변경이력 :
+	 */
+	public static boolean isWeekend(String yyyymmmdd, String format) {
+		
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat(StringUtil.isEmpty(format) ? "yyyyMMdd" : format) ;
+		    Date nDate = dateFormat.parse(yyyymmmdd) ;
+		     
+		    Calendar cal = Calendar.getInstance() ;
+		    cal.setTime(nDate);
+		     
+		    int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
+		    
+		    return dayNum == 1 || dayNum == 7;
+		}catch(Exception e) {
+			throw new HrsException("invalid date");
+		}
+	     
+	    
+	}
+	
+	/**
+	 * 
 	 * @설명 :  일자 계산  
 	 * @작성일 : 2019.09.15
 	 * @작성자 : P150113

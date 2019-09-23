@@ -1,13 +1,5 @@
 $(function(){				
 
-	//include header
-	//$('.header').load("../include/header.html", function(){
-	//});
-
-	//include header
-	//$('.header.admin').load("../include/header_admin.html", function(){
-	//});
-
 	// 달력UI
 	$.datepicker.setDefaults({
 		showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
@@ -25,33 +17,15 @@ $(function(){
 		showButtonPanel: true,
 		currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
 		closeText: '닫기',  // 닫기 버튼 패널
+		showMonthAfterYear: true,
+		beforeShowDay: function(date){
+			// 주말 선택불가
+			var day = date.getDay();
+			return [(day != 0 && day != 6)];
+		}	
 	});	
 
-	$(".datepicker").datepicker();
-
-//	$('body').on('focus',".datepicker", function(){
-//	    $(this).datepicker({
-//			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-//			buttonImage: IMG + "/common/ico_date.png", // 버튼 이미지.
-//			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
-//			changeMonth: true ,
-//			changeYear: true,
-//			nextText: '다음 달', // next 아이콘의 툴팁.
-//			prevText: '이전 달', // prev 아이콘의 툴팁.
-//			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-//			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-//			dayNames: ['일','월','화','수','목','금','토'],
-//			dayNamesShort: ['일','월','화','수','목','금','토'],
-//			dayNamesMin: ['일','월','화','수','목','금','토'],
-//			showButtonPanel: true,
-//			currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
-//			closeText: '닫기',  // 닫기 버튼 패널
-//		})
-//	});
-	
-	//include header
-	//$('.footer').load("../include/footer.html", function(){
-	//});
+	initDatepicker();
 	
 	$.ajaxSetup({
 		dataFilter: function(data,type){
@@ -61,7 +35,14 @@ $(function(){
 				if(json.status == 200){		
 					return data;
 				}else{
-					alertPopup(json.message);
+					alertPopup(json.message, function(){
+						try{
+							resveStatus.table.refresh();
+							resveList.list.renderResveList();
+							scheduleList.list.renderScheduleList();
+						}catch(err){}
+						
+					});
 					if(json.status == 403){
 						location.href = '/error/403';
 					}
@@ -79,6 +60,24 @@ $(function(){
 	});
 	moment.locale('en');
 });
+
+function initDatepicker(){
+	$(".startDate").each(function(i,picker){
+		$(picker).datepicker({        
+	        onSelect: function(selected) {
+	          $(picker).parents('td:eq(0)').find(".endDate").datepicker("option","minDate", selected);
+	        }
+	    })
+	});
+	
+	 $(".endDate").each(function(i,picker){
+		 $(picker).datepicker({        
+			 onSelect: function(selected, element) {
+	        	$(picker).parents('td:eq(0)').find(".startDate").datepicker("option","maxDate", selected);
+	        }
+	    });
+	 })
+}
 
 //layer popup 
 function e_layer_pop01(id) {

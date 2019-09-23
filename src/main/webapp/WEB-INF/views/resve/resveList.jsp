@@ -45,9 +45,9 @@
 								<tr>
 									<th><strong class="stit">기간</strong></th>
 									<td>
-										<input type="text" class="datepicker" id="from_date">
+										<input type="text" class="datepicker startDate" id="from_date">
 										<em class="fromto"> ~ </em>
-										<input type="text" class="datepicker" id="to_date">
+										<input type="text" class="datepicker endDate" id="to_date">
 									</td>
 									<th><strong class="stit">상태</strong></th>
 									<td>

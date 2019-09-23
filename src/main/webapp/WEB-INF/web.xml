@@ -74,6 +74,11 @@
 	</listener> 
 	-->
 	
+	<!-- URL JSESSIONID 제거 -->
+	<session-config>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+	
 	<!-- 모든 jsp에 include -->
 	<jsp-config>
 		<jsp-property-group>
