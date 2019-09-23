@@ -50,7 +50,12 @@ public class CspService {
 		
 		// 케어 30분전 알림
 		if(messageCode.equals("csp.sms.resveNotify")) {
-			mssg = messageSource.getMessage(messageCode, null, locale);
+			//헬스케어 {0} {1}베드 시작 30분 전입니다.도착 후 본인 확인 바랍니다
+			mssg =  messageSource.getMessage("csp.sms.resveNotify", new String[] {				
+					param.get("BLD_NM").toString(),
+					param.get("BED_NM").toString()
+			}, locale);
+			//mssg = messageSource.getMessage(mssg, null, locale);
 	    	
 		}else if (messageCode.equals("csp.sms.adminResveCancel")) {
 			String resveDay = DateUtil.yyyymmdd2HumanReadable(param.get("RESVE_DE").toString());			
