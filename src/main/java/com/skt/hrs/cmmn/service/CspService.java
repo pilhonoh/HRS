@@ -63,17 +63,6 @@ public class CspService {
 				resveDay
 			}, locale);
 		
-		}else if (messageCode.equals("csp.sms.adminResveCancelinfo")) { 
-			String resveDay = param.get("RESVE_DE").toString();
-			try {		
-				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
-				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
-				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
-			}catch (Exception e) {}
-			
-			mssg = messageSource.getMessage(messageCode, new String[] {
-				resveDay
-			}, locale);
 		}else if (messageCode.equals("csp.sms.adminWaitCancel")) { 
 			String resveDay = param.get("RESVE_DE").toString();
 			try {		
@@ -84,18 +73,6 @@ public class CspService {
 			
 			mssg = messageSource.getMessage(messageCode, new String[] {
 				resveDay
-			}, locale);
-		}else if (messageCode.equals("csp.sms.adminWaitCancelInfo")) { 
-			String resveDay = param.get("RESVE_DE").toString();
-			try {		
-				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
-				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
-				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
-			}catch (Exception e) {}
-			
-			mssg = messageSource.getMessage(messageCode, new String[] {
-					resveDay,
-					param.get("RESVE_TM_STR").toString()
 			}, locale);
 		}else{
 			String resveDay = param.get("RESVE_DE").toString();
