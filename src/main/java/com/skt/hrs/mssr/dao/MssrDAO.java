@@ -156,6 +156,20 @@ public class MssrDAO {
 	}
 	/**
 	 * 
+	 * @설명 : 관리사 관리화면 SMS 정보 
+	 * @작성일 : 2019.09.05
+	 * @작성자 : LEE.J.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public Map selectSmsInfoGet(DataEntity param) {
+		return sqlSession.selectOne("mssrMapper.selectSmsInfoGet", param);
+	}
+	
+	
+	/**
+	 * 
 	 * @설명 : 관리사 스케쥴 일괄삭제 예약번호 조회
 	 * @작성일 : 2019.09.20
 	 * @작성자 : LEE.Y.H

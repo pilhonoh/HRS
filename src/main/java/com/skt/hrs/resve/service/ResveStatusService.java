@@ -157,22 +157,9 @@ public class ResveStatusService {
 			throw new HrsException("error.completeResve", true);	//이미 완료된 예약입니다.
 		}
 		
-		// 블랙리스트 확인
-		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("resveEmpno"));
-		
-		
-		param.put("resveDe", resveItem.get("RESVE_DE"));
-		param.put("nextResveTm", DateUtil.getNextResveTm());
-		Map dayCount = resveStatusDAO.selectDayCount(param);
-		
-		// 금일 예약건이 존재하는경우
-		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
-			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
-		}
-		
 		// 상태체크
 		if(!StringUtil.isEmpty((String) resveItem.get("RESVE_EMPNO"))) {				
-			throw new HrsException("error.notAvailable", true);
+			throw new HrsException("error.notAvailableResve", true);	// 예약할 수 없는 상태입니다.
 		}		
 		// 시간체크 (현재시간<= 예약시간-20분)
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
@@ -182,8 +169,20 @@ public class ResveStatusService {
 		// 성별체크
 		if(resveItem.get("MSSR_SEXDSTN").equals("F")	// 관리사가 여성이고 
 				&& param.get("resveSexdstn").equals("M")) {		// 구성원이 남성이면 불가
-			throw new HrsException("error.notAvailable", true);
+			throw new HrsException("error.notAvailableMssr", true);		// 해당관리사는 예약/대기할 수 없습니다.
 		}
+		
+		// 금일 예약건이 존재하는경우
+		param.put("resveDe", resveItem.get("RESVE_DE"));
+		param.put("nextResveTm", DateUtil.getNextResveTm());
+		Map dayCount = resveStatusDAO.selectDayCount(param);
+				
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
+			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
+		}
+		
+		// 블랙리스트 확인
+		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("resveEmpno"));
 		
 		/*****************************
 		 *  입력
@@ -246,22 +245,12 @@ public class ResveStatusService {
 			throw new HrsException("error.completeResve", true);	//이미 완료된 예약입니다.
 		}
 		
-		// 블랙리스트 확인
-		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("waitEmpno"));
-				
-		param.put("resveDe", resveItem.get("RESVE_DE"));
-		param.put("nextResveTm", DateUtil.getNextResveTm());
-		Map dayCount = resveStatusDAO.selectDayCount(param);
-		
-		// 금일 예약건이 존재하는경우
-		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {		
-			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
-		}
-		
-		// 상태체크
-		if(!StringUtil.isEmpty((String) resveItem.get("WAIT_EMPNO"))) {
-			throw new HrsException("error.notAvailable", true);
+		// 상태체크		
+		if(!StringUtil.isEmpty((String) resveItem.get("WAIT_EMPNO")) || // 대기자가 존재하거나
+			StringUtil.isEmpty((String) resveItem.get("RESVE_EMPNO"))) { // 예약자가 비어있는경우 (예약취소) 							
+			throw new HrsException("error.notAvailableWait", true);
 		}		
+		
 		// 시간체크 (현재시간<= 예약시간-20분)
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
 		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
@@ -271,8 +260,22 @@ public class ResveStatusService {
 		// 성별체크
 		if(resveItem.get("MSSR_SEXDSTN").equals("F")	// 관리사가 여성이고 
 				&& param.get("waitSexdstn").equals("M")) {		// 구성원이 남성이면 불가
-			throw new HrsException("error.notAvailable", true);
+			throw new HrsException("error.notAvailableMssr", true);		//해당관리사는 예약/대기할 수 없습니다.
 		}
+		
+		// 블랙리스트 확인
+		checkBlacklist(resveItem.get("RESVE_DE").toString(), param.getString("waitEmpno"));
+
+		// 금일 예약건이 존재하는경우		
+		param.put("resveDe", resveItem.get("RESVE_DE"));
+		param.put("nextResveTm", DateUtil.getNextResveTm());
+		Map dayCount = resveStatusDAO.selectDayCount(param);
+
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {		
+			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
+		}
+		
+		
 		
 		/*****************************
 		 *  입력
@@ -323,6 +326,9 @@ public class ResveStatusService {
 		
 		Map resveItem = resveStatusDAO.selectResveItem(param);
 		
+		/*****************************
+		 *  VALIDATION
+		 ****************************/
 		if(resveItem == null)
 			throw new HrsException("error.invalidRequest", true);
 		
@@ -338,19 +344,15 @@ public class ResveStatusService {
 			throw new HrsException("error.canNotSuccessionCancel", true);	//승계된 예약은 취소하실 수 없습니다.
 		}
 		
+		// 시간체크
+		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
+		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
+			throw new HrsException("error.over20min", true);
+		}
 		
 		
 		// 예약취소
 		if(param.getString("cancelGbn").equals(ResveStatusConst.VIEWSTATUS.RESVE_COMPT.toString())) {					
-			
-			/*****************************
-			 *  VALIDATION
-			 ****************************/
-			// 시간체크
-			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-			if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
-				throw new HrsException("error.over20min", true);
-			}
 			
 			
 			//대기자가 있다면 예약승계 (대기중인 구성원을 예약상태로 변경)
@@ -451,10 +453,13 @@ public class ResveStatusService {
 			 *  VALIDATION
 			 ****************************/
 			// 시간체크
+			/*
 			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
 			if(DateUtil.isPast(resveDt)) {
 				throw new HrsException("error.notAvailable", true);
 			}
+			*/
+			
 			
 			/*****************************
 			 *  입력
