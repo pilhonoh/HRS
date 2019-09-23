@@ -29,6 +29,7 @@ var resveStatus = {
 		resveStatus.fillBeds(e.target.value)
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
+				$('[data-code-tyl=BLD]').trigger('blur');
 			})
 	},
 	// 해당사옥의 bed목록 조회

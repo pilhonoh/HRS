@@ -23,7 +23,10 @@ var resveConfirm = {
 		$('#btnConfirm').on('click', resveConfirm.pop.confirm);
 		$('[data-code-tyl=BLD]').on('change', resveConfirm.bldOnChange);	
 		$('#txtResveEmpno').on('keypress', function(e){
-			if(e.keyCode == 13) resveConfirm.pop.confirm();
+			if(e.keyCode == 13) {
+				resveConfirm.pop.confirm();
+				$('#txtResveEmpno').trigger('blur');	// 입력창 포커스 제거
+			}
 		});
 		
 	},
@@ -40,6 +43,7 @@ var resveConfirm = {
 		resveConfirm.fillBeds(e.target.value)
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
+				$('[data-code-tyl=BLD]').trigger('blur');	//ie에서 select가 선택된 상태 해지
 			})
 	},
 	// 해당사옥의 bed목록 조회
