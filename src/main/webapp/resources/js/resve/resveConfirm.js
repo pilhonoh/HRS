@@ -36,7 +36,7 @@ var resveConfirm = {
 	},
 	// 사옥변경 이벤트 리스너
 	bldOnChange : function(e){
-		
+		resveConfirm.data.bldCode = e.target.value;
 		resveConfirm.fillBeds(e.target.value)
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
