@@ -122,6 +122,7 @@
 		   <if test='resveTime !=null  and resveTime != ""' >
 		   AND RESVE_TM = #{resveTime}
 		   AND CANCL_YN ='N'
+		   
 		   </if>
 	</select>
      <select id ="selectResveItemMultString" parameterType="map" resultType="hashmap">
@@ -165,7 +166,20 @@
 		         AND BLD_CODE = #{bldCode}
 		         AND  CANCL_YN = 'N'
      </select>
-
      
-     
+   <select id="selectSmsInfoGet" parameterType="map" resultType="hashmap">
+     SELECT A.RESVE_NO as RESVE_NO 
+          , A.RESVE_DE as RESVE_DE
+          , IFNULL(A.RESVE_EMPNO,'')  as RESVE_EMPNO
+          , IFNULL(A.WAIT_EMPNO,'')  as WAIT_EMPNO
+          , A.RESVE_TM    as RESVE_TM
+          , B.CODE_NM     as RESVE_TM_STR
+          ,C.CODE_NM   AS BLD_NM
+          ,D.CODE_NM   AS BED_NM
+   FROM RESVE_STTUS A 
+   JOIN  CMMN_CODE B ON A.RESVE_TM = B.CODE AND CODE_TYL ='RVT'
+   JOIN  CMMN_CODE C ON A.BLD_CODE = C.CODE AND C.CODE_TYL ='BLD'
+   JOIN  CMMN_CODE D ON A.BED_CODE = D.CODE AND A.BLD_CODE = D.CODE_TYS AND D.CODE_TYL ='BED'
+  WHERE RESVE_NO = #{RESVE_NO}  ;
+ </select>    
 </mapper>

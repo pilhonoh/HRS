@@ -50,7 +50,8 @@ public class CspService {
 		// 케어 30분전 알림
 		if(messageCode.equals("csp.sms.resveNotify")) {
 			mssg = messageSource.getMessage(messageCode, null, locale);
-		}else {
+	    	
+		}else if (messageCode.equals("csp.sms.adminResveCancel")) {
 			String resveDay = param.get("RESVE_DE").toString();
 			try {		
 				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
@@ -59,8 +60,52 @@ public class CspService {
 			}catch (Exception e) {}
 			
 			mssg = messageSource.getMessage(messageCode, new String[] {
-				param.get("BLD_NM").toString(),
-				param.get("BED_NM").toString(),
+				resveDay
+			}, locale);
+		
+		}else if (messageCode.equals("csp.sms.adminResveCancelinfo")) { 
+			String resveDay = param.get("RESVE_DE").toString();
+			try {		
+				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
+				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
+				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
+			}catch (Exception e) {}
+			
+			mssg = messageSource.getMessage(messageCode, new String[] {
+				resveDay
+			}, locale);
+		}else if (messageCode.equals("csp.sms.adminWaitCancel")) { 
+			String resveDay = param.get("RESVE_DE").toString();
+			try {		
+				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
+				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
+				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
+			}catch (Exception e) {}
+			
+			mssg = messageSource.getMessage(messageCode, new String[] {
+				resveDay
+			}, locale);
+		}else if (messageCode.equals("csp.sms.adminWaitCancelInfo")) { 
+			String resveDay = param.get("RESVE_DE").toString();
+			try {		
+				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
+				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
+				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
+			}catch (Exception e) {}
+			
+			mssg = messageSource.getMessage(messageCode, new String[] {
+					resveDay,
+					param.get("RESVE_TM_STR").toString()
+			}, locale);
+		}else{
+			String resveDay = param.get("RESVE_DE").toString();
+			try {		
+				SimpleDateFormat fromUser = new SimpleDateFormat("yyyyMMdd");
+				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd");
+				resveDay = toFormat.format(fromUser.parse(param.get("RESVE_DE").toString()));
+			}catch (Exception e) {}
+			
+			mssg = messageSource.getMessage(messageCode, new String[] {
 				resveDay,
 				param.get("RESVE_TM_STR").toString()
 			}, locale);
@@ -75,6 +120,9 @@ public class CspService {
 		
 		return result;
 	}
+	
+	
+	
 	
 	/**
 	  * 

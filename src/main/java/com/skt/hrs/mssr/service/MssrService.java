@@ -15,6 +15,7 @@ import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
+import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.mssr.dao.MssrDAO;
 import com.skt.hrs.utils.DateUtil;
 import com.skt.hrs.utils.StringUtil;
@@ -40,7 +41,11 @@ public class MssrService {
 	private MssrDAO mssrDAO;
 	
 	@Autowired
+	private CspService cspService;
+	
+	@Autowired
 	MessageSource messageSource;
+
 	
 	/**
 	 * 
@@ -167,6 +172,7 @@ public class MssrService {
         	paramsMap.putAll(getListItems.get(i));
         	startDate = paramsMap.getString("startDate");
         	endDate = paramsMap.getString("endDate");
+        	paramsMap.put("regEmpNo",param.getString("regEmpNo"));
         	days = DateUtil.getDateDiff(startDate, endDate );
         	for (int j = 0; j <= days; j++) {
         		 workDate = DateUtil.getDateAdd(startDate,j);
@@ -278,7 +284,7 @@ public class MssrService {
 				 Map item = mssrDAO.selectResveItem(param);
 				 param.put("RESVE_NO",item.get("resveNo").toString());
 				
-				 insertResult = mssrDAO.deleteResve(param); 
+				    insertResult = mssrDAO.deleteResve(param); 
 				 
 					if(!(insertResult)) { 
 						throw new HrsException("error.processFailure", true);
@@ -287,7 +293,10 @@ public class MssrService {
 					if(!(insertResult)) { 
 						throw new HrsException("error.processFailure", true);
 					 }	 
-					param.remove("RESVE_NO");
+				
+				sendSms(param);	
+				param.remove("RESVE_NO");
+					
 			}
 		}
 			// data적용 성공여부
@@ -306,8 +315,10 @@ public class MssrService {
 		    	paramsMap.put("regEmpNo", param.getString("regEmpNo"));
 		    	paramsMap.put("canclYn", "Y");
 		    	paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
-		    	paramsMap.put("canclYn","Y");
-				updateResult = mssrDAO.deleteResve(paramsMap); 
+
+		    	
+		    	updateResult = mssrDAO.deleteResve(paramsMap); 
+                 
 				if(!(updateResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 }	
@@ -316,22 +327,37 @@ public class MssrService {
 				if(!(updateResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 }
+				
+				sendSms(paramsMap);
 		
            } 
-
+        
+		  
+		
 		result.setItemOne(updateResult);
 		// data적용 성공여부
 		return result;
 	}
 	
-	/*
-	 * public ArrayList<HashMap<String, String>> getMultParam(DataEntity param ,
-	 * String name) { HashMap<String,String> resultItem = new HashMap<String,String
-	 * >(); ArrayList getListItems =
-	 * (ArrayList)JsonUtils.stringToJsonClass(param.getString(name),
-	 * ArrayList.class); ArrayList <HashMap<String, String>> resultList = new
-	 * ArrayList <HashMap<String, String>> for (int i = 0; i < list.size(); i++) {
-	 * result = (HashMap<String,String >) list.get(i); } ; return result ; }
-	 */
+  public void sendSms(DataEntity param) {
+	 // ResponseResult result = new ResponseResult(); 
+	   Map SmsItem = mssrDAO.selectSmsInfoGet(param);
+		if(!StringUtil.isEmpty(SmsItem.get("RESVE_EMPNO").toString())) {
+	    	SmsItem.put("targetEmpno", SmsItem.get("RESVE_EMPNO").toString());
+	       cspService.insertCspSMS(SmsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+	       cspService.insertCspSMS(SmsItem, "csp.sms.adminResveCancelInfo", Locale.forLanguageTag(param.getString("_ep_locale")));
+		}				
+		
+		if(!StringUtil.isEmpty(SmsItem.get("WAIT_EMPNO").toString())) {
+			SmsItem.put("targetEmpno", param.get("WAIT_EMPNO"));
+			cspService.insertCspSMS(SmsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+			
+			cspService.insertCspSMS(SmsItem, "csp.sms.adminWaitCancelInfo", Locale.forLanguageTag(param.getString("_ep_locale")));
+				
+		}
+	  
+  }
+	
+
 			
 }
