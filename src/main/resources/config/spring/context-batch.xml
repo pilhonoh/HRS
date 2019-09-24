@@ -49,7 +49,8 @@
 	</bean>	
 	<bean id="resveNotifyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  <!-- 케어 30분전 알림 JOB -->
 	    <property name="jobDetail" ref="jobResveNotifyDetail" />
-	    <property name="cronExpression" value="0 0 9-18 ? * MON-FRI" /> <!-- 월~금 9시~18시 정각 -->	    
+	    <!-- <property name="cronExpression" value="0 0 9-18 ? * MON-FRI" /> --> <!-- 월~금 9시~18시 정각 -->
+	    <property name="cronExpression" value="0 0/30 8-17 ? * MON-FRI" /> <!-- 월~금 08:30 ~ 17:30 -->	    
 	</bean>	
 	
 	<!--
