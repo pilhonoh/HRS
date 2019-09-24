@@ -168,7 +168,7 @@ public class DateUtil {
 			Date startDate = dateFormater.parse(strart);
 			Date endDate = dateFormater.parse(end);
             diff = endDate.getTime() - startDate.getTime();
-            return (int)diff/(24 * 60 * 60 * 1000);
+            return (int)(diff/(24 * 60 * 60 * 1000));
 	    }catch(Exception e) {
 			throw new HrsException("invalid date");
 		

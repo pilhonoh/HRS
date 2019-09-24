@@ -182,7 +182,7 @@ var popSchCreate = {
 						return false;
 					}
 					
-					confirmPopup('관리자스케즐울 등록 하시겠습니까', function(){		 			
+					confirmPopup('관리자 스케쥴을 등록 하시겠습니까?', function(){		 			
 						$.ajax({
 							url: ROOT + '/mssr/scheduleCreate',
 							type: 'POST',
