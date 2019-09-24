@@ -368,18 +368,18 @@ public class MssrService {
 	
   public void sendSms(DataEntity param) {
 	 // ResponseResult result = new ResponseResult(); 
-	   Map SmsItem = mssrDAO.selectSmsInfoGet(param);
-		if(!StringUtil.isEmpty(SmsItem.get("RESVE_EMPNO").toString())) {
-	    	SmsItem.put("targetEmpno", SmsItem.get("RESVE_EMPNO").toString());
-	       cspService.insertCspSMS(SmsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
-	       cspService.insertCspSMS(SmsItem, "csp.sms.resveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+	   Map smsItem = mssrDAO.selectSmsInfoGet(param);
+		if(!StringUtil.isEmpty(smsItem.get("RESVE_EMPNO").toString())) {
+			smsItem.put("targetEmpno", smsItem.get("RESVE_EMPNO").toString());
+	       cspService.insertCspSMS(smsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+	       cspService.insertCspSMS(smsItem, "csp.sms.resveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
 		}				
 		
-		if(!StringUtil.isEmpty(SmsItem.get("WAIT_EMPNO").toString())) {
-			SmsItem.put("targetEmpno", param.get("WAIT_EMPNO"));
-			cspService.insertCspSMS(SmsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+		if(!StringUtil.isEmpty(smsItem.get("WAIT_EMPNO").toString())) {
+			smsItem.put("targetEmpno", smsItem.get("WAIT_EMPNO"));
+			cspService.insertCspSMS(smsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
 			
-			cspService.insertCspSMS(SmsItem, "csp.sms.waitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+			cspService.insertCspSMS(smsItem, "csp.sms.waitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
 				
 		}
 	  
