@@ -114,16 +114,14 @@
 	<select id="selectResveDetailList" parameterType="map" resultType="hashmap">		
 		SELECT RESVE_NO,
 			STTUS_CODE_NM,
-		    DATE_FORMAT(T.REG_DT, '%Y-%m-%d %H:%i') AS REG_DT_STR,
-		    CASE 
-				WHEN ADM_EMPNO IS NOT NULL THEN '관리자'
-		        WHEN ADM_EMPNO IS NULL THEN
-					CASE REG_EMPNO
-						WHEN #{empno} THEN HNAME
-						WHEN 'SYSTEM' THEN 'SYSTEM'
-						ELSE '구성원'
-					END
-				END AS REG_EMPNM
+		    DATE_FORMAT(T.REG_DT, '%Y-%m-%d %H:%i') AS REG_DT_STR,		   
+			CASE 		
+		        WHEN REG_EMPNO != #{empno} AND ADM_EMPNO IS NOT NULL THEN '관리자'
+		        WHEN REG_EMPNO = 'SYSTEM' THEN '시스템'
+				ELSE HNAME
+			END AS REG_EMPNM,
+			STTUS_CODE,
+			REG_EMPNO
 		FROM (
 			SELECT HIST.RESVE_NO,
 				STTUS_CODE,
@@ -138,7 +136,7 @@
 			LEFT JOIN CHARGER ADM
 			ON HIST.REG_EMPNO = ADM.EMPNO
 			WHERE RESVE_NO = #{resveNo}
-			AND STTUS_CODE != 'STS00' <!-- 근무입력 제외 --> 		  
+			AND (TARGET_EMPNO = #{empno} OR STTUS_CODE='STS99') <!-- 나의 예약/대기 거나, 근무취소만 조회 -->			 		  
 		) T
 		ORDER BY REG_DT DESC	<!-- 최신순 -->
 	</select>
