@@ -42,7 +42,7 @@
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = LAST_STTUS_CODE) AS STTUS_NM,
 			DATE_FORMAT(B.REG_DT, '%Y-%m-%d') AS REG_DT_TXT
 		FROM resve_sttus A
-		INNER JOIN (
+		INNER JOIN (			
 			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE, T1.REG_DT
 			FROM RESVE_HIST T1
 			INNER JOIN (
@@ -51,13 +51,14 @@
 					SELECT A.*
 					FROM RESVE_HIST A
 					INNER JOIN (
-					SELECT RESVE_NO
-					FROM RESVE_HIST
-					WHERE TARGET_EMPNO = #{empNo}
-					GROUP BY RESVE_NO
-					) B
+						SELECT RESVE_NO
+						FROM RESVE_HIST
+						WHERE TARGET_EMPNO = #{empNo}
+						GROUP BY RESVE_NO
+					) B	<!-- 나랑관련된 예약 -->
 					ON A.RESVE_NO = B.RESVE_NO
-		        ) T 		        
+		            WHERE (TARGET_EMPNO = #{empNo} OR TARGET_EMPNO IS NULL OR TARGET_EMPNO = '')	<!-- 나의ACTION이거나 근무취소 -->
+				) T 		        
 				GROUP BY RESVE_NO
 			) T2
 			ON T1.RESVE_NO = T2.RESVE_NO
@@ -84,8 +85,18 @@
 			FROM RESVE_HIST T1
 			INNER JOIN (
 				SELECT RESVE_NO, MAX(REG_DT) AS REG_DT
-				FROM RESVE_HIST	 
-		        WHERE TARGET_EMPNO = #{empNo}
+				FROM (
+					SELECT A.*
+					FROM RESVE_HIST A
+					INNER JOIN (
+						SELECT RESVE_NO
+						FROM RESVE_HIST
+						WHERE TARGET_EMPNO = #{empNo}
+						GROUP BY RESVE_NO
+					) B
+					ON A.RESVE_NO = B.RESVE_NO
+		            WHERE (TARGET_EMPNO = #{empNo} OR TARGET_EMPNO IS NULL OR TARGET_EMPNO = '')
+				) T 		        
 				GROUP BY RESVE_NO
 			) T2
 			ON T1.RESVE_NO = T2.RESVE_NO
@@ -93,11 +104,10 @@
 		) B
 		ON A.RESVE_NO = B.RESVE_NO
 		WHERE 1=1
-			AND RESVE_DE BETWEEN #{fromDate} AND #{toDate}
-			<if test='statusCode != null and statusCode != ""'>
-			AND LAST_STTUS_CODE = #{statusCode}
-			</if>
-		ORDER BY A.RESVE_DE DESC
+		AND RESVE_DE BETWEEN #{fromDate} AND #{toDate}
+		<if test='statusCode != null and statusCode != ""'>
+		AND LAST_STTUS_CODE = #{statusCode}
+		</if>
 	</select>
 	
 	<!-- 예약 상세현황 조회 -->
