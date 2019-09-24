@@ -146,7 +146,8 @@
 			SELECT CODE
 			FROM CMMN_CODE
 			WHERE CODE_TYL = 'RVT'
-			AND LEFT(CODE_NM,2) = DATE_FORMAT(NOW(), '%H')
+			<!-- AND LEFT(CODE_NM,2) = DATE_FORMAT(NOW(), '%H') -->		<!-- 정각에 30분뒤 조회 -->
+			AND LEFT(CODE_NM,2) = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 HOUR), '%H')	<!-- 30분에 다음시간 조회 -->
 		)
 		AND A.CANCL_YN != 'Y'
 		AND A.RESVE_EMPNO != '' 
