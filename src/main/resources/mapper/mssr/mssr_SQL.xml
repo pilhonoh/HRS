@@ -145,7 +145,7 @@
 	 <!-- 관리사 예약 상태 등록  -->
      <insert id="insertResveHist"  parameterType="map">
        	INSERT INTO RESVE_HIST ( RESVE_NO , STTUS_CODE  ,REG_EMPNO , REG_DT)
-						 VALUES ( #{RESVE_NO}, #{sttusCode}, #{regEmpNo}, now(3))
+						 VALUES ( #{RESVE_NO}, #{sttusCode}, #{regEmpNo}, now(6))
      </insert>
      
      <update id="deleteResve">
