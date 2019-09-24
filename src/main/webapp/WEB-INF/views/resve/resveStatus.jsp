@@ -85,7 +85,7 @@
 					<div class="rv-desc-list">
 						<ul>
 							<li class="icon01">당일로 부터 <strong>2주까지만 예약</strong>이 가능 합니다.</li>
-							<li class="icon02">신청 내역은 급여에서 <strong>한건당 5,000원이 차감</strong>됩니다.</li>
+							<li class="icon02">사용시 <strong>한건당 5,000원이 급여에서 차감</strong>됩니다.</li>
 							<li class="icon03">예약 <strong>취소는 시작 20분전 까지만</strong> 가능합니다.</li>
 							<li class="icon04">예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 자동 승계되며, <strong>“예약완료" SMS가 자동 발송</strong>됩니다.</li>
 						</ul>
