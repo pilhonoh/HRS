@@ -30,6 +30,7 @@
 			WHERE RESVE_DE BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y%m%d') AND DATE_FORMAT(DATE_ADD(CURRENT_DATE, INTERVAL 13 DAY), '%Y%m%d')
 			AND RESVE_EMPNO = #{empno}
 		    AND CANCL_YN != 'Y'
+		    AND COMPT_YN != 'Y'	<!-- 완료건 제외 -->
 		) AS  RESVE_CNT,
 		(
 			SELECT COUNT(RESVE_NO)
@@ -50,6 +51,7 @@
 			WHERE RESVE_DE = #{resveDe}
 			AND RESVE_EMPNO = #{empno}
 		    AND CANCL_YN != 'Y'
+		    <!-- 완료건도 포함하여 1회이상이면 예약/대기 하지못함. -->
 		) AS RESVE_CNT ,
 		(
 			SELECT COUNT(RESVE_NO)
