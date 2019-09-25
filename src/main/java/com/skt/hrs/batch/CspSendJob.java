@@ -77,6 +77,29 @@ public class CspSendJob {
 					
 				}
 				
+				// 미전송된 메일 목록, 전송 처리
+				sender = new CspSender(CspContents.MAIL.value());
+				for (Map<String, String> mails : undeliveredMails) {
+					String[][] paramLt = { 
+						 {"SENDEREMAIL"		, mails.get("SEND_EMAIL") }
+						,{"RECEIVEREMAIL"	, mails.get("RCV_EMAIL") }
+						,{"SUBJECT"			, mails.get("MSSG_HEAD") }
+						,{"CONTENT"			, mails.get("MSSG_BODY") }
+					};
+					String[] contLt = { "RETURN" };
+					sender.setParamLt(paramLt);
+					sender.setContLt(contLt);
+					ResultVo vo = sender.send();
+					service.updateCspLog(String.valueOf(mails.get("NO")), vo.getHEADER().RESULT );
+					undeliveredMailCnt++;
+					
+					
+					logger.info("==={} : {} " , 
+							"CSP MAIL 전송후 결과 코드", 
+							vo.getHEADER().RESULT_CODE);
+				}
+				
+				
 				logger.info("==={} {} : {} " ,
 						CspSendJob.class.getSimpleName(), 
 						"미전송된 총 목록", 
@@ -88,6 +111,13 @@ public class CspSendJob {
 						undeliveredMessages.size(),
 						undeliveredSmsCnt, 
 						(undeliveredMessages.size() - undeliveredSmsCnt) );
+				
+				logger.info(  "{} MAIL {} : {} Transfer: {} Untransfer: {} ",
+						CspSendJob.class.getSimpleName(), 
+						"미전송된 총 목록", 
+						undeliveredMails.size(),
+						undeliveredMailCnt, 
+						(undeliveredMails.size() - undeliveredMailCnt));
 
 				logger.info(":::::{} SMS/MAIL job {} ", 
 						CspSendJob.class.getSimpleName(),
