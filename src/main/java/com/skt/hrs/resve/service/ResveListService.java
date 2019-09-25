@@ -1,6 +1,9 @@
 package com.skt.hrs.resve.service;
 
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
+import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.resve.dao.ResveListDAO;
 
 
@@ -64,9 +68,22 @@ public class ResveListService {
 	 * @return
 	 * @변경이력 :
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ResponseResult selectResveDetailList(DataEntity param) {
 		ResponseResult result = new ResponseResult();
-		result.setItemList(resveListDAO.selectResveDetailList(param));
+		List<Map> list = resveListDAO.selectResveDetailList(param);
+		for(Map item : list) {
+			if("SYSTEM".equals(item.get("REG_EMPNO"))) {
+				if(ResveStatusConst.DBSTATUS.RESVE_COMPT.toString().equals(item.get("STTUS_CODE"))) {
+					item.put("STTUS_CODE_NM", "승계완료");
+				}else {
+					list.remove(item);
+				}
+				item.remove("REG_EMPNO");
+				item.remove("STTUS_CODE");
+			}
+		}
+		result.setItemList(list);
 		return result;
 	}
 	

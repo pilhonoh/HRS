@@ -190,7 +190,7 @@ public class MssrDAO {
 	 * @return 10: 에약일 시간관리시 예약여부 , 20:예약일 시간 BED 사용여부 
 	 * @변경이력 :
  	 */
-	public int selectResveCheck(DataEntity param) {
+	public Map selectResveCheck(DataEntity param) {
 		return sqlSession.selectOne("mssrMapper.selectResveCheck", param);
 	}
 	

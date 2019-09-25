@@ -177,7 +177,12 @@ var popSchCreate = {
 					if(!popSchCreate.validation.required()){
 						return false;
 					}
-					confirmPopup('관리자스케즐울 등록 하시겠습니까', function(){		 			
+					
+					if(!popSchCreate.validation.timeCheck()){
+						return false;
+					}
+					
+					confirmPopup('관리자 스케쥴을 등록 하시겠습니까?', function(){		 			
 						$.ajax({
 							url: ROOT + '/mssr/scheduleCreate',
 							type: 'POST',
@@ -269,6 +274,21 @@ var popSchCreate = {
 						});  
 					 return chk;
 						 
+				 },
+				 timeCheck: function(){
+					 var chk = true;
+					 $('select[id^=scheduleCreate_startTime]').each(function(i,e){
+						 var startTm = $('#'+e.id);
+						 var endTm = $('#scheduleCreate_endTime' + e.id.replace('scheduleCreate_startTime',''));
+						 
+						 if(startTm.val()>endTm.val()){
+							 //alertPopup('시작시간이 종료시간보다 클 수 없습니다.');
+							 $("#requiredMsg").text(getMessage('error.timeCompareStartEnd'));
+							 $(".rv-desc").show();
+							 chk = false;
+						 }						
+					 })
+					 return chk;
 				 }
 	}
 }

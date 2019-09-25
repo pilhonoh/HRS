@@ -17,6 +17,7 @@ var messages = {
 	'error.invalidStartDate' : '<spring:message code="error.invalidStartDate" />',
 	'error.invalidEndDate' : '<spring:message code="error.invalidEndDate" />',
 	'error.dateCompareStartEnd' : '<spring:message code="error.dateCompareStartEnd" />',
+	'error.timeCompareStartEnd' : '<spring:message code="error.timeCompareStartEnd" />',
 }
 
 /**

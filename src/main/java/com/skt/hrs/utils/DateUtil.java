@@ -50,7 +50,8 @@ public class DateUtil {
 	 */
 	public static Date hrsDtToRealDt(String yyyymmdd, String hrsTm) {
 		try {
-			Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0830");
+			//Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0830");
+			Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0800");
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(startDate);
 			cal.add(Calendar.HOUR, Integer.parseInt(hrsTm));
@@ -72,7 +73,8 @@ public class DateUtil {
 		try {
 			SimpleDateFormat f = new SimpleDateFormat("HHmm");
 			Date time = f.parse(f.format(new Date()));
-			Date startDate = f.parse("0830");
+			//Date startDate = f.parse("0830");
+			Date startDate = f.parse("0800");
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(startDate);
 			int i=1;
@@ -166,7 +168,7 @@ public class DateUtil {
 			Date startDate = dateFormater.parse(strart);
 			Date endDate = dateFormater.parse(end);
             diff = endDate.getTime() - startDate.getTime();
-            return (int)diff/(24 * 60 * 60 * 1000);
+            return (int)(diff/(24 * 60 * 60 * 1000));
 	    }catch(Exception e) {
 			throw new HrsException("invalid date");
 		

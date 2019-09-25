@@ -67,6 +67,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				
 				String authCode = user.get("AUTH_CODE") == null ? "" : user.get("AUTH_CODE").toString();				
 				
+				
+				// P사번 19사번은 관리자일때만 접속 가능
+				if(paramUserid.startsWith("P") || paramUserid.startsWith("19")) {
+					if(StringUtil.isEmpty(authCode)) {					
+						response.sendRedirect("/error/403");
+						return false;
+					}
+				}
+				
 				LoginVo loginVo = new LoginVo();
 				loginVo.setEmpno(user.get("EMPNO").toString());
 				loginVo.setHname(user.get("HNAME").toString());
@@ -75,13 +84,22 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				loginVo.setAuth(authCode);
 				
 				//HttpSession sess = request.getSession();
-				session.setAttribute("LoginVo", loginVo);							
+				session.setAttribute("LoginVo", loginVo);
 																
 			}else {
 				forbidden(request, response);
 				return false;
 			}
 			
+		}else {
+			// P사번 19사번은 관리자일때만 접속 가능
+			LoginVo loginVo = (LoginVo) session.getAttribute("LoginVo");
+			if(loginVo.getEmpno().startsWith("P") || loginVo.getEmpno().startsWith("19")) {
+				if(StringUtil.isEmpty(loginVo.getAuth())) {					
+					response.sendRedirect("/error/403");
+					return false;
+				}
+			}
 		}
 		logger.info("SESSION => " + ((LoginVo) session.getAttribute("LoginVo")).getEmpno());
 		return true;

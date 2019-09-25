@@ -45,7 +45,7 @@ var popSchModify= {
 		init: function() {
 	
 			$('#scheduleModify_enter select[data-code-tyl]').empty(); 
-			loadCodeSelect(undefined, '#scheduleModify_enter'); //콤보박스 공통코드 세팅	
+			/* loadCodeSelect(undefined, '#scheduleModify_enter'); //콤보박스 공통코드 세팅	 */
 			popSchModify.button.popSaveClickEvent();
 		    popSchModify.button.rowAddClickEvent();			
 		},	
@@ -190,8 +190,10 @@ var popSchModify= {
 		},
 		button:{
 			popSaveClickEvent:function(){
+				
 				$("#scheduleModify_saveBtn").on("click",function(){			
-					console.log({bldCode :  popSchModify.params.bldCode,
+					
+				  console.log({bldCode :  popSchModify.params.bldCode,
 					       bedCode:   popSchModify.params.bedCode, //배드     
 						   mssrEmpno : popSchModify.params.mssrEmpno,
 						   resveDate : popSchModify.params.resveDate,
@@ -199,6 +201,8 @@ var popSchModify= {
 						   deleteTime: JSON.stringify(getParamsdiff().deleteTime)	   
 					});
 					
+				  var timeSheet = getParamsdiff();
+				  
 					$.ajax({
 						url: ROOT + '/mssr/scheduleModify',
 						type: 'POST',
@@ -206,8 +210,8 @@ var popSchModify= {
 						       bedCode:   popSchModify.params.bedCode, //배드     
 							   mssrEmpno : popSchModify.params.mssrEmpno,
 							   resveDate : popSchModify.params.resveDate,
-							   insertTime: JSON.stringify(getParamsdiff().insertTime),
-							   deleteTime: JSON.stringify(getParamsdiff().deleteTime)	   
+							   insertTime: JSON.stringify(timeSheet.insertTime),
+							   deleteTime: JSON.stringify(timeSheet.deleteTime)	   
 						},
 						success : function(res){
 							console.log('regist',res);				
@@ -288,19 +292,28 @@ function getParams(){
 		   setTimesheet.push(j.toString());	
 		}  
 	}
-    console.log(setTimesheet);
-    console.log(defData);
   
- 
-    var diff2 = defData.filter(x => setTimesheet.includes(x));
-      
-     return{
-		      insertTime:setTimesheet.filter(x => ! defData.includes(x)),
-		      deleteTime:DeleTime = defData.filter(x => ! diff2.includes(x))         	    
-     }
-     
-
-} 
+    
+    var diff1 = defData.filter( function(x){ return (setTimesheet.indexOf(x) ===-1)?false:true});
+    var diffInsert = setTimesheet.filter(function(x){ return (defData.indexOf(x) ===-1)?true:false});
+    var diffDelete = defData.filter(function(x){ return (diff1.indexOf(x)===-1)?true:false});
+   
+    /* console.log("diff1",setTimesheet);
+    console.log("diffInsert",diffInsert);
+    console.log("diffDelete",diffDelete);*/    
+    //return{insertTime:diffInsert, deleteTime:diffDelete }
+	/* 
+    var diff2  = defData.filter(x => setTimesheet.includes(x));
+    var insertTime = setTimesheet.filter(x => ! defData.includes(x));
+    var deleteTime = defData.filter(x => ! diff2.includes(x)); 
+    console.log("setTimesheet",setTimesheet);
+    console.log("defData",defData);
+    console.log("diff2",diff2);
+    console.log("insertTime",insertTime);
+    console.log("deleteTime",deleteTime); */
+    
+    return{insertTime:diffInsert,deleteTime:diffDelete}
+ }
 
 $(document).ready(function(){		
 	var item = '${item}';
@@ -323,7 +336,7 @@ $(document).ready(function(){
 
     //popSchModify.selectScheduleList(); 
     popSchModify.renderScheduleList();
-	
+	loadCodeSelect(undefined, '#scheduleModify_enter'); //콤보박스 공통코드 세팅	
 	
 })
   

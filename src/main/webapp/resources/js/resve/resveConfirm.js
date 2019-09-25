@@ -10,6 +10,9 @@ var resveConfirm = {
 			$('[data-code-tyl=BLD] option[value='+resveConfirm.data.bldCode+']')
 				.attr('selected', true);	// default사옥선택
 			
+			//default 사옥이 케어가능한 사옥이 아닌경우
+			resveConfirm.data.bldCode = $('select[data-code-tyl=BLD] option:selected').val();
+			
 			resveConfirm.fillBeds(resveConfirm.data.bldCode)	// bed목록 조회
 				.then(function(){
 					$('.month-calendar .today span').trigger('click');
@@ -20,7 +23,10 @@ var resveConfirm = {
 		$('#btnConfirm').on('click', resveConfirm.pop.confirm);
 		$('[data-code-tyl=BLD]').on('change', resveConfirm.bldOnChange);	
 		$('#txtResveEmpno').on('keypress', function(e){
-			if(e.keyCode == 13) resveConfirm.pop.confirm();
+			if(e.keyCode == 13) {
+				resveConfirm.pop.confirm();
+				$('#txtResveEmpno').trigger('blur');	// 입력창 포커스 제거
+			}
 		});
 		
 	},
@@ -33,10 +39,11 @@ var resveConfirm = {
 	},
 	// 사옥변경 이벤트 리스너
 	bldOnChange : function(e){
-		
+		resveConfirm.data.bldCode = e.target.value;
 		resveConfirm.fillBeds(e.target.value)
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
+				$('[data-code-tyl=BLD]').trigger('blur');	//ie에서 select가 선택된 상태 해지
 			})
 	},
 	// 해당사옥의 bed목록 조회

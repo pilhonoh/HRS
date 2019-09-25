@@ -145,7 +145,7 @@
 	 <!-- 관리사 예약 상태 등록  -->
      <insert id="insertResveHist"  parameterType="map">
        	INSERT INTO RESVE_HIST ( RESVE_NO , STTUS_CODE  ,REG_EMPNO , REG_DT)
-						 VALUES ( #{RESVE_NO}, #{sttusCode}, #{regEmpNo}, now(3))
+						 VALUES ( #{RESVE_NO}, #{sttusCode}, #{regEmpNo}, now(6))
      </insert>
      
      <update id="deleteResve">
@@ -157,14 +157,20 @@
      </update>
      
 
-      <select id ="selectResveCheck" parameterType="map"  resultType="int">
-		  SELECT IFNULL( MAX(CASE  WHEN  MSSR_EMPNO  = #{mssrEmpno} THEN 10 ELSE 0 END) 
-		        + MAX(CASE  WHEN  BED_CODE  = #{bedCode} THEN  20 ELSE 0 END),0) AS RESVE_CHECK 
-				FROM resve_sttus
-			   WHERE RESVE_DE = #{resveDate}
-		         AND RESVE_TM = #{resveTime}
-		         AND BLD_CODE = #{bldCode}
-		         AND  CANCL_YN = 'N'
+      <select id ="selectResveCheck" parameterType="map"  resultType="hashmap">
+		  SELECT IFNULL( MAX(CASE  WHEN  A.MSSR_EMPNO  = #{mssrEmpno} THEN 10 ELSE 0 END) 
+		        + MAX(CASE  WHEN  A.BED_CODE  = #{bedCode} THEN  20 ELSE 0 END),0) AS RESVE_CHECK 
+		          ,IFNULL(MIN(A.RESVE_DE),#{resveDate})  AS START_DATE
+                  ,IFNULL(MAX(A.RESVE_DE),#{resveDate})  AS END_DATE
+                  ,IFNULL(A.BED_CODE,'') AS BED_CODE
+                  ,IFNULL(A.RESVE_TM,'')   AS  RESVE_TM
+                  ,IFNULL((SELECT NCNM FROM MASSEUR WHERE EMPNO = A.MSSR_EMPNO),'') AS MSSR_NCNM
+                 ,COUNT(*)
+				FROM resve_sttus A
+			   WHERE A.RESVE_DE = #{resveDate}
+		         AND A.RESVE_TM = #{resveTime}
+		         AND A.BLD_CODE = #{bldCode}
+		         AND A.CANCL_YN = 'N'
      </select>
      
    <select id="selectSmsInfoGet" parameterType="map" resultType="hashmap">

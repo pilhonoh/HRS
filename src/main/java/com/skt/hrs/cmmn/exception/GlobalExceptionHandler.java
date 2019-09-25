@@ -91,7 +91,8 @@ public class GlobalExceptionHandler{
 	public void hrsExceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response, Locale locale){
 		
 		logger.error(getClass().getName(),ex);
-		
+		//logger.error(ex.getMessage());	//로그 짧게
+		 
 		
 		ResponseResult result = new ResponseResult();
 		result.setStatus(ex.getErrorCode() > 0 ? ex.getErrorCode() : ResultConst.CODE.ERROR.toInt());		
