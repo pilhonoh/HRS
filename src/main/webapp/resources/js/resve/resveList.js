@@ -423,19 +423,22 @@ var resveList = {
 			
 			if (fromdt.length !== 8) {
 				//alertPopup('시작날짜 형식이 잘못되었습니다.');
-				alertPopup(getMessage('error.invalidStartDate'));
+				//alertPopup(getMessage('error.invalidStartDate'));
+				$.alert({title: getMessage('error.invalidStartDate')});
 				return false;
 			}
 			
 			if (todt.length !== 8) {
 				//alertPopup('종료날짜 형식이 잘못되었습니다.');
-				alertPopup(getMessage('error.invalidEndDate'));
+				//alertPopup(getMessage('error.invalidEndDate'));
+				$.alert({title: getMessage('error.invalidEndDate')});
 				return false;
 			}
 			
 			if (fromdt > todt) {
 				//alertPopup('시작날짜가 종료날짜가 클 수 없습니다.');
-				alertPopup(getMessage('error.dateCompareStartEnd'));
+				//alertPopup(getMessage('error.dateCompareStartEnd'));
+				$.alert({title: getMessage('error.dateCompareStartEnd')});
 				return false;
 			}
 			

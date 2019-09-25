@@ -68,12 +68,12 @@
 
 				<table class="tbl-style t_center">
 					<colgroup>
-						<col style="width:12%;">
-						<col style="width:12%;">
-						<col style="width:12%;">
-						<col style="width:12%;">
-						<col style="width:12%;">
-						<col style="width:12%;">						
+						<col style="width:13.5%;">
+						<col style="width:13.5%;">
+						<col style="width:13.5%;">
+						<col style="width:13.5%;">
+						<col style="width:13.5%;">
+						<col style="width:13.5%;">						
 						<col>
 					</colgroup>
 					<thead>
