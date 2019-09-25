@@ -169,7 +169,7 @@ resveConfirm.table = {
 			var $th = $('<th>').text(bed.CODE_NM);
 			$tr.append($th);
 			
-			for(var i=1; i<=9; i++){
+			for(var i=1; i<=8; i++){
 				var $td = $('<td>').addClass(bed.CODE + '-' + i);
 				$tr.append($td);
 			}
