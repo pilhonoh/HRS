@@ -84,10 +84,10 @@
 
 					<div class="rv-desc-list">
 						<ul>
-							<li class="icon01">당일로 부터 <strong>2주까지만 예약</strong>이 가능 합니다.</li>
-							<li class="icon02">예약 <strong>취소는 시작 20분전 까지만</strong> 가능합니다.</li>
-							<li class="icon03">사용시 <strong>한 건당 5,000원이 급여에서 차감</strong>됩니다.</li>
-							<li class="icon04">예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 자동 승계되며, <strong>“예약완료" SMS가 자동 발송</strong>됩니다.</li>
+							<li class="icon01">금일부터 <strong>2주까지의 케어만 예약</strong>이 가능하며, <strong>1건 당 5,000원이 급여에서 차감</strong>됩니다.</li>
+							<li class="icon02">예약 <strong>취소는 케어 시작 20분 전까지만</strong> 가능하며, No-show 시 <strong>2주간 예약이 불가</strong>합니다.</li>
+							<li class="icon03">예약자가 <strong>1명인 경우 대기 신청이 가능</strong>하며, 이전 예약자가 취소할 경우 대기자에게 <strong>예약완료 SMS가 발송</strong>됩니다.</li>
+							<li class="icon04">케어 시작 <strong>30분에서 20분 전 사이에 예약완료 SMS</strong>를 받으신 대기자는 No-show 시 패널티가 없습니다.</li>
 						</ul>
 					</div>		
 				
@@ -95,9 +95,9 @@
 				
 			</div><!-- //content -->
 
-			<footer class="footer">
-				<!--#include file="../include/footer.html"-->
-			</footer><!-- //footer -->
+<!-- 			<footer class="footer"> -->
+<!-- 				#include file="../include/footer.html" -->
+<!-- 			</footer>//footer -->
 
 		</div><!-- //wrap -->
 
