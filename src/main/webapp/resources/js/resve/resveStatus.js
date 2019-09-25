@@ -331,7 +331,14 @@ resveStatus.pop  =  {
 			}, 
 			function(res){
 				$('#layer_pop01 #btnOk').on('click', function(){
-					resveStatus.regist(data.RESVE_NO);
+					
+					alertPopup('케어 시작 20분 전까지만 취소가 가능하며, No-show 시 2주간 예약이 불가합니다.',
+						'확인버튼 클릭시 예약이 완료됩니다.', 
+						function(){
+							resveStatus.regist(data.RESVE_NO);
+						}
+					);
+					
 				});	
 				openLayerPopup('layer_pop01');
 			}

@@ -35,14 +35,20 @@ $(function(){
 				if(json.status == 200){		
 					return data;
 				}else{
-					alertPopup(json.message, function(){
+					
+					function afterLogic(){
 						try{
 							resveStatus.table.refresh();
 							resveList.list.renderResveList();
 							scheduleList.list.renderScheduleList();
 						}catch(err){}
-						
-					});
+					}
+					
+					if(json.messageCode == 'system.error'){
+						alertPopup(getMessage('system.error'), afterLogic);
+					}else{						
+						alertPopup(json.message, afterLogic);
+					}
 					if(json.status == 403){
 						location.href = '/error/403';
 					}

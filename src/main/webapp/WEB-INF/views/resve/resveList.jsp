@@ -9,6 +9,9 @@
 		<jsp:include page="${JSP}/include/resource.jsp" />
 		<jsp:include page="${JSP}/include/messages.jsp" />		
 		<script src="${JS}/resve/resveList.js"></script>
+		<style>
+			.link {text-decoration: underline;}
+		</style>
 	</head>
 	<body>	
 		<div class="wrap">
@@ -87,69 +90,13 @@
 						</tr>
 					</thead>
 					<tbody id="resveList">
-						<!-- 
-						<tr>
-							<td>2019-08-19</td>
-							<td>10:00 ~ 11:00</td>
-							<td>티타워</td>
-							<td>James(남)</td>
-							<td>A</td>
-							<td>2019-08-19</td>
-							<td>예약 완료</td>
-							<td>
-								<button class="t-btn">예약취소</button>
-							</td>
-						</tr>
-						<tr>
-							<td>2019-08-19</td>
-							<td>10:00 ~ 11:00</td>
-							<td>티타워</td>
-							<td>James(남)</td>
-							<td>A</td>
-							<td>2019-08-19</td>
-							<td>예약 완료</td>
-							<td>
-								<button class="t-btn cr01">대기취소</button>
-							</td>
-						</tr>
-						<tr>
-							<td>2019-08-19</td>
-							<td>10:00 ~ 11:00</td>
-							<td>티타워</td>
-							<td>James(남)</td>
-							<td>A</td>
-							<td>2019-08-19</td>
-							<td>예약 완료</td>
-							<td></td>
-						</tr>
-						-->
+						<!-- 예약현황 리스트 렌더 영역 -->
 					</tbody>
 				</table>
 
 				<div class="paging_area" id="pagingArea">
-					<!-- 
-					<a href="#none" class="first"><img src="${IMG}/common/btn_first.gif"></a>
-					<a href="#none" class="prev"><img src="${IMG}/common/btn_prev.gif"></a>
-					<a href="#none" class="num selected">1</a>
-					<a href="#none" class="num">2</a>
-					<a href="#none" class="num">3</a>
-					<a href="#none" class="num">4</a>
-					<a href="#none" class="num">5</a>
-					<a href="#none" class="num">6</a>
-					<a href="#none" class="num">7</a>
-					<a href="#none" class="num">8</a>
-					<a href="#none" class="num">9</a>
-					<a href="#none" class="num">10</a>
-					<a href="#none" class="next"><img src="${IMG}/common/btn_next.gif"></a>
-					<a href="#none" class="last"><img src="${IMG}/common/btn_last.gif"></a>
-					-->
+					<!-- 페이징 렌더 영역 -->
 				</div>
-
-				<!-- <br><br><br><br><br><br>
-				<button class="t-btn" onclick="e_layer_pop01('layer_pop01');"><em class="icon01">pop_예약신청</em></button>
-				<button class="t-btn" onclick="e_layer_pop02('layer_pop02');"><em class="icon01">pop_대기신청</em></button>
-				<button class="t-btn" onclick="e_layer_pop03('layer_pop03');"><em class="icon01">pop_예약대기취소</em></button>
-				<button class="t-btn" onclick="e_layer_pop04('layer_pop04');"><em class="icon01">pop_시작확인</em></button> -->
 				
 			</div><!-- //content -->
 

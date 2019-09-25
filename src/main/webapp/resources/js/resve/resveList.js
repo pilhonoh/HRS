@@ -159,7 +159,7 @@ var resveList = {
 					resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 					resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');
 					//resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
-					resveListHtml.push('	<td><a href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a></td>');
+					resveListHtml.push('	<td><a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a></td>');
 					resveListHtml.push('	<td>');
 					if (stsCode == 'STS01' || stsCode == 'STS03') {
 						var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						

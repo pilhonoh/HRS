@@ -9,34 +9,7 @@
 <div class="pop-container st2">	
 	<!-- 팝업 컨텐츠 S -->
 	
-	<p class="pop-desc icon01"><strong>예약</strong> 하시겠습니까?</p>
-	
-	<!-- 
-	<table class="tbl-style">
-		<colgroup>
-			<col style="width:30%;">
-			<col>
-		</colgroup>
-		<tbody>
-			<tr>
-				<th>예약일</th>
-				<td id="resveRegist_resveDe"></td>
-			</tr>
-			<tr>
-				<th>관리사</th>
-				<td id="resveRegist_mssr"></td>
-			</tr>
-			<tr>
-				<th>베드</th>
-				<td id="resveRegist_bed"></td>
-			</tr>
-			<tr>
-				<th>예약시각</th>
-				<td id="resveRegist_resveTm"></td>
-			</tr>
-		</tbody>
-	</table>
-	-->
+	<p class="pop-desc icon01"><strong>예약</strong> 하시겠습니까?</p>		
 	
 	<ul class="reservation-list">
 		<li><span class="icon01" id="resveRegist_resveDe"></span></li>
@@ -45,7 +18,11 @@
 		<li><span class="icon04" id="resveRegist_bed"></span></li>
 	</ul>
 	
-
+	
+	<div style="text-align:center; margin-top: 10px; font-size: 14px">
+		<span>※ 케어 센터에서 꼭 <strong>본인 확인</strong> 후 입장해주세요.</span>
+	</div>
+	
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>
 		<button class="pop-btn gray layerClose">취소</button>

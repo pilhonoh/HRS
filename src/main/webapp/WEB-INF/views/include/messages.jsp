@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <script>
 var messages = {
+	'system.error' : '<spring:message code="system.error" />',
 	'error.invalidRequest' : '<spring:message code="error.invalidRequest" />',
 	'error.notAvailable' : '<spring:message code="error.notAvailable" />',
 	'error.processFailure' : '<spring:message code="error.processFailure" />',
