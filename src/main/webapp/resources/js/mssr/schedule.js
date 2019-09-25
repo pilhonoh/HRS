@@ -11,8 +11,7 @@ var scheduleList = {
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		scheduleList.button.scheduleCreateBtnEvent();
 		scheduleList.button.scheduleDeleteBtnEvent();
-		
-		
+		scheduleList.checkboxEvent.checkall();
 	},
 	
 	
@@ -149,8 +148,10 @@ var scheduleList = {
 				success: function(res) {
 					console.log('scheduleList', res);
 					if (res.status === 200) {
-						deferred.resolve(res);
-						scheduleList.list.dataList = res.list;
+						
+							deferred.resolve(res);
+							scheduleList.list.dataList = res.list;
+					   	
 						
 					} else {
 						deferred.reject("");
@@ -180,32 +181,40 @@ var scheduleList = {
 				var sexdstn = '';
 				
 				scheduleList.paging.params.totalCount = result.customs.totalCount;
-				
-				for (var i in resultList) {
-					
-					var resve_de = resultList[i].RESVE_DE;
-					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
-					
-					var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
-					var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
-					
+				if(result.customs.totalCount == 0){
 					scheduleListHtml.push('<tr>');
-					scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
-				/*	scheduleListHtml.push('	<td>'+ resultList[i].RESVE_NO+'</td>');*/
-					scheduleListHtml.push('	<td>' + resveDt + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
-					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
-					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
-					scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
+					scheduleListHtml.push('<td colspan=8 >검색 결과가 없습니다</td>');
 					scheduleListHtml.push('</tr>');
+				}else{
+					
+						for (var i in resultList) {
+						
+						var resve_de = resultList[i].RESVE_DE;
+						resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+						
+						var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
+						var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
+						
+						scheduleListHtml.push('<tr>');
+						scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
+						scheduleListHtml.push('	<td>' + resveDt + '</td>');
+						scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
+						scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
+						scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
+						scheduleListHtml.push('	<td>' + sexdstn + '</td>');
+						scheduleListHtml.push('	<td>' + convertedTime + '</td>');
+						scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
+						scheduleListHtml.push('</tr>');
+						
+					}
+					
+					
 				}
-				
 				$('tbody#scheduleList').html(scheduleListHtml.join(''));
 				scheduleList.paging.renderPaging();
-
+				
 				scheduleList.button.scheduleModifyBtnEvent();
+				
 				
 			});
 		},
@@ -481,6 +490,7 @@ var scheduleList = {
 							success : function(res){
 								console.log('delete',res);				
 								scheduleList.list.renderScheduleList();
+								$("#checkAll").prop('checked',false);
 								alertPopup('삭제되었습니다.');
 							},
 							error : function(err) {
@@ -494,7 +504,13 @@ var scheduleList = {
 		}
 	},
 	
-	
+	refresh :{ 
+		inputbox:function(){
+			$("#checkAll").prop('checked',false);
+			
+		}
+		
+	},
 	
 	validation: {
 		//날짜 필드 값 체크
@@ -541,6 +557,23 @@ var scheduleList = {
 			});
 		}
 
+	},
+	checkboxEvent:{
+		checkall:function(){
+			
+			$("#checkAll").on("change",function(){
+				 var chkstat = $("#checkAll").prop("checked");
+				$("#scheduleList input[type=checkbox]").each(function(){
+				
+				    $(this).prop("checked",chkstat)
+				});
+					
+					
+				
+			})
+		}	
+		
+		
 	}
 
 }

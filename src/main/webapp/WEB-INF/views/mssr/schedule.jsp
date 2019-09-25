@@ -90,7 +90,7 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<th><input type="checkbox"></th>
+							<th><input id ='checkAll' type="checkbox"></th>
 							<th>근무날짜</th>
 							<th>사옥</th>
 							<th>관리사</th>
