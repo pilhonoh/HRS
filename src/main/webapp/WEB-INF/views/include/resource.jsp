@@ -12,9 +12,9 @@
 <!-- CSS -->
 <link href="${LIB}/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 <link href="${LIB}/XEIcon/xeicon.css" rel="stylesheet">
-<link href="${CSS}/animate.css?v=<fmt:formatDate value="${now}" pattern="yyyyMMddhhmmss" />" rel="stylesheet">
-<link href="${CSS}/reset.css?v=<fmt:formatDate value="${now}" pattern="yyyyMMddhhmmss" />" rel="stylesheet">
-<link href="${CSS}/common.css?v=<fmt:formatDate value="${now}" pattern="yyyyMMddhhmmss" />" rel="stylesheet">
+<link href="${CSS}/animate.css?v=<fmt:formatDate value="${now}" pattern="yyyyMMdd" />" rel="stylesheet">
+<link href="${CSS}/reset.css?v=<fmt:formatDate value="${now}" pattern="yyyyMMdd" />" rel="stylesheet">
+<link href="${CSS}/common.css?v=<fmt:formatDate value="${now}" pattern="yyyyMMdd" />" rel="stylesheet">
 <!-- SCRIPT -->
 <script>
 var ROOT = '${ROOT}';
