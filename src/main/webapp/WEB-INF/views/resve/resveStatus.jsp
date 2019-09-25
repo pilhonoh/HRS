@@ -42,30 +42,19 @@
 					<div class="reservation-table-wrap">
 						<table class="reservation-table">
 							<colgroup>
-								<col>
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
+								<col>								
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
 							</colgroup>
 							<thead>
 								<tr>
-									<th>배드</th>
-									<!-- <th>09:30~10:00</th>
-									<th>10:30~11:00</th>
-									<th>11:30~12:00</th>
-									<th>12:30~13:00</th>
-									<th>13:30~14:00</th>
-									<th>14:30~15:00</th>
-									<th>15:30~16:00</th>
-									<th>16:30~17:00</th>
-									<th>17:30~18:00</th> -->
-									<th>09:00~09:30</th>
+									<th>베드</th>									
 									<th>10:00~10:30</th>
 									<th>11:00~11:30</th>
 									<th>12:00~12:30</th>
