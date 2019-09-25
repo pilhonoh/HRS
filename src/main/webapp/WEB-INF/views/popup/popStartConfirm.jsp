@@ -53,7 +53,7 @@ $(document).ready(function(){
 		$('.reservation-list').remove();
 		$('#btnCancel').remove();
 		$('#btnOk').addClass('layerClose');
-		$('.pop-desc').text('<spring:message code="error.resveNotFound" />');	//예약이 존재하지 않습니다.
+		$('.pop-desc').html('<spring:message code="error.resveNotFound" />');	//예약이 존재하지 않습니다.
 	}
 	
 })
