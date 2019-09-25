@@ -135,48 +135,56 @@ var resveList = {
 				
 				resveList.paging.params.totalCount = result.customs.totalCount;
 				
-				for (var i in resultList) {
-					var stsCode = resultList[i].LAST_STTUS_CODE;
-					if (stsCode == 'STS01') {
-						btnText = '예약취소';
-						btnClass = 'resveCancelBtn';
-					} else if (stsCode == 'STS03') {
-						btnText = '대기취소';
-						btnClass = 'waitCancelBtn';
-						btnStyle = 'cr01';
-					}
-					
-					var resve_de = resultList[i].RESVE_DE;
-					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
-					
-					
-					
+				if(resultList.length == 0){
 					resveListHtml.push('<tr>');
-					resveListHtml.push('	<td>' + resveDt + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
-					resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');
-					//resveListHtml.push('	<td>' + resultList[i].STTUS_NM + '</td>');
-					resveListHtml.push('	<td><a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a></td>');
-					resveListHtml.push('	<td>');
-					if (stsCode == 'STS01' || stsCode == 'STS03') {
-						var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
-						var cancelDt = moment(resveDt + " " +resve_tm_start).subtract(20, 'minutes').toDate();
-						
-						//케어시작 20분전까지 취소가능
-						if(cancelDt >= new Date()){						
-							resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
-						}						
-											
-					}					
-					resveListHtml.push('	</td>');
-					//resveListHtml.push('	<td><button class="t-btn" onclick="resveList.popup.detail('+resultList[i].RESVE_NO+')">상세보기</button></td>');
+					resveListHtml.push('	<td colspan="7">검색 결과가 없습니다.</td>');
 					resveListHtml.push('</tr>');
-					
-					btnStyle = '';
+				}else{
+					for (var i in resultList) {
+						var stsCode = resultList[i].LAST_STTUS_CODE;
+						if (stsCode == 'STS01') {
+							//btnText = '예약취소';
+							btnText = '취소';
+							btnClass = 'resveCancelBtn';
+						} else if (stsCode == 'STS03') {
+							//btnText = '대기취소';
+							btnText = '취소';
+							btnClass = 'waitCancelBtn';
+							btnStyle = 'cr01';
+						}
+						
+						var resve_de = resultList[i].RESVE_DE;
+						resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+						
+						
+						
+						resveListHtml.push('<tr>');
+						resveListHtml.push('	<td>' + resveDt + '</td>');
+						resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
+						resveListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
+						resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
+						resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
+						resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');						
+						resveListHtml.push('	<td>');
+						resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a>');
+						if (stsCode == 'STS01' || stsCode == 'STS03') {
+							var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
+							var cancelDt = moment(resveDt + " " +resve_tm_start).subtract(20, 'minutes').toDate();
+							
+							//케어시작 20분전까지 취소가능
+							if(cancelDt >= new Date()){						
+								resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
+							}						
+												
+						}					
+						resveListHtml.push('	</td>');
+						//resveListHtml.push('	<td><button class="t-btn" onclick="resveList.popup.detail('+resultList[i].RESVE_NO+')">상세보기</button></td>');
+						resveListHtml.push('</tr>');
+						
+						btnStyle = '';
+					}
 				}
+				
 				
 				$('tbody#resveList').html(resveListHtml.join(''));
 				resveList.paging.renderPaging();

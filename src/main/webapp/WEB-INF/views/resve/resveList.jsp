@@ -10,7 +10,7 @@
 		<jsp:include page="${JSP}/include/messages.jsp" />		
 		<script src="${JS}/resve/resveList.js"></script>
 		<style>
-			.link {text-decoration: underline;}
+			.link {text-decoration: underline; margin-right: 10px}
 		</style>
 	</head>
 	<body>	
@@ -73,8 +73,7 @@
 						<col style="width:12%;">
 						<col style="width:12%;">
 						<col style="width:12%;">
-						<col style="width:12%;">
-						<col style="width:12%;">
+						<col style="width:12%;">						
 						<col>
 					</colgroup>
 					<thead>
@@ -85,8 +84,7 @@
 							<th>관리사</th>
 							<th>베드</th>
 							<th>신청일</th>
-							<th>상태</th>
-							<th>비고</th>
+							<th>상태</th>							
 						</tr>
 					</thead>
 					<tbody id="resveList">

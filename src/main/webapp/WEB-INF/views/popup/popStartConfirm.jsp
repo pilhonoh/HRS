@@ -50,10 +50,7 @@ $(document).ready(function(){
 			$('#txtResveEmpno').val('');
 		});
 	}else{		
-		$('.reservation-list').remove();
-		$('#btnCancel').remove();
-		$('#btnOk').addClass('layerClose');
-		$('.pop-desc').html('<spring:message code="error.resveNotFound" />');	//예약이 존재하지 않습니다.
+		alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.		
 	}
 	
 })

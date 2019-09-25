@@ -732,6 +732,30 @@ function alertPopup(title, contents, fn){
 	});
 }
 
+/**
+ * options = {
+ *	title: 'alert 주요 메시지'
+ *	contents: '하부 보조 메시지',
+ *	callback: 확인버튼 클릭시, 수행할 콜백함수
+ *	isHideIcon : true면 아이콘 숨김
+ * }
+ */
+$.alert = function(options) {
+	$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
+		$('.alert-message h3').html(options.title.replace(/\n/g, '<br/>'));
+		if(options.contents){
+			$('.alert-message p').text(options.contents);
+		}
+		
+		if(options.isHideIcon)
+			$('.alert-message h3').removeClass('alert');
+			
+		$('#layer_pop_alert #btnOk').one('click', options.callback);
+		openLayerPopup('layer_pop_alert');
+	});
+}
+
+
 function confirmPopup(title, contents, fn){	
 	$('#layer_pop_confirm').load(ROOT + '/resources/html/confirm.html', function(res){		
 		$('.alert-message h3').html(title.replace(/\n/g, '<br/>'));
