@@ -1,7 +1,6 @@
 package com.skt.hrs.cmmn.service;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Map;
 
@@ -20,8 +19,6 @@ import com.skt.hrs.utils.DateUtil;
 
 
 
-
-
 @Service("cspService")
 public class CspService {
 	
@@ -33,9 +30,27 @@ public class CspService {
 	@Resource(name="messageSource")
 	MessageSource messageSource;
 	
+	
 	/**
 	 * 
-	 * @설명 : CSP입력 
+	 * @설명 : MAIL 입력
+	 * @작성일 : 2019.09.26
+	 * @작성자 : P149365
+	 * @param cspVo
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult insertCspMail(CspVo cspVo) {
+		ResponseResult result = new ResponseResult();
+		
+		result.setItemOne(cspDAO.insertCspSend(cspVo));
+		
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @설명 : SMS입력
 	 * @작성일 : 2019.09.06
 	 * @작성자 : P149365
 	 * @param param
