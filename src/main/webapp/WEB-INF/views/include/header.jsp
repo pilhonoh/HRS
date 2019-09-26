@@ -7,6 +7,7 @@ var SESSION = {
 	PLACE: '${sessionScope.LoginVo.place}'
 }
 var header = {
+	// 이번달 카운트 (2주카운트로 변경되며, 사용안함)
 	getMonthCount : function(){
 		$.ajax({
 			url: ROOT + '/resve/monthCnt',
@@ -23,6 +24,9 @@ var header = {
 			}
 		})
 	},
+	// 2주 예약/대기건수
+	// 예약 : 근무취소/완료건 제외 2주간
+	// 대기 : 근무취소/완료/시간이지난(대기중상태로 끝난) 건 제외
 	get2WeeksCount : function(){
 		$.ajax({
 			url: ROOT + '/resve/2WeeksCnt',
@@ -38,6 +42,14 @@ var header = {
 				console.error(err)
 			}
 		})
+	},
+	goToList : function(e){
+		console.log(e.target.id)
+		if(e.target.id == 'waitCnt'){
+			location.href = ROOT + '/resve/list?from=waitCnt';
+		}else{
+			location.href = ROOT + '/resve/list?from=resveCnt';
+		}
 	}
 	
 }
@@ -47,6 +59,8 @@ $(document).ready(function(){
 			$(this).addClass('selected');	//gbn 메뉴 선택표시
 		}		
 	})
+	
+	$('.user-desc em').on('click', header.goToList)
 	
 	header.get2WeeksCount();
 })
@@ -64,6 +78,6 @@ $(document).ready(function(){
 	</ul>
 	<p class="user-desc">
 		<strong>${sessionScope.LoginVo.hname}<em>님</em></strong>
-		<span>예약 <em id="resveCnt">0</em> 건 / 대기 <em id="waitCnt">0</em>건</span>
+		<span>예약 <em id="resveCnt" style="text-decoration: underline; cursor:pointer">0</em> 건 / 대기 <em id="waitCnt" style="text-decoration: underline; cursor:pointer">0</em>건</span>
 	</p>
 </div>

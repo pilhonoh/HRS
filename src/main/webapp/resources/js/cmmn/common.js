@@ -23,7 +23,13 @@ $(function(){
 			var day = date.getDay();
 			return [(day != 0 && day != 6)];
 		}	
-	});	
+	});
+	
+	// 오늘 버튼 클릭이벤트
+	$.datepicker._gotoToday = function(id) {
+		$(id).datepicker('setDate', new Date());	//오늘로 setDate
+		$('.ui-datepicker-current-day').click(); 	//클릭 트리깅
+	};
 
 	initDatepicker();
 	
@@ -45,10 +51,16 @@ $(function(){
 						}catch(err){}
 					}
 					
-					if(json.messageCode == 'system.error'){
-						alertPopup(getMessage('system.error'), afterLogic);
-					}else{						
-						alertPopup(json.message, afterLogic);
+					if(json.messageCode == 'system.error'){	// 시스템에러
+						$.alert({
+							text: getMessage('system.error'), 
+							callback: afterLogic
+						});
+					}else{	// 비즈니스로직 에러
+						$.alert({
+							text: json.message, 
+							callback: afterLogic
+						});
 					}
 					if(json.status == 403){
 						location.href = '/error/403';
@@ -66,6 +78,67 @@ $(function(){
 	    weekdaysShort: ["일","월","화","수","목","금","토"],
 	});
 	moment.locale('en');
+	
+	
+	/**
+	 *  URL로부터 get parameter를 구한다.
+	 * $.getParam('myKey')
+	 */
+	$.getParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    return results ? results[1] : undefined;
+	}
+	
+	/**
+	 * Alert 메시지 출력
+	 * 
+	 * options = {
+	 *	text: 'alert 메시지'
+	 *	desc: '하부 보조 메시지',
+	 *	callback: 확인버튼 클릭시, 수행할 콜백함수
+	 *	icon : false면 아이콘 숨김
+	 * }
+	 */
+	$.alert = function(options) {
+		$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
+			$('.alert-message h3').html(options.text.replace(/\n/g, '<br/>'));
+			if(options.desc){
+				$('.alert-message p').text(options.desc);
+			}
+			
+			if(options.icon == false)
+				$('.alert-message h3').removeClass('alert');
+				
+			$('#layer_pop_alert #btnOk').one('click', options.callback);
+			openLayerPopup('layer_pop_alert');
+		});
+	}
+	
+	/**
+	 * Confirm 메시지 출력
+	 * 
+	 * options = {
+	 *	text: 'confirm 메시지'
+	 *	desc: '하부 보조 메시지',
+	 *	callback: 확인버튼 클릭시, 수행할 콜백함수
+	 *	icon : false면 아이콘 숨김
+	 * }
+	 */
+	$.confirm = function(options) {
+		$('#layer_pop_confirm').load(ROOT + '/resources/html/confirm.html', function(res){		
+			$('.alert-message h3').html(options.text.replace(/\n/g, '<br/>'));
+			if(options.desc){
+				$('.alert-message p').text(options.desc);
+			}
+			
+			if(options.icon == false)
+				$('.alert-message h3').removeClass('confirm');
+			
+			$('#layer_pop_confirm #btnOk').one('click', options.callback);
+			openLayerPopup('layer_pop_confirm');
+		});
+	}
+	
 });
 
 function initDatepicker(){
@@ -210,28 +283,6 @@ function alertPopup(title, contents, fn){
 	});
 }
 
-/**
- * options = {
- *	title: 'alert 주요 메시지'
- *	contents: '하부 보조 메시지',
- *	callback: 확인버튼 클릭시, 수행할 콜백함수
- *	isHideIcon : true면 아이콘 숨김
- * }
- */
-$.alert = function(options) {
-	$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
-		$('.alert-message h3').html(options.title.replace(/\n/g, '<br/>'));
-		if(options.contents){
-			$('.alert-message p').text(options.contents);
-		}
-		
-		if(options.isHideIcon)
-			$('.alert-message h3').removeClass('alert');
-			
-		$('#layer_pop_alert #btnOk').one('click', options.callback);
-		openLayerPopup('layer_pop_alert');
-	});
-}
 
 
 function confirmPopup(title, contents, fn){	

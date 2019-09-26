@@ -79,13 +79,9 @@ var resveConfirm = {
 	pop : {
 		confirm : function(e){
 			if($('#txtResveEmpno').val().trim() == ""){
-				//alertPopup('사번을 입력하세요.');
-				//alertPopup(getMessage('error.requireEmpno'));
-				$.alert({title: getMessage('error.requireEmpno')});
+				$.alert({text: getMessage('error.requireEmpno')});
 			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
-				//alertPopup('본인 확인은 케어시작 당일에만 가능합니다.');
-				//alertPopup(getMessage('error.onlySameday'));
-				$.alert({title: getMessage('error.onlySameday')});
+				$.alert({text: getMessage('error.onlySameday')});
 			}else{
 				$('#layer_pop04').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 

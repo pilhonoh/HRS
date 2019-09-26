@@ -52,7 +52,7 @@ $(document).ready(function(){
 	}else{		
 		//alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.	
 		$.alert({
-			title: getMessage('error.resveNotFound'),
+			text: getMessage('error.resveNotFound'),
 			callback: resveConfirm.table.refresh
 		});
 	}

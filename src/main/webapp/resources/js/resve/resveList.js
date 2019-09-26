@@ -4,9 +4,11 @@
 var resveList = {
 	// 초기화
 	init: function() {
-		loadCodeSelect(resveList.combobox.deleteStsOption); //콤보박스 공통코드 세팅
-		resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		resveList.list.renderResveList(); //목록 조회 후 렌더
+		loadCodeSelect(function(){
+			resveList.combobox.initStsOption();
+			resveList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
+			resveList.list.renderResveList(); //목록 조회 후 렌더
+		}); //콤보박스 공통코드 세팅
 		resveList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 	},
 	
@@ -50,27 +52,33 @@ var resveList = {
 	
 	datepicker: {
 		setDefaultValue: function() { //기본 날짜 세팅
-			//var fromDate = moment().subtract(30, 'd').format('YYYY-MM-DD'); //30일 전 날짜
-			var fromDate = moment().format('YYYY-MM-DD'); //2주전 날짜
-			//var toDate = moment().format('YYYY-MM-DD'); //오늘 날짜
-			var toDate = moment().add(2, 'w').format('YYYY-MM-DD'); //2주후 날짜
+			var fromDate = moment().format('YYYY-MM-DD'); //오늘
+			var toDate = moment().add(13, 'd').format('YYYY-MM-DD'); //2주후
 			
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			//resveList.list.params.fromDate = moment().subtract(30, 'd').format('YYYYMMDD');
-			//resveList.list.params.toDate = moment().format('YYYYMMDD');
-
-			resveList.list.params.fromDate = moment().format('YYYYMMDD');
-			resveList.list.params.toDate = moment().add(2, 'w').format('YYYYMMDD');
+			resveList.list.params.fromDate = fromDate.replace(/-/g,'');
+			resveList.list.params.toDate = toDate.replace(/-/g,'');
 		}
 	},
 	
 	
 	combobox: {
-		deleteStsOption: function() {
+		initStsOption: function() {
 			$('select#stsCombo option[value="STS00"]').remove(); //'미예약' 삭제
 			$('select#stsCombo option[value="STS99"]').remove(); //'근무취소' 삭제
+			
+			var fromPage = $.getParam('from');
+			if(fromPage){
+				if(fromPage == 'waitCnt'){					
+					$('select#stsCombo option[value="STS03"]').attr('selected', true);
+					resveList.list.params.statusCode = 'STS03';
+				}else{
+					$('select#stsCombo option[value="STS01"]').attr('selected', true);
+					resveList.list.params.statusCode = 'STS01';
+				}
+			}
 		}
 	},
 	
@@ -422,23 +430,17 @@ var resveList = {
 			var todt = toDate[0] + toDate[1] + toDate[2];
 			
 			if (fromdt.length !== 8) {
-				//alertPopup('시작날짜 형식이 잘못되었습니다.');
-				//alertPopup(getMessage('error.invalidStartDate'));
-				$.alert({title: getMessage('error.invalidStartDate')});
+				$.alert({text: getMessage('error.invalidStartDate')});
 				return false;
 			}
 			
 			if (todt.length !== 8) {
-				//alertPopup('종료날짜 형식이 잘못되었습니다.');
-				//alertPopup(getMessage('error.invalidEndDate'));
-				$.alert({title: getMessage('error.invalidEndDate')});
+				$.alert({text: getMessage('error.invalidEndDate')});
 				return false;
 			}
 			
 			if (fromdt > todt) {
-				//alertPopup('시작날짜가 종료날짜가 클 수 없습니다.');
-				//alertPopup(getMessage('error.dateCompareStartEnd'));
-				$.alert({title: getMessage('error.dateCompareStartEnd')});
+				$.alert({text: getMessage('error.dateCompareStartEnd')});
 				return false;
 			}
 			
