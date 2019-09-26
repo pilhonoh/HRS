@@ -29,9 +29,10 @@
 				<td id="tdBedName">A</td>
 			</tr>
 		</thead>	
-		<tbody id=scheduleBody>		
+		<tbody id="scheduleModify_Body">		
 		</tbody>
-	</table>	
+	</table>
+	 <div class='rv-desc' style="text-align: center; display:none ;"><strong id="requiredMsg">취소는 시작 20분전 까지만</strong></div>	
 	<div class="pop-btn-area">
 		<button id ="scheduleModify_saveBtn" class="pop-btn">저장</button>
 		<button class="pop-btn gray" onclick="closeLayerPopup();">취소</button>
@@ -47,23 +48,36 @@ var popSchModify= {
 			$('#scheduleModify_enter select[data-code-tyl]').empty(); 
 			/* loadCodeSelect(undefined, '#scheduleModify_enter'); //콤보박스 공통코드 세팅	 */
 			popSchModify.button.popSaveClickEvent();
-		    popSchModify.button.rowAddClickEvent();			
+		
 		},	
 		cmmnCode: {
 			allCodeList: [],
+			startTimeCombo: [],
+			endTimeCombo: [],
 			getAllCodeList: function() {
+				var deferred = $.Deferred();
 				$.ajax({
 					url: ROOT + '/cmmn/allCodeList',
 					success: function(res) {
 						console.log('allCodeList', res);
 						if (res.status === 200) {
-							popSchModify.cmmnCode.allCodeList = res.list;
+						
+							var data = res.list.filter(function (it) { return it.CODE_TYL.includes("RVT")});
+							for (var i in data) {
+								popSchModify.cmmnCode.startTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).start  + '</option>');
+								popSchModify.cmmnCode.endTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).end + '</option>');
+							}
+							deferred.resolve(data);
+						} else {
+							deferred.reject("");
 						}
 					},
 					error: function(err) {
 						console.error(err);
+						deferred.reject("");
 					}
 				})
+				return deferred.promise();
 			},
 			codeToName: function(code) {
 				var allCodeList = popSchModify.cmmnpopSchModify.CodeList;
@@ -83,9 +97,10 @@ var popSchModify= {
 			}
 		},
 		dataList: [],
+		margData:[],
 		params: {}, 
 		selectScheduleList: function() {
-	
+			
 			var deferred = $.Deferred();
 			$.ajax({
 				url: ROOT + '/mssr/selectScheduleDetail',
@@ -93,9 +108,9 @@ var popSchModify= {
 				success: function(res) {
 					console.log('selectScheduleDetail', res);
 					if (res.status === 200) {
-						deferred.resolve(res);
+						popSchModify.margData = popSchModify.convertTime(popSchModify.params.timeList)
+						deferred.resolve(popSchModify.margData);
 						popSchModify.dataList.push (res.list);
-						
 					} else {
 						deferred.reject("");
 					}
@@ -112,50 +127,11 @@ var popSchModify= {
 		
 		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성
 		renderScheduleList: function() {
-			$.when(popSchModify.selectScheduleList()).done(function(result) {
-				var resultList = result.list;
-				console.log("select",popSchModify.dataList)
-				var scheduleListHtml = [];
-				var optionstring = popSchModify.convertTime(popSchModify.params.timeList)
-				
-				for (var i = 0; i < optionstring.length; i++) {
-					if(i == 0){
-						scheduleListHtml.push('<tr id="tr'+i+'" data-rowid = "" class="trscheduleModfiy"><th>근무 시간</th>');
-						scheduleListHtml.push('<td>');
-						scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime"></select>'); 
-						scheduleListHtml.push('<em class="fromto"> ~ </em>');
-						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  default-str ="9" id="scheduleModify_endTime"></select>')
-				        scheduleListHtml.push('<button class="t-btn cr01" id="scheduleModify_rowAddBtn">추가</button></td></tr>');
-					}
-					else{
-					 	scheduleListHtml.push('<tr id="tr'+i+'" data-rowid = "'+i+'" class="trscheduleModfiy"><th>근무 시간</th>');
-						scheduleListHtml.push('<td>');
-						scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+i+'"></select>'); 
-						scheduleListHtml.push('<em class="fromto"> ~ </em>');
-						scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  default-str ="9" id="scheduleModify_endTime'+i+'"></select>')
-						scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
-					}
-				}			
-				$('#scheduleBody').append(scheduleListHtml.join(''));
-				popSchModify.button.rowAddClickEvent();	
-				loadCodeSelect(function(){
-			    		var timeName = "";
-			    		$("select[name='startTime']").each(function(index){
-						    if( index < optionstring.length){
-			    				$(this).val(optionstring[index].startTime);
-						    }
-						});
-						$("select[name='endTime']").each(function(index){
-						    if( index < optionstring.length){
-								$(this).val(optionstring[index].endTime);
-						    }
-						});	
-                    
-			    	}, '#scheduleModify_enter'); 
-
+			$.when(	popSchModify.cmmnCode.getAllCodeList(),popSchModify.selectScheduleList()).done(function(result){
+							 popSchModify.rowAddEvent();
 			});
-		},		//리스트 조회 시 가져온 시간 데이터[ex)1,2,4,5 ...] 를
-		//실제 시간 범위[09:30~11:00  12:30~14:00 ...]로 변경하여 표시하는 함수
+			
+		},		
 		convertTime: function(timeListStr) {
 			
 			var tList = timeListStr.split(',');
@@ -188,21 +164,31 @@ var popSchModify= {
 			}
 			return timeSheet.time;
 		},
+	   rowAddEvent:function(){		
+				$.when(addRow()).then(function(cnt){
+					var startTime = Number($("#scheduleModify_endTime"+ (cnt-1)).val());
+					var endTime = Number($("#scheduleModify_endTime"+ (cnt-1)).val());
+					var arrayCnt = popSchModify.margData.length  
+					 startTime = (cnt<=arrayCnt)? popSchModify.margData[cnt-1].startTime :startTime + 1;
+					 endTime  = (cnt<=arrayCnt)? popSchModify.margData[cnt-1].endTime: endTime + 1;
+						var indexMax =$("#scheduleModify_startTime"+cnt).children().length
+						$("#scheduleModify_startTime"+cnt).val((startTime>=indexMax)? 1: startTime)
+						$("#scheduleModify_endTime"+cnt).val((endTime>=indexMax)?indexMax:endTime) 
+					
+					   if(  cnt < arrayCnt ){
+				    	     popSchModify.rowAddEvent();
+				        }  		
+				});
+	
+	    },
 		button:{
 			popSaveClickEvent:function(){
 				
 				$("#scheduleModify_saveBtn").on("click",function(){			
-					
-				  console.log({bldCode :  popSchModify.params.bldCode,
-					       bedCode:   popSchModify.params.bedCode, //배드     
-						   mssrEmpno : popSchModify.params.mssrEmpno,
-						   resveDate : popSchModify.params.resveDate,
-						   insertTime: JSON.stringify(getParamsdiff().insertTime),
-						   deleteTime: JSON.stringify(getParamsdiff().deleteTime)	   
-					});
-					
-				  var timeSheet = getParamsdiff();
-				  
+					if(!popSchModify.validation.timeCheck()){
+						return false;
+					}
+				    var timeSheet = getParamsdiff();
 					$.ajax({
 						url: ROOT + '/mssr/scheduleModify',
 						type: 'POST',
@@ -224,49 +210,88 @@ var popSchModify= {
 					}); 
 					
  				});
-			},
-		   rowAddClickEvent:function(){			   
-				$("#scheduleModify_rowAddBtn").on("click",function(){
-                    var rowidrest = null;
-				 
-					
-					var trCnt = $(".trscheduleModfiy").length;
-				   if(trCnt >4){return false}
-					
-					$clone = $(".trscheduleModfiy").eq(0).clone();
-				    console.log($clone.html());
-				    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
-				    $clone.find("th").text("근무시간 "+trCnt);
-				    $clone.find(".t-btn").text("삭제").attr({"onclick": "fnRowDelete(event);"});	
-				    $clone.find("select").each(function(){
-				    	$(this).attr({'id':this.id+trCnt , "default-str":((this.name =="endTime" )? "9":"1" ) });
-				    	
-					});				    
-				    
-				    $("#scheduleModify_enter tbody").append( $clone.wrapAll("<div/>").parent().html());
-			   });				
-				
 			}
-	}
+					
+	   },
+	   validation: {
+			//날짜 필드 값 체크
+			dateCheck: function() {
+				var fromDate = $('input#from_date').val().trim().split('-');
+				var toDate = $('input#to_date').val().trim().split('-');
+				
+				var fromdt = fromDate[0] + fromDate[1] + fromDate[2];
+				var todt = toDate[0] + toDate[1] + toDate[2];
+				
+				if (fromdt.length !== 8) {
+					alert('시작날짜 형식이 잘못되었습니다.');
+					return false;
+				}
+				
+				if (todt.length !== 8) {
+					alert('종료날짜 형식이 잘못되었습니다.');
+					return false;
+				}
+				
+				if (fromdt > todt) {
+					alert('시작날짜가 종료날짜가 클 수 없습니다.');
+					return false;
+				}
+				
+				scheduleList.list.params.fromDate = fromdt;
+				scheduleList.list.params.toDate = todt;
+				
+				return true;
+			},
+			 required:function(){
+				 var chk = true;
+				 var returnMsg="등록된값이 없습니다"
+					$(".required").nextAll("td").children("input,select").each(function(){
+						console.log($(this).parent().prev().text());	
+					  if ($(this).val()==null||$(this).val()==""){
+						  returnMsg = $(this).parent().prev().text() +returnMsg;
+						  $(".rv-desc").show();
+						  $("#requiredMsg").text(returnMsg);
+						  chk = false
+						  return false;
+					  };
+					});  
+				 return chk;	 
+			 },
+			 timeCheck: function(){
+				 var chk = true;
+				 $('select[id^=scheduleModify_startTime]').each(function(i,e){
+					 var startTm = $('#'+e.id);
+					 var endTm = $('#scheduleModify_endTime' + e.id.replace('scheduleModify_startTime',''));
+					 
+					 if(startTm.val()>endTm.val()){
+						 //alertPopup('시작시간이 종료시간보다 클 수 없습니다.');
+						 $("#requiredMsg").text(getMessage('error.timeCompareStartEnd'));
+						 $(".rv-desc").show();
+						 chk = false;
+					 }						
+				 })
+				 return chk;
+			 }
+			
+      }
 		
 }
 
 function fnRowDelete(){
-javascript:event.target.parentNode.parentNode.remove()
-	  $("#scheduleBody  tr").each(function(index){
+		javascript:event.target.parentNode.parentNode.remove()
+	  $("#scheduleModify_Body tr").each(function(index){
 		     rowidrest = this;
 		     if(index>=1){
-		     $(rowidrest).children("th").text("근무시간 "+index)
+		     $(rowidrest).children("th").text("근무시간 "+(index+1))
 		     $(rowidrest).attr({"id":"tr"+index ,"data-rowid":index});
 		     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "scheduleModify_"+ this.name+ index })  
 		     }
 		});
 	
 }
-
 function getParams(){
 	var params = [] 
-	$(".trscheduleModfiy").each(function(){
+	$(".scheduleModify").each(function(){
 		var rowid = $(this).data("rowid");
 		params.push({
 				startTime: $("#scheduleModify_startTime"+rowid).val(), //근무 시작일
@@ -276,7 +301,6 @@ function getParams(){
 	});	
 	return params;
 }
-
 
  function getParamsdiff(){
 	var defData = popSchModify.params.timeList.split(',');
@@ -292,33 +316,50 @@ function getParams(){
 		   setTimesheet.push(j.toString());	
 		}  
 	}
-  
-    
     var diff1 = defData.filter( function(x){ return (setTimesheet.indexOf(x) ===-1)?false:true});
     var diffInsert = setTimesheet.filter(function(x){ return (defData.indexOf(x) ===-1)?true:false});
     var diffDelete = defData.filter(function(x){ return (diff1.indexOf(x)===-1)?true:false});
-   
-    /* console.log("diff1",setTimesheet);
-    console.log("diffInsert",diffInsert);
-    console.log("diffDelete",diffDelete);*/    
-    //return{insertTime:diffInsert, deleteTime:diffDelete }
-	/* 
-    var diff2  = defData.filter(x => setTimesheet.includes(x));
-    var insertTime = setTimesheet.filter(x => ! defData.includes(x));
-    var deleteTime = defData.filter(x => ! diff2.includes(x)); 
-    console.log("setTimesheet",setTimesheet);
-    console.log("defData",defData);
-    console.log("diff2",diff2);
-    console.log("insertTime",insertTime);
-    console.log("deleteTime",deleteTime); */
     
     return{insertTime:diffInsert,deleteTime:diffDelete}
  }
 
+ function  addRow (){ 
+	  var deferred = $.Deferred();
+	  var trCnt = $(".scheduleModify").length +1;	
+	 if(trCnt <=5 ){
+		
+		 var scheduleListHtml = [];
+	           scheduleListHtml.push('<tr id="scheduleModify_tr'+trCnt+'" data-rowid = "'+trCnt+'" class="scheduleModify"><th>근무 시간'+trCnt+'</th>');
+				scheduleListHtml.push('<td>');
+				//scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'"></select>'); 
+				scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'">')
+			    scheduleListHtml.push(popSchModify.cmmnCode.startTimeCombo.join(''));
+			    scheduleListHtml.push('</select>');
+				scheduleListHtml.push('<em class="fromto"> ~ </em>');
+				scheduleListHtml.push('<select name ="endtime" data-code-tyl="RVT" data-code-tys="RVTEND" id="scheduleModify_endTime'+trCnt+'">')
+				scheduleListHtml.push(popSchModify.cmmnCode.endTimeCombo.join(''));
+				scheduleListHtml.push('</select>');
+				//scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  data-default-str ="9" id="scheduleModify_endTime'+trCnt+'"></select>')
+		    if(trCnt == 1){
+				scheduleListHtml.push('<button class="t-btn cr01" id="scheduleModify_rowAddBtn" onclick="popSchModify.rowAddEvent()">추가</button></td></tr>');
+			
+		    }else{
+				scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
+			}
+            $('#scheduleModify_Body').append(scheduleListHtml.join(''));
+  
+	}else{
+		deferred.reject("");
+	}
+  deferred.resolve(trCnt);
+  return deferred.promise();
+
+ } 
 $(document).ready(function(){		
 	var item = '${item}';
 	var data = JSON.parse(item);
 	console.log("modify",data);
+	var resveDt =data.RESVE_DE.substr(0,4) + '-' + data.RESVE_DE.substr(4,2) + '-' + data.RESVE_DE.substr(6,2);
 	popSchModify.init();
 	popSchModify.params.bldCode = data.BLD_CODE;
 	popSchModify.params.RESVE_NO = data.RESVE_NO;
@@ -327,16 +368,12 @@ $(document).ready(function(){
 	popSchModify.params.resveTime = data.RESVE_TM;
 	popSchModify.params.bedCode = data.BED_CODE;
 	popSchModify.params.timeList = data.RESVE_TM_LIST;
-	/* popSchModify.convertTime(popSchModify.params.timeList); */
-	$("#tdResveDate").text(data.RESVE_DE);
+	popSchModify.renderScheduleList()
+
+	$("#tdResveDate").text(resveDt);
 	$("#tdMssName").text(data.MSSR_NCNM);
-
 	$('#tdBedName').text(data.BED_NM)
-	/* popSchModify.selectScheduleList(); */
 
-    //popSchModify.selectScheduleList(); 
-    popSchModify.renderScheduleList();
-	loadCodeSelect(undefined, '#scheduleModify_enter'); //콤보박스 공통코드 세팅	
 	
 })
   
