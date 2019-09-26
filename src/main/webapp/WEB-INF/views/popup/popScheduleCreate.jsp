@@ -191,20 +191,20 @@ var popSchCreate = {
 				});
 			},
 		   rowAddClickEvent:function(){			   
-				  $.when(addRow()).done(function(cnt){
-  				   
+				  $.when(addRow()).done(function(cnt,setDate){
 				    $("#scheduleCreate_Body").find('.datepicker').datepicker("destroy");//.datepicker();
   				    initDatepicker(); 
-  				    
-  					var fromDate = moment().format('YYYY-MM-DD'); //오늘 날짜
-  					var toDate = moment().add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
+  				  loadCodeSelect( function(){
+  				 
+  				    var mm = moment(setDate,"YYYYMMDD");
+  				    var fromDate = mm.format('YYYY-MM-DD');
+  					var toDate = mm.add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
   					
   					$('#scheduleCreate_start_date'+cnt).val(fromDate);
   					$('#scheduleCreate_end_date'+cnt).val(toDate);
-  				    console.log(123123123)
-  				     $('#scheduleCreate_startTime'+cnt).val(1);
-   	  	
-  				      loadCodeSelect(undefined, '#scheduleCreate_tr'+cnt);   
+  				    $('#scheduleCreate_startTime'+cnt).val(1);
+  				   }
+  				      , '#scheduleCreate_tr'+cnt);   
 				  });
 
 			}
@@ -260,11 +260,11 @@ function fnRowDelete(){
 function addRow (){
 	var deferred = $.Deferred();
 	var trCnt =$(".trschedule").length + 1
-	console.log(trCnt);
+	var lastdate = (trCnt==1)? moment() : moment($('.datepicker:last').val(),"YYYYMMDD"); 
 	var scheduleListHtml = [];
 	if(trCnt >5){ deferred.reject(''); return false;}
 		scheduleListHtml.push('<tr id ="scheduleCreate_tr'+trCnt+'" class="trschedule" data-rowid = "'+trCnt+'" >');
-		scheduleListHtml.push('<th class = "required">근무 일정'+trCnt+'</th >');
+		scheduleListHtml.push('<th class = "required">근무시간'+trCnt+'</th >');
 		scheduleListHtml.push('<td>');
 		scheduleListHtml.push('<input type="text"  id = "scheduleCreate_start_date'+trCnt+'" class="datepicker startDate" >');
 		scheduleListHtml.push('<em class="fromto"> ~ </em>');
@@ -278,8 +278,8 @@ function addRow (){
 		scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
 	}
 	$('#scheduleCreate_Body').append(scheduleListHtml.join(''));
-
-	deferred.resolve(trCnt);
+	 
+	deferred.resolve(trCnt,lastdate);
 	return deferred.promise();
 }
 

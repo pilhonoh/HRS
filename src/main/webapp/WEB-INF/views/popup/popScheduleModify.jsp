@@ -165,19 +165,27 @@ var popSchModify= {
 			return timeSheet.time;
 		},
 	   rowAddEvent:function(){		
-				$.when(addRow()).then(function(cnt){
-					var startTime = Number($("#scheduleModify_endTime"+ (cnt-1)).val());
-					var endTime = Number($("#scheduleModify_endTime"+ (cnt-1)).val());
-					var arrayCnt = popSchModify.margData.length  
-					 startTime = (cnt<=arrayCnt)? popSchModify.margData[cnt-1].startTime :startTime + 1;
-					 endTime  = (cnt<=arrayCnt)? popSchModify.margData[cnt-1].endTime: endTime + 1;
-						var indexMax =$("#scheduleModify_startTime"+cnt).children().length
-						$("#scheduleModify_startTime"+cnt).val((startTime>=indexMax)? 1: startTime)
-						$("#scheduleModify_endTime"+cnt).val((endTime>=indexMax)?indexMax:endTime) 
-					
+				$.when(addRow()).then(function(cnt,endTime){
+			
+					    var arrayCnt = popSchModify.margData.length  
+					    
+					    if ( cnt <=arrayCnt ) {
+					        startTime = Number(popSchModify.margData[cnt-1].startTime);
+					        endTime  =  Number(popSchModify.margData[cnt-1].endTime);
+					    } else {	
+					        
+					    	startTime = endTime  
+					    	endTime  = $("select >option:last").eq(0).val();
+					    }
+					    
+					    $("#scheduleModify_startTime"+cnt).val(startTime);
+						$("#scheduleModify_endTime"+cnt).val(endTime); 
+				    
 					   if(  cnt < arrayCnt ){
 				    	     popSchModify.rowAddEvent();
-				        }  		
+				        }  
+					   if (cnt==5){$("#scheduleModify_rowAddBtn").removeClass('cr01').prop('disabled',true)}	
+						
 				});
 	
 	    },
@@ -278,14 +286,15 @@ var popSchModify= {
 }
 
 function fnRowDelete(){
-		javascript:event.target.parentNode.parentNode.remove()
-	  $("#scheduleModify_Body tr").each(function(index){
+    javascript:event.target.parentNode.parentNode.remove()
+    popSchModify.margData =[];
+    if ($("#scheduleModify_rowAddBtn").prop("disabled")){$("#scheduleModify_rowAddBtn").addClass('cr01').prop('disabled',false)}	
+    $("#scheduleModify_Body tr").each(function(index){
 		     rowidrest = this;
-		     if(index>=1){
-		     $(rowidrest).children("th").text("근무시간 "+(index+1))
+		     index += 1
+		     $(rowidrest).children("th").text("근무시간 "+(index))
 		     $(rowidrest).attr({"id":"tr"+index ,"data-rowid":index});
-		     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "scheduleModify_"+ this.name+ index })  
-		     }
+		     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "scheduleModify_"+ this.name + index })
 		});
 	
 }
@@ -326,17 +335,20 @@ function getParams(){
  function  addRow (){ 
 	  var deferred = $.Deferred();
 	  var trCnt = $(".scheduleModify").length +1;	
-	 if(trCnt <=5 ){
+	  var lastTiem = (trCnt==1)? trCnt : $("select[name='endTime']:last").val() ;
+	   
+	   
+	   if(trCnt <=5 ){
 		
 		 var scheduleListHtml = [];
-	           scheduleListHtml.push('<tr id="scheduleModify_tr'+trCnt+'" data-rowid = "'+trCnt+'" class="scheduleModify"><th>근무 시간'+trCnt+'</th>');
+	           scheduleListHtml.push('<tr id="scheduleModify_tr'+trCnt+'" data-rowid = "'+trCnt+'" class="scheduleModify"><th>근무시간'+trCnt+'</th>');
 				scheduleListHtml.push('<td>');
 				//scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'"></select>'); 
 				scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'">')
 			    scheduleListHtml.push(popSchModify.cmmnCode.startTimeCombo.join(''));
 			    scheduleListHtml.push('</select>');
 				scheduleListHtml.push('<em class="fromto"> ~ </em>');
-				scheduleListHtml.push('<select name ="endtime" data-code-tyl="RVT" data-code-tys="RVTEND" id="scheduleModify_endTime'+trCnt+'">')
+				scheduleListHtml.push('<select name ="endTime" data-code-tyl="RVT" data-code-tys="RVTEND" id="scheduleModify_endTime'+trCnt+'">')
 				scheduleListHtml.push(popSchModify.cmmnCode.endTimeCombo.join(''));
 				scheduleListHtml.push('</select>');
 				//scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  data-default-str ="9" id="scheduleModify_endTime'+trCnt+'"></select>')
@@ -347,11 +359,11 @@ function getParams(){
 				scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
 			}
             $('#scheduleModify_Body').append(scheduleListHtml.join(''));
-  
+    
 	}else{
 		deferred.reject("");
 	}
-  deferred.resolve(trCnt);
+  deferred.resolve(trCnt,lastTiem);
   return deferred.promise();
 
  } 
