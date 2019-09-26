@@ -109,13 +109,28 @@
 
 .footer {
 	padding:15px;
-	border-top:1px solid #ddd;
-	text-align:center;
-	color:#999;
-	font-size:12px;
+	border-top:1px solid #e8e8eb;
+	text-align:center;	
 	position:relative;
 	z-index:999;
-	background:#fff;
+	background:#fff;	
+}
+.footer .inner span {
+	color:#999;
+	font-size:12px;
+	vertical-align:middle;
+	border-right:1px solid #ddd;
+	margin-right:15px;
+	padding-right:15px;
+}
+.footer .inner .f-btn {
+	color:#a6968f;
+	font-size:12px;
+	font-weight:900;
+	vertical-align:middle;
+}
+.footer .inner .f-btn:hover {
+	text-decoration:underline;
 }
 
 .content { 
@@ -123,7 +138,7 @@
 	margin:0 auto;
 	box-sizing:border-box;
 	min-height:850px;
-	padding:80px 0 20px;
+	padding:75px 0 10px;
 	position:relative;
 }
 
@@ -526,10 +541,9 @@ button.ui-datepicker-trigger {
 .month-area {	
 	display:table;
 	width:100%;
-	border:10px solid #d5d5d5;
-	border-radius:15px;
+	border:5px solid #d5d5d5;
+	border-radius:10px;
 	overflow:hidden;
-	padding:15px 0;
 	box-sizing: border-box;
 }
 .building-select {
@@ -553,11 +567,12 @@ button.ui-datepicker-trigger {
 	font-weight:900;
 	color:#333;
 	padding-left:20px;
-	background:url('../images/common/select_arrow.png') no-repeat right 20px top 50%;
+	background:#f9f9f9 url('../images/common/select_arrow.png') no-repeat right 15px top 50%;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 	vertical-align:middle;
+	border-radius:5px;
 }
 .building-select select::-ms-expand {
     display: none;
@@ -586,16 +601,16 @@ button.ui-datepicker-trigger {
 }
 .cal-day span {	
 	display:inline-block;
-	width:35px;
-	height:35px;
-	line-height:35px;
+	width:30px;
+	height:30px;
+	line-height:30px;
 	text-align:center;
 	border-radius:100%;
-	font-size:18px;
+	font-size:17px;
 	color:#333;
 	background:#fff;
 	cursor:pointer;
-	margin-top:10px;
+	margin-top:5px;
 }
 .cal-day.off span {
 	color:#999;
@@ -632,12 +647,17 @@ button.ui-datepicker-trigger {
 }
 .cal-day.month span {
 	color:#333;
-	font-size:35px;
+	font-size:32px;
 	font-weight:900;
 	width:auto;
 	cursor:auto;
+	margin-top:3px;
+}
+
+.month-area.st2 .cal-day span { 
 	margin-top:10px;
 }
+
 
 /* 체크 디자인 */
 .check-design {
@@ -739,7 +759,7 @@ button.ui-datepicker-trigger {
 	border-bottom:1px solid #c9c9c9;
 }
 .reservation-table tbody td { 
-	height:72px;
+	height:67px;
 	font-size:18px;
 	color:#333;
 	border-left:1px solid #ebebeb;
@@ -791,9 +811,9 @@ button.ui-datepicker-trigger {
 }
 
 .rbtn {
-	height:32px;
+	height:30px;
 	background:#666;
-	border-radius:32px;
+	border-radius:30px;
 	width:100px;
 	text-align:center;
 	color:#fff;
@@ -956,14 +976,54 @@ button.ui-datepicker-trigger {
 }
 
 .rv-desc-list {
-	border:2px solid #e8e8eb;
+	border:1px solid #e8e8eb;
 	border-radius:10px;
-	padding:20px;
+	padding:10px 20px;
 	box-sizing:border-box;
-	margin-top:20px;
+	margin-top:10px;
 	overflow:hidden;
 	position:relative;
 }
+/* .rv-desc-list:after { 
+	content:"";
+	width:1px;
+	background:#dbdce0;
+	position:absolute;
+	top:25px;
+	bottom:25px;
+	left:38%;
+} 
+.rv-desc-list ul li {
+	float:left;
+	font-size:13px;
+	color:#727272;
+	box-sizing:border-box;
+	padding-left:25px;
+	line-height:26px;
+}
+.rv-desc-list ul li strong {
+	font-weight:900;
+	color:#333;
+}
+.rv-desc-list ul li.icon01 {
+	background:url('../images/common/btm_info_icon01.png') no-repeat 0 50%;
+	width:40%;
+}
+.rv-desc-list ul li.icon02 {
+	background:url('../images/common/btm_info_icon02.png') no-repeat 0 50%;
+	width:60%;
+}
+.rv-desc-list ul li.icon03 {
+	background:url('../images/common/btm_info_icon03.png') no-repeat 0 50%;
+	width:40%;
+}
+.rv-desc-list ul li.icon04 {
+	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
+	width:60%;
+}
+*/
+
+/* 사용자 안내 문구 디자인 수정.20190925(김대종) 시작 */
 .rv-desc-list:after { 
 	content:"";
 	width:1px;
@@ -973,6 +1033,7 @@ button.ui-datepicker-trigger {
 	bottom:25px;
 	left:48%;
 }
+
 .rv-desc-list ul li {
 	float:left;
 	font-size:12px;
@@ -1001,6 +1062,7 @@ button.ui-datepicker-trigger {
 	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
 	width:50%;
 }
+/* 사용자 안내 문구 디자인 수정.20190925(김대종) 끝 */
 .rv-desc-list.st2 {
 	margin:0 0 10px;
 }
@@ -1057,7 +1119,7 @@ button.ui-datepicker-trigger {
 	border-radius:10px;
 	text-align:center;
 	margin-top:10px;
-	padding:15px 0;
+	padding:20px 0;
 }
 .number-search label {
 	display:inline-block;
@@ -1068,9 +1130,15 @@ button.ui-datepicker-trigger {
 	color:#fff;
 	margin-right:20px;
 }
+.number-search select {
+	height:40px;
+	font-size:15px;
+	border-radius:2px;
+	width:150px;
+}
 .number-search input[type="text"] {
 	height:40px;
-	width:500px;
+	width:350px;
 	font-size:15px;
 	padding:0 15px;
 	border-radius:2px;
@@ -1100,7 +1168,6 @@ button.ui-datepicker-trigger {
 }
 .tit-head {
 	position:relative;
-	padding:0 0 10px;
 }
 .tit-head .logo {
 	top:-5px;
@@ -1332,4 +1399,40 @@ button.ui-datepicker-trigger {
 }
 .tab-design li a:hover {
 	color:#ff7a00;
+}
+
+
+.report-cont h3 {
+	font-size:18px;
+	color:#4c4c4c;
+	text-align:center;
+}
+.report-cont p {
+	font-size:14px;
+	color:#7f7f7f;
+	position:relative;
+	padding-top:20px;
+	margin-top:20px;
+	text-align:center;
+}
+.report-cont p:after {
+	content:"";
+	width:20px;
+	height:1px;
+	background:#4c4c4c;
+	position:absolute;
+	top:0;
+	left:50%;
+	margin-left:-10px;
+}
+.report-cont span {
+	display:block;
+	text-align:right;
+	font-size:12px;
+	color:#7f7f7f;
+	margin-top:20px;
+}
+.report-cont textarea {
+	padding:10px;
+	margin-top:5px;
 }

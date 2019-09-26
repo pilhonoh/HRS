@@ -120,10 +120,32 @@ var resveStatus = {
  * 상단 2주달력
  */
 resveStatus.calendar =  {
+	// 오늘부터 이후 2주조회
+	getAfter2Weeks : function(fromDate) {
+		var startDt = moment(fromDate) || moment();
+		var endDt = startDt.clone().add(2, 'w');
+		var dates = [];	
+		while(!startDt.isSame(endDt)){
+			var d = {
+				date: startDt.toDate(),
+				yyyymmdd: startDt.format('YYYYMMDD'),
+				year: startDt.year(),
+				month: startDt.month()+1,
+				day: startDt.date(),
+				weekday: startDt.isoWeekday(),
+				weekdayName: startDt.format('ddd').toUpperCase()
+			}
+			
+			dates.push(d);
+			startDt = startDt.add(1, 'days');
+		}	
+		
+		return dates;
+	},
 	// 렌더링
 	render : function(){
 							
-		var dates = getAfter2Weeks();
+		var dates = resveStatus.calendar.getAfter2Weeks();
 		var elements = [];
 							
 		dates.forEach(function(d, i){
@@ -301,10 +323,8 @@ resveStatus.pop  =  {
 
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
-			//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다');
-			//alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 			$.alert({
-				title: getMessage('error.over20min'),
+				text: getMessage('error.over20min'),
 				callback: resveStatus.table.refresh
 			});
 			return false;
@@ -321,10 +341,8 @@ resveStatus.pop  =  {
 				status == 'NOSHOW';				//노쇼
 		});
 		if(filtered.length != 0){
-			//alertPopup("예약/대기신청은 1일 1회만 가능합니다.");
-			//alertPopup(getMessage('error.duplicateDayResve'), resveStatus.table.refresh);
 			$.alert({
-				title: getMessage('error.duplicateDayResve'),
+				text: getMessage('error.duplicateDayResve'),
 				callback: resveStatus.table.refresh
 			});
 			return false;
@@ -339,23 +357,17 @@ resveStatus.pop  =  {
 			}, 
 			function(res){
 				$('#layer_pop01 #btnOk').on('click', function(){
+					//closeLayerPopup();
 					
 					$.alert({
-						title: '케어 시작 20분 전까지만 취소가 가능하며, No-show 시 2주간 예약이 불가합니다.',
-						contents: '확인버튼 클릭시 예약이 완료됩니다.',
+						text: '케어 시작 20분 전까지만 취소가 가능하며, No-show 시 2주간 예약이 불가합니다.',
+						desc: '확인버튼 클릭시 예약이 완료됩니다.',
 						callback: function(){
 							resveStatus.regist(data.RESVE_NO);
 						},
-						isHideIcon: true
+						icon: false
 					});
-					
-					/*alertPopup('케어 시작 20분 전까지만 취소가 가능하며, No-show 시 2주간 예약이 불가합니다.',
-						'확인버튼 클릭시 예약이 완료됩니다.', 
-						function(){
-							resveStatus.regist(data.RESVE_NO);
-						},
-						true	//아이콘 숨김여부
-					);*/
+	
 					
 				});	
 				openLayerPopup('layer_pop01');
@@ -370,10 +382,8 @@ resveStatus.pop  =  {
 
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
-			//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다.');
-			//alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 			$.alert({
-				title: getMessage('error.over20min'),				
+				text: getMessage('error.over20min'),				
 				callback: resveStatus.table.refresh
 			});
 			return false;
@@ -389,10 +399,8 @@ resveStatus.pop  =  {
 				status == 'NOSHOW';				//노쇼
 		});
 		if(filtered.length != 0){
-			//alertPopup("예약/대기신청은 1일 1회만 가능합니다.");
-			//alertPopup(getMessage('error.duplicateDayResve'), resveStatus.table.refresh);
 			$.alert({
-				title: getMessage('error.duplicateDayResve'),				
+				text: getMessage('error.duplicateDayResve'),				
 				callback: resveStatus.table.refresh
 			});
 			return false;
@@ -422,13 +430,10 @@ resveStatus.pop  =  {
 
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
-			//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다.');
-			//alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 			$.alert({
-				title: getMessage('error.over20min'),				
+				text: getMessage('error.over20min'),				
 				callback: resveStatus.table.refresh
-			});
-			duplicateDayResve
+			});			
 			return false;
 		}
 						
@@ -451,10 +456,8 @@ resveStatus.pop  =  {
 
 			// 20분전 ~ 케어시작시간 사이라면 alert
 			if(new Date() < resveDatetime){				
-				//alertPopup('케어시작 20분 전 까지만 신청 및 취소 가능합니다.');
-				//alertPopup(getMessage('error.over20min'), resveStatus.table.refresh);
 				$.alert({
-					title: getMessage('error.over20min'),				
+					text: getMessage('error.over20min'),				
 					callback: resveStatus.table.refresh
 				});
 				return false;

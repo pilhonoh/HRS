@@ -103,7 +103,7 @@ var scheduleList = {
 			$.when(scheduleList.combobox.getMssrList(bldCode)).done(function(result) {
 				
 				$('#mssrCombo').empty();
-				var mssrComboHtml = ['<option value="">관리사</option>'];
+				var mssrComboHtml = ['<option value="">전체</option>'];
 								
 				if (result.length > 0 && bldCode) {
 					for (var i in result) {

@@ -79,19 +79,15 @@ var resveConfirm = {
 	pop : {
 		confirm : function(e){
 			if($('#txtResveEmpno').val().trim() == ""){
-				//alertPopup('사번을 입력하세요.');
-				//alertPopup(getMessage('error.requireEmpno'));
-				$.alert({title: getMessage('error.requireEmpno')});
+				$.alert({text: getMessage('error.requireEmpno')});
 			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
-				//alertPopup('본인 확인은 케어시작 당일에만 가능합니다.');
-				//alertPopup(getMessage('error.onlySameday'));
-				$.alert({title: getMessage('error.onlySameday')});
+				$.alert({text: getMessage('error.onlySameday')});
 			}else{
-				$('#layer_pop01').load(ROOT + '/confirm/pop/start',{
+				$('#layer_pop04').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
 					resveDe: resveConfirm.data.selectedDate.yyyymmdd
 				}, function(res, state, xhr){						
-					openLayerPopup('layer_pop01');
+					openLayerPopup('layer_pop04');
 				});
 			}
 			
@@ -102,10 +98,32 @@ var resveConfirm = {
 
 // 달력
 resveConfirm.calendar = {
+	// 오늘부터 이후 2주조회
+	getAfter2Weeks : function(fromDate) {
+		var startDt = moment(fromDate) || moment();
+		var endDt = startDt.clone().add(2, 'w');
+		var dates = [];	
+		while(!startDt.isSame(endDt)){
+			var d = {
+				date: startDt.toDate(),
+				yyyymmdd: startDt.format('YYYYMMDD'),
+				year: startDt.year(),
+				month: startDt.month()+1,
+				day: startDt.date(),
+				weekday: startDt.isoWeekday(),
+				weekdayName: startDt.format('ddd').toUpperCase()
+			}
+			
+			dates.push(d);
+			startDt = startDt.add(1, 'days');
+		}	
+		
+		return dates;
+	},
 	// 렌더링
 	render : function(){
 							
-		var dates = getAfter2Weeks();
+		var dates = resveConfirm.calendar.getAfter2Weeks();
 		var elements = [];
 							
 		dates.forEach(function(d, i){

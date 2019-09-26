@@ -45,14 +45,14 @@ $(document).ready(function(){
 		var realTime = getRealTime(data.RESVE_TM);
 		$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
 		
-		$('#btnOk').on('click', function(){
+		$('#layer_pop04 #btnOk').on('click', function(){
 			resveConfirm.start(data.RESVE_NO);
 			$('#txtResveEmpno').val('');
 		});
 	}else{		
 		//alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.	
 		$.alert({
-			title: getMessage('error.resveNotFound'),
+			text: getMessage('error.resveNotFound'),
 			callback: resveConfirm.table.refresh
 		});
 	}

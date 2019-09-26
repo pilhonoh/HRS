@@ -21,3 +21,4 @@ var IMG = '${IMG}';
 <script src="${LIB}/jquery-ui/jquery-ui.min.js"></script>
 <script src="${LIB}/moment/moment.min.js"></script>
 <script src="${JS}/cmmn/common.js"></script>
+<script src="${JS}/cmmn/feedback.js"></script>

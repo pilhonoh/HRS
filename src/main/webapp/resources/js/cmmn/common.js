@@ -23,11 +23,18 @@ $(function(){
 			var day = date.getDay();
 			return [(day != 0 && day != 6)];
 		}	
-	});	
+	});
+	
+	// 오늘 버튼 클릭이벤트
+	$.datepicker._gotoToday = function(id) {
+		$(id).datepicker('setDate', new Date());	//오늘로 setDate
+		$('.ui-datepicker-current-day').click(); 	//클릭 트리깅
+	};
 
 	initDatepicker();
 	
 	$.ajaxSetup({
+		cache: false,
 		dataFilter: function(data,type){
 						
 			try{
@@ -44,10 +51,16 @@ $(function(){
 						}catch(err){}
 					}
 					
-					if(json.messageCode == 'system.error'){
-						alertPopup(getMessage('system.error'), afterLogic);
-					}else{						
-						alertPopup(json.message, afterLogic);
+					if(json.messageCode == 'system.error'){	// 시스템에러
+						$.alert({
+							text: getMessage('system.error'), 
+							callback: afterLogic
+						});
+					}else{	// 비즈니스로직 에러
+						$.alert({
+							text: json.message, 
+							callback: afterLogic
+						});
 					}
 					if(json.status == 403){
 						location.href = '/error/403';
@@ -65,6 +78,67 @@ $(function(){
 	    weekdaysShort: ["일","월","화","수","목","금","토"],
 	});
 	moment.locale('en');
+	
+	
+	/**
+	 *  URL로부터 get parameter를 구한다.
+	 * $.getParam('myKey')
+	 */
+	$.getParam = function(name){
+	    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	    return results ? results[1] : undefined;
+	}
+	
+	/**
+	 * Alert 메시지 출력
+	 * 
+	 * options = {
+	 *	text: 'alert 메시지'
+	 *	desc: '하부 보조 메시지',
+	 *	callback: 확인버튼 클릭시, 수행할 콜백함수
+	 *	icon : false면 아이콘 숨김
+	 * }
+	 */
+	$.alert = function(options) {
+		$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
+			$('.alert-message h3').html(options.text.replace(/\n/g, '<br/>'));
+			if(options.desc){
+				$('.alert-message p').text(options.desc);
+			}
+			
+			if(options.icon == false)
+				$('.alert-message h3').removeClass('alert');
+				
+			$('#layer_pop_alert #btnOk').one('click', options.callback);
+			openLayerPopup('layer_pop_alert');
+		});
+	}
+	
+	/**
+	 * Confirm 메시지 출력
+	 * 
+	 * options = {
+	 *	text: 'confirm 메시지'
+	 *	desc: '하부 보조 메시지',
+	 *	callback: 확인버튼 클릭시, 수행할 콜백함수
+	 *	icon : false면 아이콘 숨김
+	 * }
+	 */
+	$.confirm = function(options) {
+		$('#layer_pop_confirm').load(ROOT + '/resources/html/confirm.html', function(res){		
+			$('.alert-message h3').html(options.text.replace(/\n/g, '<br/>'));
+			if(options.desc){
+				$('.alert-message p').text(options.desc);
+			}
+			
+			if(options.icon == false)
+				$('.alert-message h3').removeClass('confirm');
+			
+			$('#layer_pop_confirm #btnOk').one('click', options.callback);
+			openLayerPopup('layer_pop_confirm');
+		});
+	}
+	
 });
 
 function initDatepicker(){
@@ -84,494 +158,6 @@ function initDatepicker(){
 	    });
 	 })
 }
-
-//layer popup 
-function e_layer_pop01(id) {
-	$('#layer_pop01').load("../popup/pop_예약신청.html", function(){	//헬스케어 예약 신청
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop02(id) {
-	$('#layer_pop02').load("../popup/pop_대기신청.html", function(){	//헬스케어 대기 신청
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop03(id) {
-	$('#layer_pop03').load("../popup/pop_예약대기취소.html", function(){	//  헬스케어 예약/대기 취소
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop04(id) {
-	$('#layer_pop04').load("../popup/pop_시작확인.html", function(){	//  헬스케어 시작 확인
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop05(id) {
-	$('#layer_pop05').load("../popup/pop_관리사등록수정.html", function(){	//  관리사 등록 수정
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop06(id) {
-	$('#layer_pop06').load("../popup/pop_관리사근무등록.html", function(){	//  관리사 근무 등록
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-
-		// 달력UI
-		$(".datepicker").datepicker({
-			showOn: "both", // 버튼과 텍스트 필드 모두 캘린더를 보여준다.
-			buttonImage: "../resources/images/common/ico_date.png", // 버튼 이미지.
-			dateFormat: "yy-mm-dd", // 텍스트 필드에 입력되는 날짜 형식.
-			changeMonth: true ,
-			changeYear: true,
-			nextText: '다음 달', // next 아이콘의 툴팁.
-			prevText: '이전 달', // prev 아이콘의 툴팁.
-			monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-			monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
-			dayNames: ['일','월','화','수','목','금','토'],
-			dayNamesShort: ['일','월','화','수','목','금','토'],
-			dayNamesMin: ['일','월','화','수','목','금','토'],
-			showButtonPanel: true,
-			currentText: '오늘' , // 오늘 날짜로 이동하는 버튼 패널
-			closeText: '닫기',  // 닫기 버튼 패널
-		});	
-	});
-};
-
-function e_layer_pop07(id) {
-	$('#layer_pop07').load("../popup/pop_관리사근무수정.html", function(){	//  관리사 근무 수정
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop08(id) {
-	$('#layer_pop08').load("../popup/pop_예약정보수정.html", function(){	//  예약정보수정
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop09(id) {
-	$('#layer_pop09').load("../popup/pop_대기정보수정.html", function(){	//  대기정보수정
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop10(id) {
-	$('#layer_pop10').load("../popup/pop_담당자등록수정.html", function(){	//  담당자 등록/수정
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop11(id) {
-	$('#layer_pop11').load("../popup/pop_코드등록.html", function(){	//  pop_코드등록
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
-
-function e_layer_pop12(id) {
-	$('#layer_pop12').load("../popup/pop_코드수정.html", function(){	//  pop_코드수정
-		$('.pop-layer').css('display', 'none'); 
-		var temp = $('#' + id);
-		var bg = temp.parents('bg');
-		if (bg) {
-			$('.layer').fadeIn();
-		} else {
-			temp.fadeIn();
-		}
-		temp.css('display', 'block');
-		if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-		else temp.css('top', '0px');
-		if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-		else temp.css('left', '0px');
-
-		$("html").attr("style", "overflow-y:hidden");
-		$("html").addClass("scroll");
-
-		temp.find('.layerClose').click(function (e) {
-			if (bg) {
-				$('.layer').fadeOut();
-			} else {
-				temp.fadeOut();
-			}
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:auto");
-			$("html").removeClass("scroll");
-		});
-
-		$('.layer .bg').click(function (e) {
-			$('.layer').fadeOut();
-			e.preventDefault();
-			$("html").attr("style", "overflow-y:scroll");
-			$("html").removeClass("scroll");
-		});
-	});
-};
 
 /**
  * 공통코드 select options 로드
@@ -616,29 +202,6 @@ function loadCodeSelect(cb, selector){
 			}
 		})
 	})
-}
-
-function getAfter2Weeks(fromDate) {
-	
-	var startDt = moment(fromDate) || moment();
-	var endDt = startDt.clone().add(2, 'w');
-	var dates = [];	
-	while(!startDt.isSame(endDt)){
-		var d = {
-			date: startDt.toDate(),
-			yyyymmdd: startDt.format('YYYYMMDD'),
-			year: startDt.year(),
-			month: startDt.month()+1,
-			day: startDt.date(),
-			weekday: startDt.isoWeekday(),
-			weekdayName: startDt.format('ddd').toUpperCase()
-		}
-		
-		dates.push(d);
-		startDt = startDt.add(1, 'days');
-	}	
-	
-	return dates;
 }
 
 function openLayerPopup(id){
@@ -694,18 +257,6 @@ function closeLayerPopup(){
 
 function getRealTime(number){
 	return {
-//		1 : { start : '09:30', end : '10:00'},
-//		2 : { start : '10:30', end : '11:00'},
-//		3 : { start : '11:30', end : '12:00'},
-//		4 : { start : '12:30', end : '13:00'},
-//		5 : { start : '13:30', end : '14:00'},
-//		6 : { start : '14:30', end : '15:00'},
-//		7 : { start : '15:30', end : '16:00'},
-//		8 : { start : '16:30', end : '17:00'},
-//		9 : { start : '17:30', end : '18:00'},
-		
-//		1 : { start : '09:00', end : '09:30'},
-		
 		1 : { start : '10:00', end : '10:30'},
 		2 : { start : '11:00', end : '11:30'},
 		3 : { start : '12:00', end : '12:30'},
@@ -732,28 +283,6 @@ function alertPopup(title, contents, fn){
 	});
 }
 
-/**
- * options = {
- *	title: 'alert 주요 메시지'
- *	contents: '하부 보조 메시지',
- *	callback: 확인버튼 클릭시, 수행할 콜백함수
- *	isHideIcon : true면 아이콘 숨김
- * }
- */
-$.alert = function(options) {
-	$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
-		$('.alert-message h3').html(options.title.replace(/\n/g, '<br/>'));
-		if(options.contents){
-			$('.alert-message p').text(options.contents);
-		}
-		
-		if(options.isHideIcon)
-			$('.alert-message h3').removeClass('alert');
-			
-		$('#layer_pop_alert #btnOk').one('click', options.callback);
-		openLayerPopup('layer_pop_alert');
-	});
-}
 
 
 function confirmPopup(title, contents, fn){	

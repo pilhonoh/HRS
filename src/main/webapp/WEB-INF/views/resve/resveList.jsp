@@ -10,7 +10,7 @@
 		<jsp:include page="${JSP}/include/messages.jsp" />		
 		<script src="${JS}/resve/resveList.js"></script>
 		<style>
-			.link {text-decoration: underline; margin-right: 10px}
+			.link:link {text-decoration: underline; margin-right: 10px}
 		</style>
 	</head>
 	<body>	
