@@ -173,8 +173,13 @@ var resveList = {
 						resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');						
-						resveListHtml.push('	<td>');
-						resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a>');
+						resveListHtml.push('	<td style="text-align:left; padding-left:70px">');
+						if(stsCode == 'STS02' || stsCode == 'STS04'){//대기취소, 예약취소 텍스트 색 다르게 조정
+							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')" style="color:#ad8a6a">' + resultList[i].STTUS_NM + '</a>');
+						}else{
+							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a>');
+						}
+						
 						if (stsCode == 'STS01' || stsCode == 'STS03') {
 							var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
 							var cancelDt = moment(resveDt + " " +resve_tm_start).subtract(20, 'minutes').toDate();
