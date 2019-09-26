@@ -964,6 +964,7 @@ button.ui-datepicker-trigger {
 	overflow:hidden;
 	position:relative;
 }
+/* 사용자 안내 문구 디자인 수정.20190925(김대종) 시작 */
 .rv-desc-list:after { 
 	content:"";
 	width:1px;
@@ -973,6 +974,7 @@ button.ui-datepicker-trigger {
 	bottom:25px;
 	left:48%;
 }
+
 .rv-desc-list ul li {
 	float:left;
 	font-size:12px;
@@ -1001,6 +1003,7 @@ button.ui-datepicker-trigger {
 	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
 	width:50%;
 }
+/* 사용자 안내 문구 디자인 수정.20190925(김대종) 끝 */
 .rv-desc-list.st2 {
 	margin:0 0 10px;
 }
