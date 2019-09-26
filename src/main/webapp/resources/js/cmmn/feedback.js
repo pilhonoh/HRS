@@ -31,6 +31,9 @@ var feedback = {
 			success : function(res){
 				console.log('feedback',res);				
 				//resveStatus.table.refresh();
+				if(res.item > 0){
+					$.alert({text:'등록하였습니다.', desc:'신속히 답변드리겠습니다.'})
+				}
 				closeLayerPopup();
 			},
 			error : function(err) {

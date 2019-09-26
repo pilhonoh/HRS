@@ -15,6 +15,7 @@ import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
 import com.skt.hrs.cmmn.contants.CspContents;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.cmmn.vo.CspVo;
 import com.skt.hrs.cmmn.vo.LoginVo;
@@ -54,13 +55,21 @@ public class FeedbackController {
 		
 		int sendCount = 0;
 		for(String empno : rcvEmpnos) {
+			if(param.get("contents") == null) {
+				throw new HrsException("error.invalidRequest", true);
+			}
+			String content = param.get("contents").toString();
+			content = StringUtil.cleanXSS(content);
+			content = StringUtil.escapeNewlineToBr(content);
+			
 			CspVo vo = new CspVo();
 			vo.setSendEmpno(loginVo.getEmpno());
 			vo.setCspType(CspContents.MAIL.toString());
 
 			vo.setRcvEmpno(empno);	// properties에 등록된 3명 (여러명은 어떻게?)
+			//FIXME: 메세지 처리
 			vo.setMssgHead("문의/오류 신고");
-			vo.setMssgBody(StringUtil.escapeNewlineToBr(param.get("contents").toString()));
+			vo.setMssgBody(content);
 			
 			if((boolean) cspService.insertCspMail(vo).getItem()) {
 				sendCount++;
