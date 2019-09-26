@@ -18,35 +18,25 @@
 			<tr>
 				<th class = "required">사옥</th >
 				<td>
-					<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="scheduleCreate_bldCombo"></select>
+					<select style="width:120px;" data-code-tyl="BLD" data-empty-str="선택" id="scheduleCreate_bldCombo"></select>
 				</td>
 			</tr>
 			<tr>
 				<th class = "required" >베드</th>
 				<td>
-					<select style="width:120px;" data-code-tyl="BED" data-code-tys="SK01"  data-empty-str="베드" id="scheduleCreate_bedCombo"></select>
+					<select style="width:120px;" data-code-tyl="BED" data-code-tys="SK01"  data-empty-str="선택" id="scheduleCreate_bedCombo"></select>
 				</td>
 			</tr>
 			<tr>
 				<th  class = "required" >관리사</th>
 				<td>
-					<select style="width:120px;"  data-empty-str="관리사" id="scheduleCreate_mssrCombo">					
-				  </select>
+					<select style="width:120px;"  data-empty-str="선택" id="scheduleCreate_mssrCombo">	
+					<option>선택</option>				
+				   </select>
 				</td>
 			</tr>
-		  <tbody id='scheduleBody'>	
-			<tr id ="tr0" class='trschedule' data-rowid = "">
-				<th class = "required">근무 일정</th >
-				<td>
-					<input type="text"  id = "scheduleCreate_start_date" class="datepicker startDate">
-					<em class="fromto"> ~ </em>
-					<input type="text" id = "scheduleCreate_end_date" class="datepicker endDate">
-					<select  data-code-tyl="RVT" data-code-tys="RVTSTART"  id="scheduleCreate_startTime"></select>
-					<em class="fromto"> ~ </em>
-					<select data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime"></select>
-					<button class="t-btn cr01" id="scheduleCreate_rowAddBtn">추가</button>
-				</td>
-			</tr>		
+		  <tbody id='scheduleCreate_Body'>	
+			
 		</tbody>
 	</table>	
 
@@ -63,7 +53,7 @@ var popSchCreate = {
 		init: function() {
 			//$(".datepicker").datepicker();
 			initDatepicker();
-			$('#scheduleCreate_enter select[data-code-tyl]').empty(); 
+			/* $('#scheduleCreate_enter select[data-code-tyl]').empty();  */
 			loadCodeSelect(undefined, '#scheduleCreate_enter'); //콤보박스 공통코드 세팅
 			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 			popSchCreate.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
@@ -149,7 +139,7 @@ var popSchCreate = {
 				$.when(popSchCreate.combobox.getMssrList(bldCode)).done(function(result) {
 					
 					$('#scheduleCreate_mssrCombo').empty();
-					var mssrComboHtml = ['<option value="">관리사</option>'];
+					var mssrComboHtml = ['<option value="">선택</option>'];
 									
 					if (result.length > 0 && bldCode) {
 						for (var i in result) {
@@ -201,69 +191,29 @@ var popSchCreate = {
 				});
 			},
 		   rowAddClickEvent:function(){			   
-				$("#scheduleCreate_rowAddBtn").on("click",function(){
+				  $.when(addRow()).done(function(cnt){
+  				   
+				    $("#scheduleCreate_Body").find('.datepicker').datepicker("destroy");//.datepicker();
+  				    initDatepicker(); 
+  				    
+  					var fromDate = moment().format('YYYY-MM-DD'); //오늘 날짜
+  					var toDate = moment().add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
+  					
+  					$('#scheduleCreate_start_date'+cnt).val(fromDate);
+  					$('#scheduleCreate_end_date'+cnt).val(toDate);
+  				    console.log(123123123)
+  				     $('#scheduleCreate_startTime'+cnt).val(1);
+   	  	
+  				      loadCodeSelect(undefined, '#scheduleCreate_tr'+cnt);   
+				  });
 
-					var trCnt =$(".trschedule").length
-		
-				    if(trCnt >4){return false}
-					$clone = $("#tr0").clone(true,true);
-					$clone.find("th").text("근무시간 "+trCnt);
-					$clone.find('.ui-datepicker-trigger').remove();					
-					$clone.find('.hasDatepicker').removeClass("hasDatepicker");
-				    $clone.attr({"id":'tr'+trCnt ,"data-rowid":trCnt});
-				    $clone.find(".t-btn").text("삭제").attr({"onclick": "fnRowDelete(event);"});	
-				    $clone.find("input").each(function(){
-						$(this).attr('id',this.id+trCnt);						
-					 });
-				    $clone.find("select").each(function(){
-				    	$(this).attr('id',this.id+trCnt)
-					});				    
-				    
-				    $("#scheduleBody").append( $clone.wrapAll("<div/>").parent().html());
-	
-				    
-				    //datepicker 초기화
-				    $("#scheduleCreate_enter tbody").find('.datepicker').datepicker("destroy");//.datepicker();
-				    initDatepicker();
-			   });				
-				
 			}
-
-			},
+		},
 			validation: {
-				//날짜 필드 값 체크
-				dateCheck: function() {
-					var fromDate = $('input#from_date').val().trim().split('-');
-					var toDate = $('input#to_date').val().trim().split('-');
-					
-					var fromdt = fromDate[0] + fromDate[1] + fromDate[2];
-					var todt = toDate[0] + toDate[1] + toDate[2];
-					
-					if (fromdt.length !== 8) {
-						alert('시작날짜 형식이 잘못되었습니다.');
-						return false;
-					}
-					
-					if (todt.length !== 8) {
-						alert('종료날짜 형식이 잘못되었습니다.');
-						return false;
-					}
-					
-					if (fromdt > todt) {
-						alert('시작날짜가 종료날짜가 클 수 없습니다.');
-						return false;
-					}
-					
-					scheduleList.list.params.fromDate = fromdt;
-					scheduleList.list.params.toDate = todt;
-					
-					return true;
-				},
 				 required:function(){
 					 var chk = true;
 					 var returnMsg="등록된값이 없습니다"
 						$(".required").nextAll("td").children("input,select").each(function(){
-							console.log($(this).parent().prev().text());	
 						  if ($(this).val()==null||$(this).val()==""){
 							  returnMsg = $(this).parent().prev().text() +returnMsg;
 							  $(".rv-desc").show();
@@ -290,21 +240,49 @@ var popSchCreate = {
 					 })
 					 return chk;
 				 }
+			}
 	}
-}
+
 
 function fnRowDelete(){
 	javascript:event.target.parentNode.parentNode.remove()
-		  $("#scheduleBody  tr").each(function(index){
+		  $("#scheduleCreate_Body  tr").each(function(index){
 			     rowidrest = this;
 			     if(index>=1){
 			     $(rowidrest).children("th").text("근무시간 "+index)
-			     $(rowidrest).attr({"id":"tr"+index ,"data-rowid":index});
+			     $(rowidrest).attr({"id":"scheduleCreate_tr"+index ,"data-rowid":index});
 			     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "cheduleCreate_"+ this.name+ index })  
 			     }
 			});
 		
 	}
+	
+function addRow (){
+	var deferred = $.Deferred();
+	var trCnt =$(".trschedule").length + 1
+	console.log(trCnt);
+	var scheduleListHtml = [];
+	if(trCnt >5){ deferred.reject(''); return false;}
+		scheduleListHtml.push('<tr id ="scheduleCreate_tr'+trCnt+'" class="trschedule" data-rowid = "'+trCnt+'" >');
+		scheduleListHtml.push('<th class = "required">근무 일정'+trCnt+'</th >');
+		scheduleListHtml.push('<td>');
+		scheduleListHtml.push('<input type="text"  id = "scheduleCreate_start_date'+trCnt+'" class="datepicker startDate" >');
+		scheduleListHtml.push('<em class="fromto"> ~ </em>');
+		scheduleListHtml.push('<input type="text" id = "scheduleCreate_end_date'+trCnt+'" class="datepicker endDate">');
+		scheduleListHtml.push('<select   name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleCreate_startTime'+trCnt+'" ></select>');
+		scheduleListHtml.push('<em class="fromto"> ~ </em>');
+		scheduleListHtml.push('<select  name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime'+trCnt+'" ></select>');
+	if(trCnt == 1){
+		scheduleListHtml.push('<button class="t-btn cr01" id="scheduleCreate_rowAddBtn" onclick="popSchCreate.button.rowAddClickEvent()" >추가</button></td></tr>');
+	}else{
+		scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
+	}
+	$('#scheduleCreate_Body').append(scheduleListHtml.join(''));
+
+	deferred.resolve(trCnt);
+	return deferred.promise();
+}
+
 function getParams(){
 	var params = [] 
 	
@@ -333,7 +311,7 @@ function getParams(){
 $(document).ready(function(){		
 	
 	popSchCreate.init();
-	
+	//popSchCreate.button.rowAddClickEvent()
 	
 })
   

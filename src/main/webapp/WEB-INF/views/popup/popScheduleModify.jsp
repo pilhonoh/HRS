@@ -67,7 +67,7 @@ var popSchModify= {
 								popSchModify.cmmnCode.startTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).start  + '</option>');
 								popSchModify.cmmnCode.endTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).end + '</option>');
 							}
-							deferred.resolve(data);
+						 deferred.resolve(data);
 						} else {
 							deferred.reject("");
 						}
