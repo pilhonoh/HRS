@@ -10,7 +10,7 @@
 	<div class="report-cont">
 		<h3>문의/오류 신고하기</h3>
 		<p>문의/오류사항을 알려주세요. 자세히 답변드리겠습니다.</p>
-		<span>담당자 : 홍길동 님</span>
+		<span>담당자 : Tech.HR담당 이린재님</span>
 		<textarea id="feedbackContents" rows="8"></textarea>
 	</div>
 
