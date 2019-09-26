@@ -85,8 +85,8 @@
 				
 			</div><!-- //content -->
 
-			<footer class="footer">
-				<!--#include file="../include/footer.html"-->
+			<footer class="footer">				
+				<jsp:include page="${JSP}/include/footer.jsp" />
 			</footer><!-- //footer -->
 
 		</div><!-- //wrap -->

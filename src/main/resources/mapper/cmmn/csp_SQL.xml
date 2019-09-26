@@ -6,10 +6,10 @@
 
 	<insert id="insertCspSend" parameterType="com.skt.hrs.cmmn.vo.CspVo">
 		INSERT INTO CSP_SEND_HIST(
-			RCV_EMPNO, CSP_TYPE, RESVE_NO, MSSG_HEAD, MSSG_BODY, SEND_YN, REG_DT
+			SEND_EMPNO, RCV_EMPNO, CSP_TYPE, RESVE_NO, MSSG_HEAD, MSSG_BODY, SEND_YN, REG_DT
 		) 
 		VALUES(
-			#{rcvEmpno}, #{cspType}, #{resveNo}, #{mssgHead}, #{mssgBody}, 'N', NOW()
+			#{sendEmpno}, #{rcvEmpno}, #{cspType}, #{resveNo}, #{mssgHead}, #{mssgBody}, 'N', NOW()
 		)
 	</insert>
 	

@@ -120,10 +120,32 @@ var resveStatus = {
  * 상단 2주달력
  */
 resveStatus.calendar =  {
+	// 오늘부터 이후 2주조회
+	getAfter2Weeks : function(fromDate) {
+		var startDt = moment(fromDate) || moment();
+		var endDt = startDt.clone().add(2, 'w');
+		var dates = [];	
+		while(!startDt.isSame(endDt)){
+			var d = {
+				date: startDt.toDate(),
+				yyyymmdd: startDt.format('YYYYMMDD'),
+				year: startDt.year(),
+				month: startDt.month()+1,
+				day: startDt.date(),
+				weekday: startDt.isoWeekday(),
+				weekdayName: startDt.format('ddd').toUpperCase()
+			}
+			
+			dates.push(d);
+			startDt = startDt.add(1, 'days');
+		}	
+		
+		return dates;
+	},
 	// 렌더링
 	render : function(){
 							
-		var dates = getAfter2Weeks();
+		var dates = resveStatus.calendar.getAfter2Weeks();
 		var elements = [];
 							
 		dates.forEach(function(d, i){

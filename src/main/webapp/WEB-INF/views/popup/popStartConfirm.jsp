@@ -45,7 +45,7 @@ $(document).ready(function(){
 		var realTime = getRealTime(data.RESVE_TM);
 		$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
 		
-		$('#btnOk').on('click', function(){
+		$('#layer_pop04 #btnOk').on('click', function(){
 			resveConfirm.start(data.RESVE_NO);
 			$('#txtResveEmpno').val('');
 		});
