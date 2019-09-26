@@ -219,7 +219,7 @@ resveConfirm.table = {
 						//예약가능
 						'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o">').append('예약가능').addClass('rbtn cr1').hide(), // 요청사항으로 인한 hide()	
 						//예약완료->예약중
-						'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약중').addClass('rbtn cr3'),	
+						'RESVE_COMPT' : $('<button style="cursor: default;">').append('<i class="xi-calendar-check">').append('예약중').addClass('rbtn cr3'),	
 						//예약불가
 						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not').hide(), // 요청사항으로 인한 hide()									
 						//완료

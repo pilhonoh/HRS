@@ -1031,12 +1031,12 @@ button.ui-datepicker-trigger {
 	position:absolute;
 	top:25px;
 	bottom:25px;
-	left:48%;
+	left:51.3%;
 }
 
 .rv-desc-list ul li {
 	float:left;
-	font-size:12px;
+	font-size:13px;
 	color:#727272;
 	box-sizing:border-box;
 	padding-left:25px;
@@ -1048,19 +1048,19 @@ button.ui-datepicker-trigger {
 }
 .rv-desc-list ul li.icon01 {
 	background:url('../images/common/btm_info_icon01.png') no-repeat 0 50%;
-	width:50%;
+	width:52%;
 }
 .rv-desc-list ul li.icon02 {
 	background:url('../images/common/btm_info_icon02.png') no-repeat 0 50%;
-	width:50%;
+	width:48%;
 }
 .rv-desc-list ul li.icon03 {
 	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
-	width:50%;
+	width:52%;
 }
 .rv-desc-list ul li.icon04 {
 	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
-	width:50%;
+	width:48%;
 }
 /* 사용자 안내 문구 디자인 수정.20190925(김대종) 끝 */
 .rv-desc-list.st2 {
