@@ -52,13 +52,13 @@
 									</td>
 									<th><strong class="stit">사옥</strong></th>
 									<td>
-										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
+										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="전체" id="bldCombo">
 										</select>										
 									</td>
 									<th><strong class="stit">관리사</strong></th>
 									<td>
-										<select style="width:120px;" id="mssrCombo">
-											<option value="">관리사</option>
+										<select style="width:120px;" id="mssrCombo" >
+											<option value="">전체</option>
 										</select>
 									</td>									
 								</tr>
