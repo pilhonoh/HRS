@@ -345,7 +345,7 @@ button.ui-datepicker-trigger {
 	text-align:center;
 }
 
-/*관리자스케줄 선택 마우흐 오버 및  관리사 이림 밑줄*/
+/*관리자스케줄 선택 마우스 오버 및  관리사 이름 밑줄 P150113*/
 .tbl-hover tbody  tr:hover td{
 	background-color:#f6f6f6;
 }
@@ -354,7 +354,7 @@ button.ui-datepicker-trigger {
 	text-decoration: underline;
 	cursor: pointer;
 }
-/*관리자스케줄 선택 마우흐 오버 및  관리사 이림 밑줄 끝*/
+/*관리자스케줄 선택 마우스 오버 및  관리사 이름 밑줄  P150113 끝*/
 .tbl-style tbody th { 
 	text-align:left;
 	padding:3px 10px;
