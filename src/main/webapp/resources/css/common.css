@@ -118,7 +118,7 @@
 .footer .inner span {
 	color:#999;
 	font-size:12px;
-	vertical-align:middle;
+	/* vertical-align:middle; */ /* vertical정렬 삭제 P149365 */
 	border-right:1px solid #ddd;
 	margin-right:15px;
 	padding-right:15px;
@@ -127,7 +127,8 @@
 	color:#a6968f;
 	font-size:12px;
 	font-weight:900;
-	vertical-align:middle;
+	/* vertical-align:middle; */ /*  baseline으로 변경 P149365 */
+	vertical-align: baseline;
 }
 .footer .inner .f-btn:hover {
 	text-decoration:underline;
@@ -448,6 +449,10 @@ button.ui-datepicker-trigger {
 .pop-layer.size2 {
 	width:600px;
 }
+/* 이미지보기용 팝업 추가 P149365 */
+.pop-layer.size3 {
+	width:1024px;
+}
 .pop-head { 
 	overflow:hidden;
 	height:50px;
@@ -493,6 +498,11 @@ button.ui-datepicker-trigger {
 .pop-container.st2 {
 	/* padding:30px 70px; */
 	padding:30px 65px; /* 좌우 padding 조절 P149365 */
+}
+/* 추가 P149365 */
+.pop-container.st3 {
+	max-height: 800px;
+	padding:30px 65px; 
 }
 
 .pop-desc {
