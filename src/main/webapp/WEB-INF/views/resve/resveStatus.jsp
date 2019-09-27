@@ -24,6 +24,7 @@
 
 					<div class="month-area">
 						<div class="building-select">
+							<i class="building-icon"></i>
 							<select data-code-tyl="BLD"></select>
 							<span class="bar"></span>
 						</div>
