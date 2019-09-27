@@ -42,30 +42,19 @@
 					<div class="reservation-table-wrap">
 						<table class="reservation-table">
 							<colgroup>
-								<col>
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
+								<col>								
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
 							</colgroup>
 							<thead>
 								<tr>
-									<th>배드</th>
-									<!-- <th>09:30~10:00</th>
-									<th>10:30~11:00</th>
-									<th>11:30~12:00</th>
-									<th>12:30~13:00</th>
-									<th>13:30~14:00</th>
-									<th>14:30~15:00</th>
-									<th>15:30~16:00</th>
-									<th>16:30~17:00</th>
-									<th>17:30~18:00</th> -->
-									<th>09:00~09:30</th>
+									<th>베드</th>									
 									<th>10:00~10:30</th>
 									<th>11:00~11:30</th>
 									<th>12:00~12:30</th>
@@ -84,10 +73,10 @@
 
 					<div class="rv-desc-list">
 						<ul>
-							<li class="icon01">당일로 부터 <strong>2주까지만 예약</strong>이 가능 합니다.</li>
-							<li class="icon02">예약 <strong>취소는 시작 20분전 까지만</strong> 가능합니다.</li>
-							<li class="icon03">사용시 <strong>한 건당 5,000원이 급여에서 차감</strong>됩니다.</li>
-							<li class="icon04">예약자가 1명인 경 우는 대기 신청이 가능하고 선 예약자가 취소 시 자동 승계되며, <strong>“예약완료" SMS가 자동 발송</strong>됩니다.</li>
+							<li class="icon01">금일부터 <strong>2주까지의 케어만 예약</strong>이 가능하며, <strong>1건 당 5,000원이 급여에서 차감</strong>됩니다.</li>
+							<li class="icon02">예약 <strong>취소는 케어 시작 20분 전까지만</strong> 가능하며, No-show 시 <strong>2주간 예약이 불가</strong>합니다.</li>
+							<li class="icon03">예약자가 <strong>1명인 경우 대기 신청이 가능</strong>하며, 이전 예약자가 취소할 경우 대기자에게 <strong>예약완료 SMS가 발송</strong>됩니다.</li>
+							<li class="icon04">케어 시작 <strong>30분에서 20분 전 사이에 예약완료 SMS</strong>를 받으신 대기자는 No-show 시 패널티가 없습니다.</li>
 						</ul>
 					</div>		
 				
@@ -95,8 +84,8 @@
 				
 			</div><!-- //content -->
 
-			<footer class="footer">
-				<!--#include file="../include/footer.html"-->
+			<footer class="footer">				
+				<jsp:include page="${JSP}/include/footer.jsp" />
 			</footer><!-- //footer -->
 
 		</div><!-- //wrap -->

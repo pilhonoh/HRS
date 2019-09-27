@@ -2,6 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <script>
 var messages = {
+	'system.error' : '<spring:message code="system.error" />',
 	'error.invalidRequest' : '<spring:message code="error.invalidRequest" />',
 	'error.notAvailable' : '<spring:message code="error.notAvailable" />',
 	'error.processFailure' : '<spring:message code="error.processFailure" />',
@@ -10,8 +11,7 @@ var messages = {
 	'error.onlySameday' : '<spring:message code="error.onlySameday" />',
 	'error.canceledResve' : '<spring:message code="error.canceledResve" />',
 	'error.completeResve' : '<spring:message code="error.completeResve" />',
-	'error.canNotSuccessionCancel' : '<spring:message code="error.canNotSuccessionCancel" />',
-	'error.paneltyTarget' : '<spring:message code="error.paneltyTarget" />',
+	'error.canNotSuccessionCancel' : '<spring:message code="error.canNotSuccessionCancel" />',	
 	'error.resveNotFound' : '<spring:message code="error.resveNotFound" />',
 	'error.requireEmpno' : '<spring:message code="error.requireEmpno" />',
 	'error.invalidStartDate' : '<spring:message code="error.invalidStartDate" />',

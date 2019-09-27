@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pub.core.constans.ResultConst;
+import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
+import com.pub.core.util.HttpUtil;
 import com.pub.core.util.JsonUtils;
 import com.skt.hrs.utils.StringUtil;
 
@@ -90,8 +92,8 @@ public class GlobalExceptionHandler{
 	@ExceptionHandler(value=HrsException.class)
 	public void hrsExceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response, Locale locale){
 		
-		logger.error(getClass().getName(),ex);
-		//logger.error(ex.getMessage());	//로그 짧게
+		//logger.error(getClass().getName(),ex);
+		logger.error(ex.getMessage());	//비즈니스에러 로그는 메세지만 간단히 찍도록
 		 
 		
 		ResponseResult result = new ResponseResult();
@@ -126,6 +128,8 @@ public class GlobalExceptionHandler{
 	}
 	
 	private void exceptionRequestHandle(HttpServletRequest request, HttpServletResponse response ,ResponseResult result, String pageName) {
+		DataEntity param = HttpUtil.getServletRequestParam(request);
+		logger.error("EXCEPTION REQUEST PARAMETER : " + param.toString());
 		
 		String headerInfo = request.getHeader("X-Requested-With");
 		

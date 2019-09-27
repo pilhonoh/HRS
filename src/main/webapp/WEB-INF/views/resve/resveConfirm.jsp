@@ -27,9 +27,9 @@
 						</p>
 					</div>
 
-					<div class="month-area">
+					<div class="month-area" style="display:none;">
 						<div class="building-select">
-							<select data-code-tyl="BLD"></select>
+							<!-- <select data-code-tyl="BLD"></select> -->
 							<span class="bar"></span>
 						</div>
 						<div class="calendar-area">
@@ -45,6 +45,7 @@
 
 					<div class="number-search">
 						<label>사번 입력</label>
+						<select data-code-tyl="BLD" style="display:none"></select>
 						<input id="txtResveEmpno" type="text" placeholder="사번을 입력해서 반드시 최종 확인해 주시기 바랍니다.">
 						<button id="btnConfirm"><i class="xi-search xi-x"></i>확인</button>
 					</div>
@@ -52,30 +53,19 @@
 					<div class="reservation-table-wrap">
 						<table class="reservation-table">
 							<colgroup>
-								<col>
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
-								<col style="width:10.6%">
+								<col>								
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
+								<col style="width:11.5%">
 							</colgroup>
 							<thead>
 								<tr>
-									<th>배드</th>
-									<!-- <th>09:30~10:00</th>
-									<th>10:30~11:00</th>
-									<th>11:30~12:00</th>
-									<th>12:30~13:00</th>
-									<th>13:30~14:00</th>
-									<th>14:30~15:00</th>
-									<th>15:30~16:00</th>
-									<th>16:30~17:00</th>
-									<th>17:30~18:00</th> -->
-									<th>09:00~09:30</th>
+									<th>베드</th>
 									<th>10:00~10:30</th>
 									<th>11:00~11:30</th>
 									<th>12:00~12:30</th>
@@ -96,8 +86,8 @@
 				
 			</div><!-- //content -->
 
-			<footer class="footer">
-				<!--#include file="../include/footer.html"-->
+			<footer class="footer">				
+				<jsp:include page="${JSP}/include/footer.jsp" />
 			</footer><!-- //footer -->
 
 		</div><!-- //wrap -->

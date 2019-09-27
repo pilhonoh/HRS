@@ -57,7 +57,7 @@
 						GROUP BY RESVE_NO
 					) B	<!-- 나랑관련된 예약 -->
 					ON A.RESVE_NO = B.RESVE_NO
-		            WHERE (TARGET_EMPNO = #{empNo} OR TARGET_EMPNO IS NULL OR TARGET_EMPNO = '')	<!-- 나의ACTION이거나 근무취소 -->
+		            WHERE (TARGET_EMPNO = #{empNo} OR STTUS_CODE = 'STS99')	<!-- 나의ACTION이거나 근무취소 -->
 				) T 		        
 				GROUP BY RESVE_NO
 			) T2

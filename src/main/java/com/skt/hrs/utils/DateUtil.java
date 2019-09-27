@@ -46,12 +46,13 @@ public class DateUtil {
 	 * @작성자 : P149365
 	 * @param yyyymmdd
 	 * @param hrsTm
-	 * @변경이력 :
+	 * @변경이력 : 2019.09.25 첫타임 및 근무시간 1~8로 변경
 	 */
 	public static Date hrsDtToRealDt(String yyyymmdd, String hrsTm) {
 		try {
 			//Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0830");
-			Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0800");
+			//Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0800");	
+			Date startDate = new SimpleDateFormat("yyyyMMddHHmm").parse(yyyymmdd + "0900");	//첫타임 변경
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(startDate);
 			cal.add(Calendar.HOUR, Integer.parseInt(hrsTm));
@@ -67,18 +68,20 @@ public class DateUtil {
 	 * @작성일 : 2019.09.18
 	 * @작성자 : P149365
 	 * @return
-	 * @변경이력 :
+	 * @변경이력 : 2019.09.25 첫타임 및 근무시간 1~8로 변경
 	 */
 	public static int getNextResveTm() {
 		try {
 			SimpleDateFormat f = new SimpleDateFormat("HHmm");
 			Date time = f.parse(f.format(new Date()));
 			//Date startDate = f.parse("0830");
-			Date startDate = f.parse("0800");
+			//Date startDate = f.parse("0800");
+			Date startDate = f.parse("0900");	//첫타임 변경
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(startDate);
 			int i=1;
-			for(; i<=9; i++) {				
+			//for(; i<=9; i++) {	//근무시간 8타임으로 변경
+			for(; i<=8; i++) {
 				cal.add(Calendar.HOUR, 1);
 				if(cal.getTime().compareTo(time) > 0) {
 					break;

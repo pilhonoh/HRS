@@ -20,15 +20,15 @@
 
 			<div class="content">
 				<ul class="tab-design">
-					<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">관리사 스케쥴 관리</a></li>
+					<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
 					<%-- <li rel="tab2"><a href="${ROOT}/admin/resveMgmt">예약 정보 조회 및 변경</a></li> --%>
 					<li rel="tab2"><a href="#none">예약 정보 조회 및 변경</a></li>
-					<li rel="tab3"><a href="#none">관리사 등록</a></li>					
+					<li rel="tab3"><a href="${ROOT}/mssr/mgmt">헬스키퍼 등록</a></li>					
 					<li rel="tab4"><a href="#none">담당자 등록</a></li>
 					<li rel="tab5"><a href="#none">공통코드 관리</a></li>
 				</ul>
 				<div class="sub-tit">
-					<h2>관리사 스케쥴 관리</h2>
+					<h2>헬스키퍼 스케쥴 관리</h2>
 				</div>
 				
 				<div class="search_field_wrap">
@@ -52,13 +52,13 @@
 									</td>
 									<th><strong class="stit">사옥</strong></th>
 									<td>
-										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
+										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="전체" id="bldCombo">
 										</select>										
 									</td>
-									<th><strong class="stit">관리사</strong></th>
+									<th><strong class="stit">헬스키퍼</strong></th>
 									<td>
-										<select style="width:120px;" id="mssrCombo">
-											<option value="">관리사</option>
+										<select style="width:120px;" id="mssrCombo" >
+											<option value="">전체</option>
 										</select>
 									</td>									
 								</tr>
@@ -71,33 +71,35 @@
 				</div><!-- // search_field_wrap -->
 
 				<div class="sub-tit">
+					<div class="f-left" style="display:inline-block;">
+						<button class="btn" id ="deleteBtn">삭제</button>						
+					</div>
 					<div class="f-right">
-						<button class="btn" id ="deleteBtn">삭제</button>
 						<button class="btn" id ="createBtn">등록</button>						
 					</div>
 				</div>
 
-				<table class="tbl-style t_center">
+				<table class="tbl-style t_center tbl-hover ">
 					<colgroup>
 						<col style="width:50px;">						
-						<col style="width:15%;">
-						<col>
-						<col style="width:15%;">
-						<col style="width:70px;">
-						<col style="width:15%;">
-						<col style="width:15%;">
-						<col style="width:15%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<%-- <col style="width:15%;"> --%>
 					</colgroup>
 					<thead>
 						<tr>
-							<th><input type="checkbox"></th>
+							<th><input id ='checkAll' type="checkbox"></th>
 							<th>근무날짜</th>
 							<th>사옥</th>
-							<th>관리사</th>
+							<th>헬스키퍼</th>
 							<th>베드</th>
 							<th>성별</th>
 							<th>근무시간</th>
-							<th>수정</th>
+							<!-- <th>수정</th> -->
 						</tr>
 					</thead>
 					<tbody id="scheduleList">

@@ -130,6 +130,23 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 지난시간 대기 취소처리 대상 조회 (정각 배치용 조회)
+	 * @작성일 : 2019.09.26
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectWaitCancelTarget(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		List<Map> list = resveStatusDAO.selectResveNotifyList();
+		result.setItemList(list);
+		return result;
+	}
+	
+	/**
+	 * 
 	 * @설명 : 예약 등록
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
@@ -691,10 +708,8 @@ public class ResveStatusService {
 			//"홍길동님은 2019년9월12일 SKT타월 C베드 예약으로 인한 패널티대상으로\n2019년 10월 3일까지 예약이 불가합니다.";			
 			String message = messageSource.getMessage("error.paneltyTarget", new String[] {
 					blacklistMap.get("EMPNM").toString(),
-				DateUtil.yyyymmdd2HumanReadable(blacklistMap.get("RESVE_DE").toString()),					
-				blacklistMap.get("BLD_NM").toString(),
-				blacklistMap.get("BED_NM").toString(),
-				blacklistMap.get("PANELTY_END_DT_STR").toString(),
+					blacklistMap.get("PANELTY_START_DT_STR").toString(),
+					blacklistMap.get("PANELTY_END_DT_STR").toString()
 			}, Locale.forLanguageTag(param.getString("_ep_locale")));
 			throw new HrsException(message);
 		}

@@ -6,10 +6,10 @@
 
 	<insert id="insertCspSend" parameterType="com.skt.hrs.cmmn.vo.CspVo">
 		INSERT INTO CSP_SEND_HIST(
-			RCV_EMPNO, CSP_TYPE, RESVE_NO, MSSG_HEAD, MSSG_BODY, SEND_YN, REG_DT
+			SEND_EMPNO, RCV_EMPNO, CSP_TYPE, RESVE_NO, MSSG_HEAD, MSSG_BODY, SEND_YN, REG_DT
 		) 
 		VALUES(
-			#{rcvEmpno}, #{cspType}, #{resveNo}, #{mssgHead}, #{mssgBody}, 'N', NOW()
+			#{sendEmpno}, #{rcvEmpno}, #{cspType}, #{resveNo}, #{mssgHead}, #{mssgBody}, 'N', NOW()
 		)
 	</insert>
 	
@@ -17,6 +17,8 @@
 		<![CDATA[
 			SELECT 
 			     NO
+			    ,SEND_EMPNO
+			   	,S.EMAIL SEND_EMAIL
 				,RCV_EMPNO
 				,CSP_TYPE
 				,RESVE_NO
@@ -27,8 +29,9 @@
 				,SEND_RSLT
 				,REG_DT
 			    ,REPLACE(U.MOVETELNO,'-','') AS MOVETELNO
-			    ,U.EMAIL AS EMAIL
+			    ,U.EMAIL AS RCV_EMAIL
 			FROM CSP_SEND_HIST C LEFT JOIN INF_PERSON_INFO_RCV U ON C.RCV_EMPNO = U.EMPNO
+				 LEFT JOIN INF_PERSON_INFO_RCV S ON C.SEND_EMPNO = S.EMPNO
 			WHERE 1=1
 			AND SEND_YN = 'N' 
 			AND RETRY_CNT < 3

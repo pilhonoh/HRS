@@ -23,7 +23,7 @@
 				<td id="resveCancel_resveDe"></td>
 			</tr>
 			<tr>
-				<th>관리사</th>
+				<th>헬스키퍼</th>
 				<td id="resveCancel_mssr"></td>
 			</tr>
 			<tr>
@@ -61,7 +61,8 @@ var data = $('#resve-'+resveNo).data('data') || resveList.button.cancelBtnStatus
 $(document).ready(function(){		
 	
 	$('#resveCancel_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
-	$('#resveCancel_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+	//$('#resveCancel_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+	$('#resveCancel_mssr').text(data.MSSR_NCNM);
 	$('#resveCancel_bed').text(data.BED_NM);
 	
 	var realTime = getRealTime(data.RESVE_TM);

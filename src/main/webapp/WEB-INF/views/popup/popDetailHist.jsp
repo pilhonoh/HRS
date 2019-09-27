@@ -19,8 +19,8 @@
 		<tbody>
 			<tr>
 				<th style="text-align:center">상태</th>
-				<th style="text-align:center">등록일</th>
-				<th style="text-align:center">등록자</th>
+				<th style="text-align:center">날짜</th>
+				<th style="text-align:center">이름</th>
 			</tr>
 			<c:forEach var="item" items="${list}" varStatus="status">
 				<tr>					

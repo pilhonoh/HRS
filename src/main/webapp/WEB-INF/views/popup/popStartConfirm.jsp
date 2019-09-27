@@ -19,6 +19,10 @@
 		<li><span class="icon04" id="resveConfirm_bed"></span></li>
 	</ul>
 	
+	<div style="text-align:center; margin-top: 10px; font-size: 14px">
+		<span>※ 케어시간은 <strong>휴게시간으로 근무등록</strong> 바랍니다.</span>
+	</div>
+	
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>
 		<button id="btnCancel" class="pop-btn gray layerClose">취소</button>
@@ -34,22 +38,24 @@ $(document).ready(function(){
 	var data = JSON.parse(item);
 	if(data){
 		$('#resveConfirm_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
-		$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+		//$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+		$('#resveConfirm_mssr').text(data.MSSR_NCNM);
 		$('#resveConfirm_bed').text(data.BED_NM);
 		$('#empnm').text(data.RESVE_EMPNM);
 		
 		var realTime = getRealTime(data.RESVE_TM);
 		$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
 		
-		$('#btnOk').on('click', function(){
+		$('#layer_pop04 #btnOk').on('click', function(){
 			resveConfirm.start(data.RESVE_NO);
 			$('#txtResveEmpno').val('');
 		});
 	}else{		
-		$('.reservation-list').remove();
-		$('#btnCancel').remove();
-		$('#btnOk').addClass('layerClose');
-		$('.pop-desc').text('<spring:message code="error.resveNotFound" />');	//예약이 존재하지 않습니다.
+		//alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.	
+		$.alert({
+			text: getMessage('error.resveNotFound'),
+			callback: resveConfirm.table.refresh
+		});
 	}
 	
 })

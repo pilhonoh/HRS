@@ -7,6 +7,7 @@ import com.skt.hrs.utils.StringUtil;
 public class CspVo {
 
 	private int no;				//일련번호
+	private String sendEmpno;	//발신자사번
 	private String rcvEmpno;	//수신자사번
 	private String cspType;		//CSP타입 S:sms M:메일
 	private int resveNo;		//예약번호
@@ -23,6 +24,12 @@ public class CspVo {
 	}
 	public void setNo(int no) {
 		this.no = no;
+	}
+	public String getSendEmpno() {
+		return sendEmpno;
+	}
+	public void setSendEmpno(String sendEmpno) {
+		this.sendEmpno = sendEmpno;
 	}
 	public String getRcvEmpno() {
 		return rcvEmpno;
@@ -52,8 +59,8 @@ public class CspVo {
 		return mssgBody;
 	}
 	public void setMssgBody(String mssgBody) {
-		if(this.cspType.equals("S")) {
-			mssgBody = StringUtil.substringByte(mssgBody, 79);
+		if(this.cspType.equals("SMS")) {
+			mssgBody = StringUtil.substringByte(mssgBody, 80);
 		}
 		this.mssgBody = mssgBody;
 	}

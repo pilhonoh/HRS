@@ -7,12 +7,11 @@ var scheduleList = {
 		loadCodeSelect(); //콤보박스 공통코드 세팅
 		scheduleList.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 		scheduleList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
+	    scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		scheduleList.button.scheduleCreateBtnEvent();
 		scheduleList.button.scheduleDeleteBtnEvent();
-		
-		
+		scheduleList.checkboxEvent.checkall();
 	},
 	
 	
@@ -104,7 +103,7 @@ var scheduleList = {
 			$.when(scheduleList.combobox.getMssrList(bldCode)).done(function(result) {
 				
 				$('#mssrCombo').empty();
-				var mssrComboHtml = ['<option value="">관리사</option>'];
+				var mssrComboHtml = ['<option value="">전체</option>'];
 								
 				if (result.length > 0 && bldCode) {
 					for (var i in result) {
@@ -149,8 +148,10 @@ var scheduleList = {
 				success: function(res) {
 					console.log('scheduleList', res);
 					if (res.status === 200) {
-						deferred.resolve(res);
-						scheduleList.list.dataList = res.list;
+						
+							deferred.resolve(res);
+							scheduleList.list.dataList = res.list;
+					   	
 						
 					} else {
 						deferred.reject("");
@@ -180,32 +181,40 @@ var scheduleList = {
 				var sexdstn = '';
 				
 				scheduleList.paging.params.totalCount = result.customs.totalCount;
-				
-				for (var i in resultList) {
-					
-					var resve_de = resultList[i].RESVE_DE;
-					resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
-					
-					var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
-					var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
-					
+				if(result.customs.totalCount == 0){
 					scheduleListHtml.push('<tr>');
-					scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
-				/*	scheduleListHtml.push('	<td>'+ resultList[i].RESVE_NO+'</td>');*/
-					scheduleListHtml.push('	<td>' + resveDt + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
-					scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
-					scheduleListHtml.push('	<td>' + sexdstn + '</td>');
-					scheduleListHtml.push('	<td>' + convertedTime + '</td>');
-					scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
+					scheduleListHtml.push('<td colspan=8 >검색 결과가 없습니다</td>');
 					scheduleListHtml.push('</tr>');
+				}else{
+					
+						for (var i in resultList) {
+						
+						var resve_de = resultList[i].RESVE_DE;
+						resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+						
+						var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
+						var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
+						
+						scheduleListHtml.push('<tr>');
+						scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
+						scheduleListHtml.push('	<td>' + resveDt + '</td>');
+						scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
+						scheduleListHtml.push('	<td><a name="modifyBtn" herf="#none" data-resveno="'+resultList[i].RESVE_NO+'" >' + resultList[i].MSSR_NCNM + '</td>');
+						scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
+						scheduleListHtml.push('	<td>' + sexdstn + '</td>');
+						scheduleListHtml.push('	<td>' + convertedTime + '</td>');
+						//scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
+						scheduleListHtml.push('</tr>');
+						
+					}
+					
+					
 				}
-				
-				$('tbody#scheduleList').html(scheduleListHtml.join(''));
+				$('tbody#scheduleList').html(scheduleListHtml.join(''))
 				scheduleList.paging.renderPaging();
-
+				
 				scheduleList.button.scheduleModifyBtnEvent();
+				
 				
 			});
 		},
@@ -286,8 +295,12 @@ var scheduleList = {
 			var totalCount = scheduleList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
-			
+			/*console.log(currentIndex);
+			console.log(totalCount);
+			console.log(rowPerPage);
+			console.log(rowPerPage);*/
 			$("div#pagingArea").empty();
+			
 			var preStr = '';
 			var postStr = '';
 			var pageNumStr = '';
@@ -320,8 +333,8 @@ var scheduleList = {
 			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, last 버튼
 				postStr += '<a href="#none" class="last" id="lastBtn"><img src="' + IMG + '/common/btn_last.gif"></a>';
 			}
-
-			for (var i=first; i<(first+last); i++) {
+			
+			for (var i= first; i<= last; i++) {
 				if (i > totalIndexCount) {
 					break;
 				}
@@ -365,6 +378,7 @@ var scheduleList = {
 					if (scheduleList.list.params.pageNo == scheduleList.paging.params.prev) {
 						return false;
 					}
+					console.log(scheduleList.paging.params.prev)
 					scheduleList.list.params.pageNo = scheduleList.paging.params.prev;
 					scheduleList.list.renderScheduleList();
 				});
@@ -376,6 +390,7 @@ var scheduleList = {
 					if (scheduleList.list.params.pageNo == scheduleList.paging.params.next) {
 						return false;
 					}
+					console.log(scheduleList.paging.params.prev)
 					scheduleList.list.params.pageNo = scheduleList.paging.params.next;
 					scheduleList.list.renderScheduleList();
 				});
@@ -444,7 +459,7 @@ var scheduleList = {
 		 
 		},
 		scheduleModifyBtnEvent: function() {
-			 $("button[name='modifyBtn']").on('click',function(){
+			 $("a[name='modifyBtn']").on('click',function(){
 				  var resveNo = $(this).data("resveno")
 				  scheduleList.popup.showRowScheduleSavePopup(resveNo);  
 			  });	
@@ -481,6 +496,7 @@ var scheduleList = {
 							success : function(res){
 								console.log('delete',res);				
 								scheduleList.list.renderScheduleList();
+								$("#checkAll").prop('checked',false);
 								alertPopup('삭제되었습니다.');
 							},
 							error : function(err) {
@@ -494,7 +510,13 @@ var scheduleList = {
 		}
 	},
 	
-	
+	refresh :{ 
+		inputbox:function(){
+			$("#checkAll").prop('checked',false);
+			
+		}
+		
+	},
 	
 	validation: {
 		//날짜 필드 값 체크
@@ -541,6 +563,23 @@ var scheduleList = {
 			});
 		}
 
+	},
+	checkboxEvent:{
+		checkall:function(){
+			
+			$("#checkAll").on("change",function(){
+				 var chkstat = $("#checkAll").prop("checked");
+				$("#scheduleList input[type=checkbox]").each(function(){
+				
+				    $(this).prop("checked",chkstat)
+				});
+					
+					
+				
+			})
+		}	
+		
+		
 	}
 
 }

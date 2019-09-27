@@ -1,6 +1,7 @@
 package com.skt.hrs.resve.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,18 +73,21 @@ public class ResveListService {
 	public ResponseResult selectResveDetailList(DataEntity param) {
 		ResponseResult result = new ResponseResult();
 		List<Map> list = resveListDAO.selectResveDetailList(param);
+		List<Map> retList = new ArrayList<Map>();
 		for(Map item : list) {
 			if("SYSTEM".equals(item.get("REG_EMPNO"))) {
 				if(ResveStatusConst.DBSTATUS.RESVE_COMPT.toString().equals(item.get("STTUS_CODE"))) {
 					item.put("STTUS_CODE_NM", "승계완료");
 				}else {
-					list.remove(item);
+					continue;
 				}
 				item.remove("REG_EMPNO");
 				item.remove("STTUS_CODE");
 			}
+			retList.add(item);
 		}
-		result.setItemList(list);
+		
+		result.setItemList(retList);
 		return result;
 	}
 	

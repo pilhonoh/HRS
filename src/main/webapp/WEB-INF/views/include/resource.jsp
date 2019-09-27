@@ -9,9 +9,9 @@
 <!-- CSS -->
 <link href="${LIB}/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 <link href="${LIB}/XEIcon/xeicon.css" rel="stylesheet">
-<link href="${CSS}/animate.css" rel="stylesheet">
-<link href="${CSS}/reset.css" rel="stylesheet">
-<link href="${CSS}/common.css" rel="stylesheet">
+<link href="${CSS}/animate.css?v=1" rel="stylesheet">
+<link href="${CSS}/reset.css?v=1" rel="stylesheet">
+<link href="${CSS}/common.css?v=1" rel="stylesheet">
 <!-- SCRIPT -->
 <script>
 var ROOT = '${ROOT}';
@@ -21,3 +21,4 @@ var IMG = '${IMG}';
 <script src="${LIB}/jquery-ui/jquery-ui.min.js"></script>
 <script src="${LIB}/moment/moment.min.js"></script>
 <script src="${JS}/cmmn/common.js"></script>
+<script src="${JS}/cmmn/feedback.js"></script>
