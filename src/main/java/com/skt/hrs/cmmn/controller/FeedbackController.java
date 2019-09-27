@@ -68,7 +68,7 @@ public class FeedbackController {
 
 			vo.setRcvEmpno(empno);	// properties에 등록된 3명 (여러명은 어떻게?)
 			//FIXME: 메세지 처리
-			vo.setMssgHead("문의/오류 신고");
+			vo.setMssgHead("[헬스케어예약시스템] 문의/오류 접수 메일");
 			vo.setMssgBody(content);
 			
 			if((boolean) cspService.insertCspMail(vo).getItem()) {
