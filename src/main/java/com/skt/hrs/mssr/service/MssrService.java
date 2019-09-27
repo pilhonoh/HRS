@@ -372,15 +372,11 @@ public class MssrService {
 		if(!StringUtil.isEmpty(smsItem.get("RESVE_EMPNO").toString())) {
 			smsItem.put("targetEmpno", smsItem.get("RESVE_EMPNO").toString());
 	       cspService.insertCspSMS(smsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
-	       cspService.insertCspSMS(smsItem, "csp.sms.resveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
 		}				
 		
 		if(!StringUtil.isEmpty(smsItem.get("WAIT_EMPNO").toString())) {
 			smsItem.put("targetEmpno", smsItem.get("WAIT_EMPNO"));
-			cspService.insertCspSMS(smsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
-			
-			cspService.insertCspSMS(smsItem, "csp.sms.waitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
-				
+			cspService.insertCspSMS(smsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));		
 		}
 	  
   }
