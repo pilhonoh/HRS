@@ -1044,7 +1044,8 @@ button.ui-datepicker-trigger {
 }
 .rv-desc-list ul li strong {
 	font-weight:900;
-	color:#333;
+	/* color:#333; */	
+	color:#d81212;	/* 색상변경 P149365 */
 }
 .rv-desc-list ul li.icon01 {
 	background:url('../images/common/btm_info_icon01.png') no-repeat 0 50%;

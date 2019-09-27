@@ -26,10 +26,12 @@ $(function(){
 	});
 	
 	// 오늘 버튼 클릭이벤트
+	/*
 	$.datepicker._gotoToday = function(id) {
 		$(id).datepicker('setDate', new Date());	//오늘로 setDate
 		$('.ui-datepicker-current-day').click(); 	//클릭 트리깅
 	};
+	*/
 
 	initDatepicker();
 	
@@ -43,23 +45,26 @@ $(function(){
 					return data;
 				}else{
 					
-					function afterLogic(){
+					function afterHandler(){
 						try{
-							resveStatus.table.refresh();
-							resveList.list.renderResveList();
-							scheduleList.list.renderScheduleList();
-						}catch(err){}
+							if(resveStatus) resveStatus.table.refresh();
+							if(resveList) resveList.list.renderResveList();
+							if(scheduleList) scheduleList.list.renderScheduleList();
+							if(resveConfirm) resveConfirm.table.refresh();
+						}catch(err){
+							console.log('ajaxSetup error', err)
+						}
 					}
 					
 					if(json.messageCode == 'system.error'){	// 시스템에러
 						$.alert({
 							text: getMessage('system.error'), 
-							callback: afterLogic
+							callback: afterHandler
 						});
 					}else{	// 비즈니스로직 에러
 						$.alert({
 							text: json.message, 
-							callback: afterLogic
+							callback: afterHandler
 						});
 					}
 					if(json.status == 403){

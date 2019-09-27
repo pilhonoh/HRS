@@ -32,9 +32,9 @@ var resveConfirm = {
 	},
 	setHeader: function(yyyymmdd){
 		var m = moment(yyyymmdd) || moment();
-		
+		var bldNm = $('select[data-code-tyl=BLD] option:selected').text();
 		$('.tit-date span').empty().append(m.format('YYYY년 MM월 '))
-		.append($('<em>').text(m.format('DD일('+ m.locale('ko').format('ddd')+') 예약')))
+		.append($('<em>').text(m.format('DD일('+ m.locale('ko').format('ddd')+') '+ bldNm + ' 예약')))
 		.append('입니다.');
 	},
 	// 사옥변경 이벤트 리스너
@@ -219,7 +219,7 @@ resveConfirm.table = {
 						//예약가능
 						'RESVE_POSBL' : $('<button>').append('<i class="xi-check-circle-o">').append('예약가능').addClass('rbtn cr1').hide(), // 요청사항으로 인한 hide()	
 						//예약완료->예약중
-						'RESVE_COMPT' : $('<button style="cursor: default;">').append('<i class="xi-calendar-check">').append('예약중').addClass('rbtn cr3'),	
+						'RESVE_COMPT' : $('<button style="cursor: default;">').append('<i class="xi-calendar-check">').append('예약중').addClass('rbtn'),	
 						//예약불가
 						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not').hide(), // 요청사항으로 인한 hide()									
 						//완료
