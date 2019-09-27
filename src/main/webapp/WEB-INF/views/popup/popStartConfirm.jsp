@@ -38,7 +38,8 @@ $(document).ready(function(){
 	var data = JSON.parse(item);
 	if(data){
 		$('#resveConfirm_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
-		$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+		//$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+		$('#resveConfirm_mssr').text(data.MSSR_NCNM);
 		$('#resveConfirm_bed').text(data.BED_NM);
 		$('#empnm').text(data.RESVE_EMPNM);
 		

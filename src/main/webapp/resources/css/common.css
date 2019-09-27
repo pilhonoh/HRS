@@ -332,6 +332,7 @@ button.ui-datepicker-trigger {
 .tbl-style thead th { 
 	height:32px;
 }
+
 .tbl-style th {
 	height:28px;
 	font-size:13px;
@@ -342,6 +343,15 @@ button.ui-datepicker-trigger {
 	border-bottom:1px solid #ddd;
 	text-align:center;
 }
+.tbl-hover tbody  tr:hover td{
+	background-color:#f6f6f6;
+}
+
+.tbl-hover  a:hover {
+	text-decoration: underline;
+	cursor: pointer;
+}
+
 .tbl-style tbody th { 
 	text-align:left;
 	padding:3px 10px;

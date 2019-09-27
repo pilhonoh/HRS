@@ -38,7 +38,8 @@ var data = $('#resve-'+resveNo).data('data');
 $(document).ready(function(){		
 	
 	$('#resveRegist_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
-	$('#resveRegist_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+	//$('#resveRegist_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+	$('#resveRegist_mssr').text(data.MSSR_NCNM);
 	$('#resveRegist_bed').text(data.BED_NM);
 	
 	var realTime = getRealTime(data.RESVE_TM);

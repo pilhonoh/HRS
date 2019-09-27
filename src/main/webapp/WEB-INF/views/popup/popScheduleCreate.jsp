@@ -268,10 +268,10 @@ function addRow (){
 		scheduleListHtml.push('<td>');
 		scheduleListHtml.push('<input type="text"  id = "scheduleCreate_start_date'+trCnt+'" class="datepicker startDate" >');
 		scheduleListHtml.push('<em class="fromto"> ~ </em>');
-		scheduleListHtml.push('<input type="text" id = "scheduleCreate_end_date'+trCnt+'" class="datepicker endDate">');
+		scheduleListHtml.push('<input type="text" id = "scheduleCreate_end_date'+trCnt+'" class="datepicker endDate"> ');
 		scheduleListHtml.push('<select   name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleCreate_startTime'+trCnt+'" ></select>');
 		scheduleListHtml.push('<em class="fromto"> ~ </em>');
-		scheduleListHtml.push('<select  name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime'+trCnt+'" ></select>');
+		scheduleListHtml.push('<select  name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime'+trCnt+'" ></select> ');
 	if(trCnt == 1){
 		scheduleListHtml.push('<button class="t-btn cr01" id="scheduleCreate_rowAddBtn" onclick="popSchCreate.button.rowAddClickEvent()" >추가</button></td></tr>');
 	}else{
