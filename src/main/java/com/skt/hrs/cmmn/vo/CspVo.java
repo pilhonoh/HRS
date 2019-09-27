@@ -59,9 +59,9 @@ public class CspVo {
 		return mssgBody;
 	}
 	public void setMssgBody(String mssgBody) {
-		if(this.cspType.equals("SMS")) {
-			mssgBody = StringUtil.substringByte(mssgBody, 80);
-		}
+//		if(this.cspType.equals("SMS")) {
+//			mssgBody = StringUtil.substringByte(mssgBody, 80);
+//		}
 		this.mssgBody = mssgBody;
 	}
 	public String getSendYn() {
