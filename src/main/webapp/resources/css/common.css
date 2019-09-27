@@ -481,7 +481,8 @@ button.ui-datepicker-trigger {
 	word-break: break-all;
 }
 .pop-container.st2 {
-	padding:30px 70px;
+	/* padding:30px 70px; */
+	padding:30px 65px; /* 좌우 padding 조절 P149365 */
 }
 
 .pop-desc {

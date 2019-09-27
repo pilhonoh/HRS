@@ -70,9 +70,9 @@
 	<select id="selectBlacklistByEmpno" parameterType="map" resultType="hashmap">
 		SELECT A.RESVE_NO,
 			A.START_DT AS PANELTY_START_DT,
-		    DATE_FORMAT(A.START_DT, '%Y-%m-%d %H:%i:%s') AS PANELTY_START_DT_STR,	
+		    DATE_FORMAT(A.START_DT, '%Y-%m-%d') AS PANELTY_START_DT_STR,	
 		    A.END_DT AS PANELTY_END_DT,
-			DATE_FORMAT(A.END_DT, '%Y-%m-%d %H:%i:%s') AS PANELTY_END_DT_STR,		    
+			DATE_FORMAT(A.END_DT, '%Y-%m-%d') AS PANELTY_END_DT_STR,		    
 		    B.RESVE_DE,
 		    B.RESVE_TM,
 		    B.BLD_CODE,

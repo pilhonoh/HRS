@@ -156,6 +156,16 @@
 		AND A.RESVE_EMPNO IS NOT NULL
 	</select>
 	
+	<!-- 지난시간 대기 취소처리 대상 조회-->
+	<select id="selectWaitCancelTarget" parameterType="map" resultType="hashmap">
+		SELECT *
+		FROM resve_sttus
+		WHERE RESVE_DE = DATE_FORMAT(CURRENT_DATE,'%Y%m%d')
+		AND RESVE_TM <![CDATA[<]]> #{nextResveTm}
+		AND (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != '')
+		AND CANCL_YN != 'Y'
+	</select>
+	
 	<!-- 예약현황 update -->
 	<update id="updateResveStatus" parameterType="map">
 		UPDATE RESVE_STTUS

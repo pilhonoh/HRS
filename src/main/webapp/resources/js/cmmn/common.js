@@ -51,9 +51,7 @@ $(function(){
 							if(resveList) resveList.list.renderResveList();
 							if(scheduleList) scheduleList.list.renderScheduleList();
 							if(resveConfirm) resveConfirm.table.refresh();
-						}catch(err){
-							console.log('ajaxSetup error', err)
-						}
+						}catch(err){}
 					}
 					
 					if(json.messageCode == 'system.error'){	// 시스템에러

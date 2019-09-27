@@ -10,9 +10,9 @@
 		</layout>
 	</appender>
 	
-	<!-- blacklist filter batch log -->
+	<!-- blacklist filter JOB daily log -->
 	<appender name="blacklistFilterAppender" class="org.apache.log4j.DailyRollingFileAppender">          
-        <param name="file" value="/data/logs/blacklistFilter.log"/>  
+        <param name="file" value="/data/logs/blacklistFilterJob.log"/>  
         <param name="Append" value="true"/>  
         <param name="DatePattern" value="'.'yyMMdd"/>  
         <layout class="org.apache.log4j.PatternLayout">  
@@ -20,9 +20,19 @@
         </layout> 
     </appender>
     
-    <!--  30분전 알림 daily log -->  
+    <!--  30분전 알림 JOB daily log -->  
     <appender name="resveNotiJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
-        <param name="file" value="/data/logs/resveNoti.log"/>  
+        <param name="file" value="/data/logs/resveNotiJob.log"/>  
+        <param name="Append" value="true"/>  
+        <param name="DatePattern" value="'.'yyMMdd"/>  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%p] %m %n"/>  
+        </layout>  
+    </appender> 
+    
+    <!-- 과거 대기취소 JOB daily log -->  
+    <appender name="pastWaitCancelJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
+        <param name="file" value="/data/logs/pastWaitCancelJob.log"/>  
         <param name="Append" value="true"/>  
         <param name="DatePattern" value="'.'yyMMdd"/>  
         <layout class="org.apache.log4j.PatternLayout">  
@@ -39,6 +49,11 @@
     <logger name="resveNotiJobLogger">
     	<level value="info" />    	
     	<appender-ref ref="resveNotiJobDailyAppender" />
+    </logger>
+    
+    <logger name="pastWaitCancelJobLogger">
+    	<level value="info" />    	
+    	<appender-ref ref="pastWaitCancelJobDailyAppender" />
     </logger>
 	
 	<!-- Application Loggers -->
