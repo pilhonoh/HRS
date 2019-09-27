@@ -7,7 +7,7 @@ var scheduleList = {
 		loadCodeSelect(); //콤보박스 공통코드 세팅
 		scheduleList.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 		scheduleList.datepicker.setDefaultValue(); //datepicker 기본값 세팅
-		scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
+	    scheduleList.list.renderScheduleList(); //목록 조회 후 렌더
 		scheduleList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		scheduleList.button.scheduleCreateBtnEvent();
 		scheduleList.button.scheduleDeleteBtnEvent();
@@ -199,18 +199,18 @@ var scheduleList = {
 						scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
 						scheduleListHtml.push('	<td>' + resveDt + '</td>');
 						scheduleListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
-						scheduleListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
+						scheduleListHtml.push('	<td><a name="modifyBtn" herf="#none" data-resveno="'+resultList[i].RESVE_NO+'" >' + resultList[i].MSSR_NCNM + '</td>');
 						scheduleListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 						scheduleListHtml.push('	<td>' + sexdstn + '</td>');
 						scheduleListHtml.push('	<td>' + convertedTime + '</td>');
-						scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
+						//scheduleListHtml.push('	<td><button name="modifyBtn" data-resveno="'+resultList[i].RESVE_NO+'"  class="t-btn cr01">수정</button></td>');
 						scheduleListHtml.push('</tr>');
 						
 					}
 					
 					
 				}
-				$('tbody#scheduleList').html(scheduleListHtml.join(''));
+				$('tbody#scheduleList').html(scheduleListHtml.join(''))
 				scheduleList.paging.renderPaging();
 				
 				scheduleList.button.scheduleModifyBtnEvent();
@@ -374,6 +374,7 @@ var scheduleList = {
 					if (scheduleList.list.params.pageNo == scheduleList.paging.params.prev) {
 						return false;
 					}
+					console.log(scheduleList.paging.params.prev)
 					scheduleList.list.params.pageNo = scheduleList.paging.params.prev;
 					scheduleList.list.renderScheduleList();
 				});
@@ -385,6 +386,7 @@ var scheduleList = {
 					if (scheduleList.list.params.pageNo == scheduleList.paging.params.next) {
 						return false;
 					}
+					console.log(scheduleList.paging.params.prev)
 					scheduleList.list.params.pageNo = scheduleList.paging.params.next;
 					scheduleList.list.renderScheduleList();
 				});
@@ -453,7 +455,7 @@ var scheduleList = {
 		 
 		},
 		scheduleModifyBtnEvent: function() {
-			 $("button[name='modifyBtn']").on('click',function(){
+			 $("a[name='modifyBtn']").on('click',function(){
 				  var resveNo = $(this).data("resveno")
 				  scheduleList.popup.showRowScheduleSavePopup(resveNo);  
 			  });	

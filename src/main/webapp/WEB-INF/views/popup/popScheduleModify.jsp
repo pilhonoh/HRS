@@ -341,16 +341,16 @@ function getParams(){
 	   if(trCnt <=5 ){
 		
 		 var scheduleListHtml = [];
-	           scheduleListHtml.push('<tr id="scheduleModify_tr'+trCnt+'" data-rowid = "'+trCnt+'" class="scheduleModify"><th>근무시간'+trCnt+'</th>');
+	           scheduleListHtml.push('<tr id="scheduleModify_tr'+trCnt+'" data-rowid = "'+trCnt+'" class="scheduleModify"><th>근무시간'+trCnt+'</th> ');
 				scheduleListHtml.push('<td>');
 				//scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'"></select>'); 
-				scheduleListHtml.push('<select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'">')
+				scheduleListHtml.push(' <select name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleModify_startTime'+trCnt+'"> ')
 			    scheduleListHtml.push(popSchModify.cmmnCode.startTimeCombo.join(''));
 			    scheduleListHtml.push('</select>');
-				scheduleListHtml.push('<em class="fromto"> ~ </em>');
+				scheduleListHtml.push(' <em class="fromto"> ~ </em> ');
 				scheduleListHtml.push('<select name ="endTime" data-code-tyl="RVT" data-code-tys="RVTEND" id="scheduleModify_endTime'+trCnt+'">')
 				scheduleListHtml.push(popSchModify.cmmnCode.endTimeCombo.join(''));
-				scheduleListHtml.push('</select>');
+				scheduleListHtml.push('</select> ');
 				//scheduleListHtml.push('<select name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  data-default-str ="9" id="scheduleModify_endTime'+trCnt+'"></select>')
 		    if(trCnt == 1){
 				scheduleListHtml.push('<button class="t-btn cr01" id="scheduleModify_rowAddBtn" onclick="popSchModify.rowAddEvent()">추가</button></td></tr>');

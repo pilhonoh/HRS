@@ -71,13 +71,15 @@
 				</div><!-- // search_field_wrap -->
 
 				<div class="sub-tit">
+					<div class="f-left" style="display:inline-block;">
+						<button class="btn" id ="deleteBtn">삭제</button>						
+					</div>
 					<div class="f-right">
-						<button class="btn" id ="deleteBtn">삭제</button>
 						<button class="btn" id ="createBtn">등록</button>						
 					</div>
 				</div>
 
-				<table class="tbl-style t_center">
+				<table class="tbl-style t_center tbl-hover ">
 					<colgroup>
 						<col style="width:50px;">						
 						<col style="width:15%;">
@@ -86,7 +88,7 @@
 						<col style="width:70px;">
 						<col style="width:15%;">
 						<col style="width:15%;">
-						<col style="width:15%;">
+						<%-- <col style="width:15%;"> --%>
 					</colgroup>
 					<thead>
 						<tr>
@@ -97,7 +99,7 @@
 							<th>베드</th>
 							<th>성별</th>
 							<th>근무시간</th>
-							<th>수정</th>
+							<!-- <th>수정</th> -->
 						</tr>
 					</thead>
 					<tbody id="scheduleList">
