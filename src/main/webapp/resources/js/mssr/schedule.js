@@ -295,8 +295,12 @@ var scheduleList = {
 			var totalCount = scheduleList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
-			
+			/*console.log(currentIndex);
+			console.log(totalCount);
+			console.log(rowPerPage);
+			console.log(rowPerPage);*/
 			$("div#pagingArea").empty();
+			
 			var preStr = '';
 			var postStr = '';
 			var pageNumStr = '';
@@ -329,8 +333,8 @@ var scheduleList = {
 			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, last 버튼
 				postStr += '<a href="#none" class="last" id="lastBtn"><img src="' + IMG + '/common/btn_last.gif"></a>';
 			}
-
-			for (var i=first; i<(first+last); i++) {
+			
+			for (var i= first; i<= last; i++) {
 				if (i > totalIndexCount) {
 					break;
 				}

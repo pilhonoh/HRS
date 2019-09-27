@@ -278,7 +278,7 @@ var resveList = {
 			}
 
 
-			for (var i=first; i<(first+last); i++) {
+			for (var i=first; i<=last; i++) {
 				if (i > totalIndexCount) {
 					break;
 				}
