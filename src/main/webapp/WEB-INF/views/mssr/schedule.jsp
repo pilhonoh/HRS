@@ -82,12 +82,12 @@
 				<table class="tbl-style t_center tbl-hover ">
 					<colgroup>
 						<col style="width:50px;">						
-						<col style="width:15%;">
-						<col>
-						<col style="width:15%;">
-						<col style="width:70px;">
-						<col style="width:15%;">
-						<col style="width:15%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
+						<col style="width:16%;">
 						<%-- <col style="width:15%;"> --%>
 					</colgroup>
 					<thead>

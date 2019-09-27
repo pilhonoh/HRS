@@ -62,7 +62,7 @@ var popSchModify= {
 						console.log('allCodeList', res);
 						if (res.status === 200) {
 						
-							var data = res.list.filter(function (it) { return it.CODE_TYL.includes("RVT")});
+							var data = res.list.filter(function (item) { return (item.CODE_TYL.indexOf("RVT") ===-1)?false:true});
 							for (var i in data) {
 								popSchModify.cmmnCode.startTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).start  + '</option>');
 								popSchModify.cmmnCode.endTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).end + '</option>');
