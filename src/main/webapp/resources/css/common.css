@@ -349,7 +349,7 @@ button.ui-datepicker-trigger {
 
 .tbl-hover  a:hover {
 	text-decoration: underline;
-	cursor: help;
+	cursor: pointer;
 }
 
 .tbl-style tbody th { 
