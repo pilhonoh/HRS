@@ -22,7 +22,7 @@
 				<td id="resveWait_resveDe"></td>
 			</tr>
 			<tr>
-				<th>관리사</th>
+				<th>헬스키퍼</th>
 				<td id="resveWait_mssr"></td>
 			</tr>
 			<tr>

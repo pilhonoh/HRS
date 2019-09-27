@@ -21,7 +21,7 @@
 				<td>2019-08-19</td>
 			</tr>
 			<tr>
-				<th>관리사</th>
+				<th>헬스키퍼</th>
 				<td>James(남)</td>
 			</tr>
 			<tr>

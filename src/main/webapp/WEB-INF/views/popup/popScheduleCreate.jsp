@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <div class="pop-head">
-	<h2>관리사 근무 등록</h2>
+	<h2>헬스키퍼 근무 등록</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
 <div class="pop-container">	
@@ -28,7 +28,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th  class = "required" >관리사</th>
+				<th  class = "required" >헬스키퍼</th>
 				<td>
 					<select style="width:120px;"  data-empty-str="선택" id="scheduleCreate_mssrCombo">	
 					<option>선택</option>				

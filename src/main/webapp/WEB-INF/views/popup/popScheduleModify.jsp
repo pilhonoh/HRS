@@ -4,7 +4,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%-- <jsp:include page="${JSP}/include/resource.jsp" /> --%>
 <div class="pop-head">
-	<h2>관리사 근무 수정</h2>
+	<h2>헬스키퍼 근무 수정</h2>
 	<a href="#none" class="close layerClose">닫기</a> 
 </div>
 <div class="pop-container">	
@@ -21,7 +21,7 @@
 				<td id='tdResveDate'>2019-08-21</td>
 			</tr>
 			<tr>
-				<th>관리사</th>
+				<th>헬스키퍼</th>
 				<td id="tdMssName">James</td>
 			</tr>
 			<tr>
