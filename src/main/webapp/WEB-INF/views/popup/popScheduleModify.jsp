@@ -62,7 +62,7 @@ var popSchModify= {
 						console.log('allCodeList', res);
 						if (res.status === 200) {
 						
-							var data = res.list.filter(function (item) { return (item.CODE_TYL.indexOf("RVT") ===-1)?false:true});
+							var data = res.list.filter(function (item) { return (item.CODE_TYL.indexOf("RVT") ===-1)?false:true;});
 							for (var i in data) {
 								popSchModify.cmmnCode.startTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).start  + '</option>');
 								popSchModify.cmmnCode.endTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).end + '</option>');
@@ -335,7 +335,7 @@ function getParams(){
  function  addRow (){ 
 	  var deferred = $.Deferred();
 	  var trCnt = $(".scheduleModify").length +1;	
-	  var lastTiem = (trCnt==1)? trCnt : $("select[name='endTime']:last").val() ;
+	  var lastTiem = (trCnt==1)? trCnt + 1 : $("select[name='endTime']:last").val();
 	   
 	   
 	   if(trCnt <=5 ){
