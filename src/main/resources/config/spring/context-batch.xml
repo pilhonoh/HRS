@@ -39,7 +39,7 @@
 	-->
     <bean id="blacklistFilterTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> <!-- 블랙리스트 필터 JOB -->
 	    <property name="jobDetail" ref="jobBlacklistFilterDetail"/>
-		<property name="cronExpression" value="0 10 0 * * ?" /> <!-- 매일 0시10분 -->
+		<property name="cronExpression" value="0 1 0 * * ?" /> <!-- 매일 0시1분 -->
 		<!-- <property name="cronExpression" value="0/10 * * * * ?" /> -->	<!-- 테스트 10초간격 -->
 	</bean>
 	<bean id="cspSendTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"> <!-- CSP 연동 SMS/쪽지/Mail JOB -->
@@ -59,11 +59,11 @@
 	<bean id="jobScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 	    <property name="triggers">
 	        <list>
-	        	<!-- 
+	        	
 	        	<ref bean="blacklistFilterTrigger" />
 	        	<ref bean="cspSendTrigger" />
 	        	<ref bean="resveNotifyTrigger" /> 
-	        	 -->
+	        	
 	        </list>
 	    </property>
 	    <property name="quartzProperties">

@@ -9,9 +9,9 @@
 <!-- CSS -->
 <link href="${LIB}/jquery-ui/jquery-ui.min.css" rel="stylesheet">
 <link href="${LIB}/XEIcon/xeicon.css" rel="stylesheet">
-<link href="${CSS}/animate.css?v=1" rel="stylesheet">
-<link href="${CSS}/reset.css?v=1" rel="stylesheet">
-<link href="${CSS}/common.css?v=1" rel="stylesheet">
+<link href="${CSS}/animate.css?v=2" rel="stylesheet">
+<link href="${CSS}/reset.css?v=2" rel="stylesheet">
+<link href="${CSS}/common.css?v=2" rel="stylesheet">
 <!-- SCRIPT -->
 <script>
 var ROOT = '${ROOT}';
