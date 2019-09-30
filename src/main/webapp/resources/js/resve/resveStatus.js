@@ -15,9 +15,11 @@ var resveStatus = {
 				$('[data-code-tyl=BLD] option[value='+SESSION.PLACE+']').attr('selected', true);	// default사옥선택
 			}
 			resveStatus.fillBeds()		// bed목록 조회
-				.then(function(){
-					$('.month-calendar .today span').trigger('click');
-				})	
+			.then(function(){
+				$('.month-calendar .today span').trigger('click');
+			});
+			$('a.location').hide();
+			$('a.location.' + $('[data-code-tyl=BLD]').val()).show();
 		});			
 				
 		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩		
@@ -31,6 +33,10 @@ var resveStatus = {
 				//$('.month-calendar .today span').trigger('click');	//오늘선택
 				$('.month-calendar .selected span').trigger('click');
 				$('[data-code-tyl=BLD]').trigger('blur');
+				
+				//센터위치
+				$('a.location').hide();
+				$('a.location.' + $('[data-code-tyl=BLD]').val()).show();
 			})
 	},
 	// 해당사옥의 bed목록 조회
@@ -180,8 +186,10 @@ resveStatus.calendar =  {
 			// 데이터 및 클릭 이벤트 바인딩
 			$span.data('data', d);
 			
-			if(d.weekday != 6 && d.weekday !=7) 
+			if(d.weekday != 6 && d.weekday !=7)		
 				$span.on('click', resveStatus.calendar.click);
+				
+			
 			
 			elements.push(
 				$td.append($div.append($em).append($span))					
@@ -205,6 +213,16 @@ resveStatus.calendar =  {
 		resveStatus.table.init();
 		resveStatus.table.getStatus($(e.target).data('data').yyyymmdd)
 		resveStatus.data.selectedDate = $(e.target).data('data');
+		
+		// 주말 여부
+		if(resveStatus.data.selectedDate.weekday == 6 || 
+				resveStatus.data.selectedDate.weekday == 7){
+			$('.reservation-table tbody').hide();
+			$('.weekend-info').show();
+		}else{
+			$('.reservation-table tbody').show();
+			$('.weekend-info').hide();
+		}
 	}
 };
 
@@ -241,6 +259,7 @@ resveStatus.table = {
 		if(!yyyymmdd){
 			yyyymmdd = moment().format('YYYYMMDD');
 		}
+						
 		$.ajax({				
 			url: ROOT + '/resve/getStatus',
 			data: {resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
