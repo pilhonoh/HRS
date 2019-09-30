@@ -93,11 +93,8 @@ var scheduleList = {
 					deferred.reject('');
 				}
 			});
-			
 			return deferred.promise();
 		},
-		
-		
 		setMssrCombo: function(bldCode) {
 			
 			$.when(scheduleList.combobox.getMssrList(bldCode)).done(function(result) {
@@ -179,7 +176,6 @@ var scheduleList = {
 				var btnClass = '';
 				var resveDt = '';
 				var sexdstn = '';
-				
 				scheduleList.paging.params.totalCount = result.customs.totalCount;
 				if(result.customs.totalCount == 0){
 					scheduleListHtml.push('<tr>');
@@ -189,12 +185,15 @@ var scheduleList = {
 					
 						for (var i in resultList) {
 						
-						var resve_de = resultList[i].RESVE_DE;
-						resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+						var resve_de =  moment(resultList[i].RESVE_DE,"YYYYMMDD",'ko'); 
+	
+                        resveDt=resve_de.format('YYYY-MM-DD (ddd)');
+						//resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 						
 						var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
 						var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
-						
+
+	  				
 						scheduleListHtml.push('<tr>');
 						scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
 						scheduleListHtml.push('	<td>' + resveDt + '</td>');
