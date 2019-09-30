@@ -176,6 +176,16 @@ resveConfirm.calendar = {
 		resveConfirm.setHeader($(e.target).data('data').yyyymmdd);
 		resveConfirm.table.init();
 		resveConfirm.table.getResve($(e.target).data('data').yyyymmdd);
+		
+		// 주말 여부
+		if(resveConfirm.data.selectedDate.weekday == 6 || 
+				resveConfirm.data.selectedDate.weekday == 7){
+			$('.reservation-table tbody').hide();
+			$('.weekend-info').show();
+		}else{
+			$('.reservation-table tbody').show();
+			$('.weekend-info').hide();
+		}
 	}
 }
 

@@ -81,7 +81,11 @@
 							</tbody>
 						</table>
 					</div>	
-				
+					
+					<div class="weekend-info">
+						<p>금일은 헬스케어 <strong>서비스가 제공되지 않습니다.</strong></p>
+					</div>
+					
 				</article><!-- //content-in -->
 				
 			</div><!-- //content -->
