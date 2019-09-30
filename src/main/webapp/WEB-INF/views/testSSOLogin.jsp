@@ -44,8 +44,8 @@
  				*패널티 대상 
 				<br/>
 					<input id="id10" name="id" type="radio" value="1110621" /><label for="id10">김가상8 (1110621, 남, SKT-타워)</label><br/><p/>
-				
-<!-- 				<input id="id" name="id" type="radio" /><label for="id">직접입력</label> &nbsp;<input id="myid" type="text" placeholder="사번" onclick="setCheck();"></input> -->
+				<br/>
+				<input id="id" name="id" type="radio" /><label for="id">직접입력</label> &nbsp;<input id="myid" type="text" placeholder="사번" onclick="setCheck();"></input>
 				<p/>
 				<a href="javascript:login()">테스트 로그인</a>				
 			</form>
