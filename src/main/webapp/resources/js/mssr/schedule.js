@@ -225,7 +225,17 @@ var scheduleList = {
 			
 			for (var i in rowDataList) {
 				if (rowDataList[i].RESVE_NO == resveNo) {
-					rowData = rowDataList[i];
+					rowData = {RESVE_NO:rowDataList[i].RESVE_NO,
+							   BLD_CODE:rowDataList[i].BLD_CODE,
+							   BED_CODE:rowDataList[i].BED_CODE,
+							   RESVE_DE:rowDataList[i].RESVE_DE,
+							   MSSR_EMPNO:rowDataList[i].MSSR_EMPNO,
+							   MSSR_NCNM:rowDataList[i].MSSR_NCNM,
+							   BED_NM:rowDataList[i].BED_NM,
+							   RESVE_NO_LIST:rowDataList[i].RESVE_NO_LIST, 
+							   RESVE_TM:rowDataList[i].RESVE_TM,
+							   RESVE_TM_LIST:rowDataList[i].RESVE_TM_LIST
+					        } 
 					break;
 				}
 			}
@@ -470,11 +480,12 @@ var scheduleList = {
 				  var params = [] ;
 				  var data = null;
 				  var resveNoSplit = null;
+				  var delItemCnt = 0;
 				  $('tbody#scheduleList input:checkbox:checked').each(function(){
-
+					  delItemCnt+=1;
 					  data = scheduleList.list.getRowData($(this).val())
-					  console.log( 'data',data);
-					  console.log( 'data',data);
+				/*	  console.log( 'data',data);
+					  console.log( 'data',data);*/
 					  resveNoSplit = data.RESVE_NO_LIST.split(",")
 					  console.log( 'resv_no',resveNoSplit.length);
 					 for (var i = 0; i < resveNoSplit.length; i++) {
@@ -487,7 +498,7 @@ var scheduleList = {
 					  alertPopup('삭제할 스케쥴을 선택하세요.');
 					  return false;
 				  }
-				  confirmPopup('총' +params.length+ '건을 삭제하시겠습니까?', function(){					  					
+				  confirmPopup('총' + delItemCnt + '건을 삭제하시겠습니까?', function(){					  					
 					$.ajax({
 							url: ROOT + '/mssr/scheduleDelete',
 							type: 'POST',
