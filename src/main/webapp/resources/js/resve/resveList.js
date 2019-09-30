@@ -138,8 +138,7 @@ var resveList = {
 				var resveListHtml = [];
 				var btnText = '';
 				var btnClass = '';
-				var btnStyle = '';
-				var resveDt = '';
+				var btnStyle = '';				
 				
 				resveList.paging.params.totalCount = result.customs.totalCount;
 				
@@ -160,19 +159,20 @@ var resveList = {
 							btnClass = 'waitCancelBtn';
 							btnStyle = 'cr01';
 						}
-						
+									
 						var resve_de = resultList[i].RESVE_DE;
-						resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
-						
+						var resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+						var resveDtTxt = moment(resve_de, 'YYYYMMDD').locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
+						var regDtTxt = moment(resultList[i].REG_DT).locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
 						
 						
 						resveListHtml.push('<tr>');
-						resveListHtml.push('	<td>' + resveDt + '</td>');
+						resveListHtml.push('	<td>' + resveDtTxt + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].RESVE_TM_TXT + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
-						resveListHtml.push('	<td>' + resultList[i].REG_DT_TXT + '</td>');						
+						resveListHtml.push('	<td>' + regDtTxt + '</td>');						
 						resveListHtml.push('	<td style="text-align:left; padding-left:85px">');
 						if(stsCode == 'STS02' || stsCode == 'STS04'){//대기취소, 예약취소 텍스트 색 다르게 조정
 							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')" style="color:#ad8a6a">' + resultList[i].STTUS_NM + '</a>');
@@ -182,7 +182,7 @@ var resveList = {
 						
 						if (stsCode == 'STS01' || stsCode == 'STS03') {
 							var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
-							var cancelDt = moment(resveDt + " " +resve_tm_start).subtract(20, 'minutes').toDate();
+							var cancelDt = moment(resveDt + " " +resve_tm_start, 'YYYY-MM-DD HH:mm').subtract(20, 'minutes').toDate();
 							
 							//케어시작 20분전까지 취소가능
 							if(cancelDt >= new Date()){						

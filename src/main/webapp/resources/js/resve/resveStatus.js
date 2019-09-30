@@ -28,7 +28,8 @@ var resveStatus = {
 		
 		resveStatus.fillBeds(e.target.value)
 			.then(function(){
-				$('.month-calendar .today span').trigger('click');
+				//$('.month-calendar .today span').trigger('click');	//오늘선택
+				$('.month-calendar .selected span').trigger('click');
 				$('[data-code-tyl=BLD]').trigger('blur');
 			})
 	},

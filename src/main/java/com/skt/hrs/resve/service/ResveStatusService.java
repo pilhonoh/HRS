@@ -1,6 +1,8 @@
 package com.skt.hrs.resve.service;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -705,12 +707,37 @@ public class ResveStatusService {
 		// 블랙리스트 확인
 		Map blacklistMap = blacklistDAO.selectBlacklistByEmpno(param);		
 		if(blacklistMap != null) {
-			//"홍길동님은 2019년9월12일 SKT타월 C베드 예약으로 인한 패널티대상으로\n2019년 10월 3일까지 예약이 불가합니다.";			
-			String message = messageSource.getMessage("error.paneltyTarget", new String[] {
-					blacklistMap.get("EMPNM").toString(),
-					blacklistMap.get("PANELTY_START_DT_STR").toString(),
-					blacklistMap.get("PANELTY_END_DT_STR").toString()
-			}, Locale.forLanguageTag(param.getString("_ep_locale")));
+			//홍길동님은 케어 예약 후 No-show 하셨기에 신규 예약이 불가합니다. 
+			//No-show 일 : 2019-09-18(금)
+			//신규 예약 가능 일 : 2019-10-02(월)
+			String message = "";
+			try {
+				
+				String resveDeStr = blacklistMap.get("RESVE_DE_STR").toString();
+				String restartDtStr = blacklistMap.get("RESTART_DT_STR").toString();
+				
+				SimpleDateFormat fromFormat = new SimpleDateFormat("yyyy-MM-dd");
+				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd(EEE)", Locale.KOREAN);
+				
+				Date date_resveDe = fromFormat.parse(resveDeStr);							
+				Date date_restartDt = fromFormat.parse(restartDtStr);
+								
+				while(DateUtil.isWeekend(restartDtStr, "yyyy-MM-dd")) {					
+					Calendar cal = Calendar.getInstance(); 
+					cal.setTime(date_restartDt);
+					cal.add(Calendar.DATE, 1);
+					restartDtStr = fromFormat.format(cal.getTime());
+					date_restartDt = fromFormat.parse(restartDtStr);
+				}
+				
+				message = messageSource.getMessage("error.paneltyTarget", new String[] {
+						blacklistMap.get("EMPNM").toString(),
+						toFormat.format(date_resveDe),
+						toFormat.format(date_restartDt),
+				}, Locale.forLanguageTag(param.getString("_ep_locale")));
+			}catch(Exception e) {
+				throw new HrsException("invalid date");
+			}			
 			throw new HrsException(message);
 		}
 	}
