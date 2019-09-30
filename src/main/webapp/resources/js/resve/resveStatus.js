@@ -17,6 +17,7 @@ var resveStatus = {
 			resveStatus.fillBeds()		// bed목록 조회
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
+				$('.cal-day.sat,.sun').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
 			});
 			$('a.location').hide();
 			$('a.location.' + $('[data-code-tyl=BLD]').val()).show();
@@ -186,7 +187,8 @@ resveStatus.calendar =  {
 			// 데이터 및 클릭 이벤트 바인딩
 			$span.data('data', d);
 			
-			if(d.weekday != 6 && d.weekday !=7)		
+			//일단 클릭이벤트 모두 바인딩 후 휴일만 off (주말이어도 최초 트리깅을위해)
+			//if(d.weekday != 6 && d.weekday !=7)		
 				$span.on('click', resveStatus.calendar.click);
 				
 			
