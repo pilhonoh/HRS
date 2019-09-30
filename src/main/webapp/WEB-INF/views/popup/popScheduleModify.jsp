@@ -381,7 +381,8 @@ $(document).ready(function(){
 	popSchModify.params.bedCode = data.BED_CODE;
 	popSchModify.params.timeList = data.RESVE_TM_LIST;
 	popSchModify.renderScheduleList()
-
+   	var resve_de =  moment(resveDt,"YYYYMMDD",'ko'); 
+	var resveDt = resve_de.format('YYYY-MM-DD (ddd)');
 	$("#tdResveDate").text(resveDt);
 	$("#tdMssName").text(data.MSSR_NCNM);
 	$('#tdBedName').text(data.BED_NM)
