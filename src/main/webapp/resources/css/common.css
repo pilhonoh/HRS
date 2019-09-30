@@ -387,8 +387,8 @@ button.ui-datepicker-trigger {
 
 
 .t-btn {
-	height:28px;
-	font-size:13px;
+	height:20px;		/* 양혜리 수정 28px->20px */
+	font-size:11px;		/* 양혜리 수정 13px->11px */
 	color:#fff;
 	padding:0 15px;
 	border-radius:3px;
