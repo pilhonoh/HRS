@@ -230,9 +230,11 @@ var scheduleList = {
 							   BED_CODE:rowDataList[i].BED_CODE,
 							   RESVE_DE:rowDataList[i].RESVE_DE,
 							   MSSR_EMPNO:rowDataList[i].MSSR_EMPNO,
+							   MSSR_NCNM:rowDataList[i].MSSR_NCNM,
+							   BED_NM:rowDataList[i].BED_NM,
 							   RESVE_NO_LIST:rowDataList[i].RESVE_NO_LIST, 
 							   RESVE_TM:rowDataList[i].RESVE_TM,
-							   RESVE_TM_LIST:rowDataList[i].RESVE_TM_LIST,
+							   RESVE_TM_LIST:rowDataList[i].RESVE_TM_LIST
 					        } 
 					break;
 				}
