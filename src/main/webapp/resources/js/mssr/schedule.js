@@ -496,7 +496,7 @@ var scheduleList = {
 					  resveNoSplit = data.RESVE_NO_LIST.split(",")
 					  console.log( 'resv_no',resveNoSplit.length);
 					 for (var i = 0; i < resveNoSplit.length; i++) {
-						 delItemCnt+= i
+						 delItemCnt++;  
 						 params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE , RESVE_NO:resveNoSplit[i]});	
 					 }
 					 
