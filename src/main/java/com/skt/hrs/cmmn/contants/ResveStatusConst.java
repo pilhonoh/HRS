@@ -10,14 +10,15 @@ public abstract interface ResveStatusConst {
 	public static enum VIEWSTATUS{
 		RESVE_POSBL,	//예약가능
 		RESVE_COMPT,	//예약완료
-		RESVE_IMPRTY,	//예약불가
+		RESVE_IMPRTY,	//예약불가		
 		WAIT_POSBL,		//대기가능
 		WAIT,			//대기중
 		RESVE_CANCL,	//예약취소
 		WAIT_CANCL,		//대기취소
 		COMPT,			//완료
 		NOSHOW_COMPT,	//노쇼 당일 확인처리 가능(확인처리를 하지않으면 패널티)
-		NOSHOW			//노쇼
+		NOSHOW,			//노쇼
+		RESVE_IMPRTY_SEX	//예약불가(남성이 여성관리자선택불가)
 	}
 	
 	/**

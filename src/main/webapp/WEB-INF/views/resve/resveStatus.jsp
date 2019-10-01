@@ -25,16 +25,10 @@
 					<div class="month-area">
 						<div class="building-select">
 							<div>							
-								<i class="building-icon"></i>
+								<i class="building-icon">위치</i>
 								<select data-code-tyl="BLD"></select>
 								<span class="bar"></span>
-							</div>
-							<!-- <p class="locationlink">
-								<strong>위치 :</strong>
-								<a class="location SK01" href="#none">센터위치</a>
-								<a class="location SK02" href="#none">센터위치</a>
-								<a class="location SK09" href="#none">센터위치</a>
-							</p> -->
+							</div>							
 						</div>
 						<div class="calendar-area">
 							<table class="month-calendar">
