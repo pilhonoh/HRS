@@ -40,7 +40,10 @@
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = A.BED_CODE AND CODE_TYS = A.BLD_CODE) AS BED_NM,
 			(SELECT CODE_NM FROM CMMN_CODE WHERE CODE = LAST_STTUS_CODE) AS STTUS_NM,
 			 GROUP_CONCAT(A.RESVE_TM ORDER BY RESVE_TM SEPARATOR ',') AS RESVE_TM_LIST,
-		 	 GROUP_CONCAT(A.RESVE_NO ORDER BY A.RESVE_NO SEPARATOR ',') AS RESVE_NO_LIST  
+		     GROUP_CONCAT(A.RESVE_NO ORDER BY A.RESVE_NO SEPARATOR ',') AS RESVE_NO_LIST,  
+		     SUM(CASE WHEN  B.LAST_STTUS_CODE IN ('STS01','STS03') THEN 1 ELSE 0 END) AS RESVE_COMPT_CNT,
+		     SUM(CASE WHEN  B.LAST_STTUS_CODE ='STS05' THEN 1 ELSE 0 END) AS CARE_COMPT_CNT
+		  
 		FROM resve_sttus A
 		INNER JOIN (
 			SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
@@ -106,32 +109,40 @@
 	) C
 	</select>
 	<select id ="selectScheduleDetail" parameterType="map" resultType="hashmap">
-        SELECT A.RESVE_DE    AS resveDate 
-			 , B.NCNM        AS mssrName
-			 , A.RESVE_TM    AS resveTime
-			 , A.RESVE_NO    AS resveNo
-             , A.MSSR_EMPNO  AS  mssrEmpno
-             , A.RESVE_EMPNO AS resveEmpno
-             , A.WAIT_EMPNO  AS waitEmpno
-             , A.BED_CODE    AS bedCode
-             , A.BLD_CODE    AS bldCode
-		 FROM RESVE_STTUS A JOIN MASSEUR B 
-		                      ON A.MSSR_EMPNO =B.EMPNO   
-		 WHERE RESVE_DE = #{resveDate}
-		   AND  MSSR_EMPNO = #{mssrEmpno}
-		   <if test='resveTime !=null  and resveTime != ""' >
-		   AND RESVE_TM = #{resveTime}
+         SELECT A.RESVE_DE    AS  RESVE_DE 
+			 , C.NCNM        AS NCNM
+             , A.MSSR_EMPNO  AS MSSR_EMPNO
+             , A.RESVE_EMPNO AS RESVE_EMPNO
+             , A.WAIT_EMPNO  AS WAIT_EMPNO
+             , A.BLD_CODE    AS BLD_CODE
+             , A.BED_CODE    AS BED_CODE
+             , GROUP_CONCAT(A.RESVE_TM ORDER BY RESVE_TM SEPARATOR ',') AS RESVE_TM_LIST
+		     , GROUP_CONCAT(A.RESVE_NO ORDER BY A.RESVE_NO SEPARATOR ',') AS RESVE_NO_LIST  
+		     , IFNULL(GROUP_CONCAT(CASE WHEN B.STTUS_CODE IN ('STS01','STS03') THEN A.RESVE_TM  END ORDER BY RESVE_TM SEPARATOR ','),'')  AS RESVE_COMPT
+             , IFNULL(GROUP_CONCAT(CASE WHEN B.STTUS_CODE ='STS05' THEN A.RESVE_TM  END ORDER BY RESVE_TM SEPARATOR ','),'')  AS CARE_COMPT
+		 FROM RESVE_STTUS A 
+         JOIN RESVE_HIST B ON A.RESVE_NO = B.RESVE_NO  
+            AND B.REG_DT = (SELECT MAX(AA.REG_DT) FROM  RESVE_HIST AA  WHERE AA.RESVE_NO  = A.RESVE_NO ) 
+         JOIN MASSEUR C  ON A.MSSR_EMPNO =C.EMPNO   
+		 WHERE A.RESVE_DE =  #{resveDate}
+		   AND  A.MSSR_EMPNO =  #{mssrEmpno}
+           AND  A.BLD_CODE = #{bldCode}
+           AND  A.BED_CODE = #{bedCode}
 		   AND CANCL_YN ='N'
-		   
-		   </if>
+         GROUP BY  A.RESVE_DE   
+			      , A.MSSR_EMPNO
+                  , A.BED_CODE   
+                  , A.BLD_CODE   
 	</select>
-     <select id ="selectResveItemMultString" parameterType="map" resultType="hashmap">
-     SELECT GROUP_CONCAT( DISTINCT RESVE_NO SEPARATOR ',' ) AS RESVE_NO 
+     <select id ="selectResveItem" parameterType="map" resultType="hashmap">
+     SELECT IFNULL(RESVE_NO,COUNT(*))  AS resveNo 
 	   FROM RESVE_STTUS 
 	  WHERE RESVE_DE   = #{resveDate}
         AND MSSR_EMPNO =  #{mssrEmpno}
         AND BLD_CODE   =   #{bldCode}
-        AND SUCCS_YN   = 'N'
+        AND RESVE_TM   = #{resveTime}
+        AND BED_CODE = #{bedCode}
+        AND CANCL_YN = 'N'
      </select>
      
      <!-- 관리사 스케쥴 등록 -->
@@ -174,14 +185,15 @@
      </select>
      
    <select id="selectSmsInfoGet" parameterType="map" resultType="hashmap">
-     SELECT A.RESVE_NO as RESVE_NO 
-          , A.RESVE_DE as RESVE_DE
-          , IFNULL(A.RESVE_EMPNO,'')  as RESVE_EMPNO
-          , IFNULL(A.WAIT_EMPNO,'')  as WAIT_EMPNO
-          , A.RESVE_TM    as RESVE_TM
-          , B.CODE_NM     as RESVE_TM_STR
-          ,C.CODE_NM   AS BLD_NM
-          ,D.CODE_NM   AS BED_NM
+     SELECT A.RESVE_NO AS RESVE_NO 
+          , A.RESVE_DE AS RESVE_DE
+          , IFNULL(A.RESVE_EMPNO,'') AS RESVE_EMPNO
+          , IFNULL(A.WAIT_EMPNO,'')  AS WAIT_EMPNO
+          , A.RESVE_TM    AS RESVE_TM
+          , B.CODE_NM     AS RESVE_TM_STR
+          , C.CODE_NM     AS BLD_NM
+          , D.CODE_NM     AS BED_NM
+          , A.COMPT_YN    AS COMPT_YN
    FROM RESVE_STTUS A 
    JOIN  CMMN_CODE B ON A.RESVE_TM = B.CODE AND CODE_TYL ='RVT'
    JOIN  CMMN_CODE C ON A.BLD_CODE = C.CODE AND C.CODE_TYL ='BLD'

@@ -319,7 +319,8 @@ var popSchModify= {
 }
 
 function fnRowDelete(){
-    javascript:event.target.parentNode.parentNode.remove()
+    var id = event.target.parentNode.parentNode.id;
+    $('#'+id).remove();
     popSchModify.margData =[];
     if ($("#scheduleModify_rowAddBtn").prop("disabled")){$("#scheduleModify_rowAddBtn").addClass('cr01').prop('disabled',false)}	
     $("#scheduleModify_Body tr").each(function(index){

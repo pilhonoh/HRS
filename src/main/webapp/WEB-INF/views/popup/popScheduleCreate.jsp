@@ -246,7 +246,8 @@ var popSchCreate = {
 
 
 function fnRowDelete(){
-	javascript:event.target.parentNode.parentNode.remove()
+	    var id = event.target.parentNode.parentNode.id;
+	    $('#'+id).remove();
 		  $("#scheduleCreate_Body  tr").each(function(index){
 			     rowidrest = this;
 			     if(index>=1){
