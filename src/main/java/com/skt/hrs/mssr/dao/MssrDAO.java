@@ -115,19 +115,7 @@ public class MssrDAO {
 		}
 		return false;
 	}
-	/**
-	 * 
-	 * @설명 : 관리사 스케쥴 기본 조회 
-	 * @작성일 : 2019.09.05
-	 * @작성자 : LEE.J.H
-	 * @param param
-	 * @return
-	 * @변경이력 :
-	 */
-	public Map selectScheduleMaster(DataEntity param) {
-		return sqlSession.selectOne("mssrMapper.selectScheduleMaster", param);
-	}
-	
+
 	
 	/**
 	 * 
@@ -152,7 +140,7 @@ public class MssrDAO {
 	 * @변경이력 :
 	 */
 	public Map selectResveItem(DataEntity param) {
-		return sqlSession.selectOne("mssrMapper.selectScheduleDetail", param);
+		return sqlSession.selectOne("mssrMapper.selectResveItem", param);
 	}
 	/**
 	 * 
@@ -168,18 +156,6 @@ public class MssrDAO {
 	}
 	
 	
-	/**
-	 * 
-	 * @설명 : 관리사 스케쥴 일괄삭제 예약번호 조회
-	 * @작성일 : 2019.09.20
-	 * @작성자 : LEE.Y.H
-	 * @param param
-	 * @return RESVE_NO,RESVE_NO.... 문자열 JAVA SPLIT 처리사용
-	 * @변경이력 :
-	 */
-	public Map selectResveItemMultString(DataEntity param) {
-		return sqlSession.selectOne("mssrMapper.selectResveItemMultString", param);
-	}
 	
 	/**
 	 * 

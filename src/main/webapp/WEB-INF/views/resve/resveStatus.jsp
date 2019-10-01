@@ -29,12 +29,12 @@
 								<select data-code-tyl="BLD"></select>
 								<span class="bar"></span>
 							</div>
-							<p class="locationlink">
-								<!-- <strong>위치 :</strong> -->
+							<!-- <p class="locationlink">
+								<strong>위치 :</strong>
 								<a class="location SK01" href="#none">센터위치</a>
 								<a class="location SK02" href="#none">센터위치</a>
 								<a class="location SK09" href="#none">센터위치</a>
-							</p>
+							</p> -->
 						</div>
 						<div class="calendar-area">
 							<table class="month-calendar">

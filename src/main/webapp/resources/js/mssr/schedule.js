@@ -218,7 +218,8 @@ var scheduleList = {
 			});
 		},
 		
-		//현재 리스트에서 예약번호로 해당 ROW 의 데이터를 가져옴
+		//현재 리스트에서 예약번호로 해당 ROW 의 데이터를 가져옴 
+		 
 		getRowData: function(resveNo) {
 			var rowDataList = scheduleList.list.dataList;
 			var rowData;
@@ -234,7 +235,9 @@ var scheduleList = {
 							   BED_NM:rowDataList[i].BED_NM,
 							   RESVE_NO_LIST:rowDataList[i].RESVE_NO_LIST, 
 							   RESVE_TM:rowDataList[i].RESVE_TM,
-							   RESVE_TM_LIST:rowDataList[i].RESVE_TM_LIST
+							   RESVE_TM_LIST:rowDataList[i].RESVE_TM_LIST,
+							   RESVE_COMPT_CNT:rowDataList[i].RESVE_COMPT_CNT,
+							   CARE_COMPT_CNT:rowDataList[i].CARE_COMPT_CNT
 					        } 
 					break;
 				}
@@ -481,14 +484,19 @@ var scheduleList = {
 				  var data = null;
 				  var resveNoSplit = null;
 				  var delItemCnt = 0;
+				  var resveItemCnt = 0;
+				  var careItemCnt = 0;
+				  var meassage = '';
 				  $('tbody#scheduleList input:checkbox:checked').each(function(){
-					  delItemCnt+=1;
+					
 					  data = scheduleList.list.getRowData($(this).val())
-				/*	  console.log( 'data',data);
-					  console.log( 'data',data);*/
+				     
+					  resveItemCnt+=Number(data.RESVE_COMPT_CNT);
+					  careItemCnt+=Number(data.CARE_COMPT_CNT);
 					  resveNoSplit = data.RESVE_NO_LIST.split(",")
 					  console.log( 'resv_no',resveNoSplit.length);
 					 for (var i = 0; i < resveNoSplit.length; i++) {
+						 delItemCnt+= i
 						 params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE , RESVE_NO:resveNoSplit[i]});	
 					 }
 					 
@@ -498,7 +506,17 @@ var scheduleList = {
 					  alertPopup('삭제할 스케쥴을 선택하세요.');
 					  return false;
 				  }
-				  confirmPopup('총' + delItemCnt + '건을 삭제하시겠습니까?', function(){					  					
+				  
+				  if(careItemCnt > 0){
+						alertPopup('삭제되는 시간에 이미 \n케어완료 된 건이 있습니다.\n근무시간 확인 후 재 요청 바랍니다.');
+						 return false;
+				  }
+				  
+				  if(resveItemCnt > 0){
+					  meassage = '스케쥴 삭제 시 기존 예약 '+resveItemCnt +'건이\n 자동 취소 됩니다. 삭제하시겠습니까';
+				  }
+				  
+				  confirmPopup( meassage||'총' + delItemCnt + '건을 삭제하시겠습니까?', function(){					  					
 					$.ajax({
 							url: ROOT + '/mssr/scheduleDelete',
 							type: 'POST',

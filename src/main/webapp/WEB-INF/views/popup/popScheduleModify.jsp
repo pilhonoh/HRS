@@ -62,7 +62,7 @@ var popSchModify= {
 						console.log('allCodeList', res);
 						if (res.status === 200) {
 						
-							var data = res.list.filter(function (item) { return (item.CODE_TYL.indexOf("RVT") ===-1)?false:true;});
+							var data = res.list.filter(function (item) { return item.CODE_TYL.indexOf("RVT")>=0});
 							for (var i in data) {
 								popSchModify.cmmnCode.startTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).start  + '</option>');
 								popSchModify.cmmnCode.endTimeCombo.push('<option value="' + data[i].CODE + '">' + getRealTime(data[i].CODE).end + '</option>');
@@ -96,9 +96,10 @@ var popSchModify= {
 				return codeName;
 			}
 		},
-		dataList: [],
+		dataList:{RESVE_COMPT:null ,CARE_COMPT:null},
 		margData:[],
 		params: {}, 
+		resveData:[],
 		selectScheduleList: function() {
 			
 			var deferred = $.Deferred();
@@ -106,11 +107,15 @@ var popSchModify= {
 				url: ROOT + '/mssr/selectScheduleDetail',
 				data:popSchModify.params,
 				success: function(res) {
-					console.log('selectScheduleDetail', res);
+				console.log('selectScheduleDetail', res);
 					if (res.status === 200) {
-						popSchModify.margData = popSchModify.convertTime(popSchModify.params.timeList)
+						popSchModify.margData = popSchModify.convertTime(res.list[0].RESVE_TM_LIST);
+						popSchModify.dataList.RESVE_COMPT = res.list[0].RESVE_COMPT.split(',');
+						popSchModify.dataList.CARE_COMPT = res.list[0].CARE_COMPT.split(',');
+						console.log(popSchModify.dataList);
+						
 						deferred.resolve(popSchModify.margData);
-						popSchModify.dataList.push (res.list);
+						//popSchModify.dataList.push (res.list);
 					} else {
 						deferred.reject("");
 					}
@@ -165,19 +170,22 @@ var popSchModify= {
 			return timeSheet.time;
 		},
 	   rowAddEvent:function(){		
-				$.when(addRow()).then(function(cnt,endTime){
+				$.when(addRow()).then(function(cnt,lastTime){
 			
 					    var arrayCnt = popSchModify.margData.length  
-					    
+					    var startTime = 0;
+					    var endTime = 0;
+					  
 					    if ( cnt <=arrayCnt ) {
 					        startTime = Number(popSchModify.margData[cnt-1].startTime);
 					        endTime  =  Number(popSchModify.margData[cnt-1].endTime);
+					     
 					    } else {	
-					        
-					    	startTime = endTime  
-					    	endTime  = $("select >option:last").eq(0).val();
+					 
+					    	startTime = lastTime  
+					    	endTime  =  $("#scheduleModify_startTime1 option:last").val();
 					    }
-					    
+					     console.log(endTime);
 					    $("#scheduleModify_startTime"+cnt).val(startTime);
 						$("#scheduleModify_endTime"+cnt).val(endTime); 
 				    
@@ -197,27 +205,34 @@ var popSchModify= {
 						return false;
 					}
 				    var timeSheet = getParamsdiff();
-					$.ajax({
-						url: ROOT + '/mssr/scheduleModify',
-						type: 'POST',
-						data: {bldCode :  popSchModify.params.bldCode,
-						       bedCode:   popSchModify.params.bedCode, //배드     
-							   mssrEmpno : popSchModify.params.mssrEmpno,
-							   resveDate : popSchModify.params.resveDate,
-							   insertTime: JSON.stringify(timeSheet.insertTime),
-							   deleteTime: JSON.stringify(timeSheet.deleteTime)	   
-						},
-						success : function(res){
-							console.log('regist',res);				
-							scheduleList.list.renderScheduleList();
-							closeLayerPopup();
-						},
-						error : function(err) {
-							console.error(err)
-						}
-					}); 
-					
- 				});
+				    
+				    if(!popSchModify.validation.careCheck(timeSheet.deleteTime)){
+				    	return false;
+					}			    
+				   
+				    
+				    confirmPopup(popSchModify.validation.resveCheck(timeSheet.deleteTime)||'헬스키퍼 스케쥴을 등록 하시겠습니까?', function(){		
+						$.ajax({
+							url: ROOT + '/mssr/scheduleModify',
+							type: 'POST',
+							data: {bldCode :  popSchModify.params.bldCode,
+							       bedCode:   popSchModify.params.bedCode, //배드     
+								   mssrEmpno : popSchModify.params.mssrEmpno,
+								   resveDate : popSchModify.params.resveDate,
+								   insertTime: JSON.stringify(timeSheet.insertTime),
+								   deleteTime: JSON.stringify(timeSheet.deleteTime)	   
+							},
+							success : function(res){
+										
+								scheduleList.list.renderScheduleList();
+								alertPopup('수정 되었습니다.');
+							},
+							error : function(err) {
+								console.error(err)
+							}
+						}); 
+ 					});
+				}); 	    
 			}
 					
 	   },
@@ -279,6 +294,24 @@ var popSchModify= {
 					 }						
 				 })
 				 return chk;
+			 },
+			 resveCheck:function(deleteTime){
+			    var cnt =  deleteTime.filter(function(x){return popSchModify.dataList.RESVE_COMPT.indexOf(x) >= 0; });
+			    if(cnt.length>0){	 
+					 return '스케쥴 수정 시 기존 예약 '+cnt.length +'건이\n 자동 취소 됩니다. 수정하시겠습니까';
+				}else{
+					return'';
+				}
+			 },
+			 careCheck:function(deleteTime){
+				 var cnt = deleteTime.filter(function(x){return popSchModify.dataList.CARE_COMPT.indexOf(x) >= 0; });
+				 if(cnt.length>0){	 
+					alertPopup('수정되는 시간에 이미 \n케어완료 된 건이 있습니다.\n근무시간 확인 후 재 요청 바랍니다.');
+					 return false;
+				 }else{
+					 return true;
+				 }
+				
 			 }
 			
       }
@@ -325,10 +358,9 @@ function getParams(){
 		   setTimesheet.push(j.toString());	
 		}  
 	}
-    var diff1 = defData.filter( function(x){ return (setTimesheet.indexOf(x) ===-1)?false:true});
-    var diffInsert = setTimesheet.filter(function(x){ return (defData.indexOf(x) ===-1)?true:false});
-    var diffDelete = defData.filter(function(x){ return (diff1.indexOf(x)===-1)?true:false});
-    
+    var diff1 = defData.filter( function(x){ return setTimesheet.indexOf(x) >= 0 });
+    var diffInsert = setTimesheet.filter(function(x){ return defData.indexOf(x) < 0});
+    var diffDelete = defData.filter(function(x){ return diff1.indexOf(x) < 0});
     return{insertTime:diffInsert,deleteTime:diffDelete}
  }
 

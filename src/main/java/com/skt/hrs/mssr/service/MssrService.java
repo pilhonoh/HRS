@@ -81,21 +81,7 @@ public class MssrService {
 		return result;
 	}
 	
-	/**
-	 * 
-	 * @설명 :  관리사 근무시간 기본 사항
-	 * @작성일 : 2019.09.05
-	 * @작성자 : LEE.Y.H
-	 * @param param
-	 * @return
-	 * @변경이력 :
-	 */
-	public ResponseResult selectScheduleMaster(DataEntity param) {
-		ResponseResult result = new ResponseResult();
-		Map item = mssrDAO.selectScheduleMaster(param);
-		result.setItemOne(item);
-		return result;
-	}
+
 	
 	/**
 	 * 
@@ -309,21 +295,25 @@ public class MssrService {
 			for (int i = 0 ; i < DeleteTime.length; i++) {
 				 param.put("resveTime",DeleteTime[i]);
 				 Map item = mssrDAO.selectResveItem(param);
-				 param.put("RESVE_NO",item.get("resveNo").toString());
 				
-				    insertResult = mssrDAO.deleteResve(param); 
-				 
-					if(!(insertResult)) { 
-						throw new HrsException("error.processFailure", true);
-					 }		
-					insertResult = mssrDAO.insertResveHist(param); 
-					if(!(insertResult)) { 
-						throw new HrsException("error.processFailure", true);
-					 }	 
-				
-				sendSms(param);	
-				param.remove("RESVE_NO");
+				 if(item.get("resveNo").toString()!="0") {
+					 param.put("RESVE_NO",item.get("resveNo").toString());
 					
+					    insertResult = mssrDAO.deleteResve(param); 
+					 
+						if(!(insertResult)) { 
+							throw new HrsException("error.processFailure", true);
+						 }		
+						insertResult = mssrDAO.insertResveHist(param); 
+						if(!(insertResult)) { 
+							throw new HrsException("error.processFailure", true);
+						 }	 
+					
+					sendSms(param);	
+					param.remove("RESVE_NO");
+				 }else {
+					 throw new HrsException("error.processFailure", true);
+				 }
 			}
 		}
 			// data적용 성공여부
