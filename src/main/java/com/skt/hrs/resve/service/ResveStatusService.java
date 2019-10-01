@@ -197,7 +197,9 @@ public class ResveStatusService {
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 				
 		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
-			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
+			throw new HrsException("error.duplicateDayResve", new String[] {
+				DateUtil.yyyymmdd2HumanReadableWithWeekday(resveItem.get("RESVE_DE").toString())
+			},true);	//"2019-09-01(월) 예약/대기 1건이 접수되어\\n추가 신청이 불가합니다."
 		}
 		
 		// 블랙리스트 확인
@@ -291,7 +293,9 @@ public class ResveStatusService {
 		Map dayCount = resveStatusDAO.selectDayCount(param);
 
 		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {		
-			throw new HrsException("error.duplicateDayResve", true);	//"금일 예약/대기가 존재합니다.\n예약/대기는 1일 1회만 가능합니다."
+			throw new HrsException("error.duplicateDayResve", new String[] {
+					DateUtil.yyyymmdd2HumanReadableWithWeekday(resveItem.get("RESVE_DE").toString())
+			},true);	//"2019-09-01(월) 예약/대기 1건이 접수되어\\n추가 신청이 불가합니다."
 		}
 		
 		
@@ -644,7 +648,7 @@ public class ResveStatusService {
 			
 			// 남성구성원인경우 여성관리사 예약불가
 			if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {	
-				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY_SEX;	// 예약불가
 			}
 			// 예약,대기자가 없는경우
 			else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
@@ -679,7 +683,8 @@ public class ResveStatusService {
 						if(waitEmpno.equals(myEmpno)) {
 							resultStatus = ResveStatusConst.VIEWSTATUS.WAIT;	// 대기중
 						}else {							
-							resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+							//resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+							resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY_FULL;	// 예약불가(예약/대기 모두 찼을경우)
 						}
 					}
 				}
@@ -711,16 +716,18 @@ public class ResveStatusService {
 			//No-show 일 : 2019-09-18(금)
 			//신규 예약 가능 일 : 2019-10-02(월)
 			String message = "";
+			
+			String resveDeStr = blacklistMap.get("RESVE_DE_STR").toString();
+			String restartDtStr = blacklistMap.get("RESTART_DT_STR").toString();
+			
+			SimpleDateFormat fromFormat = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd(EEE)", Locale.KOREAN);
+			Date date_resveDe;
+			Date date_restartDt;
 			try {
 				
-				String resveDeStr = blacklistMap.get("RESVE_DE_STR").toString();
-				String restartDtStr = blacklistMap.get("RESTART_DT_STR").toString();
-				
-				SimpleDateFormat fromFormat = new SimpleDateFormat("yyyy-MM-dd");
-				SimpleDateFormat toFormat = new SimpleDateFormat("yyyy-MM-dd(EEE)", Locale.KOREAN);
-				
-				Date date_resveDe = fromFormat.parse(resveDeStr);							
-				Date date_restartDt = fromFormat.parse(restartDtStr);
+				date_resveDe = fromFormat.parse(resveDeStr);							
+				date_restartDt = fromFormat.parse(restartDtStr);
 								
 				while(DateUtil.isWeekend(restartDtStr, "yyyy-MM-dd")) {					
 					Calendar cal = Calendar.getInstance(); 
@@ -730,15 +737,15 @@ public class ResveStatusService {
 					date_restartDt = fromFormat.parse(restartDtStr);
 				}
 				
-				message = messageSource.getMessage("error.paneltyTarget", new String[] {
-						blacklistMap.get("EMPNM").toString(),
-						toFormat.format(date_resveDe),
-						toFormat.format(date_restartDt),
-				}, Locale.forLanguageTag(param.getString("_ep_locale")));
 			}catch(Exception e) {
 				throw new HrsException("invalid date");
-			}			
-			throw new HrsException(message);
+			}
+			
+			throw new HrsException("error.paneltyTarget", new String[] {
+					blacklistMap.get("EMPNM").toString(),
+					toFormat.format(date_resveDe),
+					toFormat.format(date_restartDt),
+			}, true);
 		}
 	}
 	

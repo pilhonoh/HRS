@@ -186,16 +186,15 @@ public class MssrService {
 					 timeDup= timeDup +1; 
 				 }
         	 
-        	 
-        	 insertResult = mssrDAO.insertSchedule(paramsMap); 
-			
-			if(!(insertResult)) { 
-				throw new HrsException("error.processFailure", true);
-			 } 		 
-			insertResult = mssrDAO.insertResveHist(paramsMap); 
-			if(!(insertResult)) { 
-				throw new HrsException("error.processFailure", true);
-			 } 
+	            insertResult = mssrDAO.insertSchedule(paramsMap); 
+				
+				if(!(insertResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 } 		 
+				insertResult = mssrDAO.insertResveHist(paramsMap); 
+				if(!(insertResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 } 
           }
         }
     	
@@ -359,16 +358,17 @@ public class MssrService {
   public void sendSms(DataEntity param) {
 	 // ResponseResult result = new ResponseResult(); 
 	   Map smsItem = mssrDAO.selectSmsInfoGet(param);
-		if(!StringUtil.isEmpty(smsItem.get("RESVE_EMPNO").toString())) {
-			smsItem.put("targetEmpno", smsItem.get("RESVE_EMPNO").toString());
-	       cspService.insertCspSMS(smsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
-		}				
-		
-		if(!StringUtil.isEmpty(smsItem.get("WAIT_EMPNO").toString())) {
-			smsItem.put("targetEmpno", smsItem.get("WAIT_EMPNO"));
-			cspService.insertCspSMS(smsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));		
-		}
-	  
+	   if(!StringUtil.isEmpty(smsItem.get("COMPT_YN").toString())&& smsItem.get("COMPT_YN").toString() == "N") { 	
+		   if(!StringUtil.isEmpty(smsItem.get("RESVE_EMPNO").toString())) {
+				smsItem.put("targetEmpno", smsItem.get("RESVE_EMPNO").toString());
+		       cspService.insertCspSMS(smsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+			}				
+			
+			if(!StringUtil.isEmpty(smsItem.get("WAIT_EMPNO").toString())) {
+				smsItem.put("targetEmpno", smsItem.get("WAIT_EMPNO"));
+				cspService.insertCspSMS(smsItem, "csp.sms.adminWaitCancel", Locale.forLanguageTag(param.getString("_ep_locale")));		
+			}
+	   }  
   }
 	
   public void dupChk(DataEntity param , DataEntity refResult) {

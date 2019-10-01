@@ -174,11 +174,14 @@ var resveList = {
 						resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 						resveListHtml.push('	<td>' + regDtTxt + '</td>');						
 						resveListHtml.push('	<td style="text-align:left; padding-left:85px">');
+						resveListHtml.push('		<span style="width: 55px; display: inline-block;">');
 						if(stsCode == 'STS02' || stsCode == 'STS04'){//대기취소, 예약취소 텍스트 색 다르게 조정
 							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')" style="color:#ad8a6a">' + resultList[i].STTUS_NM + '</a>');
 						}else{
 							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a>');
 						}
+						
+						resveListHtml.push('	</span>');
 						
 						if (stsCode == 'STS01' || stsCode == 'STS03') {
 							var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
@@ -189,7 +192,7 @@ var resveList = {
 								resveListHtml.push('		<button class="t-btn ' + btnStyle + ' ' + btnClass + '" data-resveno="' + resultList[i].RESVE_NO + '">' + btnText + '</button>');
 							}						
 												
-						}					
+						}		
 						resveListHtml.push('	</td>');
 						//resveListHtml.push('	<td><button class="t-btn" onclick="resveList.popup.detail('+resultList[i].RESVE_NO+')">상세보기</button></td>');
 						resveListHtml.push('</tr>');

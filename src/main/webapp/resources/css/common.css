@@ -637,13 +637,25 @@ button.ui-datepicker-trigger {
 }
 .building-icon {
 	display:inline-block;
-	width:23px;
+	width:30px;
 	height:45px;
 	vertical-align:middle;
-	background:url('../images/common/tw_icon.png') no-repeat 50%;
+	background:url('../images/common/tw_icon.png') no-repeat 50% 0;
+	background-size:20px 26px;
 	margin-right:10px;
+	padding-top:30px;
+	text-align:center;
+	box-sizing:border-box;
+	font-size:12px;
+	color:#8b8b8b;
+	font-weight:900;
+	cursor:pointer;	/* P149365 */
 }
 
+/* P149365 추가 */
+.building-icon:hover {
+	text-decoration: underline;
+}
 
 .calendar-area {
 	display:table-cell;
@@ -864,17 +876,26 @@ button.ui-datepicker-trigger {
 }
 .reservation-table tbody td .top span.women {
 	background:url('../images/common/rv_w_icon.png') no-repeat 0 50%;  
-	padding-left:20px;
+	padding-left:22px;
 }
 .reservation-table tbody td .top span.men {
 	background:url('../images/common/rv_m_icon.png') no-repeat 0 50%;  
-	padding-left:15px;
+	padding-left:20px;
 }
 .reservation-not {
 	display:inline-block;
 	font-size:12px;
 	color:#c1c1c1;
 	margin-top:12px;
+	cursor: not-allowed;
+}
+/* P149365 */
+.reservation-not-default {
+	display:inline-block;
+	font-size:12px;
+	color:#c1c1c1;
+	margin-top:12px;
+	cursor: default;
 }
 
 .rbtn {
@@ -1301,11 +1322,17 @@ button.ui-datepicker-trigger {
 .alert-message h3.confirm span {
 	color:#41b96d;
 }
+.alert-message h4 {
+	font-size:15px;
+	font-weight:700;
+	color:#666;
+	margin-top:15px;
+}
 .alert-message p {
 	font-size:14px;
 	color:#7f7f7f;
-	margin-top:10px;
-	padding-top:10px;
+	margin-top:15px;
+	padding-top:15px;
 	position:relative;
 }
 .alert-message p:after {
@@ -1494,7 +1521,11 @@ button.ui-datepicker-trigger {
 	font-size:13px;
 	color:#777;
 	text-align:center;
-	margin-top:10px;
+	margin-top:15px;
+	background:#f9f9f9;
+	border-top:1px solid  #ddd;
+	border-bottom:1px solid  #ddd;
+	padding:12px 0;
 }
 .comm-info i {
 	vertical-align:-1px;
@@ -1523,7 +1554,9 @@ button.ui-datepicker-trigger {
 	color:#333;
 }
 
-/* P149365 */
-a.location {
-	display:none;
+/* 툴팁 */
+.ui-tooltip { 
+	font-size:13px;
+	font-weight:900;
+	color:#999;
 }

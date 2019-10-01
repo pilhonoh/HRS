@@ -3,6 +3,7 @@ package com.skt.hrs.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import com.skt.hrs.cmmn.exception.HrsException;
 
@@ -36,7 +37,15 @@ public class DateUtil {
 		}catch(Exception e) {
 			throw new HrsException("invalid date");
 		}
-		
+	}
+	
+	public static String yyyymmdd2HumanReadableWithWeekday(String yyyymmdd) {
+		try{
+			Date date = new SimpleDateFormat("yyyyMMdd").parse(yyyymmdd);
+			return new SimpleDateFormat("yyyy-MM-dd(EEE)", Locale.KOREAN).format(date);
+		}catch(Exception e) {
+			throw new HrsException("invalid date");
+		}
 	}
 	
 	/**

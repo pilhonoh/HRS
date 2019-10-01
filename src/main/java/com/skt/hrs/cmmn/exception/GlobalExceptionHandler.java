@@ -98,9 +98,15 @@ public class GlobalExceptionHandler{
 		
 		ResponseResult result = new ResponseResult();
 		result.setStatus(ex.getErrorCode() > 0 ? ex.getErrorCode() : ResultConst.CODE.ERROR.toInt());		
-		result.setMessageCode(ex.getMessageCode());
-		if(!StringUtil.isEmpty(ex.getMessageCode())) {			
-			result.setMessage(messageSource.getMessage(ex.getMessageCode(), null, locale));
+		
+		if(!StringUtil.isEmpty(ex.getMessageCode())) {
+			result.setMessageCode(ex.getMessageCode());
+			if(StringUtil.isEmpty(ex.getErrorMessage())) {
+				
+				result.setMessage(messageSource.getMessage(ex.getMessageCode(), ex.getMessageArgs(), locale));
+			}else {
+				result.setMessage(ex.getErrorMessage());
+			}
 		}else {
 			result.setMessage(ex.getMessage());
 		}

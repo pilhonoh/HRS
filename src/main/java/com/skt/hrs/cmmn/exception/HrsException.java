@@ -5,6 +5,8 @@ public class HrsException extends RuntimeException {
 	private int errorCode;
 	private String errorMessage;
 	private String messageCode;
+	private String[] messageArgs;
+
 
 	public HrsException() {
 	}
@@ -34,6 +36,19 @@ public class HrsException extends RuntimeException {
 			this.messageCode = s;
 		}
 	}
+	
+	public HrsException(String s, String[] messageArgs, boolean isMessageCode) {
+		super(s);
+		if(isMessageCode) {
+			this.messageCode = s;
+			this.messageArgs = messageArgs;
+		}
+	}
+	
+	public HrsException(String messageCode, String errorMessage) {
+		this.messageCode = messageCode;
+		this.errorMessage = errorMessage;
+	}
 
 	public HrsException(String s, Exception exeception) {
 		super(s, exeception);
@@ -61,5 +76,12 @@ public class HrsException extends RuntimeException {
 
 	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
+	}
+	public String[] getMessageArgs() {
+		return messageArgs;
+	}
+
+	public void setMessageArgs(String[] messageArgs) {
+		this.messageArgs = messageArgs;
 	}
 }
