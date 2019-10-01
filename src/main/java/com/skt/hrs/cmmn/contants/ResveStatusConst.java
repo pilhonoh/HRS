@@ -18,6 +18,7 @@ public abstract interface ResveStatusConst {
 		COMPT,			//완료
 		NOSHOW_COMPT,	//노쇼 당일 확인처리 가능(확인처리를 하지않으면 패널티)
 		NOSHOW,			//노쇼
+		RESVE_IMPRTY_FULL,	//예약불가(예약/대기가 모두 찬 경우)
 		RESVE_IMPRTY_SEX	//예약불가(남성이 여성관리자선택불가)
 	}
 	
