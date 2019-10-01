@@ -25,7 +25,7 @@ var resveStatus = {
 		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
 		
 		$('.building-icon').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
-			console.log($('[data-code-tyl=BLD]').val() +' 도면');
+			resveStatus.pop.floor($('[data-code-tyl=BLD]').val());
 		})
 					
 	},
@@ -278,7 +278,9 @@ resveStatus.table = {
 						//예약완료
 						'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약완료').addClass('rbtn cr3').on('click', resveStatus.pop.cancel),	
 						//예약불가
-						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not').attr('title', '이미 예약/대기가 마감되었습니다.'),
+						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not-default'),
+						//예약불가(예약/대기 모두 찬 경우)
+						'RESVE_IMPRTY_FULL' : $('<span>').text('예약불가').addClass('reservation-not').attr('title', '이미 예약/대기가 마감되었습니다.'),
 						//예약불가(여성구성원선택불가)
 						'RESVE_IMPRTY_SEX' : $('<span>').text('예약불가').addClass('reservation-not').attr('title', '남성구성원은 여성헬스키퍼 예약이 불가능합니다.'),
 						//대기가능
@@ -366,8 +368,9 @@ resveStatus.pop  =  {
 				status == 'NOSHOW';				//노쇼
 		});
 		if(filtered.length != 0){
+			var dateStr = moment(data.RESVE_DE).locale('ko').format('YYYY-MM-DD(ddd)');
 			$.alert({
-				text: getMessage('error.duplicateDayResve'),
+				text: getMessage('error.duplicateDayResve', [dateStr]),
 				callback: resveStatus.table.refresh
 			});
 			return false;
@@ -424,8 +427,9 @@ resveStatus.pop  =  {
 				status == 'NOSHOW';				//노쇼
 		});
 		if(filtered.length != 0){
+			var dateStr = moment(data.RESVE_DE).locale('ko').format('YYYY-MM-DD(ddd)');
 			$.alert({
-				text: getMessage('error.duplicateDayResve'),				
+				text: getMessage('error.duplicateDayResve', [dateStr]),
 				callback: resveStatus.table.refresh
 			});
 			return false;
@@ -494,6 +498,16 @@ resveStatus.pop  =  {
 				resveStatus.complete(data.RESVE_NO);
 			});				
 			openLayerPopup('layer_pop05');
+		});
+	},
+	floor : function(bldCode){
+		bldCode = bldCode || $('[data-code-tyl=BLD]').val();
+		$('#layer_pop_floor').load(ROOT + '/resources/html/floor.html', function(res){
+			
+			$('#layer_pop_floor img').attr('src', IMG+'/floor/'+bldCode+'.jpg');
+			setTimeout(function(){				
+				openLayerPopup('layer_pop_floor');
+			},100);
 		});
 	}
 }

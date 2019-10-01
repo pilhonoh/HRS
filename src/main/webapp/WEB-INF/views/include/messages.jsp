@@ -2,22 +2,22 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <script>
 var messages = {
-	'system.error' : '<spring:message code="system.error" />',
-	'error.invalidRequest' : '<spring:message code="error.invalidRequest" />',
-	'error.notAvailable' : '<spring:message code="error.notAvailable" />',
-	'error.processFailure' : '<spring:message code="error.processFailure" />',
-	'error.duplicateDayResve' : '<spring:message code="error.duplicateDayResve" />',
-	'error.over20min' : '<spring:message code="error.over20min" />',
-	'error.onlySameday' : '<spring:message code="error.onlySameday" />',
-	'error.canceledResve' : '<spring:message code="error.canceledResve" />',
-	'error.completeResve' : '<spring:message code="error.completeResve" />',
-	'error.canNotSuccessionCancel' : '<spring:message code="error.canNotSuccessionCancel" />',	
-	'error.resveNotFound' : '<spring:message code="error.resveNotFound" />',
-	'error.requireEmpno' : '<spring:message code="error.requireEmpno" />',
-	'error.invalidStartDate' : '<spring:message code="error.invalidStartDate" />',
-	'error.invalidEndDate' : '<spring:message code="error.invalidEndDate" />',
-	'error.dateCompareStartEnd' : '<spring:message code="error.dateCompareStartEnd" />',
-	'error.timeCompareStartEnd' : '<spring:message code="error.timeCompareStartEnd" />',
+	'system.error' : '<spring:message code="system.error"  javaScriptEscape="true" />',
+	'error.invalidRequest' : '<spring:message code="error.invalidRequest"  javaScriptEscape="true" />',
+	'error.notAvailable' : '<spring:message code="error.notAvailable"  javaScriptEscape="true" />',
+	'error.processFailure' : '<spring:message code="error.processFailure"  javaScriptEscape="true" />',
+	'error.duplicateDayResve' : '<spring:message code="error.duplicateDayResve"  javaScriptEscape="true" />',
+	'error.over20min' : '<spring:message code="error.over20min"  javaScriptEscape="true" />',
+	'error.onlySameday' : '<spring:message code="error.onlySameday"  javaScriptEscape="true" />',
+	'error.canceledResve' : '<spring:message code="error.canceledResve"  javaScriptEscape="true" />',
+	'error.completeResve' : '<spring:message code="error.completeResve"  javaScriptEscape="true" />',
+	'error.canNotSuccessionCancel' : '<spring:message code="error.canNotSuccessionCancel"  javaScriptEscape="true" />',	
+	'error.resveNotFound' : '<spring:message code="error.resveNotFound" javaScriptEscape="true" />',
+	'error.requireEmpno' : '<spring:message code="error.requireEmpno" javaScriptEscape="true" />',
+	'error.invalidStartDate' : '<spring:message code="error.invalidStartDate" javaScriptEscape="true" />',
+	'error.invalidEndDate' : '<spring:message code="error.invalidEndDate" javaScriptEscape="true" />',
+	'error.dateCompareStartEnd' : '<spring:message code="error.dateCompareStartEnd" javaScriptEscape="true" />',
+	'error.timeCompareStartEnd' : '<spring:message code="error.timeCompareStartEnd" javaScriptEscape="true" />',
 }
 
 /**
