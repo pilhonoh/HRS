@@ -387,8 +387,8 @@ button.ui-datepicker-trigger {
 
 
 .t-btn {
-	height:28px;
-	font-size:13px;
+	height:20px;		/* 양혜리 수정 28px->20px */
+	font-size:11px;		/* 양혜리 수정 13px->11px */
 	color:#fff;
 	padding:0 15px;
 	border-radius:3px;
@@ -1042,6 +1042,7 @@ button.ui-datepicker-trigger {
 	margin-top:4px;
 }
 
+/* 사용자 안내 문구 디자인 수정. 20190930(MUPLUS) 시작 */
 .rv-desc-list {
 	border:1px solid #e8e8eb;
 	border-radius:10px;
@@ -1051,16 +1052,10 @@ button.ui-datepicker-trigger {
 	overflow:hidden;
 	position:relative;
 }
-/* 사용자 안내 문구 디자인 수정.20190925(김대종) 시작 */
-/* .rv-desc-list:after { 
-	content:"";
-	width:1px;
-	background:#dbdce0;
-	position:absolute;
-	top:25px;
-	bottom:25px;
-	left:50%;
-} */
+.rv-desc-list h3 {
+	font-size:15px;
+	color:#333;
+}
 .rv-desc-list ul li {
 	float:left;
 	font-size:13px;
@@ -1069,28 +1064,31 @@ button.ui-datepicker-trigger {
 	padding-left:25px;
 	line-height:26px;
 }
-.rv-desc-list ul li strong {
+.rv-desc-list ul li strong { 
 	font-weight:900;
-	/* color:#333; */	
+	color:#333; 
+}
+.rv-desc-list ul li strong.red {
+	font-weight:900;
 	color:#d81212;	/* 색상변경 P149365 */
 }
 .rv-desc-list ul li.icon01 {
 	background:url('../images/common/btm_info_icon01.png') no-repeat 0 50%;
-	width:52%;
+	width:53%;
 }
 .rv-desc-list ul li.icon02 {
 	background:url('../images/common/btm_info_icon02.png') no-repeat 0 50%;
-	width:48%;
+	width:47%;
 }
 .rv-desc-list ul li.icon03 {
 	background:url('../images/common/btm_info_icon05.png') no-repeat 0 50%;
-	width:52%;
+	width:53%;
 }
 .rv-desc-list ul li.icon04 {
 	background:url('../images/common/btm_info_icon04.png') no-repeat 0 50%;
-	width:48%;
+	width:47%;
 }
-/* 사용자 안내 문구 디자인 수정.20190925(김대종) 끝 */
+/* 사용자 안내 문구 디자인 수정. 20190930(MUPLUS)끝 */
 
 .rv-desc-list.st2 {
 	margin:0 0 10px;
@@ -1476,3 +1474,56 @@ button.ui-datepicker-trigger {
 	cursor: pointer;
 }
 /*관리자스케줄 선택 마우스 오버 및  관리사 이름 밑줄 P150113*/
+
+
+
+/* 사옥선택 하단 위치정보 20190930(MUPLUS) */
+.locationlink {
+	text-align: left;
+    font-size: 12px;
+    margin-top: 5px;
+    padding-left: 20px;
+}
+.locationlink strong {
+	color:#aaa;
+}
+.locationlink a:hover {
+	text-decoration:underline;
+}
+.comm-info {
+	font-size:13px;
+	color:#777;
+	text-align:center;
+	margin-top:10px;
+}
+.comm-info i {
+	vertical-align:-1px;
+	margin-right:5px;
+	font-size:15px;
+}
+
+/* 주말 안내 문구 20190930(MUPLUS) */
+.weekend-info {
+	padding:70px 0;
+	background:#f7f7f7 url('../images/common/no_date_bg.png') no-repeat 50%;
+	border:2px solid #d5d5d5;
+	border-radius:10px;
+	margin-top:10px;
+	display:none;	/* P149365 */
+}
+.weekend-info p {
+	text-align:center;
+	padding-top:80px;
+	font-size:16px;
+	color:#727272;
+	background:url('../images/common/no_date_img.png') no-repeat 50% 0;
+}
+.weekend-info p strong {
+	font-weight:900;
+	color:#333;
+}
+
+/* P149365 */
+a.location {
+	display:none;
+}

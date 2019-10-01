@@ -1,6 +1,14 @@
 package com.skt.hrs.cmmn.vo;
 
-public class LoginVo {
+import java.io.Serializable;
+
+public class LoginVo implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	
 	private String empno;	//사번
 	private String hname;	//성명	
