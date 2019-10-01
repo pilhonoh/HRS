@@ -228,6 +228,8 @@ function loadCodeSelect(cb, selector){
 function openLayerPopup(id){
 	$('.pop-layer').css('display', 'none'); 
 	var temp = $('#' + id);
+	temp.css('top','');
+	temp.css('left','');
 	var bg = temp.parents('bg');
 	if (bg) {
 		$('.layer').fadeIn();
@@ -235,10 +237,20 @@ function openLayerPopup(id){
 		temp.fadeIn();
 	}
 	temp.css('display', 'block');
-	if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-	else temp.css('top', '0px');
-	if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-	else temp.css('left', '0px');
+	
+	if (temp.outerHeight() < $(document).height()){ 
+		temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px')
+	}else {
+		temp.css('top', '0px');
+		temp.css('margin-top','');
+	}
+	
+	if (temp.outerWidth() < $(document).width()) {
+		temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
+	} else {
+		temp.css('left', '0px');
+		temp.css('margin-left','');
+	}
 
 	//$("html").attr("style", "overflow-y:hidden");
 	$("html").addClass("scroll");

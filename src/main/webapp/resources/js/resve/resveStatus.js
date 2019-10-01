@@ -507,7 +507,7 @@ resveStatus.pop  =  {
 			$('#layer_pop_floor img').attr('src', IMG+'/floor/'+bldCode+'.jpg');
 			setTimeout(function(){				
 				openLayerPopup('layer_pop_floor');
-			},100);
+			}, 300);
 		});
 	}
 }
