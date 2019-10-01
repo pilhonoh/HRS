@@ -68,6 +68,7 @@ var resveConfirm = {
 			data: {resveNo: resveNo},
 			success: function(res){				
 				resveConfirm.table.refresh();
+				$('#txtResveEmpno').val('');
 				closeLayerPopup();
 			},
 			error: function(err){
@@ -84,7 +85,12 @@ var resveConfirm = {
 			if($('#txtResveEmpno').val().trim() == ""){
 				$.alert({text: getMessage('error.requireEmpno')});
 			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
-				$.alert({text: getMessage('error.onlySameday')});
+				$.alert({
+					text: getMessage('error.onlySameday'),
+					callback: function(){
+						$('#txtResveEmpno').val('');
+					}
+				});
 			}else{
 				$('#layer_pop04').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
@@ -93,6 +99,8 @@ var resveConfirm = {
 					openLayerPopup('layer_pop04');
 				});
 			}
+			
+			
 			
 		}
 	}
