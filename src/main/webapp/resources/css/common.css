@@ -652,6 +652,10 @@ button.ui-datepicker-trigger {
 	cursor:pointer;	/* P149365 */
 }
 
+/* P149365 추가 */
+.building-icon:hover {
+	text-decoration: underline;
+}
 
 .calendar-area {
 	display:table-cell;
@@ -884,6 +888,14 @@ button.ui-datepicker-trigger {
 	color:#c1c1c1;
 	margin-top:12px;
 	cursor: not-allowed;
+}
+/* P149365 */
+.reservation-not-default {
+	display:inline-block;
+	font-size:12px;
+	color:#c1c1c1;
+	margin-top:12px;
+	cursor: default;
 }
 
 .rbtn {
