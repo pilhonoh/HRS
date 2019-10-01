@@ -19,11 +19,14 @@ var resveStatus = {
 				$('.month-calendar .today span').trigger('click');
 				$('.cal-day.sat,.sun').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
 			});
-			$('a.location').hide();
-			$('a.location.' + $('[data-code-tyl=BLD]').val()).show();
+			
 		});			
 				
-		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩		
+		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
+		
+		$('.building-icon').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
+			console.log($('[data-code-tyl=BLD]').val() +' 도면');
+		})
 					
 	},
 	// 사옥변경 이벤트 리스너
@@ -33,11 +36,7 @@ var resveStatus = {
 			.then(function(){
 				//$('.month-calendar .today span').trigger('click');	//오늘선택
 				$('.month-calendar .selected span').trigger('click');
-				$('[data-code-tyl=BLD]').trigger('blur');
-				
-				//센터위치
-				$('a.location').hide();
-				$('a.location.' + $('[data-code-tyl=BLD]').val()).show();
+				$('[data-code-tyl=BLD]').trigger('blur');								
 			})
 	},
 	// 해당사옥의 bed목록 조회
@@ -279,7 +278,9 @@ resveStatus.table = {
 						//예약완료
 						'RESVE_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약완료').addClass('rbtn cr3').on('click', resveStatus.pop.cancel),	
 						//예약불가
-						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not'), 
+						'RESVE_IMPRTY' : $('<span>').text('예약불가').addClass('reservation-not').attr('title', '이미 예약/대기가 마감되었습니다.'),
+						//예약불가(여성구성원선택불가)
+						'RESVE_IMPRTY_SEX' : $('<span>').text('예약불가').addClass('reservation-not').attr('title', '남성구성원은 여성헬스키퍼 예약이 불가능합니다.'),
 						//대기가능
 						'WAIT_POSBL' : $('<button>').append('<i class="xi-alarm-o">').append('대기가능').addClass('rbtn cr4').on('click', resveStatus.pop.wait),
 						//대기중
@@ -323,7 +324,9 @@ resveStatus.table = {
 					$td.empty().append($p).append($status)
 					
 					last = stts;
-				});						
+				});		
+				
+				$( ".reservation-not" ).tooltip();	//툴팁
 				
 			},
 			error : function(err) {
