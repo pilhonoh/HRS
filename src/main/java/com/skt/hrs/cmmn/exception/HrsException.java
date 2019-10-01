@@ -34,6 +34,11 @@ public class HrsException extends RuntimeException {
 			this.messageCode = s;
 		}
 	}
+	
+	public HrsException(String messageCode, String errorMessage) {
+		this.messageCode = messageCode;
+		this.errorMessage = errorMessage;
+	}
 
 	public HrsException(String s, Exception exeception) {
 		super(s, exeception);

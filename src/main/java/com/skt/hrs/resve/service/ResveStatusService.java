@@ -644,7 +644,7 @@ public class ResveStatusService {
 			
 			// 남성구성원인경우 여성관리사 예약불가
 			if(mySexdstn.equals("M") && mssrSexdstn.equals("F")) {	
-				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY;	// 예약불가
+				resultStatus = ResveStatusConst.VIEWSTATUS.RESVE_IMPRTY_SEX;	// 예약불가
 			}
 			// 예약,대기자가 없는경우
 			else if(StringUtil.isEmpty(resveEmpno) && StringUtil.isEmpty(waitEmpno)) {
@@ -738,7 +738,7 @@ public class ResveStatusService {
 			}catch(Exception e) {
 				throw new HrsException("invalid date");
 			}			
-			throw new HrsException(message);
+			throw new HrsException("error.paneltyTarget", message);
 		}
 	}
 	

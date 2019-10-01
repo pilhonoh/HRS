@@ -60,10 +60,23 @@ $(function(){
 							callback: afterHandler
 						});
 					}else{	// 비즈니스로직 에러
-						$.alert({
-							text: json.message, 
-							callback: afterHandler
-						});
+						
+						if(json.messageCode == 'error.paneltyTarget'){	// 블랙리스트 오류 메시지 예외
+							var textArr = json.message.split('\n\n');
+							$.alert({
+								text: textArr[0],
+								subText: textArr[1].replace(/\n/g,'<br>'),
+								callback: afterHandler
+							});
+						}else{							
+							$.alert({
+								text: json.message, 
+								callback: afterHandler
+							});
+						}
+						
+						
+							
 					}
 					if(json.status == 403){
 						location.href = '/error/403';
@@ -96,15 +109,20 @@ $(function(){
 	 * Alert 메시지 출력
 	 * 
 	 * options = {
-	 *	text: 'alert 메시지'
+	 *	text: <h3/> 'alert 메시지'
 	 *	desc: '하부 보조 메시지',
 	 *	callback: 확인버튼 클릭시, 수행할 콜백함수
 	 *	icon : false면 아이콘 숨김
+	 *	subText: <h4/> alert 메시지와 desc 메시지 사이에 중간크기로 보여지는 메시지 (추가)
 	 * }
 	 */
 	$.alert = function(options) {
 		$('#layer_pop_alert').load(ROOT + '/resources/html/alert.html', function(res){		
 			$('.alert-message h3').html(options.text.replace(/\n/g, '<br/>'));
+			
+			if(options.subText){
+				$('.alert-message h4').html(options.subText);
+			}
 			if(options.desc){
 				$('.alert-message p').text(options.desc);
 			}
