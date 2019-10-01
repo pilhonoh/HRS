@@ -93,11 +93,8 @@ var scheduleList = {
 					deferred.reject('');
 				}
 			});
-			
 			return deferred.promise();
 		},
-		
-		
 		setMssrCombo: function(bldCode) {
 			
 			$.when(scheduleList.combobox.getMssrList(bldCode)).done(function(result) {
@@ -179,7 +176,6 @@ var scheduleList = {
 				var btnClass = '';
 				var resveDt = '';
 				var sexdstn = '';
-				
 				scheduleList.paging.params.totalCount = result.customs.totalCount;
 				if(result.customs.totalCount == 0){
 					scheduleListHtml.push('<tr>');
@@ -189,12 +185,15 @@ var scheduleList = {
 					
 						for (var i in resultList) {
 						
-						var resve_de = resultList[i].RESVE_DE;
-						resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
+						var resve_de =  moment(resultList[i].RESVE_DE,"YYYYMMDD",'ko'); 
+	
+                        resveDt=resve_de.format('YYYY-MM-DD (ddd)');
+						//resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 						
 						var sexdstn = (resultList[i].MSSR_SEXDSTN == 'M') ? '남' : '여';
 						var convertedTime = scheduleList.list.convertTime(resultList[i].RESVE_TM_LIST);
-						
+
+	  				
 						scheduleListHtml.push('<tr>');
 						scheduleListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
 						scheduleListHtml.push('	<td>' + resveDt + '</td>');
@@ -219,14 +218,27 @@ var scheduleList = {
 			});
 		},
 		
-		//현재 리스트에서 예약번호로 해당 ROW 의 데이터를 가져옴
+		//현재 리스트에서 예약번호로 해당 ROW 의 데이터를 가져옴 
+		 
 		getRowData: function(resveNo) {
 			var rowDataList = scheduleList.list.dataList;
 			var rowData;
 			
 			for (var i in rowDataList) {
 				if (rowDataList[i].RESVE_NO == resveNo) {
-					rowData = rowDataList[i];
+					rowData = {RESVE_NO:rowDataList[i].RESVE_NO,
+							   BLD_CODE:rowDataList[i].BLD_CODE,
+							   BED_CODE:rowDataList[i].BED_CODE,
+							   RESVE_DE:rowDataList[i].RESVE_DE,
+							   MSSR_EMPNO:rowDataList[i].MSSR_EMPNO,
+							   MSSR_NCNM:rowDataList[i].MSSR_NCNM,
+							   BED_NM:rowDataList[i].BED_NM,
+							   RESVE_NO_LIST:rowDataList[i].RESVE_NO_LIST, 
+							   RESVE_TM:rowDataList[i].RESVE_TM,
+							   RESVE_TM_LIST:rowDataList[i].RESVE_TM_LIST,
+							   RESVE_COMPT_CNT:rowDataList[i].RESVE_COMPT_CNT,
+							   CARE_COMPT_CNT:rowDataList[i].CARE_COMPT_CNT
+					        } 
 					break;
 				}
 			}
@@ -471,14 +483,20 @@ var scheduleList = {
 				  var params = [] ;
 				  var data = null;
 				  var resveNoSplit = null;
+				  var delItemCnt = 0;
+				  var resveItemCnt = 0;
+				  var careItemCnt = 0;
+				  var meassage = '';
 				  $('tbody#scheduleList input:checkbox:checked').each(function(){
-
+					
 					  data = scheduleList.list.getRowData($(this).val())
-					  console.log( 'data',data);
-					  console.log( 'data',data);
+				     
+					  resveItemCnt+=Number(data.RESVE_COMPT_CNT);
+					  careItemCnt+=Number(data.CARE_COMPT_CNT);
 					  resveNoSplit = data.RESVE_NO_LIST.split(",")
 					  console.log( 'resv_no',resveNoSplit.length);
 					 for (var i = 0; i < resveNoSplit.length; i++) {
+						 delItemCnt+= i
 						 params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE , RESVE_NO:resveNoSplit[i]});	
 					 }
 					 
@@ -488,7 +506,17 @@ var scheduleList = {
 					  alertPopup('삭제할 스케쥴을 선택하세요.');
 					  return false;
 				  }
-				  confirmPopup('총' +params.length+ '건을 삭제하시겠습니까?', function(){					  					
+				  
+				  if(careItemCnt > 0){
+						alertPopup('삭제되는 시간에 이미 \n케어완료 된 건이 있습니다.\n근무시간 확인 후 재 요청 바랍니다.');
+						 return false;
+				  }
+				  
+				  if(resveItemCnt > 0){
+					  meassage = '스케쥴 삭제 시 기존 예약 '+resveItemCnt +'건이\n 자동 취소 됩니다. 삭제하시겠습니까';
+				  }
+				  
+				  confirmPopup( meassage||'총' + delItemCnt + '건을 삭제하시겠습니까?', function(){					  					
 					$.ajax({
 							url: ROOT + '/mssr/scheduleDelete',
 							type: 'POST',

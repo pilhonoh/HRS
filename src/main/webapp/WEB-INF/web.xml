@@ -74,6 +74,9 @@
 	</listener> 
 	-->
 	
+	<distributable />
+	
+	
 	<!-- URL JSESSIONID 제거 -->
 	<session-config>
 		<tracking-mode>COOKIE</tracking-mode>

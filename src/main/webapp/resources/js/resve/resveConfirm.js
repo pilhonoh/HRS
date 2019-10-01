@@ -78,6 +78,9 @@ var resveConfirm = {
 	// 팝업
 	pop : {
 		confirm : function(e){
+			if($('#txtResveEmpno').is(':disabled')){	//주말 등의 이유로 disabled라면
+				return;
+			}
 			if($('#txtResveEmpno').val().trim() == ""){
 				$.alert({text: getMessage('error.requireEmpno')});
 			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
@@ -176,6 +179,18 @@ resveConfirm.calendar = {
 		resveConfirm.setHeader($(e.target).data('data').yyyymmdd);
 		resveConfirm.table.init();
 		resveConfirm.table.getResve($(e.target).data('data').yyyymmdd);
+		
+		// 주말 여부
+		if(resveConfirm.data.selectedDate.weekday == 6 || 
+				resveConfirm.data.selectedDate.weekday == 7){
+			$('.reservation-table tbody').hide();
+			$('.weekend-info').show();
+			$('#txtResveEmpno').attr('disabled', true);
+		}else{
+			$('.reservation-table tbody').show();
+			$('.weekend-info').hide();
+			$('#txtResveEmpno').removeAttr('disabled');
+		}
 	}
 }
 

@@ -19,9 +19,11 @@
 	</ul>
 	
 	
-	<div style="text-align:center; margin-top: 10px; font-size: 14px">
-		<span>※ 케어 센터에서 꼭 <strong>본인 확인</strong> 후 입장해주세요.</span>
-	</div>
+<!-- 	<div style="text-align:center; margin-top: 10px; font-size: 14px"> -->
+<!-- 		<span>※ 케어 센터에서 꼭 <strong>본인 확인</strong> 후 입장해주세요.</span> -->
+<!-- 	</div> -->
+	
+	<p class="comm-info"><i class="xi-error-o"></i>케어 센터에서 꼭 본인 확인 후 입장해주세요.</p>
 	
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>

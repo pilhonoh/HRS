@@ -172,7 +172,7 @@ var popSchCreate = {
 						return false;
 					}
 					
-					confirmPopup('관리자 스케쥴을 등록 하시겠습니까?', function(){		 			
+					confirmPopup('헬스키퍼 스케쥴을 등록 하시겠습니까?', function(){		 			
 						$.ajax({
 							url: ROOT + '/mssr/scheduleCreate',
 							type: 'POST',
@@ -180,7 +180,8 @@ var popSchCreate = {
 							success : function(res){
 								console.log('regist',res);				
 								scheduleList.list.renderScheduleList();
-								closeLayerPopup();
+								alertPopup('등록 되었습니다.');
+								//closeLayerPopup();
 							},
 							error : function(err) {
 								var json = JSON.parse(err.responseText);

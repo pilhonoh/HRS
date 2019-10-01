@@ -10,16 +10,6 @@
 	
 	<util:properties id="prop" location="classpath:config/spring/config.properties" /> 
 
-	<!-- 개발 DB -->
-    <!-- 
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://150.19.47.51:3306/healthcare" />
-        <property name="username" value="hcruser" />
-        <property name="password" value="hcruser1234@" />
-    </bean> 
-    -->
-
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
 		<property name="jndiName" value="#{prop['jndiName']}" />
 	</bean>
@@ -27,21 +17,5 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
   		<property name="dataSource" ref="dataSource" />
 	</bean>
-    
-    
-    
-
-    <!-- <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" /> -->
-    
-    
-    <!-- DB 2 -->
-    <!-- 
-    <bean id="dataSource_db2" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://127.0.0.1:3306/webos" />
-        <property name="username" value="admin" />
-        <property name="password" value="webos123$" />
-    </bean>
-    -->
-    
+            
 </beans>

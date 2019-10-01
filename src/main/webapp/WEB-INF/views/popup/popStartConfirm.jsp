@@ -19,9 +19,12 @@
 		<li><span class="icon04" id="resveConfirm_bed"></span></li>
 	</ul>
 	
+	<!-- 
 	<div style="text-align:center; margin-top: 10px; font-size: 14px">
 		<span>※ 케어시간은 <strong>휴게시간으로 근무등록</strong> 바랍니다.</span>
-	</div>
+	</div> 
+	-->
+	<p class="comm-info"><i class="xi-error-o"></i>케어시간은 휴게시간으로 근무등록 바랍니다.</p>
 	
 	<div class="pop-btn-area">
 		<button id="btnOk" class="pop-btn">확인</button>
