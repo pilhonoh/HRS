@@ -775,5 +775,43 @@ public class ResveStatusService {
 		}
 	}
 	
-	
+	/**
+	 * 
+	 * @설명 : 전일 노쇼 이력 저장 
+	 * 			- 전일 노쇼이력 hist테이블에 저장
+	 * @작성일 : 2019.10.02
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	@Transactional
+	public ResponseResult insertNoShowHist() {
+		ResponseResult result = new ResponseResult();
+		List<Map> noshowList = resveStatusDAO.selectNoShowResve();
+		
+		if(noshowList != null && noshowList.size() > 0) {			
+			DataEntity param;
+			boolean insertResult = true;
+			for(Map item : noshowList) {
+				param = new DataEntity();
+				// 이력 insert
+				// (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
+				param.put("resveNo", item.get("RESVE_NO").toString());
+				param.put("sttusCode", ResveStatusConst.DBSTATUS.NOSHOW.toString());
+				param.put("regEmpno", "SYSTEM");
+				param.put("targetEmpno", item.get("RESVE_EMPNO").toString());
+				insertResult = insertResult && resveStatusDAO.insertResveHist(param);
+								
+				logger.info("전일 노쇼 이력 등록 ===> 예약번호 : {}, 예약자사번 : {}", 
+						item.get("RESVE_NO").toString(),
+						item.get("RESVE_EMPNO").toString());
+			}
+			
+			if(!insertResult) {
+				throw new HrsException("error.processFailure", true);
+			}
+		}
+		result.setItemList(noshowList);
+		return result;
+	}
 }
