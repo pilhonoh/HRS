@@ -149,6 +149,32 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 당일 예약/대기건수 조회 
+	 * @작성일 : 2019.10.02
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectDayCount(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		// 금일 예약건이 존재하는경우		
+		param.put("nextResveTm", DateUtil.getNextResveTm());
+		Map dayCount = resveStatusDAO.selectDayCount(param);
+				
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
+			throw new HrsException("error.duplicateDayResve", new String[] {
+				DateUtil.yyyymmdd2HumanReadableWithWeekday(param.getString("resveDe"))
+			},true);	//"2019-09-01(월) 예약/대기 1건이 접수되어\\n추가 신청이 불가합니다."
+		}
+		  
+		return result;
+	}
+
+	
+	/**
+	 * 
 	 * @설명 : 예약 등록
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
@@ -748,7 +774,6 @@ public class ResveStatusService {
 			}, true);
 		}
 	}
-	
 	
 	
 }

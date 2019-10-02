@@ -68,6 +68,15 @@ $(function(){
 								subText: textArr[1].replace(/\n/g,'<br>'),
 								callback: afterHandler
 							});
+						}else if(json.messageCode == 'error.canNotSuccessionCancel'){
+							var textArr = json.message.split('\n');
+							var subText = textArr.pop();
+							var text = textArr.join('\n');							
+							$.alert({
+								text: text,
+								subText: subText,
+								callback: afterHandler
+							});
 						}else{							
 							$.alert({
 								text: json.message, 
@@ -201,8 +210,7 @@ function loadCodeSelect(cb, selector){
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
-			success : function(res){
-				console.log('codeList',res);				
+			success : function(res){							
 				if(res.status === 200){
 					var options = res.list.map( function(data){
 						return $('<option>').val(data.CODE).text(data.CODE_NM);
