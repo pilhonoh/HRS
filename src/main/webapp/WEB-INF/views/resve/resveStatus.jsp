@@ -22,13 +22,10 @@
 
 				<article class="content-in">
 
-					<div class="month-area">
+					<div class="month-area">						
 						<div class="building-select">
-							<div>							
-								<i class="building-icon">위치</i>
-								<select data-code-tyl="BLD"></select>
-								<span class="bar"></span>
-							</div>							
+							<select data-code-tyl="BLD"></select>
+							<button class="loca-btn" title="위치">위치</button>
 						</div>
 						<div class="calendar-area">
 							<table class="month-calendar">

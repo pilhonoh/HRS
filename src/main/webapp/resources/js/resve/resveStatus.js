@@ -24,7 +24,7 @@ var resveStatus = {
 				
 		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
 		
-		$('.building-icon').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
+		$('.loca-btn').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
 			resveStatus.pop.floor($('[data-code-tyl=BLD]').val());
 		})
 					
@@ -197,7 +197,9 @@ resveStatus.calendar =  {
 			);
 		});
 		
-		$('.month-calendar tbody tr').append(elements);			
+		$('.month-calendar tbody tr').append(elements);		
+		
+		$( ".loca-btn" ).tooltip();
 	},
 	// 클릭이벤트 리스너
 	click: function(e){
@@ -292,7 +294,7 @@ resveStatus.table = {
 						//대기취소
 						'WAIT_CANCL' : '',
 						//완료
-						'COMPT' :  $('<span>').text('케어완료').addClass('reservation-not'),
+						'COMPT' :  $('<span>').text('케어완료').addClass('care-com'),
 						//노쇼 완료가능
 						'NOSHOW_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약완료').addClass('rbtn cr3').on('click', resveStatus.pop.noshowConfirm),
 						//노쇼
