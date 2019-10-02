@@ -15,8 +15,7 @@ var feedback = {
 		);	
 	},
 	// 신고하기
-	send : function(){
-		console.log('피드백 보내기');
+	send : function(){		
 		var contents = $('#feedbackContents').val();
 		
 		if(!contents){
@@ -28,8 +27,7 @@ var feedback = {
 			url: ROOT + '/feedback',
 			type: 'POST',
 			data: {contents: contents},
-			success : function(res){
-				console.log('feedback',res);				
+			success : function(res){						
 				//resveStatus.table.refresh();
 				if(res.item > 0){
 					$.alert({text:'등록하였습니다.', desc:'신속히 답변드리겠습니다.'})

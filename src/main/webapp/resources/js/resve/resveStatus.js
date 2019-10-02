@@ -47,7 +47,7 @@ var resveStatus = {
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: "BED", codeTys: bldCode},
 			success : function(res){
-				console.log('fillBeds',res);
+				//console.log('fillBeds',res);
 				resveStatus.data.beds = res.list;
 			},
 			error : function(err) {
@@ -61,9 +61,9 @@ var resveStatus = {
 		$.ajax({
 			url: ROOT + '/resve/regist',
 			type: 'POST',
-			data: {resveNo: resveNo},
+			data: {resveNo: resveNo},			
 			success : function(res){
-				console.log('regist',res);				
+				//console.log('regist',res);				
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -79,7 +79,7 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},
 			success : function(res){
-				console.log('wait',res);
+				//console.log('wait',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -95,7 +95,7 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo, cancelGbn: cancelGbn},
 			success : function(res){
-				console.log('cancel',res);
+				//console.log('cancel',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -111,7 +111,7 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},
 			success : function(res){
-				console.log('complete',res);
+				//console.log('complete',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -201,7 +201,7 @@ resveStatus.calendar =  {
 	},
 	// 클릭이벤트 리스너
 	click: function(e){
-		console.log('click',$(e.target).data('data'));
+		
 		var data = $(e.target).data('data');			
 		
 		// 예전퍼블
@@ -265,7 +265,7 @@ resveStatus.table = {
 			url: ROOT + '/resve/getStatus',
 			data: {resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
 			success : function(res){
-				console.log('getStatus',res);
+				//console.log('getStatus',res);
 				
 				var list = res.list;
 				
@@ -332,7 +332,7 @@ resveStatus.table = {
 				
 			},
 			error : function(err) {
-				console.error(err.responseJSON)					
+				console.error(err)					
 			}
 		});			
 	}
@@ -519,9 +519,7 @@ function checkBefore20min(resveDe, resveTm){
 	resveTm = getRealTime(resveTm).start;
 	var targetDate = moment(resveDe + " " + resveTm, 'YYYYMMDD HH:mm').subtract(20,'minutes').toDate();	//예약시간 20분전
 	var now = new Date();
-	console.info("현재", now);
-	console.info("시작20분전", targetDate);
-	console.info("가능여부", now < targetDate);
+
 	return now < targetDate;
 }
 
