@@ -20,7 +20,7 @@ var feedback = {
 		
 		if(!contents){
 			alert('내용을 입력하세요.');
-			false;
+			return false;
 		}
 		
 		$.ajax({
