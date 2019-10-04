@@ -587,10 +587,27 @@ public class ResveStatusService {
 		 ****************************/
 		// 현황 update
 		param.put("updtEmpno", param.get("empno"));
-		param.put("comptYn", 'Y');
+		param.put("comptYn", "Y");	// 완료여부 Y
+		
+		// 10.04 추가 - 대기자삭제 (대기취소)
+		param.put("waitEmpno", "");
+		
 		boolean updateResult = resveStatusDAO.updateResveStatus(param);
 		
+				
 		// 이력 insert
+		
+		// 10.04 추가 - 대기자가 있다면 대기취소
+		if(resveItem.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(resveItem.get("WAIT_EMPNO").toString())) {	
+			// 대기취소 입력
+			param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());
+			param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+			param.put("regEmpno", "WAITCNCL");
+			resveStatusDAO.insertResveHist(param);
+		}
+		
+		
+		// 케어완료 입력
 		param.put("sttusCode", ResveStatusConst.DBSTATUS.COMPT.toString());
 		param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 		param.put("regEmpno", param.get("empno"));
@@ -791,23 +808,48 @@ public class ResveStatusService {
 		
 		if(noshowList != null && noshowList.size() > 0) {			
 			DataEntity param;
-			boolean insertResult = true;
+			boolean processResult = true;
 			for(Map item : noshowList) {
 				param = new DataEntity();
-				// 이력 insert
-				// (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
+				
+				
 				param.put("resveNo", item.get("RESVE_NO").toString());
+				
+				
+				// 현황 update				
+				param.put("updtEmpno", "WAITCNCL");								
+				// 10.04 추가 - 대기자삭제 (대기취소)
+				param.put("waitEmpno", "");				
+				processResult = processResult && resveStatusDAO.updateResveStatus(param);
+				
+						
+				// 이력 insert
+				
+				// 10.04 추가 - 대기자가 있다면 대기취소
+				if(item.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(item.get("WAIT_EMPNO").toString())) {	
+					// 대기취소 입력
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());
+					param.put("targetEmpno", item.get("WAIT_EMPNO").toString());
+					param.put("regEmpno", "WAITCNCL");
+					resveStatusDAO.insertResveHist(param);
+					
+					logger.info("대기취소 등록 ===> 예약번호 : {}, 대기자사번 : {}", 
+							item.get("RESVE_NO").toString(),
+							item.get("WAIT_EMPNO").toString());
+				}
+				
+				// 노쇼입력
 				param.put("sttusCode", ResveStatusConst.DBSTATUS.NOSHOW.toString());
-				param.put("regEmpno", "SYSTEM");
 				param.put("targetEmpno", item.get("RESVE_EMPNO").toString());
-				insertResult = insertResult && resveStatusDAO.insertResveHist(param);
+				param.put("regEmpno", "SYSTEM");
+				processResult = processResult && resveStatusDAO.insertResveHist(param);
 								
 				logger.info("전일 노쇼 이력 등록 ===> 예약번호 : {}, 예약자사번 : {}", 
 						item.get("RESVE_NO").toString(),
 						item.get("RESVE_EMPNO").toString());
 			}
 			
-			if(!insertResult) {
+			if(!processResult) {
 				throw new HrsException("error.processFailure", true);
 			}
 		}

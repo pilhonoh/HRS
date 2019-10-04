@@ -23,7 +23,8 @@
 					<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
 					<%-- <li rel="tab2"><a href="${ROOT}/admin/resveMgmt">예약 정보 조회 및 변경</a></li> --%>
 					<li rel="tab2"><a href="#none">예약 정보 조회 및 변경</a></li>
-					<li rel="tab3"><a href="${ROOT}/mssr/mgmt">헬스키퍼 등록</a></li>					
+					<%-- <li rel="tab3"><a href="${ROOT}/mssr/mgmt">헬스키퍼 등록</a></li>	 --%>
+					<li rel="tab3"><a href="#none">헬스키퍼 등록</a></li>		
 					<li rel="tab4"><a href="#none">담당자 등록</a></li>
 					<li rel="tab5"><a href="#none">공통코드 관리</a></li>
 				</ul>
