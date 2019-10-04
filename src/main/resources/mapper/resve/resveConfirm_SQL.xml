@@ -57,6 +57,7 @@
 			AND RESVE_EMPNO = #{resveEmpno}
 			AND CANCL_YN != 'Y'
 			AND COMPT_YN != 'Y'
+			AND BLD_CODE = #{bldCode}
 		)
 	</select>
 </mapper>

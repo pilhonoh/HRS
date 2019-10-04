@@ -94,7 +94,8 @@ var resveConfirm = {
 			}else{
 				$('#layer_pop04').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
-					resveDe: resveConfirm.data.selectedDate.yyyymmdd
+					resveDe: resveConfirm.data.selectedDate.yyyymmdd,
+					bldCode: resveConfirm.data.bldCode
 				}, function(res, state, xhr){						
 					openLayerPopup('layer_pop04');
 				});
