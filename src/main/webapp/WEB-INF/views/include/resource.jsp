@@ -11,7 +11,7 @@
 <link href="${LIB}/XEIcon/xeicon.css" rel="stylesheet">
 <link href="${CSS}/animate.css?v=4" rel="stylesheet">
 <link href="${CSS}/reset.css?v=3" rel="stylesheet">
-<link href="${CSS}/common.css?v=3" rel="stylesheet">
+<link href="${CSS}/common.css?v=4" rel="stylesheet">
 <!-- SCRIPT -->
 <script>
 var ROOT = '${ROOT}';
