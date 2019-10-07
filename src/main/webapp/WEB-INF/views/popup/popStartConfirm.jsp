@@ -53,12 +53,20 @@ $(document).ready(function(){
 			resveConfirm.start(data.RESVE_NO);
 			
 		});
+		
+		// 취소클릭시
+		$('#layer_pop04 #btnCancel').on('click', function(){	
+			$(document).off('keypress');	//엔터이벤트삭제
+			$('#txtResveEmpno').focus();	//포커스
+		})
+		
 		// 엔터이벤트
 		$(document).one('keypress', function(e){
 			if(e.keyCode == 13){					
 				$('#layer_pop04 #btnOk').trigger('click');				
 		    }
 		})
+		
 	}else{		
 		//alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.	
 		$.alert({
