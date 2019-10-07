@@ -302,6 +302,14 @@ resveStatus.table = {
 					}[status]
 				}
 				
+				// 근무가 하나도 없는경우 주말이미지 보여줌
+				if(!list || list.length ==0){
+					$('.reservation-table tbody').hide();
+					$('.weekend-info').show();
+					
+					return false;
+				}
+				
 				// 예약현황
 				list.forEach(function(stts){
 					

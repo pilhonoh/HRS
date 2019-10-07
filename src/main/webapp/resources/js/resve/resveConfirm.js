@@ -240,14 +240,23 @@ resveConfirm.table = {
 		if(!yyyymmdd){
 			yyyymmdd = moment().format('YYYYMMDD');
 		}
+		
 		$.ajax({
 			url: ROOT + '/confirm/getResve',
 			data: {resveDe: yyyymmdd, bldCode: resveConfirm.data.bldCode},
-			success: function(res){
-				console.log('getResve', res);
+			success: function(res){				
 				var list = res.list;
 				
 				var last = undefined;
+				
+				// 근무가 하나도 없는경우 주말이미지 보여줌
+				if(!list || list.length ==0){
+					$('.reservation-table tbody').hide();
+					$('.weekend-info').show();
+					
+					return false;
+				}
+				
 				
 				function getButton(status){
 					return {
