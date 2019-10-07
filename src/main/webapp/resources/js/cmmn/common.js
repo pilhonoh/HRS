@@ -142,6 +142,13 @@ $(function(){
 			$('#layer_pop_alert .layerClose').one('click', options.callback);
 			//$('#layer_pop_alert #btnOk').one('click', options.callback);
 			openLayerPopup('layer_pop_alert');
+			
+			// 엔터입력시 확인버튼 클릭
+			$(document).one('keypress', function(e){
+				if(e.keyCode == 13){					
+					$('#layer_pop_alert #btnOk').trigger('click');
+			    }
+			})
 		});
 	}
 	

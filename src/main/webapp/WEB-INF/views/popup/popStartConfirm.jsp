@@ -49,10 +49,16 @@ $(document).ready(function(){
 		var realTime = getRealTime(data.RESVE_TM);
 		$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
 		
-		$('#layer_pop04 #btnOk').on('click', function(){
+		$('#layer_pop04 #btnOk').on('click', function(){			
 			resveConfirm.start(data.RESVE_NO);
-			//$('#txtResveEmpno').val('');
+			
 		});
+		// 엔터이벤트
+		$(document).one('keypress', function(e){
+			if(e.keyCode == 13){					
+				$('#layer_pop04 #btnOk').trigger('click');				
+		    }
+		})
 	}else{		
 		//alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.	
 		$.alert({
@@ -60,6 +66,7 @@ $(document).ready(function(){
 			callback: function(){
 				resveConfirm.table.refresh();
 				$('#txtResveEmpno').val('');
+				$('#txtResveEmpno').focus();							
 			}
 		});
 	}
