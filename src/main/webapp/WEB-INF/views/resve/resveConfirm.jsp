@@ -46,7 +46,7 @@
 					<div class="number-search">
 						<label>사번 입력</label>
 						<select data-code-tyl="BLD" style="display:none"></select>
-						<input id="txtResveEmpno" type="text" placeholder="사번을 입력해서 반드시 최종 확인해 주시기 바랍니다.">
+						<input id="txtResveEmpno" type="text" placeholder="사번을 입력해서 반드시 최종 확인해 주시기 바랍니다." style="ime-mode:disabled;">
 						<button id="btnConfirm"><i class="xi-search xi-x"></i>확인</button>
 					</div>
 

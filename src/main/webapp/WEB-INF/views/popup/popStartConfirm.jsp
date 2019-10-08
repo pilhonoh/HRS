@@ -39,20 +39,51 @@
 $(document).ready(function(){		
 	var item = '${item}';
 	var data = JSON.parse(item);
+	
+	console.log('완료대상건', data);
+	
 	if(data){
-		$('#resveConfirm_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
-		//$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
-		$('#resveConfirm_mssr').text(data.MSSR_NCNM);
-		$('#resveConfirm_bed').text(data.BED_NM);
-		$('#empnm').text(data.RESVE_EMPNM);
 		
-		var realTime = getRealTime(data.RESVE_TM);
-		$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
+		if(data.COMPT_YN != 'Y'){
+			$('#resveConfirm_resveDe').text(moment(data.RESVE_DE).format('YYYY-MM-DD'));
+			//$('#resveConfirm_mssr').text(data.MSSR_NCNM + '(' + (data.MSSR_SEXDSTN =='M' ? '남':'여') +')');
+			$('#resveConfirm_mssr').text(data.MSSR_NCNM);
+			$('#resveConfirm_bed').text(data.BED_NM);
+			$('#empnm').text(data.RESVE_EMPNM);
+			
+			var realTime = getRealTime(data.RESVE_TM);
+			$('#resveConfirm_resveTm').text(realTime.start + '~' + realTime.end);
+			
+			$('#layer_pop04 #btnOk').on('click', function(){			
+				resveConfirm.start(data.RESVE_NO);
+				
+			});
+			
+			// 취소클릭시
+			$('#layer_pop04 #btnCancel').on('click', function(){	
+				$(document).off('keypress');	//엔터이벤트삭제
+				$('#txtResveEmpno').val('');
+				$('#txtResveEmpno').focus();	//포커스
+			})
+			
+			// 엔터이벤트
+			$(document).one('keypress', function(e){
+				if(e.keyCode == 13){					
+					$('#layer_pop04 #btnOk').trigger('click');				
+			    }
+			})
+		}else{
+			$.alert({
+				text: getMessage('error.alreadyConfirm'),
+				callback: function(){
+					resveConfirm.table.refresh();
+					$('#txtResveEmpno').val('');
+					$('#txtResveEmpno').focus();							
+				}
+			});
+		}
 		
-		$('#layer_pop04 #btnOk').on('click', function(){
-			resveConfirm.start(data.RESVE_NO);
-			//$('#txtResveEmpno').val('');
-		});
+		
 	}else{		
 		//alertPopup(getMessage('error.resveNotFound'), resveConfirm.table.refresh);	//예약이 존재하지 않습니다.	
 		$.alert({
@@ -60,6 +91,7 @@ $(document).ready(function(){
 			callback: function(){
 				resveConfirm.table.refresh();
 				$('#txtResveEmpno').val('');
+				$('#txtResveEmpno').focus();							
 			}
 		});
 	}

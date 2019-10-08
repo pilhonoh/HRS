@@ -55,8 +55,9 @@
 			FROM RESVE_STTUS
 			WHERE RESVE_DE = #{resveDe}
 			AND RESVE_EMPNO = #{resveEmpno}
+			AND BLD_CODE = #{bldCode}
 			AND CANCL_YN != 'Y'
-			AND COMPT_YN != 'Y'
+			<!-- AND COMPT_YN != 'Y' --> <!-- 완료건까지 조회하여, 이미완료했는지 예약자체가 없는지 구분 -->
 		)
 	</select>
 </mapper>

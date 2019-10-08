@@ -29,24 +29,29 @@ public class ResveNotifyJob {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void execute() {
-		try {
-			List<Map> list = resveStatusService.selectResveNotifyList().getList();
-			logger.info("케어 30분전 알림 Job 수행 시작 - " + list.size() + "건");
-			for(Map m : list) {
-				logger.info("일자:{}, 시간:{}, 사옥:{}, 베드:{}, 사번:{} ",
-						m.get("RESVE_DE"),
-						m.get("RESVE_TM"),
-						m.get("BLD_CODE"),
-						m.get("BED_CODE"),
-						m.get("RESVE_EMPNO"));
+		String opt = System.getProperty("hrs.batch");
+		if(opt != null && opt.equals("true")) {
+			try {
 				
-				m.put("targetEmpno", m.get("RESVE_EMPNO"));							
+				List<Map> list = resveStatusService.selectResveNotifyList().getList();
+				logger.info("케어 30분전 알림 Job 수행 시작 - " + list.size() + "건");
+				for(Map m : list) {
+					logger.info("일자:{}, 시간:{}, 사옥:{}, 베드:{}, 사번:{} ",
+							m.get("RESVE_DE"),
+							m.get("RESVE_TM"),
+							m.get("BLD_CODE"),
+							m.get("BED_CODE"),
+							m.get("RESVE_EMPNO"));
+					
+					m.put("targetEmpno", m.get("RESVE_EMPNO"));							
+					
+					ResponseResult insertResult = cspService.insertCspSMS(m, "csp.sms.resveNotify", Locale.KOREAN);
+					logger.info("CSP테이블 INSERT 결과 : "+ insertResult.getItem());
+				}
 				
-				ResponseResult insertResult = cspService.insertCspSMS(m, "csp.sms.resveNotify", Locale.KOREAN);
-				logger.info("CSP테이블 INSERT 결과 : "+ insertResult.getItem());
+			}catch(Exception e) {
+				logger.error("{} Reservation Notify Job Error Message : {} ", ResveNotifyJob.class.getSimpleName(), e.getMessage());
 			}
-		}catch(Exception e) {
-			logger.error("{} Reservation Notify Job Error Message : {} ", ResveNotifyJob.class.getSimpleName(), e.getMessage());
 		}
 	}
 }

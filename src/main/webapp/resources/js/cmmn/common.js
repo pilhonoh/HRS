@@ -68,6 +68,15 @@ $(function(){
 								subText: textArr[1].replace(/\n/g,'<br>'),
 								callback: afterHandler
 							});
+						}else if(json.messageCode == 'error.canNotSuccessionCancel'){
+							var textArr = json.message.split('\n');
+							var subText = textArr.pop();
+							var text = textArr.join('\n');							
+							$.alert({
+								text: text,
+								subText: subText,
+								callback: afterHandler
+							});
 						}else{							
 							$.alert({
 								text: json.message, 
@@ -130,8 +139,16 @@ $(function(){
 			if(options.icon == false)
 				$('.alert-message h3').removeClass('alert');
 				
-			$('#layer_pop_alert #btnOk').one('click', options.callback);
+			$('#layer_pop_alert .layerClose').one('click', options.callback);
+			//$('#layer_pop_alert #btnOk').one('click', options.callback);
 			openLayerPopup('layer_pop_alert');
+			
+			// 엔터입력시 확인버튼 클릭
+			$(document).one('keypress', function(e){
+				if(e.keyCode == 13){					
+					$('#layer_pop_alert #btnOk').trigger('click');
+			    }
+			})
 		});
 	}
 	
@@ -201,8 +218,7 @@ function loadCodeSelect(cb, selector){
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
-			success : function(res){
-				console.log('codeList',res);				
+			success : function(res){							
 				if(res.status === 200){
 					var options = res.list.map( function(data){
 						return $('<option>').val(data.CODE).text(data.CODE_NM);
@@ -228,6 +244,8 @@ function loadCodeSelect(cb, selector){
 function openLayerPopup(id){
 	$('.pop-layer').css('display', 'none'); 
 	var temp = $('#' + id);
+	temp.css('top','');
+	temp.css('left','');
 	var bg = temp.parents('bg');
 	if (bg) {
 		$('.layer').fadeIn();
@@ -235,10 +253,20 @@ function openLayerPopup(id){
 		temp.fadeIn();
 	}
 	temp.css('display', 'block');
-	if (temp.outerHeight() < $(document).height()) temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px');
-	else temp.css('top', '0px');
-	if (temp.outerWidth() < $(document).width()) temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
-	else temp.css('left', '0px');
+	
+	if (temp.outerHeight() < $(document).height()){ 
+		temp.css('margin-top', '-' + temp.outerHeight() / 2 + 'px')
+	}else {
+		temp.css('top', '0px');
+		temp.css('margin-top','');
+	}
+	
+	if (temp.outerWidth() < $(document).width()) {
+		temp.css('margin-left', '-' + temp.outerWidth() / 2 + 'px');
+	} else {
+		temp.css('left', '0px');
+		temp.css('margin-left','');
+	}
 
 	//$("html").attr("style", "overflow-y:hidden");
 	$("html").addClass("scroll");
@@ -253,13 +281,14 @@ function openLayerPopup(id){
 		$("html").attr("style", "overflow-y:auto");
 		$("html").removeClass("scroll");
 	});
-
+/*
 	$('.layer .bg').click(function (e) {
 		$('.layer').fadeOut();
 		e.preventDefault();
-		$("html").attr("style", "overflow-y:scroll");
+		$("html").attr("style", "overflow-y:auto");
 		$("html").removeClass("scroll");
 	});
+	*/
 }
 
 function closeLayerPopup(){
@@ -299,7 +328,9 @@ function alertPopup(title, contents, fn){
 				$('.alert-message p').text(contents);
 			}
 		}
-		$('#layer_pop_alert #btnOk').one('click', fn);
+		//$('#layer_pop_alert #btnOk').one('click', fn);
+		$('#layer_pop_alert .layerClose').one('click', fn);
+
 		openLayerPopup('layer_pop_alert');
 	});
 }

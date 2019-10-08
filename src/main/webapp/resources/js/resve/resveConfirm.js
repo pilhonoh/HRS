@@ -20,8 +20,9 @@ var resveConfirm = {
 				});	
 		});	
 			
-		$('#btnConfirm').on('click', resveConfirm.pop.confirm);
-		$('[data-code-tyl=BLD]').on('change', resveConfirm.bldOnChange);	
+		$('#btnConfirm').on('click', resveConfirm.pop.confirm);	//확인 버튼 이벤트
+		$('[data-code-tyl=BLD]').on('change', resveConfirm.bldOnChange);	//사옥변경 이벤트	
+		
 		$('#txtResveEmpno').on('keypress', function(e){
 			if(e.keyCode == 13) {
 				resveConfirm.pop.confirm();
@@ -29,6 +30,7 @@ var resveConfirm = {
 			}
 		});
 		
+		setTimeout(function(){ $('#txtResveEmpno').focus();},300);	// 페이지 로드시 포커스
 	},
 	setHeader: function(yyyymmdd){
 		var m = moment(yyyymmdd) || moment();
@@ -68,6 +70,7 @@ var resveConfirm = {
 			data: {resveNo: resveNo},
 			success: function(res){				
 				resveConfirm.table.refresh();
+				$('#txtResveEmpno').focus();
 				$('#txtResveEmpno').val('');
 				closeLayerPopup();
 			},
@@ -83,20 +86,29 @@ var resveConfirm = {
 				return;
 			}
 			if($('#txtResveEmpno').val().trim() == ""){
-				$.alert({text: getMessage('error.requireEmpno')});
+				$.alert({
+					text: getMessage('error.requireEmpno'),
+					callback: function(){
+						$('#txtResveEmpno').focus();						
+					}
+				});
+				
 			}else if(resveConfirm.data.selectedDate.yyyymmdd != moment().format('YYYYMMDD')){
 				$.alert({
 					text: getMessage('error.onlySameday'),
 					callback: function(){
 						$('#txtResveEmpno').val('');
+						$('#txtResveEmpno').focus();						
 					}
 				});
+				
 			}else{
 				$('#layer_pop04').load(ROOT + '/confirm/pop/start',{
 					resveEmpno : $('#txtResveEmpno').val().trim().toUpperCase(), 
-					resveDe: resveConfirm.data.selectedDate.yyyymmdd
+					resveDe: resveConfirm.data.selectedDate.yyyymmdd,
+					bldCode: resveConfirm.data.bldCode
 				}, function(res, state, xhr){						
-					openLayerPopup('layer_pop04');
+					openLayerPopup('layer_pop04');					
 				});
 			}
 			
@@ -228,14 +240,23 @@ resveConfirm.table = {
 		if(!yyyymmdd){
 			yyyymmdd = moment().format('YYYYMMDD');
 		}
+		
 		$.ajax({
 			url: ROOT + '/confirm/getResve',
 			data: {resveDe: yyyymmdd, bldCode: resveConfirm.data.bldCode},
-			success: function(res){
-				console.log('getResve', res);
+			success: function(res){				
 				var list = res.list;
 				
 				var last = undefined;
+				
+				// 근무가 하나도 없는경우 주말이미지 보여줌
+				if(!list || list.length ==0){
+					$('.reservation-table tbody').hide();
+					$('.weekend-info').show();
+					
+					return false;
+				}
+				
 				
 				function getButton(status){
 					return {

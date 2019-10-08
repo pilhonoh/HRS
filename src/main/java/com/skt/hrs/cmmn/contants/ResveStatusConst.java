@@ -34,6 +34,7 @@ public abstract interface ResveStatusConst {
 		WAIT_COMPT("STS03"),	//대기완료
 		WAIT_CANCL("STS04"),	//대기취소
 		COMPT("STS05"),			//(케어)완료
+		NOSHOW("STS06"),		//노쇼
 		WORK_CANCL("STS99");	//근무취소
 		
 		private String code = "";
