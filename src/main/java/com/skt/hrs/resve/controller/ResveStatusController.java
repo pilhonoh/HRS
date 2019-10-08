@@ -76,8 +76,15 @@ public class ResveStatusController {
 	public String resveRegistPopupView(HttpServletRequest req, HttpSession sess, Model model) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		model.addAllAttributes(param);
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");		
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		
+		//기존예약건 조회
+		param.put("empno", loginVo.getEmpno());
+		resveStatusService.selectDayCount(param);
+				
+		//블랙리스트 체크
 		resveStatusService.checkBlacklist(param.getString("resveDe"), loginVo.getEmpno());
+		
 		return "popup/popResveRegist";
 	}
 	
@@ -97,8 +104,15 @@ public class ResveStatusController {
 	public String resveWaitPopupView(HttpServletRequest req, HttpSession sess, Model model) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		model.addAllAttributes(param);
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");		
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");	
+		
+		//기존예약건 조회
+		param.put("empno", loginVo.getEmpno());
+		resveStatusService.selectDayCount(param);
+		
+		//블랙리스트 체크
 		resveStatusService.checkBlacklist(param.getString("resveDe"), loginVo.getEmpno());
+		
 		return "popup/popResveWait";
 	}
 	

@@ -12,8 +12,7 @@ var header = {
 		$.ajax({
 			url: ROOT + '/resve/monthCnt',
 			data: {},
-			success : function(res){
-				console.log('monthCht',res);
+			success : function(res){				
 				$('.header .user-desc #resveCnt').text(res.item.RESVE_CNT);
 				$('.header .user-desc #waitCnt').text(res.item.WAIT_CNT);
 				$('.header .user-desc').show();
@@ -31,8 +30,7 @@ var header = {
 		$.ajax({
 			url: ROOT + '/resve/2WeeksCnt',
 			data: {},
-			success : function(res){
-				console.log('monthCht',res);
+			success : function(res){				
 				$('.header .user-desc #resveCnt').text(res.item.RESVE_CNT);
 				$('.header .user-desc #waitCnt').text(res.item.WAIT_CNT);
 				$('.header .user-desc').show();
@@ -43,8 +41,7 @@ var header = {
 			}
 		})
 	},
-	goToList : function(e){
-		console.log(e.target.id)
+	goToList : function(e){		
 		if(e.target.id == 'waitCnt'){
 			location.href = ROOT + '/resve/list?from=waitCnt';
 		}else{

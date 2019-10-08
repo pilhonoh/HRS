@@ -24,7 +24,7 @@ var resveStatus = {
 				
 		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
 		
-		$('.building-icon').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
+		$('.loca-btn').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
 			resveStatus.pop.floor($('[data-code-tyl=BLD]').val());
 		})
 					
@@ -47,7 +47,7 @@ var resveStatus = {
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: "BED", codeTys: bldCode},
 			success : function(res){
-				console.log('fillBeds',res);
+				//console.log('fillBeds',res);
 				resveStatus.data.beds = res.list;
 			},
 			error : function(err) {
@@ -61,9 +61,9 @@ var resveStatus = {
 		$.ajax({
 			url: ROOT + '/resve/regist',
 			type: 'POST',
-			data: {resveNo: resveNo},
+			data: {resveNo: resveNo},			
 			success : function(res){
-				console.log('regist',res);				
+				//console.log('regist',res);				
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -79,7 +79,7 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},
 			success : function(res){
-				console.log('wait',res);
+				//console.log('wait',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -95,7 +95,7 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo, cancelGbn: cancelGbn},
 			success : function(res){
-				console.log('cancel',res);
+				//console.log('cancel',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -111,7 +111,7 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},
 			success : function(res){
-				console.log('complete',res);
+				//console.log('complete',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -197,11 +197,13 @@ resveStatus.calendar =  {
 			);
 		});
 		
-		$('.month-calendar tbody tr').append(elements);			
+		$('.month-calendar tbody tr').append(elements);		
+		
+		$( ".loca-btn" ).tooltip();
 	},
 	// 클릭이벤트 리스너
 	click: function(e){
-		console.log('click',$(e.target).data('data'));
+		
 		var data = $(e.target).data('data');			
 		
 		// 예전퍼블
@@ -265,7 +267,7 @@ resveStatus.table = {
 			url: ROOT + '/resve/getStatus',
 			data: {resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
 			success : function(res){
-				console.log('getStatus',res);
+				//console.log('getStatus',res);
 				
 				var list = res.list;
 				
@@ -292,12 +294,20 @@ resveStatus.table = {
 						//대기취소
 						'WAIT_CANCL' : '',
 						//완료
-						'COMPT' :  $('<span>').text('케어완료').addClass('reservation-not'),
+						'COMPT' :  $('<span>').text('케어완료').addClass('care-com'),
 						//노쇼 완료가능
 						'NOSHOW_COMPT' : $('<button>').append('<i class="xi-calendar-check">').append('예약완료').addClass('rbtn cr3').on('click', resveStatus.pop.noshowConfirm),
 						//노쇼
 						'NOSHOW' : $('<button>').append('<i class="xi-calendar-check">').append('예약완료').addClass('rbtn cr3'),
 					}[status]
+				}
+				
+				// 근무가 하나도 없는경우 주말이미지 보여줌
+				if(!list || list.length ==0){
+					$('.reservation-table tbody').hide();
+					$('.weekend-info').show();
+					
+					return false;
 				}
 				
 				// 예약현황
@@ -332,7 +342,7 @@ resveStatus.table = {
 				
 			},
 			error : function(err) {
-				console.error(err.responseJSON)					
+				console.error(err)					
 			}
 		});			
 	}
@@ -507,7 +517,7 @@ resveStatus.pop  =  {
 			$('#layer_pop_floor img').attr('src', IMG+'/floor/'+bldCode+'.jpg');
 			setTimeout(function(){				
 				openLayerPopup('layer_pop_floor');
-			},100);
+			}, 300);
 		});
 	}
 }
@@ -519,9 +529,7 @@ function checkBefore20min(resveDe, resveTm){
 	resveTm = getRealTime(resveTm).start;
 	var targetDate = moment(resveDe + " " + resveTm, 'YYYYMMDD HH:mm').subtract(20,'minutes').toDate();	//예약시간 20분전
 	var now = new Date();
-	console.info("현재", now);
-	console.info("시작20분전", targetDate);
-	console.info("가능여부", now < targetDate);
+
 	return now < targetDate;
 }
 

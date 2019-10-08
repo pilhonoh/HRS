@@ -133,6 +133,12 @@
 	text-decoration:underline;
 }
 
+.footer .inner .f-hline { 
+	padding-left:12px; 
+	margin-left:10px; 
+	border-left:1px solid #ddd;
+}
+
 .location-link {
 	overflow:hidden;
 	display:inline-block;
@@ -652,6 +658,20 @@ button.ui-datepicker-trigger {
 	cursor:pointer;	/* P149365 */
 }
 
+.building-select button {
+	width:45px;
+	height:45px;
+	border:1px solid #d5d5d5;
+	box-sizing:border-box;
+	border-radius:5px;
+	background:url('../images/common/loca_icon.png') no-repeat 50%;
+	text-indent:-9999px;
+	transition: all .3s;
+}
+.building-select button:hover {
+	border:1px solid #999;
+}
+
 /* P149365 추가 */
 .building-icon:hover {
 	text-decoration: underline;
@@ -896,6 +916,14 @@ button.ui-datepicker-trigger {
 	color:#c1c1c1;
 	margin-top:12px;
 	cursor: default;
+}
+
+.care-com {
+	display:inline-block;
+	font-size:12px;
+	color:#4e4e4e;
+	margin-top:12px;
+	font-weight:700;
 }
 
 .rbtn {

@@ -59,7 +59,8 @@ var popSchCreate = {
 			popSchCreate.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
 			popSchCreate.button.popSaveClickEvent();
 			popSchCreate.button.rowAddClickEvent();
-		},	
+		},
+		
 		cmmnCode: {
 			allCodeList: [],
 			getAllCodeList: function() {
@@ -76,6 +77,7 @@ var popSchCreate = {
 					}
 				})
 			},
+			
 			codeToName: function(code) {
 				var allCodeList = popSchCreate.cmmnCode.allCodeList;
 				
@@ -109,9 +111,7 @@ var popSchCreate = {
 					var bldCode = $(this).val();
 					popSchCreate.combobox.setMssrCombo(bldCode);
 					loadCodeSelect(undefined, $('#scheduleCreate_bedCombo').parent()); 
-					
 				})
-				
 			},		
 			getMssrList: function(bldCode) {
 				var deferred = $.Deferred();
@@ -151,14 +151,15 @@ var popSchCreate = {
 					
 				});	
 			}
-			
 		},
+		
 		 params: {	bldCode: "", //사옥코드
 				    mssrEmpno:"", //관리사 코드 
 				    bedCode: "" , //배드  
 			        rowData:null,
 			        rowCnt:""
 		}, 
+		
 		button:{
 			popSaveClickEvent:function(){
 				$("#scheduleCreate_saveBtn").on("click",function(){			
@@ -191,11 +192,12 @@ var popSchCreate = {
 				    }); 
 				});
 			},
+			
 		   rowAddClickEvent:function(){			   
 				  $.when(addRow()).done(function(cnt,setDate){
 				    $("#scheduleCreate_Body").find('.datepicker').datepicker("destroy");//.datepicker();
   				    initDatepicker(); 
-  				  loadCodeSelect( function(){
+  				    loadCodeSelect( function(){
   				 
   				    var mm = moment(setDate,"YYYYMMDD");
   				    var fromDate = mm.format('YYYY-MM-DD');
@@ -207,114 +209,110 @@ var popSchCreate = {
   				   }
   				      , '#scheduleCreate_tr'+cnt);   
 				  });
-
 			}
 		},
-			validation: {
-				 required:function(){
-					 var chk = true;
-					 var returnMsg="등록된값이 없습니다"
-						$(".required").nextAll("td").children("input,select").each(function(){
-						  if ($(this).val()==null||$(this).val()==""){
-							  returnMsg = $(this).parent().prev().text() +returnMsg;
-							  $(".rv-desc").show();
-							  $("#requiredMsg").text(returnMsg);
-							  chk = false
-							  return false;
-						  };
-						});  
-					 return chk;
-						 
-				 },
-				 timeCheck: function(){
-					 var chk = true;
-					 $('select[id^=scheduleCreate_startTime]').each(function(i,e){
-						 var startTm = $('#'+e.id);
-						 var endTm = $('#scheduleCreate_endTime' + e.id.replace('scheduleCreate_startTime',''));
-						 
-						 if(startTm.val()>endTm.val()){
-							 //alertPopup('시작시간이 종료시간보다 클 수 없습니다.');
-							 $("#requiredMsg").text(getMessage('error.timeCompareStartEnd'));
-							 $(".rv-desc").show();
-							 chk = false;
-						 }						
-					 })
-					 return chk;
-				 }
-			}
-	}
-
-
-function fnRowDelete(){
-	    var id = event.target.parentNode.parentNode.id;
-	    $('#'+id).remove();
-		  $("#scheduleCreate_Body  tr").each(function(index){
-			     rowidrest = this;
-			     if(index>=1){
-			     $(rowidrest).children("th").text("근무시간 "+index)
-			     $(rowidrest).attr({"id":"scheduleCreate_tr"+index ,"data-rowid":index});
-			     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "cheduleCreate_"+ this.name+ index })  
-			     }
-			});
 		
-	}
-	
-function addRow (){
-	var deferred = $.Deferred();
-	var trCnt =$(".trschedule").length + 1
-	var lastdate = (trCnt==1)? moment() : moment($('.datepicker:last').val(),"YYYYMMDD"); 
-	var scheduleListHtml = [];
-	if(trCnt >5){ deferred.reject(''); return false;}
-		scheduleListHtml.push('<tr id ="scheduleCreate_tr'+trCnt+'" class="trschedule" data-rowid = "'+trCnt+'" >');
-		scheduleListHtml.push('<th class = "required">근무시간'+trCnt+'</th >');
-		scheduleListHtml.push('<td>');
-		scheduleListHtml.push('<input type="text"  id = "scheduleCreate_start_date'+trCnt+'" class="datepicker startDate" >');
-		scheduleListHtml.push('<em class="fromto"> ~ </em>');
-		scheduleListHtml.push('<input type="text" id = "scheduleCreate_end_date'+trCnt+'" class="datepicker endDate"> ');
-		scheduleListHtml.push('<select   name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleCreate_startTime'+trCnt+'" ></select>');
-		scheduleListHtml.push('<em class="fromto"> ~ </em>');
-		scheduleListHtml.push('<select  name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime'+trCnt+'" ></select> ');
-	if(trCnt == 1){
-		scheduleListHtml.push('<button class="t-btn cr01" id="scheduleCreate_rowAddBtn" onclick="popSchCreate.button.rowAddClickEvent()" >추가</button></td></tr>');
-	}else{
-		scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
-	}
-	$('#scheduleCreate_Body').append(scheduleListHtml.join(''));
-	 
-	deferred.resolve(trCnt,lastdate);
-	return deferred.promise();
-}
-
-function getParams(){
-	var params = [] 
-	
-	$(".trschedule").each(function(){
-		var rowid = $(this).data("rowid");
-		var startTimeCode = Number($("#scheduleCreate_startTime"+rowid ).val());
-		var endTimeCode  =  Number($("#scheduleCreate_endTime"+rowid ).val())
-		for (var i = startTimeCode; i <= endTimeCode; i++) {
-			params.push({
-			    bldCode      : $("#scheduleCreate_bldCombo" ).val(),
-		        mssrEmpno    : $("#scheduleCreate_mssrCombo").val(),
-		        bedCode      : $("#scheduleCreate_bedCombo").val(),
-				startDate    : $("#scheduleCreate_start_date"+rowid).val(), //근무 시작일
-				endDate      : $("#scheduleCreate_end_date"+rowid).val(), //근무 종료일  */
-				resveTime    : i, //시간코드  */
-				//startTimeCode: $("#scheduleCreate_startTime"+rowid ).val(), //시작 시간 코드
-				//endTimeCode  : $("#scheduleCreate_endTime"+rowid ).val(),	  // 종료 시간 코드 	 */
-			});	
-		
+		validation: {
+			 required:function(){
+				 var chk = true;
+				 var returnMsg="등록된값이 없습니다"
+					$(".required").nextAll("td").children("input,select").each(function(){
+					  if ($(this).val()==null||$(this).val()==""){
+						  returnMsg = $(this).parent().prev().text() +returnMsg;
+						  $(".rv-desc").show();
+						  $("#requiredMsg").text(returnMsg);
+						  chk = false
+						  return false;
+					  };
+					});  
+				 return chk;
+					 
+			 },
+			 
+			 timeCheck: function(){
+				 var chk = true;
+				 $('select[id^=scheduleCreate_startTime]').each(function(i,e){
+					 var startTm = $('#'+e.id);
+					 var endTm = $('#scheduleCreate_endTime' + e.id.replace('scheduleCreate_startTime',''));
+					 
+					 if(startTm.val()>endTm.val()){
+						 //alertPopup('시작시간이 종료시간보다 클 수 없습니다.');
+						 $("#requiredMsg").text(getMessage('error.timeCompareStartEnd'));
+						 $(".rv-desc").show();
+						 chk = false;
+					 }						
+				 })
+				 return chk;
+			 }
 		}
-				
-	});	
-	return params;
-}
+	}
+
+	function fnRowDelete(){
+		    var id = event.target.parentNode.parentNode.id;
+		    $('#'+id).remove();
+			  $("#scheduleCreate_Body  tr").each(function(index){
+				     rowidrest = this;
+				     index += 1
+				     $(rowidrest).children("th").text("근무시간 "+index)
+				     $(rowidrest).attr({"id":"scheduleCreate_tr"+index ,"data-rowid":index});
+				     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "cheduleCreate_"+ this.name+ index })  
+				    
+				});
+			
+		}
+		
+	function addRow (){
+		var deferred = $.Deferred();
+		var trCnt =$(".trschedule").length + 1
+		var lastdate = (trCnt==1)? moment() : moment($('.datepicker:last').val(),"YYYYMMDD"); 
+		var scheduleListHtml = [];
+		if(trCnt >5){ deferred.reject(''); return false;}
+			scheduleListHtml.push('<tr id ="scheduleCreate_tr'+trCnt+'" class="trschedule" data-rowid = "'+trCnt+'" >');
+			scheduleListHtml.push('<th class = "required">근무시간'+trCnt+'</th >');
+			scheduleListHtml.push('<td>');
+			scheduleListHtml.push('<input type="text"  id = "scheduleCreate_start_date'+trCnt+'" class="datepicker startDate" >');
+			scheduleListHtml.push('<em class="fromto"> ~ </em>');
+			scheduleListHtml.push('<input type="text" id = "scheduleCreate_end_date'+trCnt+'" class="datepicker endDate"> ');
+			scheduleListHtml.push('<select   name ="startTime" data-code-tyl="RVT" data-code-tys="RVTSTART" id="scheduleCreate_startTime'+trCnt+'" ></select>');
+			scheduleListHtml.push('<em class="fromto"> ~ </em>');
+			scheduleListHtml.push('<select  name ="endTime"  data-code-tyl="RVT" data-code-tys="RVTEND"  id="scheduleCreate_endTime'+trCnt+'" ></select> ');
+		if(trCnt == 1){
+			scheduleListHtml.push('<button class="t-btn cr01" id="scheduleCreate_rowAddBtn" onclick="popSchCreate.button.rowAddClickEvent()" >추가</button></td></tr>');
+		}else{
+			scheduleListHtml.push("<button name='delBtn' class='t-btn cr01' onclick='fnRowDelete(event)'>삭제</button></td></tr>"); 
+		}
+		$('#scheduleCreate_Body').append(scheduleListHtml.join(''));
+		 
+		deferred.resolve(trCnt,lastdate);
+		return deferred.promise();
+	}
+	
+	function getParams(){
+		var params = [] 
+		
+		$(".trschedule").each(function(){
+			var rowid = $(this).data("rowid");
+			var startTimeCode = Number($("#scheduleCreate_startTime"+rowid ).val());
+			var endTimeCode  =  Number($("#scheduleCreate_endTime"+rowid ).val())
+			for (var i = startTimeCode; i <= endTimeCode; i++) {
+				params.push({
+				    bldCode      : $("#scheduleCreate_bldCombo" ).val(),
+			        mssrEmpno    : $("#scheduleCreate_mssrCombo").val(),
+			        bedCode      : $("#scheduleCreate_bedCombo").val(),
+					startDate    : $("#scheduleCreate_start_date"+rowid).val(), //근무 시작일
+					endDate      : $("#scheduleCreate_end_date"+rowid).val(), //근무 종료일  */
+					resveTime    : i, //시간코드  */
+					//startTimeCode: $("#scheduleCreate_startTime"+rowid ).val(), //시작 시간 코드
+					//endTimeCode  : $("#scheduleCreate_endTime"+rowid ).val(),	  // 종료 시간 코드 	 */
+				});	
+			}		
+		});	
+		return params;
+	}
 
 $(document).ready(function(){		
-	
 	popSchCreate.init();
-	//popSchCreate.button.rowAddClickEvent()
-	
+
 })
   
 </script>

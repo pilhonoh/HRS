@@ -118,6 +118,7 @@
 			CASE 		
 		        WHEN REG_EMPNO != #{empno} AND ADM_EMPNO IS NOT NULL THEN '관리자'
 		        WHEN REG_EMPNO = 'SYSTEM' THEN '시스템'
+		        WHEN REG_EMPNO = 'WAITCNCL' THEN '시스템'
 				ELSE HNAME
 			END AS REG_EMPNM,
 			STTUS_CODE,

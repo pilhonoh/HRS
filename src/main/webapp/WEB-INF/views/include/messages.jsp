@@ -18,6 +18,7 @@ var messages = {
 	'error.invalidEndDate' : '<spring:message code="error.invalidEndDate" javaScriptEscape="true" />',
 	'error.dateCompareStartEnd' : '<spring:message code="error.dateCompareStartEnd" javaScriptEscape="true" />',
 	'error.timeCompareStartEnd' : '<spring:message code="error.timeCompareStartEnd" javaScriptEscape="true" />',
+	'error.alreadyConfirm' : '<spring:message code="error.alreadyConfirm" javaScriptEscape="true" />',
 }
 
 /**

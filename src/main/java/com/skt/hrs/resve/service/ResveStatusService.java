@@ -149,6 +149,32 @@ public class ResveStatusService {
 	
 	/**
 	 * 
+	 * @설명 : 당일 예약/대기건수 조회 
+	 * @작성일 : 2019.10.02
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectDayCount(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		
+		// 금일 예약건이 존재하는경우		
+		param.put("nextResveTm", DateUtil.getNextResveTm());
+		Map dayCount = resveStatusDAO.selectDayCount(param);
+				
+		if(!"0".equals(dayCount.get("RESVE_CNT").toString()) || !"0".equals(dayCount.get("WAIT_CNT").toString())) {
+			throw new HrsException("error.duplicateDayResve", new String[] {
+				DateUtil.yyyymmdd2HumanReadableWithWeekday(param.getString("resveDe"))
+			},true);	//"2019-09-01(월) 예약/대기 1건이 접수되어\\n추가 신청이 불가합니다."
+		}
+		  
+		return result;
+	}
+
+	
+	/**
+	 * 
 	 * @설명 : 예약 등록
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
@@ -561,10 +587,27 @@ public class ResveStatusService {
 		 ****************************/
 		// 현황 update
 		param.put("updtEmpno", param.get("empno"));
-		param.put("comptYn", 'Y');
+		param.put("comptYn", "Y");	// 완료여부 Y
+		
+		// 10.04 추가 - 대기자삭제 (대기취소)
+		param.put("waitEmpno", "");
+		
 		boolean updateResult = resveStatusDAO.updateResveStatus(param);
 		
+				
 		// 이력 insert
+		
+		// 10.04 추가 - 대기자가 있다면 대기취소
+		if(resveItem.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(resveItem.get("WAIT_EMPNO").toString())) {	
+			// 대기취소 입력
+			param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());
+			param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+			param.put("regEmpno", "WAITCNCL");
+			resveStatusDAO.insertResveHist(param);
+		}
+		
+		
+		// 케어완료 입력
 		param.put("sttusCode", ResveStatusConst.DBSTATUS.COMPT.toString());
 		param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 		param.put("regEmpno", param.get("empno"));
@@ -749,6 +792,68 @@ public class ResveStatusService {
 		}
 	}
 	
-	
-	
+	/**
+	 * 
+	 * @설명 : 전일 노쇼 이력 저장 
+	 * 			- 전일 노쇼이력 hist테이블에 저장
+	 * @작성일 : 2019.10.02
+	 * @작성자 : P149365
+	 * @return
+	 * @변경이력 :
+	 */
+	@Transactional
+	public ResponseResult insertNoShowHist() {
+		ResponseResult result = new ResponseResult();
+		List<Map> noshowList = resveStatusDAO.selectNoShowResve();
+		
+		if(noshowList != null && noshowList.size() > 0) {			
+			DataEntity param;
+			boolean processResult = true;
+			for(Map item : noshowList) {
+				param = new DataEntity();
+				
+				
+				param.put("resveNo", item.get("RESVE_NO").toString());
+				
+				
+				// 현황 update				
+				param.put("updtEmpno", "WAITCNCL");								
+				// 10.04 추가 - 대기자삭제 (대기취소)
+				param.put("waitEmpno", "");				
+				processResult = processResult && resveStatusDAO.updateResveStatus(param);
+				
+						
+				// 이력 insert
+				
+				// 10.04 추가 - 대기자가 있다면 대기취소
+				if(item.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(item.get("WAIT_EMPNO").toString())) {	
+					// 대기취소 입력
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());
+					param.put("targetEmpno", item.get("WAIT_EMPNO").toString());
+					param.put("regEmpno", "WAITCNCL");
+					resveStatusDAO.insertResveHist(param);
+					
+					logger.info("대기취소 등록 ===> 예약번호 : {}, 대기자사번 : {}", 
+							item.get("RESVE_NO").toString(),
+							item.get("WAIT_EMPNO").toString());
+				}
+				
+				// 노쇼입력
+				param.put("sttusCode", ResveStatusConst.DBSTATUS.NOSHOW.toString());
+				param.put("targetEmpno", item.get("RESVE_EMPNO").toString());
+				param.put("regEmpno", "SYSTEM");
+				processResult = processResult && resveStatusDAO.insertResveHist(param);
+								
+				logger.info("전일 노쇼 이력 등록 ===> 예약번호 : {}, 예약자사번 : {}", 
+						item.get("RESVE_NO").toString(),
+						item.get("RESVE_EMPNO").toString());
+			}
+			
+			if(!processResult) {
+				throw new HrsException("error.processFailure", true);
+			}
+		}
+		result.setItemList(noshowList);
+		return result;
+	}
 }

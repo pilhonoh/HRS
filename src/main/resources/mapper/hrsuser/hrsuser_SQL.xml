@@ -7,7 +7,11 @@
 		SELECT A.EMPNO,
 			A.HNAME,
 		    CASE WHEN A.T_SEX = '2' THEN 'F' ELSE 'M' END AS T_SEX,
-		    A.PLACE,
+		    CASE 
+				WHEN A.PLACE IN ('SK06','SK10','SK07','SK85') THEN 'SK06'
+		        WHEN A.PLACE IN ('SK09','SK18') THEN 'SK09'
+		        ELSE 'SK01'
+			END PLACE,
 		    B.AUTH_CODE,
 		    B.BLD_CODE
 		FROM inf_person_info_rcv A

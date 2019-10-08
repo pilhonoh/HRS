@@ -75,10 +75,12 @@ public class ResveListService {
 		List<Map> list = resveListDAO.selectResveDetailList(param);
 		List<Map> retList = new ArrayList<Map>();
 		for(Map item : list) {
+			// 시스템이 예약완료 한 경우 -> (대기취소 + 예약완료) = 승계완료
 			if("SYSTEM".equals(item.get("REG_EMPNO"))) {
-				if(ResveStatusConst.DBSTATUS.RESVE_COMPT.toString().equals(item.get("STTUS_CODE"))) {
+				
+				if(ResveStatusConst.DBSTATUS.RESVE_COMPT.toString().equals(item.get("STTUS_CODE"))) {		// 예약완료 => 승계완료
 					item.put("STTUS_CODE_NM", "승계완료");
-				}else {
+				}else if(ResveStatusConst.DBSTATUS.WAIT_CANCL.toString().equals(item.get("STTUS_CODE"))){	// 시스템에 의한 대기취소는 무시
 					continue;
 				}
 				item.remove("REG_EMPNO");

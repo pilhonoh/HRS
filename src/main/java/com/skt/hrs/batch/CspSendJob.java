@@ -37,8 +37,10 @@ public class CspSendJob {
 	/**
 	 */
 	protected void execute() {
-		
-		try {
+		String opt = System.getProperty("hrs.batch");
+		if(opt != null && opt.equals("true")) {
+			try {
+				
 				int undeliveredTotalCnt = 0; // 전체 토탈
 				int undeliveredSmsCnt = 0;
 				int undeliveredMailCnt = 0;
@@ -104,7 +106,7 @@ public class CspSendJob {
 						CspSendJob.class.getSimpleName(), 
 						"미전송된 총 목록", 
 						undeliveredTotalCnt);
-
+	
 				logger.info(  "{} SMS {} : {} Transfer: {} Untransfer: {} ",
 						CspSendJob.class.getSimpleName(), 
 						"미전송된 총 목록", 
@@ -118,16 +120,16 @@ public class CspSendJob {
 						undeliveredMails.size(),
 						undeliveredMailCnt, 
 						(undeliveredMails.size() - undeliveredMailCnt));
-
+	
 				logger.info(":::::{} SMS/MAIL job {} ", 
 						CspSendJob.class.getSimpleName(),
 						"실행에 성공하였습니다" + " ::::: ");
 				
-
-		} catch (Exception e) {
-			logger.error("{} MEMO/SMS/MAIL Error Message : {} ", CspSendJob.class.getSimpleName(), e.getMessage());
+	
+			} catch (Exception e) {
+				logger.error("{} MEMO/SMS/MAIL Error Message : {} ", CspSendJob.class.getSimpleName(), e.getMessage());
+			}
 		}
-
 	}
 	
 	/**

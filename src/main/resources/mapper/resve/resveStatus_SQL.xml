@@ -135,36 +135,7 @@
 		INNER JOIN MASSEUR B
 		ON A.MSSR_EMPNO = B.EMPNO
 		WHERE RESVE_NO = #{resveNo}		
-	</select>
-	
-	<!-- 30분전 SMS알림용 쿼리 -->
-	<select id="selectResveNotifyList" resultType="hashmap">
-		SELECT A.*,
-		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BLD' AND CODE = A.BLD_CODE) AS BLD_NM,
-		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BED' AND CODE_TYS=A.BLD_CODE AND CODE = A.BED_CODE) AS BED_NM
-		FROM RESVE_STTUS A
-		WHERE A.RESVE_DE=DATE_FORMAT(NOW(),'%Y%m%d')
-		AND A.RESVE_TM = (
-			SELECT CODE
-			FROM CMMN_CODE
-			WHERE CODE_TYL = 'RVT'
-			<!-- AND LEFT(CODE_NM,2) = DATE_FORMAT(NOW(), '%H') -->		<!-- 동시간 예약 조회 (정각에 30분뒤 조회) -->
-			AND LEFT(CODE_NM,2) = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 HOUR), '%H')	<!-- 다음시간 예약 조회 (30분에 다음시간 조회) -->
-		)
-		AND A.CANCL_YN != 'Y'
-		AND A.RESVE_EMPNO != '' 
-		AND A.RESVE_EMPNO IS NOT NULL
-	</select>
-	
-	<!-- 지난시간 대기 취소처리 대상 조회-->
-	<select id="selectWaitCancelTarget" parameterType="map" resultType="hashmap">
-		SELECT *
-		FROM resve_sttus
-		WHERE RESVE_DE = DATE_FORMAT(CURRENT_DATE,'%Y%m%d')
-		AND RESVE_TM <![CDATA[<]]> #{nextResveTm}
-		AND (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != '')
-		AND CANCL_YN != 'Y'
-	</select>
+	</select>		
 	
 	<!-- 예약현황 update -->
 	<update id="updateResveStatus" parameterType="map">
@@ -196,4 +167,60 @@
 		VALUES (#{resveNo}, #{sttusCode}, #{regEmpno}, now(6), #{targetEmpno} )
 	</insert>
 	
+	
+	<!-- ######### 배치 관련 쿼리 ############ -->
+	
+	<!-- 30분전 SMS알림용 쿼리 -->
+	<select id="selectResveNotifyList" resultType="hashmap">
+		SELECT A.*,
+		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BLD' AND CODE = A.BLD_CODE) AS BLD_NM,
+		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL='BED' AND CODE_TYS=A.BLD_CODE AND CODE = A.BED_CODE) AS BED_NM
+		FROM RESVE_STTUS A
+		WHERE A.RESVE_DE=DATE_FORMAT(NOW(),'%Y%m%d')
+		AND A.RESVE_TM = (
+			SELECT CODE
+			FROM CMMN_CODE
+			WHERE CODE_TYL = 'RVT'
+			<!-- AND LEFT(CODE_NM,2) = DATE_FORMAT(NOW(), '%H') -->		<!-- 동시간 예약 조회 (정각에 30분뒤 조회) -->
+			AND LEFT(CODE_NM,2) = DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 1 HOUR), '%H')	<!-- 다음시간 예약 조회 (30분에 다음시간 조회) -->
+		)
+		AND A.CANCL_YN != 'Y'
+		AND A.RESVE_EMPNO != '' 
+		AND A.RESVE_EMPNO IS NOT NULL
+	</select>
+	
+	<!-- 지난시간 대기 취소처리 대상 조회-->
+	<select id="selectWaitCancelTarget" parameterType="map" resultType="hashmap">
+		SELECT *
+		FROM resve_sttus
+		WHERE RESVE_DE = DATE_FORMAT(CURRENT_DATE,'%Y%m%d')
+		AND RESVE_TM <![CDATA[<]]> #{nextResveTm}
+		AND (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != '')
+		AND CANCL_YN != 'Y'
+	</select>
+	
+	<!-- 전일 노쇼 이력 추가 -->
+	<insert id="insertNoShowHist" parameterType="int">
+		INSERT INTO RESVE_HIST (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
+		SELECT RESVE_NO, 'STS06', 'SYSTEM', NOW(6), RESVE_EMPNO
+		FROM RESVE_STTUS
+		WHERE RESVE_DE = DATE_FORMAT(SUBDATE(CURRENT_DATE, 1),'%Y%m%d')
+		AND CANCL_YN != 'Y'
+		AND COMPT_YN != 'Y'
+		<!-- AND SUCCS_YN != 'Y' --> 	<!-- /* 승계된 예약도 노쇼 처리, 패널티는 없음. */ -->
+		AND RESVE_EMPNO != '' 
+		AND RESVE_EMPNO IS NOT NULL 
+	</insert>	
+	
+	<!-- 전일 노쇼 조회 -->
+	<select id="selectNoShowResve" parameterType="map" resultType="hashmap">
+		SELECT *
+		FROM RESVE_STTUS
+		WHERE RESVE_DE = DATE_FORMAT(SUBDATE(CURRENT_DATE, 1),'%Y%m%d')
+		AND CANCL_YN != 'Y'
+		AND COMPT_YN != 'Y'
+		<!-- AND SUCCS_YN != 'Y' --> 	<!-- /* 승계된 예약도 노쇼 처리, 패널티는 없음. */ -->
+		AND RESVE_EMPNO != '' 
+		AND RESVE_EMPNO IS NOT NULL
+	</select>
 </mapper>
