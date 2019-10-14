@@ -296,7 +296,7 @@ public class MssrService {
 				 param.put("resveTime",DeleteTime[i]);
 				 Map item = mssrDAO.selectResveItem(param);
 				
-				 if(item.get("resveNo").toString()!="0") {
+				 if(!"0".equals(item.get("resveNo").toString())) {
 					 param.put("RESVE_NO",item.get("resveNo").toString());
 					    insertResult = mssrDAO.deleteResve(param); 
 						if(!(insertResult)) { 
@@ -331,7 +331,6 @@ public class MssrService {
 		    	paramsMap.put("canclYn", "Y");
 		    	paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
 
-		    	
 		    	updateResult = mssrDAO.deleteResve(paramsMap); 
                  
 				if(!(updateResult)) { 
@@ -357,7 +356,7 @@ public class MssrService {
   public void sendSms(DataEntity param) {
 	 // ResponseResult result = new ResponseResult(); 
 	   Map smsItem = mssrDAO.selectSmsInfoGet(param);
-	   if(!StringUtil.isEmpty(smsItem.get("COMPT_YN").toString())&& smsItem.get("COMPT_YN").toString() == "N") { 	
+	   if(!StringUtil.isEmpty(smsItem.get("COMPT_YN").toString()) &&  "N".equals(smsItem.get("COMPT_YN").toString())) { 	
 		   if(!StringUtil.isEmpty(smsItem.get("RESVE_EMPNO").toString())) {
 				smsItem.put("targetEmpno", smsItem.get("RESVE_EMPNO").toString());
 		       cspService.insertCspSMS(smsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
