@@ -602,7 +602,6 @@ var scheduleList = {
 				    $(this).prop("checked",chkstat)
 				});
 					
-					
 				
 			})
 		}	

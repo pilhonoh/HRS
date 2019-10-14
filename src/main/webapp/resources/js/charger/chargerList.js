@@ -9,8 +9,9 @@ var ChargerList = {
 	    ChargerList.list.renderChargerList(); //목록 조회 후 렌더
 		ChargerList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		ChargerList.button.chargerRegisterCreateBtnEvent();
+		ChargerList.button.chargerRegisterDeleteBtnEvent();
 	    ChargerList.button.chargerExcelDownBtnEvent();
-	/*	ChargerList.checkboxEvent.checkall();*/
+		ChargerList.checkboxEvent.checkall();
 	},
 	
 	
@@ -161,7 +162,7 @@ var ChargerList = {
 						for (var i in resultList) {						
 							chargerListHtml.push('<tr>');
 							chargerListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].EMPNO +'"></td>');
-							chargerListHtml.push('	<td>' + (Number(i) + 1) + '</td>');
+							chargerListHtml.push('	<td>' +resultList[i].NUM + '</td>');
 							chargerListHtml.push('	<td>' + resultList[i].EMPNO + '</td>');
 							chargerListHtml.push('	<td><a name="modifyBtn" herf="#none" data-chargerempno="'+resultList[i].EMPNO+'" >' + resultList[i].HNAME + '</td>');
 							chargerListHtml.push('	<td>' + resultList[i].DEPTNM + '</td>');
@@ -353,15 +354,59 @@ var ChargerList = {
 				ChargerList.list.renderChargerList();
 			});
 		},
-		//관리사스케줄등록
+		//관리자등록		
 		chargerRegisterCreateBtnEvent: function(){
-		  $("button#createBtn ,a[name='modifyBtn']").on('click',function(){  
-			 
+		  $("#createBtn").off('click').on('click',function(){  
+			
 			   var popParam = { EMPNO:$(this).data("chargerempno")}
 			   console.log(popParam)
 			    ChargerList.popup.showChargerRegisterSavePopup(popParam);  
 		  });
 		  
+		  $("a[name='modifyBtn']").on('click',function(){  
+				 
+			   var popParam = { EMPNO:$(this).data("chargerempno")}
+			   console.log(popParam)
+			    ChargerList.popup.showChargerRegisterSavePopup(popParam);  
+		  });
+		},
+		chargerRegisterDeleteBtnEvent:function(){
+			
+			$("#deleteBtn").on('click',function(){  
+				 
+						  var delEmpNo = [] ;
+						  
+						  var meassage = '';
+						  $('tbody#chargerList input:checkbox:checked').each(function(){
+							  
+							  	delEmpNo.push($(this).val());	
+							 
+						  });
+						  
+						  if(delEmpNo.length == 0){
+							  alertPopup('삭제할 스케쥴을 선택하세요.');
+							  return false;
+						  }
+						  
+						  confirmPopup('총' + delEmpNo.length + '건을 삭제하시겠습니까?', function(){					  					
+							$.ajax({
+									url: ROOT + '/charger/chargerDelete',
+									type: 'POST',
+									data:{deleteEmpNo:delEmpNo.toString()}  ,
+									success : function(res){
+									
+										ChargerList.list.renderChargerList();
+										$("#checkAll").prop('checked',false);
+										alertPopup('삭제되었습니다.');
+									},
+									error : function(err) {
+										console.error(err)
+									}
+							  });
+						  })
+						  
+					  });					
+			
 		},
 
 		chargerExcelDownBtnEvent:function(){
@@ -371,14 +416,7 @@ var ChargerList = {
 			  });	
 		}
 	},
-	
-	refresh :{ 
-		/*inputbox:function(){
-			$("#checkAll").prop('checked',false);
-			
-		}
-		*/
-	},
+
 	
 	validation: {
 		//날짜 필드 값 체크
@@ -424,7 +462,7 @@ var ChargerList = {
 			
 			$("#checkAll").on("change",function(){
 				 var chkstat = $("#checkAll").prop("checked");
-				$("#ChargerList input[type=checkbox]").each(function(){
+				$("#chargerList input[type=checkbox]").each(function(){
 				
 				    $(this).prop("checked",chkstat)
 				});

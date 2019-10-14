@@ -53,6 +53,7 @@
 <script>
 var popRegCreate = {
 		init: function() {
+			loadCodeSelect()
 			popRegCreate.button.popSaveClickEvent();
 			
 		},
@@ -121,28 +122,9 @@ var popRegCreate = {
 			},
 		   empCheckClickEvent:function(){
 			  $("#chargerRegister_getEmpInfo").on('click',function(){
-				  popRegCreate.params.chargerEmpno = $("#chargerRegister_chargerEmpNo").val();
-				  launchOrgChart()
-				  
-				  /*  if(popRegCreate.params.chargerEmpno ==''){
-					  $(".rv-desc").show();
-					  $("#requiredMsg").text("사번을 입력하세요.");
-					  return false;
-				  }
-				  $.ajax({
-						url: ROOT + '/charger/chargerEmpNoCheck',
-						type: 'POST',
-						data: popRegCreate.params ,
-						success : function(res){
-							popRegCreate.validation.empDupCheck(res.item);
-						},
-						error : function(err) {
-							var json = JSON.parse(err.responseText);
-							alertPopup(json.message);
-						} 
-					}); */
-  
-				  
+				  document.domain  = g_newDomain
+				  om_OpenOrgChart({ callback: popRegCreate.validation.empDupCheck, title: '유저/부서 단일선택', data: null , oneSelect: true });
+				 
 			  }) 
 			   			   
 		   }
@@ -174,40 +156,48 @@ var popRegCreate = {
 				 return chk;
 					 
 			 },
-			 empDupCheck:function(value){
-			     if(value){
-				  $("#requiredMsg").text("등록된 사번이 있습니다");
-			     }
-			     popRegCreate.elementLock(value)
-					 
-			 }		 
-			
+			 empDupCheck:function(result){
+				 var orgchartObj = JSON.parse(result);
+				 popRegCreate.params.chargerEmpno = orgchartObj[0].UserID.toUpperCase()
+				 $("#chargerRegister_chargerEmpNo").val(popRegCreate.params.chargerEmpno)
+				 $("#chargerRegister_Name").val(orgchartObj[0].UserName)
+				 $("#chargerRegister_Dept").val(orgchartObj[0].DeptName) 
+				$.when(orgchart_callback()).done(function(value){
+				     if(value){
+					  $("#requiredMsg").text("등록된 사번이 있습니다");
+				     }
+			     popRegCreate.validation.elementLock(value)	 
+			 })	
 		},
 		elementLock:function(value){
-			if(popRegCreate.params.saveStat =='C'){
-				$("#chargerRegister_getEmpInfo").css('display',(value)?'':'none');
-				//$(".rv-desc").css('display',(value)?'':'none');
-		
-			}else{
-				$("#chargerRegister_chargerEmpNo").prop("disabled",value);
-				$("#chargerRegister_getEmpInfo").css('display',(value)?'none':'');
-			}
+		if(popRegCreate.params.saveStat =='C'){
+			$(".rv-desc").css('display',(value)?'':'none');
+			$("#chargerRegister_saveBtn").prop("disabled",value);
+		}else{
+			$("#chargerRegister_chargerEmpNo").prop("disabled",value);
+			$("#chargerRegister_getEmpInfo").css('display',(value)?'none':'');
+		} 
 			
 		}
 	}
-
-function launchOrgChart() {
-    om_OpenOrgChart({ callback: orgchart_callback, title: '유저/부서 단일선택', data: popRegCreate.params.chargerEmpno, oneSelect: true });
 }
 
-function orgchart_callback(result)
-{
- $('#chargerRegister_chargerEmpNo').val(result);
-    var orgchartObj = JSON.parse(result);
-    if(orgchartObj.length > 0){
-   //  $('#userId'  ).val(orgchartObj[0].UserID.toUpperCase()); // 소문자 user id 도 있음. 그룹에서는 대문자 user id 임    
-   //  $('#userName').val(orgchartObj[0].UserName);
-    };
+function orgchart_callback(){ 	
+	var deferred = $.Deferred();
+    	$.ajax({
+			url: ROOT + '/charger/chargerEmpNoCheck',
+			type: 'POST',
+			data: popRegCreate.params ,
+			success : function(res){
+				deferred.resolve(res.item);
+			},
+			error : function(err) {
+				var json = JSON.parse(err.responseText);
+				alertPopup(json.message);
+			} 
+		}); 
+
+    return deferred.promise();
 };
 
 
@@ -216,17 +206,17 @@ $(document).ready(function(){
 	var data = JSON.parse(item);
 	popRegCreate.init();
 	popRegCreate.params.chargerEmpno = data.EMPNO;
-	loadCodeSelect(function(){
-		if(data.EMPNO !="" ){
+	
+	if(data.EMPNO !="" ){
 			popRegCreate.params.saveStat="U" 
 			popRegCreate.setparam();
-			//popRegCreate.elementLock(true);
+		    popRegCreate.validation.elementLock(true);
 			
 		}else{
 			popRegCreate.params.saveStat="C"
 		    popRegCreate.button.empCheckClickEvent();
 		}	
-	}, '#chargerRegister_enter'); 
+
 	
 })
   

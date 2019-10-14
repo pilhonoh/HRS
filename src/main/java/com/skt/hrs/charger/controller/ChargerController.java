@@ -135,14 +135,13 @@ public class ChargerController {
 	}
 	
 	  
-	/*
-	 * @RequestMapping(value = "/mssrEmpNoCheck") public @ResponseBody
-	 * ResponseResult selectEmpNoCheck(HttpServletRequest req, HttpSession res){
-	 * DataEntity param = HttpUtil.getServletRequestParam(req); return
-	 * chargerService.selectEmpNoCheck(param);
-	 * 
-	 * }
-	 */
+	
+	@RequestMapping(value = "/chargerEmpNoCheck")
+	public @ResponseBody ResponseResult selectEmpNoCheck(HttpServletRequest req, HttpSession res){
+	  DataEntity param = HttpUtil.getServletRequestParam(req); return
+	  chargerService.selectEmpNoCheck(param);
+	}
+	 
 	
 	/**
 	 * 
@@ -161,6 +160,14 @@ public class ChargerController {
 		param.put("regEmpNo", loginVo.getEmpno()); //등록자사번
 				
 		return  chargerService.chargerSave(param);
+	}
+	@RequestMapping(value = "/chargerDelete", method = RequestMethod.POST)
+	public @ResponseBody ResponseResult deleteCharger(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("regEmpNo", loginVo.getEmpno()); //등록자사번
+				
+		return  chargerService.deleteCharger(param);
 	}
 	
 

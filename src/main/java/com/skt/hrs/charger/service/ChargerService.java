@@ -116,14 +116,27 @@ public class ChargerService {
 		if(!(saveResult)) { 
 			throw new HrsException("error.processFailure", true);
 		 } 	
-   
-		
+   	
 		return result;
 	}
 	
 
+	@Transactional
+	public  ResponseResult deleteCharger(DataEntity param) {
+		  ResponseResult result = new ResponseResult(); 
+		  String[] deleteEmpNo = param.split("deleteEmpNo",",");
+	      boolean updateResult = false;	 
+		    for (int i = 0; i < deleteEmpNo.length; i++) {
+		    	param.put("chargerEmpno",deleteEmpNo[i]);
+		    	updateResult = chargerDAO.deleteCharger(param); 
+                 
+				if(!(updateResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 }		
+           } 
+		result.setItemOne(updateResult);
+		// data적용 성공여부
+		return result;
+	}
 	
-	
-
-			
 }

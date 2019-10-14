@@ -80,7 +80,13 @@ public class ChargerDAO {
 		  } 
 		  return false; 
 	}
-	  
+	 public boolean deleteCharger(DataEntity param) { 
+		  int result = sqlSession.update("chargerMapper.deleteCharger", param); 
+		  if(result == 1) { 
+			  return true; 
+		  } 
+		  return false; 
+	}
 	  /**
 		 * 
 		 * @설명 : 관리사  정보 

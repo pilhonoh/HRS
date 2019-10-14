@@ -6,14 +6,15 @@
 
 
 	<sql id="COMMON_PAGING_HEADER">
-		SELECT R1.*, IFNULL(FOUND_ROWS(),0) as total_cnt FROM (
+		SELECT @ROWNUM:= @ROWNUM +1 as NUM  ,R1.*, IFNULL(FOUND_ROWS(),0) as total_cnt FROM (
 	</sql>
 	
 	
 
 	<sql id="COMMON_PAGING_TAIL">
-		) R1
+		) R1 ,(SELECT @ROWNUM := #{startRow, jdbcType=INTEGER})TEMP
 		LIMIT #{rowPerPage, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
+	               
 	</sql>
 	
 	
@@ -30,6 +31,7 @@
 	
 
 	<select id="selectChargerList" parameterType="map" resultType="hashmap">
+	  
 		<include refid="COMMON_PAGING_HEADER"/>
 			 SELECT A.EMPNO
 		      ,B.HNAME
@@ -41,15 +43,16 @@
 		FROM CHARGER A JOIN INF_PERSON_INFO_RCV B ON A.EMPNO = B.EMPNO
 		               JOIN CMMN_CODE AUTH ON A.AUTH_CODE = AUTH.CODE AND AUTH.CODE_TYL ='AUT'
 		               JOIN CMMN_CODE BLD ON A.BLD_CODE = BLD.CODE AND BLD.CODE_TYL ='BLD'
-                                 
 			<if test='bldCode != null and bldCode != ""'>
 			 AND BLD_CODE = #{bldCode}
 			</if>
 			<if test='authCode != null and authCode != ""'>
 			    AND A.AUTH_CODE  = #{authCode}
 			</if>
+			
 			    GROUP BY  A.EMPNO  
 		<include refid="COMMON_PAGING_TAIL"/>
+		
 	</select>
 
 
@@ -70,7 +73,7 @@
 	
 	<!-- 관리사 스케쥴 리스트 전체 ROW COUNT 값 조회 -->
 	<select id="selectEmpNoCheck" parameterType="map" resultType="int">
-	 SELECT IFNULL(COUNT(*),0) AS EmpNoCheck  FROM MASSEUR WHERE EMPNO  =  #{mssrEmpno}
+	 SELECT IFNULL(COUNT(*),0) AS EmpNoCheck  FROM charger WHERE EMPNO  =  #{chargerEmpno}
 	</select>
 	 
 	<insert id="insertCharger"  parameterType="map" >     
@@ -87,4 +90,7 @@
 		WHERE EMPNO = #{chargerEmpno}
      </update>
 	
+	<delete id="deleteCharger" parameterType="map" >   
+     DELETE FROM CHARGER WHERE EMPNO = #{chargerEmpno}
+     </delete>
 </mapper>
