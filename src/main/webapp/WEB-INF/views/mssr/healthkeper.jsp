@@ -22,13 +22,14 @@
 				<ul class="tab-design">
 					<li rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
 					<li rel="tab2"><a href="${ROOT}/admin/resveMgmt">예약 정보 조회 및 변경</a></li>
-					<li class="on" rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 등록</a></li>					
-					<li rel="tab4"><a href="#none">담당자 등록</a></li>
+					<li class="on" rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>					
+					<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
 					<li rel="tab5"><a href="#none">공통코드 관리</a></li>
+					<%-- <li rel="tab6"><a href="${ROOT}/mssr/mssrblacklist">No-Show 관리</a></li> --%>
 					<li rel="tab6"><a href="#none">No-Show 관리</a></li>
 				</ul>
 				<div class="sub-tit">
-					<h2>헬스키퍼 현황</h2>
+					<h2>헬스키퍼 관리</h2>
 				</div>
 				
 				<div class="search_field_wrap">
@@ -36,14 +37,15 @@
 						<table class="search_field">
 							<tbody>
 								<tr>
-									<th><strong class="stit">검색조건</strong></th>
+									<th><strong class="stit">사옥</strong></th>
 									<td>
-										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="bldCombo">
+										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="전체" id="bldCombo">
 										</select>										
 									</td>
+									<th><strong class="stit">재직여부</strong></th>
 									<td>
 										<select style="width:120px;" id="hffcCombo">
-											<option value="">재직여부</option>
+											<option value="">전체</option>
 											 <option value="Y">Y</option>
 											<option value="N">N</option>
 										</select>
@@ -65,23 +67,21 @@
 
 				<table class="tbl-style t_center tbl-hover ">
 					<colgroup>
-						<col style="width:10%;">						
-						<col style="width:15%;">
+						<col>						
 						<col>
-						<col style="width:15%;">
+						<col>
+						<col>
 						<col style="width:10%;">
-						<col style="width:10%;">
-						<col style="width:15%;">
+						<col>
 						<col style="width:10%;">
 					</colgroup>
 					<thead>
 						<tr>
 							<th>NO.</th>
 							<th>사옥</th>
-							<th>헬스키퍼 본명</th>
-							<th>헬스키퍼 닉네임</th>
+							<th>이름</th>
+							<th>닉네임</th>
 							<th>성별</th>
-							<th>등록자</th>
 							<th>등록일</th>
 							<th>재직</th>
 						</tr>

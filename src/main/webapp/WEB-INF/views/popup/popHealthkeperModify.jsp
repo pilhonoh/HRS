@@ -9,7 +9,7 @@
 <div class="pop-container">	
 	<!-- 팝업 컨텐츠 S -->
 
-	<table id="healthkeperModify_enter" class="tbl-style">
+	<table id="healthkeperModify_enter" class="tbl-style" >
 		<colgroup>
 			<col style="width:25%;">
 			<col>
@@ -24,11 +24,11 @@
 				<td id='tdHealthkeperBld'></td>
 			</tr>
 			<tr>
-				<th>헬스키퍼 본명</th>
+				<th>이름</th>
 				<td id="tdMssName"></td>
 			</tr>
 			<tr>
-				<th>헬스키퍼 닉네임</th>
+				<th>닉네임</th>
 				<td id="tdMssNCName"></td>
 			</tr>
 			<tr>
@@ -36,7 +36,8 @@
 				<td id="tdSexdstn"></td>
 			</tr>
 		</thead>	
-		<tbody id="healthkeperModify_Body">		
+		<tbody id="healthkeperModify_Body" >
+			
 		</tbody>
 	</table>
 	<div class="pop-btn-area">
@@ -107,7 +108,7 @@ function  modifyRow (){
 	  
 	  
 		 var healthkeperListHtml = [];
-	           healthkeperListHtml.push('<tr><th>재직여부</th>');
+	            healthkeperListHtml.push('<tr><th style="text-align:center;">재직여부</th>');
 				healthkeperListHtml.push('<td id="tdHffc">');
 				healthkeperListHtml.push('<select style="width:120px;" id="hffcCombo" name="hffcCombo">');
 				healthkeperListHtml.push('<option value="" selected disabled hidden>'+popHealthkeperModify.params.mssrhffc+'</option>');

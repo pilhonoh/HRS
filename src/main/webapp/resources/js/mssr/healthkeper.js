@@ -109,7 +109,6 @@ var healthkeperList = {
 						healthkeperListHtml.push('	<td>' + resultList[i].MSSR_NAME + '</td>');
 						healthkeperListHtml.push('	<td><a name="modifyBtn" herf="#none" data-healthkeperno="'+resultList[i].MSSR_EMPNO+'" >' + resultList[i].MSSR_NCNM + '</td>');
 						healthkeperListHtml.push('	<td>' + sexdstn + '</td>');
-						healthkeperListHtml.push('	<td>' + resultList[i].REG_NCNM + '</td>');
 						healthkeperListHtml.push('	<td>' + regDt + '</td>');
 						healthkeperListHtml.push('	<td>' + resultList[i].HFFC_YN + '</td>');
 						healthkeperListHtml.push('</tr>');

@@ -19,17 +19,17 @@
 			<tr>
 				<th class = "required">사옥</th >
 				<td>
-					<select style="width:120px;" data-code-tyl="BLD" data-empty-str="사옥" id="healthkeperCreate_bldCombo"></select>
+					<select style="width:120px;" data-code-tyl="BLD" data-empty-str="선택" id="healthkeperCreate_bldCombo"></select>
 				</td>
 			</tr>
 			<tr>
-				<th  class = "required" >헬스키퍼 본명</th>
+				<th  class = "required" >이름</th>
 				<td>
 					<input style="width:115px;"  data-empty-str="관리사본명" id="healthkeperCreate_mssrName">	
 				</td>
 			</tr>
 			<tr>
-				<th  class = "required" >헬스키퍼 닉네임</th>
+				<th  class = "required" >닉네임</th>
 				<td>
 					<input style="width:115px;"  data-empty-str="관리사" id="healthkeperCreate_mssrNCName">						
 				</td>
@@ -38,7 +38,7 @@
 				<th  class = "required" >성별</th>
 				<td>
 					<select style="width:120px;" id="sexdstnCombo">
-						<option value="">성별</option>
+						<option value="">선택</option>
 						<option value="M">남</option>
 						<option value="F">여</option>
 					</select>
