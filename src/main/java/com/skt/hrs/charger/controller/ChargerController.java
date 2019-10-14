@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+/*import org.apache.poi.xssf.usermodel.XSSFWorkbook;*/
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
@@ -22,7 +22,7 @@ import com.pub.core.util.JsonUtils;
 import com.skt.hrs.charger.service.ChargerService;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.utils.StringUtil;
-import com.skt.hrs.utils.ExcelExport;
+/*import com.skt.hrs.utils.ExcelExport;*/
 
 
 /**
@@ -102,7 +102,7 @@ public class ChargerController {
 		param.put("rowPerPage", rowPerPage);
 		param.put("startRow", startRow);	
 		result = chargerService.selectChargerList(param);
-        ExcelExport.excelDownLoad(result, request, response);
+		/* ExcelExport.excelDownLoad(result, request, response); */
 	}
 	
 	
