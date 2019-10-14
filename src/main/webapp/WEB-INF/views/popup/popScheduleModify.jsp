@@ -219,8 +219,8 @@ var popSchModify= {
 							       bedCode:   popSchModify.params.bedCode, //배드     
 								   mssrEmpno : popSchModify.params.mssrEmpno,
 								   resveDate : popSchModify.params.resveDate,
-								   insertTime: JSON.stringify(timeSheet.insertTime),
-								   deleteTime: JSON.stringify(timeSheet.deleteTime)	   
+								   insertTime: timeSheet.insertTime.toString(),
+								   deleteTime: timeSheet.deleteTime.toString()	   
 							},
 							success : function(res){
 										

@@ -235,8 +235,9 @@ public class MssrService {
 		ResponseResult result = new ResponseResult();
 	    boolean  insertResult = false;
 	    DataEntity chkDataMap = new DataEntity();
-	    String[] InsertTime = param.getString("insertTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
-		String[] DeleteTime = param.getString("deleteTime").replaceAll("\"","").replaceAll("[\\[\\]]","").split(",");
+	    DataEntity test = new DataEntity();
+	    String[] InsertTime = param.split("insertTime",",");
+		String[] DeleteTime = param.split("deleteTime",",");
 		int chk =0 , timeDup = 0, bedUse = 0;
         //HashMap<String,String > paramsMap = new HashMap<String,String >() ;
         param.remove("insertTime");
@@ -245,7 +246,7 @@ public class MssrService {
 		chkDataMap.put("START_DATE",param.getString("resveDate"));
 		chkDataMap.put("MSSR_EMPNO","");
 		chkDataMap.put("BED_CODE","");
-		if( !StringUtil.isEmpty(InsertTime[0]) && InsertTime.length >0) {
+		if(InsertTime.length >0) {
 			 param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
 			for (int i = 0 ; i < InsertTime.length; i++) {
 		     param.put("resveTime",InsertTime[i]);
@@ -288,7 +289,7 @@ public class MssrService {
    		 throw new HrsException(message); 
    	 }
 	    //삭제
-		if (!StringUtil.isEmpty(DeleteTime[0]) && DeleteTime.length>0) {
+		if (DeleteTime.length>0) {
 			param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
 			param.put("canclYn","Y");
 			for (int i = 0 ; i < DeleteTime.length; i++) {
@@ -297,9 +298,7 @@ public class MssrService {
 				
 				 if(item.get("resveNo").toString()!="0") {
 					 param.put("RESVE_NO",item.get("resveNo").toString());
-					
 					    insertResult = mssrDAO.deleteResve(param); 
-					 
 						if(!(insertResult)) { 
 							throw new HrsException("error.processFailure", true);
 						 }		

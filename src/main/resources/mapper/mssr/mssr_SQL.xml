@@ -143,6 +143,7 @@
         AND RESVE_TM   = #{resveTime}
         AND BED_CODE = #{bedCode}
         AND CANCL_YN = 'N'
+        AND COMPT_YN = 'N'
      </select>
      
      <!-- 관리사 스케쥴 등록 -->
