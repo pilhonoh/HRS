@@ -213,7 +213,7 @@ public class ResveStatusService {
 		}
 		// 성별체크
 		if(resveItem.get("MSSR_SEXDSTN").equals("F")	// 관리사가 여성이고 
-				&& param.get("resveSexdstn").equals("M")) {		// 구성원이 남성이면 불가
+				&& param.getString("resveSexdstn").equals("M")) {		// 구성원이 남성이면 불가
 			throw new HrsException("error.notAvailableMssr", true);		// 해당관리사는 예약/대기할 수 없습니다.
 		}
 		
@@ -235,13 +235,13 @@ public class ResveStatusService {
 		 *  입력
 		 ****************************/
 		// 현황 update	
-		param.put("updtEmpno", param.get("empno"));
+		param.put("updtEmpno", param.getString("empno"));
 		boolean updateResult = resveStatusDAO.updateResveStatus(param);
 		
 		// 이력 insert
 		param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_COMPT.toString());
-		param.put("targetEmpno", param.get("resveEmpno"));
-		param.put("regEmpno", param.get("empno"));
+		param.put("targetEmpno", param.getString("resveEmpno"));
+		param.put("regEmpno", param.getString("empno"));
 		boolean insertResult = resveStatusDAO.insertResveHist(param);
 		
 		result.setItemOne(updateResult && insertResult);
@@ -255,7 +255,7 @@ public class ResveStatusService {
 		 *  후처리
 		 ****************************/
 		// SMS 등록		
-		resveItem.put("targetEmpno", param.get("targetEmpno"));
+		resveItem.put("targetEmpno", param.getString("targetEmpno"));
 		cspService.insertCspSMS(resveItem, "csp.sms.resveComplete", Locale.forLanguageTag(param.getString("_ep_locale")));
 		
 		
@@ -306,7 +306,7 @@ public class ResveStatusService {
 		
 		// 성별체크
 		if(resveItem.get("MSSR_SEXDSTN").equals("F")	// 관리사가 여성이고 
-				&& param.get("waitSexdstn").equals("M")) {		// 구성원이 남성이면 불가
+				&& param.getString("waitSexdstn").equals("M")) {		// 구성원이 남성이면 불가
 			throw new HrsException("error.notAvailableMssr", true);		//해당관리사는 예약/대기할 수 없습니다.
 		}
 		
@@ -330,13 +330,13 @@ public class ResveStatusService {
 		 *  입력
 		 ****************************/
 		// 현황 update
-		param.put("updtEmpno", param.get("empno"));
+		param.put("updtEmpno", param.getString("empno"));
 		boolean updateResult = resveStatusDAO.updateResveStatus(param);
 		
 		// 이력 insert
 		param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_COMPT.toString());
-		param.put("targetEmpno", (String)param.get("waitEmpno"));
-		param.put("regEmpno", param.get("empno"));
+		param.put("targetEmpno", param.getString("waitEmpno"));
+		param.put("regEmpno", param.getString("empno"));
 		boolean insertResult = resveStatusDAO.insertResveHist(param);
 		
 		result.setItemOne(updateResult && insertResult);
@@ -349,7 +349,7 @@ public class ResveStatusService {
 		 *  후처리
 		 ****************************/
 		// SMS 등록	
-		resveItem.put("targetEmpno", param.get("targetEmpno"));
+		resveItem.put("targetEmpno", param.getString("targetEmpno"));
 		cspService.insertCspSMS(resveItem, "csp.sms.waitComplete", Locale.forLanguageTag(param.getString("_ep_locale")));
 		
 		
@@ -396,7 +396,7 @@ public class ResveStatusService {
 		// 시간체크
 		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
 		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
-			throw new HrsException("error.over20min", true);
+			throw new HrsException("error.over20minCancel", true);
 		}
 		
 		
@@ -435,7 +435,7 @@ public class ResveStatusService {
 				// 이력 insert (예약취소)
 				param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
 				param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-				param.put("regEmpno", param.get("empno"));
+				param.put("regEmpno", param.getString("empno"));
 				boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
 								
 
@@ -468,13 +468,13 @@ public class ResveStatusService {
 				 ****************************/
 				// 현황 update
 				param.put("resveEmpno", "");
-				param.put("updtEmpno", param.get("empno"));
+				param.put("updtEmpno", param.getString("empno"));
 				boolean updateResult = resveStatusDAO.updateResveStatus(param);
 				
 				// 이력 insert
 				param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
 				param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-				param.put("regEmpno", param.get("empno"));
+				param.put("regEmpno", param.getString("empno"));
 				boolean insertResult = resveStatusDAO.insertResveHist(param);
 									
 				result = updateResult && insertResult;
@@ -515,13 +515,13 @@ public class ResveStatusService {
 			 ****************************/
 			// 현황 update
 			param.put("waitEmpno", "");
-			param.put("updtEmpno", param.get("empno"));
+			param.put("updtEmpno", param.getString("empno"));
 			boolean updateResult = resveStatusDAO.updateResveStatus(param);
 			
 			// 이력 insert
 			param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
 			param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
-			param.put("regEmpno", param.get("empno"));
+			param.put("regEmpno", param.getString("empno"));
 			boolean insertResult = resveStatusDAO.insertResveHist(param);
 								
 			result = updateResult && insertResult;
@@ -579,14 +579,14 @@ public class ResveStatusService {
 				
 		// 시간체크 (사후처리 포함하여 당일까지만 완료처리 가능)
 		if(!DateUtil.getYYYYYMMDD().equals(resveItem.get("RESVE_DE").toString())) {
-			new HrsException("error.onlySameday", true);	//완료처리는 당일만 가능합니다.
+			throw new HrsException("error.onlySameday", true);	//완료처리는 당일만 가능합니다.
 		}			
 		
 		/*****************************
 		 *  입력
 		 ****************************/
 		// 현황 update
-		param.put("updtEmpno", param.get("empno"));
+		param.put("updtEmpno", param.getString("empno"));
 		param.put("comptYn", "Y");	// 완료여부 Y
 		
 		// 10.04 추가 - 대기자삭제 (대기취소)
@@ -610,7 +610,7 @@ public class ResveStatusService {
 		// 케어완료 입력
 		param.put("sttusCode", ResveStatusConst.DBSTATUS.COMPT.toString());
 		param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-		param.put("regEmpno", param.get("empno"));	// 공용사번
+		param.put("regEmpno", param.getString("empno"));	// 공용사번
 		//param.put("regEmpno", (String)resveItem.get("RESVE_EMPNO"));	//예약자사번 (예약자가 직접 완료처리를 하므로)
 		boolean insertResult = resveStatusDAO.insertResveHist(param);
 		
@@ -623,6 +623,8 @@ public class ResveStatusService {
 		/*****************************
 		 *  후처리
 		 ****************************/
+		// 예약자 -> 케어완료 알림없음
+		// 대기자 -> 케어완료로 인한 대기취소 알림없음
 		
 		return result;
 	}
@@ -758,9 +760,7 @@ public class ResveStatusService {
 		if(blacklistMap != null) {
 			//홍길동님은 케어 예약 후 No-show 하셨기에 신규 예약이 불가합니다. 
 			//No-show 일 : 2019-09-18(금)
-			//신규 예약 가능 일 : 2019-10-02(월)
-			String message = "";
-			
+			//신규 예약 가능 일 : 2019-10-02(월)					
 			String resveDeStr = blacklistMap.get("RESVE_DE_STR").toString();
 			String restartDtStr = blacklistMap.get("RESTART_DT_STR").toString();
 			
