@@ -21,7 +21,7 @@
 			<div class="content">
 			<ul class="tab-design">
 				<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
-				<li rel="tab2"><a href="#none">예약 정보 조회 및 변경</a></li>
+				<li rel="tab2"><a href="${ROOT}/admin/resveMgmt">예약 정보 조회 및 변경</a></li>
 				<li rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>	
 				<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
 				<li rel="tab5"><a href="${ROOT}/cmmn/codeManage">공통코드 관리</a></li>
@@ -29,16 +29,7 @@
 				<li rel="tab7"><a href="${ROOT}/cmmn/restDeList">휴일 관리</a></li>
 			</ul>
 		<!-- //header -->
-				<%-- <ul class="tab-design">
-					<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
-					<li rel="tab2"><a href="${ROOT}/admin/resveMgmt">예약 정보 조회 및 변경</a></li>
-					<li rel="tab2"><a href="#none">예약 정보 조회 및 변경</a></li>
-					<li rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>
-					<!-- <li rel="tab3"><a href="#none">헬스키퍼 등록</a></li> -->		
-					<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
-						<li class="on"><a rel="tab5" href="${ROOT}/cmmn/codeManage">공통코드 관리</a></li>
-					<li rel="tab6"><a href="#none">No-Show 관리</a></li>
-				</ul> --%>
+				
 				<div class="sub-tit">
 					<h2>헬스키퍼 스케쥴 관리</h2>
 				</div>
