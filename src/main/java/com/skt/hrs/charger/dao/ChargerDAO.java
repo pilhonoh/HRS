@@ -22,15 +22,13 @@ public class ChargerDAO {
 	@Resource(name="sqlSession")
 	private SqlSession sqlSession;
 	
-	
-	
-	
+
 	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴 리스트 조회 
-	 * @작성일 : 2019.09.05
-	 * @작성자 : LEE.J.H
+	 * @설명 : 관리자 리스트 조회 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -44,9 +42,9 @@ public class ChargerDAO {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 사번 중복 체크  조회 
-	 * @작성일 : 2019.09.05
-	 * @작성자 : LEE.J.H
+	 * @설명 : 관리자중복체크
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -58,8 +56,8 @@ public class ChargerDAO {
 	 
 	/**
 	 * 
-	 * @설명 :  등록 
-	 * @작성일 : 2019.09.10
+	 * @설명 : 관리자 등록수정 삭제 
+	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
 	 * @param param
 	 * @return
@@ -73,6 +71,7 @@ public class ChargerDAO {
 		  } 
 		  return false; 
 	}
+	  
 	  public boolean updateCharger(DataEntity param) { 
 		  int result = sqlSession.update("chargerMapper.updateCharger", param); 
 		  if(result == 1) { 
@@ -80,6 +79,7 @@ public class ChargerDAO {
 		  } 
 		  return false; 
 	}
+	  
 	 public boolean deleteCharger(DataEntity param) { 
 		  int result = sqlSession.update("chargerMapper.deleteCharger", param); 
 		  if(result == 1) { 
@@ -87,15 +87,16 @@ public class ChargerDAO {
 		  } 
 		  return false; 
 	}
-	  /**
-		 * 
-		 * @설명 : 관리사  정보 
-		 * @작성일 : 2019.09.05
-		 * @작성자 : LEE.J.H
-		 * @param param
-		 * @return
-		 * @변경이력 :
-		 */
+	 
+	/**
+	 * 
+	 * @설명 : 관리자 조회 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
 		public Map selectChargerItem(DataEntity param) {
 			return sqlSession.selectOne("chargerMapper.selectChargerItem", param);
 		}

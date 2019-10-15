@@ -41,22 +41,19 @@ public class ChargerController {
 	
 	@Autowired
 	ChargerService chargerService;
-
-  
 	
 	/**
 	 * 
 	 * @설명 : 관리사 스케쥴 목록 view 호출
-	 * @작성일 : 2019.09.03
-	 * @작성자 : LEE.J.H
-	 * @param request
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
 	 * @param response
 	 * @return
 	 * @throws Exception
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/chargerList")
-	public ModelAndView mssrScheduleView(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView ChargerView(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		ModelAndView mav = new ModelAndView();
 		
@@ -65,12 +62,11 @@ public class ChargerController {
 	}
 	
 	
-	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴 리스트 조회
-	 * @작성일 : 2019.09.05
-	 * @작성자 : LEE.J.H
+	 * @설명 : 관리자 조회
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
 	 * @param request
 	 * @return
 	 * @throws Exception
@@ -117,37 +113,47 @@ public class ChargerController {
     
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴  등록 팝업
-	 * @작성일 : 2019.09.09
+	 * @설명 : 관리자   등록 팝업
+	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
-	 * @param request
-	 * @return
+	 * @param : request
+	 * @return: response
 	 * @throws Exception
 	 * @변경이력 :
 	 */
 	
 	
-	@RequestMapping(value = "/pop/Register") 
+	@RequestMapping(value = "/pop/ChargerRegister") 
 	public String ChargerRegistPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception { 
 		DataEntity param =  HttpUtil.getServletRequestParam(req);
 		model.addAttribute("item", JsonUtils.objectToString(param));
 		return"popup/popChargerRegister"; 
 	}
 	
-	  
+	/**
+	 * 
+	 * @설명 : 관리자   중복 체크  
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
+	 * @param request
+	 * @param Exception
+	 * @return
+	 * @변경이력 :
+	 */
 	
 	@RequestMapping(value = "/chargerEmpNoCheck")
 	public @ResponseBody ResponseResult selectEmpNoCheck(HttpServletRequest req, HttpSession res){
-	  DataEntity param = HttpUtil.getServletRequestParam(req); return
-	  chargerService.selectEmpNoCheck(param);
+	  DataEntity param = HttpUtil.getServletRequestParam(req); 
+	  
+	  return chargerService.selectEmpNoCheck(param);
 	}
 	 
 	
 	/**
 	 * 
-	 * @설명 : 관리사   등록
-	 * @작성일 : 2019.09.03
-	 * @작성자 : P149365
+	 * @설명 : 관리자   등록 /수정 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
 	 * @param req
 	 * @param sess
 	 * @return
@@ -169,8 +175,6 @@ public class ChargerController {
 				
 		return  chargerService.deleteCharger(param);
 	}
-	
-
 	
 
 }

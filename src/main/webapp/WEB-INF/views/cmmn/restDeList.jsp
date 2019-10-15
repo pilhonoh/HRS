@@ -8,7 +8,7 @@
 	<head>
 		<jsp:include page="${JSP}/include/resource.jsp" />	
 		<jsp:include page="${JSP}/include/messages.jsp" />	
-		<script src="${JS}/mssr/schedule.js"></script>
+		<script src="${JS}/cmmn/restDeList.js"></script>
 	</head>
 	<body>
 
@@ -16,31 +16,20 @@
 
 			<header class="header">				
 				<jsp:include page="${JSP}/include/header.jsp" />
-			</header><!-- //header -->
+			</header>
 
 			<div class="content">
 			<ul class="tab-design">
-				<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
+				<li  rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
 				<li rel="tab2"><a href="#none">예약 정보 조회 및 변경</a></li>
 				<li rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>	
 				<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
 				<li rel="tab5"><a href="${ROOT}/cmmn/codeManage">공통코드 관리</a></li>
 				<li rel="tab6"><a href="#none">No-Show 관리</a></li>
-				<li rel="tab7"><a href="${ROOT}/cmmn/restDeList">휴일 관리</a></li>
+				<li class="on" rel="tab7"><a href="${ROOT}/cmmn/restDeList">휴일 관리</a></li>
 			</ul>
-		<!-- //header -->
-				<%-- <ul class="tab-design">
-					<li class="on" rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
-					<li rel="tab2"><a href="${ROOT}/admin/resveMgmt">예약 정보 조회 및 변경</a></li>
-					<li rel="tab2"><a href="#none">예약 정보 조회 및 변경</a></li>
-					<li rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>
-					<!-- <li rel="tab3"><a href="#none">헬스키퍼 등록</a></li> -->		
-					<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
-						<li class="on"><a rel="tab5" href="${ROOT}/cmmn/codeManage">공통코드 관리</a></li>
-					<li rel="tab6"><a href="#none">No-Show 관리</a></li>
-				</ul> --%>
 				<div class="sub-tit">
-					<h2>헬스키퍼 스케쥴 관리</h2>
+					<h2>휴일정보관리</h2>
 				</div>
 				
 				<div class="search_field_wrap">
@@ -61,18 +50,7 @@
 										<input type="text" class="datepicker startDate" id="from_date">
 										<em class="fromto"> ~ </em>
 										<input type="text" class="datepicker endDate" id="to_date">
-									</td>
-									<th><strong class="stit">사옥</strong></th>
-									<td>
-										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="전체" id="bldCombo">
-										</select>										
-									</td>
-									<th><strong class="stit">헬스키퍼</strong></th>
-									<td>
-										<select style="width:120px;" id="mssrCombo" >
-											<option value="">전체</option>
-										</select>
-									</td>									
+									</td>							
 								</tr>
 							</tbody>
 						</table>
@@ -87,7 +65,7 @@
 						<button class="btn" id ="deleteBtn">삭제</button>						
 					</div>
 					<div class="f-right">
-						<button class="btn" id ="createBtn">등록</button>						
+						<button class="btn" data-restdeno=""  id ="createBtn">등록</button>						
 					</div>
 				</div>
 
@@ -96,70 +74,18 @@
 						<col style="width:50px;">						
 						<col style="width:16%;">
 						<col style="width:16%;">
-						<col style="width:16%;">
-						<col style="width:16%;">
-						<col style="width:16%;">
-						<col style="width:16%;">
 						<%-- <col style="width:15%;"> --%>
 					</colgroup>
 					<thead>
 						<tr>
 							<th><input id ='checkAll' type="checkbox"></th>
-							<th>근무날짜</th>
-							<th>사옥</th>
-							<th>헬스키퍼</th>
-							<th>베드</th>
-							<th>성별</th>
-							<th>근무시간</th>
+							<th>날짜</th>
+							<th>공휴일명</th>
 							<!-- <th>수정</th> -->
 						</tr>
 					</thead>
-					<tbody id="scheduleList">
-						<!-- <tr>
-							<td><input type="checkbox"></td>
-							<td>2019-08-21</td>
-							<td>티타워</td>
-							<td>James</td>
-							<td>남</td>
-							<td>09:30 ~ 11:00</td>
-							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2019-08-21</td>
-							<td>티타워</td>
-							<td>James</td>
-							<td>남</td>
-							<td>09:30 ~ 11:00<br>14:30 ~ 15:00</td>
-							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>		
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2019-08-21</td>
-							<td>티타워</td>
-							<td>James</td>
-							<td>남</td>
-							<td>09:30 ~ 11:00</td>
-							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2019-08-21</td>
-							<td>티타워</td>
-							<td>James</td>
-							<td>남</td>
-							<td>09:30 ~ 11:00</td>
-							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr>
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>2019-08-21</td>
-							<td>티타워</td>
-							<td>James</td>
-							<td>남</td>
-							<td>09:30 ~ 11:00</td>
-							<td><button class="t-btn cr01" onclick="e_layer_pop07('layer_pop07');">수정</button></td>
-						</tr> -->
+					<tbody id="restDeList">
+					
 					</tbody>
 				</table>
 

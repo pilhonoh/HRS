@@ -1,56 +1,18 @@
 /**
  * 관리사 스케쥴 List
  */
-var ChargerList = {
+var RestDeList = {
 	// 초기화
 	init: function() {
-		loadCodeSelect(undefined, '.search_field'); //콤보박스 공통코드 세팅
-	
-	    ChargerList.list.renderChargerList(); //목록 조회 후 렌더
-		ChargerList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
-		ChargerList.button.chargerRegisterCreateBtnEvent();
-		ChargerList.button.chargerRegisterDeleteBtnEvent();
-	    ChargerList.button.chargerExcelDownBtnEvent();
-		ChargerList.checkboxEvent.checkall();
+		//loadCodeSelect(); //콤보박스 공통코드 세팅
+		RestDeList.datepicker.setDefaultValue();
+	    RestDeList.list.renderRestDeList(); //목록 조회 후 렌더
+		RestDeList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
+		RestDeList.button.restDeRegisterCreateBtnEvent();
+		RestDeList.button.restDeRegisterDeleteBtnEvent();
+	   /* RestDeList.button.restDeExcelDownBtnEvent();*/
+		RestDeList.checkboxEvent.checkall();
 	},
-	
-	
-	cmmnCode: {
-		allCodeList: [],
-		getAllCodeList: function() {
-			$.ajax({
-				url: ROOT + '/cmmn/allCodeList',
-				success: function(res) {
-					console.log('allCodeList', res);
-					if (res.status === 200) {
-						ChargerList.cmmnCode.allCodeList = res.list;
-					}
-				},
-				error: function(err) {
-					console.error(err);
-				}
-			})
-		},
-		codeToName: function(code) {
-			var allCodeList = ChargerList.cmmnCode.allCodeList;
-			
-			if (allCodeList.length == 0) {
-				ChargerList.cmmnCode.getAllCodeList();
-			}
-			
-			var codeName = '';
-			for (var i in allCodeList) {
-				if (allCodeList[i].CODE == code) {
-					codeName = allCodeList[i].CODE_NM;
-					break;
-				}
-			}
-			
-			return codeName;
-		}
-	},
-	
-	
 	
 	datepicker: {
 		setDefaultValue: function() { //기본 날짜 세팅
@@ -60,8 +22,8 @@ var ChargerList = {
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
 			
-			ChargerList.list.params.fromDate = moment().format('YYYYMMDD');
-			ChargerList.list.params.toDate = moment().add(1, 'M').format('YYYYMMDD');
+			RestDeList.list.params.fromDate = moment().format('YYYYMMDD');
+			RestDeList.list.params.toDate = moment().add(1, 'M').format('YYYYMMDD');
 		}
 	},
 	
@@ -80,21 +42,21 @@ var ChargerList = {
 		dataList: [],
 		
 		//예약 목록 조회
-		selectChargerList: function() {
+		selectRestDeList: function() {
 			
-			ChargerList.list.params.startRow = parseInt((ChargerList.list.params.pageNo - 1 ) * ChargerList.list.params.rowPerPage);
-			console.log(ChargerList.list.params)
+			RestDeList.list.params.startRow = parseInt((RestDeList.list.params.pageNo - 1 ) * RestDeList.list.params.rowPerPage);
+			console.log(RestDeList.list.params)
 			var deferred = $.Deferred();
 			
 			$.ajax({
-				url: ROOT + '/charger/selectChargerList',
-				data: ChargerList.list.params,
+				url: ROOT + '/cmmn/selectRestDeList',
+				data: RestDeList.list.params,
 				success: function(res) {
-					console.log('ChargerList', res);
+					console.log('RestDeList', res);
 					if (res.status === 200) {
 						   console.log(res)
 							deferred.resolve(res);
-							ChargerList.list.dataList = res.list;
+							RestDeList.list.dataList = res.list;
 					   	
 						
 					} else {
@@ -109,21 +71,21 @@ var ChargerList = {
 			
 			return deferred.promise();
 		},
-		exportChargerList: function() {
+		exportRestDeList: function() {
 			
-			ChargerList.list.params.startRow = parseInt((ChargerList.list.params.pageNo - 1 ) * ChargerList.list.params.rowPerPage);
-			console.log(ChargerList.list.params)
+			RestDeList.list.params.startRow = parseInt((RestDeList.list.params.pageNo - 1 ) * RestDeList.list.params.rowPerPage);
+			console.log(RestDeList.list.params)
 			var deferred = $.Deferred();
 			
 			$.ajax({
-				url: ROOT + '/charger/exportChargerList',
-				data: ChargerList.list.params,
+				url: ROOT + '/cmmn/exportRestDeList',
+				data: RestDeList.list.params,
 				success: function(res) {
-					console.log('ChargerList', res);
+					console.log('RestDeList', res);
 					if (res.status === 200) {
 						   console.log(res)
 							deferred.resolve(res);
-							ChargerList.list.dataList = res.list;
+							RestDeList.list.dataList = res.list;
 					   	
 						
 					} else {
@@ -140,41 +102,36 @@ var ChargerList = {
 		},
 		 
 		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성  
-		renderChargerList: function() {
-			$.when(ChargerList.list.selectChargerList()).done(function(result) {
+		renderRestDeList: function() {
+			$.when(RestDeList.list.selectRestDeList()).done(function(result) {
 
-				$('tbody#chargerList').empty();
+				$('tbody#restDeList').empty();
 				
 				var resultList = result.list;
-				var chargerListHtml = [];
-				var btnText = '';
-				var btnClass = '';
-				var resveDt = '';
-				var sexdstn = '';
+				var restDeListHtml = [];
+				var restdeDate = '';
 				
-				ChargerList.paging.params.totalCount = resultList[0].total_cnt;
-				if( resultList[0].total_cnt == 0){
-					chargerListHtml.push('<tr>');
-					chargerListHtml.push('<td colspan=8 >검색 결과가 없습니다</td>');
-					chargerListHtml.push('</tr>');
+				if(result.list == 0){
+					restDeListHtml.push('<tr>');
+					restDeListHtml.push('<td colspan=3 >검색 결과가 없습니다</td>');
+					restDeListHtml.push('</tr>');
 				}else{
-		
-						for (var i in resultList) {						
-							chargerListHtml.push('<tr>');
-							chargerListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].EMPNO +'"></td>');
-							chargerListHtml.push('	<td>' +resultList[i].NUM + '</td>');
-							chargerListHtml.push('	<td>' + resultList[i].EMPNO + '</td>');
-							chargerListHtml.push('	<td><a name="modifyBtn" herf="#none" data-chargerempno="'+resultList[i].EMPNO+'" >' + resultList[i].HNAME + '</td>');
-							chargerListHtml.push('	<td>' + resultList[i].DEPTNM + '</td>');
-							chargerListHtml.push('	<td>' + resultList[i].AUTH_NAME + '</td>');
-							chargerListHtml.push('	<td>' + resultList[i].BLD_NAME + '</td>');
-							chargerListHtml.push('</tr>');
+					
+					RestDeList.paging.params.totalCount = resultList[0].total_cnt; 
+						for (var i in resultList) {	
+							restdeDate =  moment(resultList[i].RESTDE_DATE,"YYYYMMDD",'ko'); 
+							restDt = restdeDate.format('YYYY-MM-DD (ddd)');
+							restDeListHtml.push('<tr>');
+							restDeListHtml.push('	<td><input type="checkbox" value="'+ resultList[i].RESTDE_NO +'"></td>');
+							restDeListHtml.push('	<td>' + restDt + '</td>');
+							restDeListHtml.push('	<td><a name="modifyBtn" herf="#none" data-restdeno="'+resultList[i].RESTDE_NO+'" >' + resultList[i].RESTDE_NAME + '</td>');
+							restDeListHtml.push('</tr>');
 					}
 					
 				}
-				$('tbody#chargerList').html(chargerListHtml.join(''))
-				ChargerList.paging.renderPaging();
-				ChargerList.button.chargerRegisterCreateBtnEvent();
+				$('tbody#restDeList').html(restDeListHtml.join(''))
+				RestDeList.paging.renderPaging();
+				RestDeList.button.restDeRegisterCreateBtnEvent();
 				
 			});
 		}
@@ -194,9 +151,9 @@ var ChargerList = {
 		//페이지 이동 영역 생성
 		renderPaging: function() {
 			
-			var currentIndex = ChargerList.list.params.pageNo; //현재 페이지 위치
-			var rowPerPage = ChargerList.list.params.rowPerPage; //페이지 당 레코드 수
-			var totalCount = ChargerList.paging.params.totalCount; //list 의 전체 row count
+			var currentIndex = RestDeList.list.params.pageNo; //현재 페이지 위치
+			var rowPerPage = RestDeList.list.params.rowPerPage; //페이지 당 레코드 수
+			var totalCount = RestDeList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
 			/*console.log(currentIndex);
@@ -218,10 +175,10 @@ var ChargerList = {
 			var last = currentBlock * 10; //현재 블록의 끝 페이지
 			
 			
-			ChargerList.paging.params.first = first;
-			ChargerList.paging.params.last = last;
-			ChargerList.paging.params.prev = prev;
-			ChargerList.paging.params.next = next;
+			RestDeList.paging.params.first = first;
+			RestDeList.paging.params.last = last;
+			RestDeList.paging.params.prev = prev;
+			RestDeList.paging.params.next = next;
 			
 			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
 				preStr += '<a href="#none" class="first" id="firstBtn"><img src="' + IMG + '/common/btn_first.gif"></a>'
@@ -252,79 +209,79 @@ var ChargerList = {
 			
 			$("div#pagingArea").append(preStr + pageNumStr + postStr);
 			
-			ChargerList.paging.button.allPagingBtnEventBinding();
+			RestDeList.paging.button.allPagingBtnEventBinding();
 		},
 		
 		button: {
 			allPagingBtnEventBinding: function() {
-				ChargerList.paging.button.pageNumEvent();
-				ChargerList.paging.button.prevBtnEvent();
-				ChargerList.paging.button.nextBtnEvent();
-				ChargerList.paging.button.firstBtnEvent();
-				ChargerList.paging.button.lastBtnEvent();
+				RestDeList.paging.button.pageNumEvent();
+				RestDeList.paging.button.prevBtnEvent();
+				RestDeList.paging.button.nextBtnEvent();
+				RestDeList.paging.button.firstBtnEvent();
+				RestDeList.paging.button.lastBtnEvent();
 			},
 			
 			pageNumEvent: function() {
 				$('a.num').off();
 				$('a.num').on('click', function() {	
-					if (ChargerList.list.params.pageNo == parseInt(this.innerHTML)) {
+					if (RestDeList.list.params.pageNo == parseInt(this.innerHTML)) {
 						return false;
 					}
 					
-					ChargerList.list.params.pageNo = parseInt(this.innerHTML);
-					ChargerList.list.renderChargerList();
+					RestDeList.list.params.pageNo = parseInt(this.innerHTML);
+					RestDeList.list.renderRestDeList();
 				});
 			},
 			
 			prevBtnEvent: function() {
 				$('a#prevBtn').off();
 				$('a#prevBtn').on('click', function() {
-					if (ChargerList.list.params.pageNo == ChargerList.paging.params.prev) {
+					if (RestDeList.list.params.pageNo == RestDeList.paging.params.prev) {
 						return false;
 					}
-					console.log(ChargerList.paging.params.prev)
-					ChargerList.list.params.pageNo = ChargerList.paging.params.prev;
-					ChargerList.list.renderChargerList();
+					console.log(RestDeList.paging.params.prev)
+					RestDeList.list.params.pageNo = RestDeList.paging.params.prev;
+					RestDeList.list.renderRestDeList();
 				});
 			},
 			
 			nextBtnEvent: function() {
 				$('a#nextBtn').off();
 				$('a#nextBtn').on('click', function() {
-					if (ChargerList.list.params.pageNo == ChargerList.paging.params.next) {
+					if (RestDeList.list.params.pageNo == RestDeList.paging.params.next) {
 						return false;
 					}
-					console.log(ChargerList.paging.params.prev)
-					ChargerList.list.params.pageNo = ChargerList.paging.params.next;
-					ChargerList.list.renderChargerList();
+					console.log(RestDeList.paging.params.prev)
+					RestDeList.list.params.pageNo = RestDeList.paging.params.next;
+					RestDeList.list.renderRestDeList();
 				});
 			},
 			
 			firstBtnEvent: function() {
 				$('a#firstBtn').off();
 				$('a#firstBtn').on('click', function() {
-					if (ChargerList.list.params.pageNo == 1) {
+					if (RestDeList.list.params.pageNo == 1) {
 						return false;
 					}
 				
-					ChargerList.list.params.pageNo = 1;
-					ChargerList.list.renderChargerList();
+					RestDeList.list.params.pageNo = 1;
+					RestDeList.list.renderRestDeList();
 				});
 			},
 			
 			lastBtnEvent: function() {
 				$('a#lastBtn').off();
 				$('a#lastBtn').on('click', function() {
-					var rowPerPage = ChargerList.list.params.rowPerPage; //페이지 당 레코드 수
-					var totalCount = ChargerList.paging.params.totalCount; //list 의 전체 row count
+					var rowPerPage = RestDeList.list.params.rowPerPage; //페이지 당 레코드 수
+					var totalCount = RestDeList.paging.params.totalCount; //list 의 전체 row count
 					var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 					
-					if (ChargerList.list.params.pageNo == totalIndexCount) {
+					if (RestDeList.list.params.pageNo == totalIndexCount) {
 						return false;
 					}
 					
-					ChargerList.list.params.pageNo = totalIndexCount;
-					ChargerList.list.renderChargerList();
+					RestDeList.list.params.pageNo = totalIndexCount;
+					RestDeList.list.renderRestDeList();
 				});
 			}
 		}
@@ -339,63 +296,60 @@ var ChargerList = {
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
 			/*	//날짜 validation 실행
-				ChargerList.validation.dateCheck();*/
+				RestDeList.validation.dateCheck();*/
 				
 				//조회 페이지는 1로 초기화 param 세팅
-				ChargerList.list.params.pageNo = 1;
+				RestDeList.list.params.pageNo = 1;
 				
 				//사옥 param 세팅
-				ChargerList.list.params.bldCode = $('#search_bldCombo').val();
+				RestDeList.list.params.bldCode = $('#search_bldCombo').val();
 				
 				//관리사 param 세팅
-				ChargerList.list.params.authCode = $('#search_authCombo').val();
+				RestDeList.list.params.authCode = $('#search_authCombo').val();
 				
 				//목록 조회 및 렌더 실행
-				ChargerList.list.renderChargerList();
+				RestDeList.list.renderRestDeList();
 			});
 		},
 		//관리자등록		
-		chargerRegisterCreateBtnEvent: function(){
-		  $("#createBtn").off('click').on('click',function(){  
+		restDeRegisterCreateBtnEvent: function(){
 			
-			   var popParam = { EMPNO:$(this).data("chargerempno")}
-			   console.log(popParam)
-			    ChargerList.popup.showChargerRegisterSavePopup(popParam);  
-		  });
+			$("#createBtn").off('click').on('click',function(){  
+			  var popParam= { RESTDE_NO:$(this).data("restdeno")}
+			    RestDeList.popup.showRestDeRegisterSavePopup(popParam);  
+		   });
 		  
 		  $("a[name='modifyBtn']").on('click',function(){  
-				 
-			   var popParam = { EMPNO:$(this).data("chargerempno")}
-			   console.log(popParam)
-			    ChargerList.popup.showChargerRegisterSavePopup(popParam);  
+			  var  popParam= { RESTDE_NO:$(this).data("restdeno")}
+			    RestDeList.popup.showRestDeRegisterSavePopup(popParam);  
 		  });
 		},
-		chargerRegisterDeleteBtnEvent:function(){
+		restDeRegisterDeleteBtnEvent:function(){
 			
 			$("#deleteBtn").on('click',function(){  
 				 
-						  var delEmpNo = [] ;
+						  var delRestDeNo = [] ;
 						  
 						  var meassage = '';
-						  $('tbody#chargerList input:checkbox:checked').each(function(){
+						  $('tbody#restDeList input:checkbox:checked').each(function(){
 							  
-							  	delEmpNo.push($(this).val());	
+							  	delRestDeNo.push($(this).val());	
 							 
 						  });
 						  
-						  if(delEmpNo.length == 0){
-							  alertPopup('삭제할 스케쥴을 선택하세요.');
+						  if(delRestDeNo.length == 0){
+							  alertPopup('삭제할  휴일을  선택하세요.');
 							  return false;
 						  }
 						  
-						  confirmPopup('총' + delEmpNo.length + '건을 삭제하시겠습니까?', function(){					  					
+						  confirmPopup('총' + delRestDeNo.length + '건을 삭제하시겠습니까?', function(){					  					
 							$.ajax({
-									url: ROOT + '/charger/chargerDelete',
+									url: ROOT + '/cmmn/restDeDelete',
 									type: 'POST',
-									data:{deleteEmpNo:delEmpNo.toString()}  ,
+									data:{deleteRestNo:delRestDeNo.toString()}  ,
 									success : function(res){
 									
-										ChargerList.list.renderChargerList();
+										RestDeList.list.renderRestDeList();
 										$("#checkAll").prop('checked',false);
 										alertPopup('삭제되었습니다.');
 									},
@@ -409,10 +363,10 @@ var ChargerList = {
 			
 		},
 
-		chargerExcelDownBtnEvent:function(){
+		restDeExcelDownBtnEvent:function(){
 			  
 			  $("button#excelDownBtn").on('click',function(){
-				  ChargerList.list.exportChargerList();
+				  RestDeList.list.exportRestDeList();
 			  });	
 		}
 	},
@@ -442,8 +396,8 @@ var ChargerList = {
 				return false;
 			}
 			
-			ChargerList.list.params.fromDate = fromdt;
-			ChargerList.list.params.toDate = todt;
+			RestDeList.list.params.fromDate = fromdt;
+			RestDeList.list.params.toDate = todt;
 			
 			return true;
 		}
@@ -451,9 +405,9 @@ var ChargerList = {
 	
 	
 	popup: {
-		showChargerRegisterSavePopup: function(popParam) {
-			$('#layer_pop10').load(ROOT + '/charger/pop/ChargerRegister',popParam, function(res) {
-				openLayerPopup('layer_pop10');
+		showRestDeRegisterSavePopup: function(popParam) {
+			$('#layer_pop15').load(ROOT + '/cmmn/pop/RestDeRegister',popParam, function(res) {
+				openLayerPopup('layer_pop15');
 			});
 		}
 	},
@@ -462,7 +416,7 @@ var ChargerList = {
 			
 			$("#checkAll").on("change",function(){
 				 var chkstat = $("#checkAll").prop("checked");
-				$("#chargerList input[type=checkbox]").each(function(){
+				$("#restDeList input[type=checkbox]").each(function(){
 				
 				    $(this).prop("checked",chkstat)
 				});
@@ -478,7 +432,7 @@ var ChargerList = {
 }
 
 $(document).ready(function() {	
-	ChargerList.init();
+	RestDeList.init();
 });
 
 

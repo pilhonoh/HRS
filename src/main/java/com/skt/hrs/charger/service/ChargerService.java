@@ -47,7 +47,7 @@ public class ChargerService {
 
 	/**
 	 * 
-	 * @설명 : 관리사  조회
+	 * @설명 : 관리자  조회
 	 * @작성일 : 2019.10.07
 	 * @작성자 : LEE.Y.H
 	 * @param param
@@ -62,7 +62,7 @@ public class ChargerService {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 상세 조회
+	 * @설명 : 관리자 상세 조회
 	 * @작성일 : 2019.10.07
 	 * @작성자 : LEE.Y.H
 	 * @param param
@@ -77,7 +77,7 @@ public class ChargerService {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 사번 중복 체크 
+	 * @설명 : 관리자 사번 중복 체크 
 	 * @작성일 : 2019.10.07
 	 * @작성자 : LEE.Y.H
 	 * @param param
@@ -96,7 +96,7 @@ public class ChargerService {
 	}
 	/**
 	 * 
-	 * @설명 : 관리사 동록
+	 * @설명 : 관리자 동록
 	 * @작성일 : 2019.10.07
 	 * @작성자 : LEE.Y.H
 	 * @param param

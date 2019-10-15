@@ -176,6 +176,7 @@ var scheduleList = {
 				var btnClass = '';
 				var resveDt = '';
 				var sexdstn = '';
+				var resve_de =  '' ;
 				scheduleList.paging.params.totalCount = result.customs.totalCount;
 				if(result.customs.totalCount == 0){
 					scheduleListHtml.push('<tr>');
@@ -185,8 +186,7 @@ var scheduleList = {
 					
 						for (var i in resultList) {
 						
-						var resve_de =  moment(resultList[i].RESVE_DE,"YYYYMMDD",'ko'); 
-	
+						resve_de =  moment(resultList[i].RESVE_DE,"YYYYMMDD",'ko'); 
                         resveDt=resve_de.format('YYYY-MM-DD (ddd)');
 						//resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 						

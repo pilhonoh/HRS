@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="restdeMapper">
+
+    <sql id="COMMON_PAGING_HEADER">
+		SELECT @ROWNUM:= @ROWNUM +1 as NUM  ,R1.*, IFNULL(FOUND_ROWS(),0) as total_cnt FROM (
+	</sql>
+
+	<sql id="COMMON_PAGING_TAIL">
+		) R1 ,(SELECT @ROWNUM := #{startRow, jdbcType=INTEGER})TEMP
+		LIMIT #{rowPerPage, jdbcType=INTEGER} OFFSET #{startRow, jdbcType=INTEGER}
+	               
+	</sql>
+	
+     <!-- 휴일 리스트 조회-->
+	<select id="selectRestDeList" parameterType="map" resultType="hashmap">
+	  
+		<include refid="COMMON_PAGING_HEADER"/>
+			 SELECT RESTDE_NO
+					,RESTDE_DATE  
+					,RESTDE_TYPE  
+					,RESTDE_NAME  
+					,RESTDE_REMARK
+					,USED_YN      
+		    FROM RESTDE 
+			WHERE RESTDE_DATE BETWEEN #{fromDate} AND #{toDate}
+		    AND USED_YN = 'Y'      
+            GROUP BY RESTDE_NO  
+		<include refid="COMMON_PAGING_TAIL"/>
+		
+	</select>
+
+     <!-- 휴일 조회-->
+	<select id="selectRestDeItem" parameterType="map" resultType="hashmap">
+      	 SELECT RESTDE_NO
+					,RESTDE_DATE  
+					,RESTDE_TYPE  
+					,RESTDE_NAME  
+					,RESTDE_REMARK
+					,USED_YN      
+		    FROM RESTDE 
+			WHERE RESTDE_NO = #{restDeNo}      
+	 </select>    
+	<!-- 휴일 중복 체크  -->
+	<select id="selectRestCheck" parameterType="map" resultType="int">
+	 SELECT IFNULL(COUNT(*),0) AS RestCheck  
+	  FROM RESTDE 
+	   WHERE RESTDE_DATE =  #{restDeDate} 
+	   AND USED_YN = 'Y'        
+	</select>
+     <!-- 휴일 등록 -->
+     <insert id="insertRestDe"  useGeneratedKeys="true" keyProperty="RESTDE_NO"  parameterType="map" >     
+      INSERT INTO RESTDE ( RESTDE_DATE, RESTDE_NAME, REG_EMPNO, REG_DT ) 
+                          VALUES (#{restDeDate}, #{restDeName}, #{regEmpno},now(6))    
+          <!--   VALUES (#{restDeDate}, #{restDeType}, #{restDeName}, #{restDeRemark}, #{regEmpno}, #{regDt}, #{usedYn})    -->
+     </insert>
+	<!-- 휴일 수정 -->
+	<update id="updateRestDe">
+		UPDATE RESTDE
+		   SET   RESTDE_NAME = #{restDeName}
+		   
+		     <!-- RESTDE_DATE = #{restDeDate} -->
+			 <!-- , RESTDE_TYPE = #{restDeType} -->
+			 <!-- , RESTDE_REMARK =#{restDeRemark} -->
+			 , UPDT_EMPNO = #{regEmpNo}
+			 , UPDT_DT =  now(6)
+		 WHERE RESTDE_NO = #{restDeNo}
+	</update>
+	
+	<!-- 휴일 삭제 -->
+	<update id="deleteRestDe">
+		UPDATE RESTDE
+		   SET USED_YN = #{usedYn}
+			 , UPDT_EMPNO = #{regEmpNo}
+			 , UPDT_DT =   now(6)
+		 WHERE RESTDE_NO = #{restDeNo}
+	</update>
+   
+</mapper>
