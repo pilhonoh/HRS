@@ -84,7 +84,7 @@ public class ResveListService {
 					continue;
 				}
 				item.remove("REG_EMPNO");
-				item.remove("STTUS_CODE");
+				//item.remove("STTUS_CODE");
 			}
 			retList.add(item);
 		}

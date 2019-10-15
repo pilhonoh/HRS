@@ -8,10 +8,7 @@
 	<head>
 		<jsp:include page="${JSP}/include/resource.jsp" />
 		<jsp:include page="${JSP}/include/messages.jsp" />		
-		<script src="${JS}/resve/resveList.js"></script>
-		<style>
-			.link:link {text-decoration: underline; margin-right: 3px} /* 10/01 양혜리 수정 margin-right 10px->3px */
-		</style>
+		<script src="${JS}/resve/resveList.js"></script>		
 	</head>
 	<body>	
 		<div class="wrap">

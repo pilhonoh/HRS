@@ -1588,3 +1588,5 @@ button.ui-datepicker-trigger {
 	font-weight:900;
 	color:#999;
 }
+
+.link:link {text-decoration: underline; margin-right: 3px} /* 10/01 양혜리 수정 margin-right 10px->3px */

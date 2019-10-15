@@ -35,6 +35,7 @@ public abstract interface ResveStatusConst {
 		WAIT_CANCL("STS04"),	//대기취소
 		COMPT("STS05"),			//(케어)완료
 		NOSHOW("STS06"),		//노쇼
+		NOSHOW_NOPANELTY("STS07"),		//노쇼패널티없음
 		WORK_CANCL("STS99");	//근무취소
 		
 		private String code = "";

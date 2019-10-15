@@ -164,7 +164,10 @@ var resveList = {
 						var resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 						var resveDtTxt = moment(resve_de, 'YYYYMMDD').locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
 						var regDtTxt = moment(resultList[i].REG_DT).locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
-						
+						var sttusNm = resultList[i].STTUS_NM;
+						if(resultList[i].LAST_STTUS_CODE === 'STS07'){
+							sttusNm = 'No-Show<br/>페널티없음';
+						}
 						
 						resveListHtml.push('<tr>');
 						resveListHtml.push('	<td>' + resveDtTxt + '</td>');
@@ -174,11 +177,11 @@ var resveList = {
 						resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
 						resveListHtml.push('	<td>' + regDtTxt + '</td>');						
 						resveListHtml.push('	<td style="text-align:left; padding-left:85px">');
-						resveListHtml.push('		<span style="width: 60px; display: inline-block;">');
+						resveListHtml.push('		<span style="width: 65px; display: inline-block;">');
 						if(stsCode == 'STS02' || stsCode == 'STS04'){//대기취소, 예약취소 텍스트 색 다르게 조정
-							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')" style="color:#ad8a6a">' + resultList[i].STTUS_NM + '</a>');
+							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')" style="color:#ad8a6a">' + sttusNm + '</a>');
 						}else{
-							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + resultList[i].STTUS_NM + '</a>');
+							resveListHtml.push('        <a class="link" href="javascript:resveList.popup.detail('+resultList[i].RESVE_NO+')">' + sttusNm + '</a>');
 						}
 						
 						resveListHtml.push('	</span>');

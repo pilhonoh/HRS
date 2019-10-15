@@ -155,13 +155,13 @@ var codeManageList = {
 						codeManageListHtml.push('	<td>' + resultList[i].CODE_TYS_NM + '</td>');
 						codeManageListHtml.push('	<td>' + resultList[i].CODE + '</td>');
 //						codeManageListHtml.push('	<td>' + resultList[i].CODE_NM + '</td>');
-						var codeNmSet = "";
-						if(resultList[i].CODE_TYL == "BED") {
-							codeNmSet = resultList[i].CODE_TYS_NM + " " + resultList[i].CODE_NM;
-						} else {
-							codeNmSet = resultList[i].CODE_NM;
-						}
-						codeManageListHtml.push('	<td>' + codeNmSet + '</td>');
+//						var codeNmSet = "";
+//						if(resultList[i].CODE_TYL == "BED") {
+//							codeNmSet = resultList[i].CODE_TYS_NM + " " + resultList[i].CODE_NM;
+//						} else {
+//							codeNmSet = resultList[i].CODE_NM;
+//						}
+						codeManageListHtml.push('	<td>' + resultList[i].CODE_NM + '</td>');
 //						codeManageListHtml.push('	<td>' + resultList[i].CODE_ORDR + '</td>');
 						codeManageListHtml.push('	<td><button name="modifyBtn" class="t-btn cr01" onclick="javascript:codeManageList.popup.showCodeManageModifyPopup(\''+resultList[i].CODE_TYL + '\',\'' + resultList[i].CODE_TYS + '\',\'' + resultList[i].CODE +'\');">수정</button></td>');
 //						codeManageListHtml.push('	<td>' + resultList[i].REG_EMPNO + '</td>');

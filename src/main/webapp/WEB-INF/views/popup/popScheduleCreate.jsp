@@ -110,7 +110,7 @@ var popSchCreate = {
 				$('#scheduleCreate_bldCombo').on('change', function() {
 					var bldCode = $(this).val();
 					popSchCreate.combobox.setMssrCombo(bldCode);
-					loadCodeSelect(undefined, $('#scheduleCreate_bedCombo').parent()); 
+					//loadCodeSelect(undefined, $('#scheduleCreate_bedCombo').parent()); 
 				})
 			},		
 			getMssrList: function(bldCode) {

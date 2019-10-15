@@ -203,18 +203,20 @@ function initDatepicker(){
  */
 function loadCodeSelect(cb, selector){
 	
-	var $container = selector ? $(selector) : $(document);
-	$container.find('select[data-code-tyl]').each(function(idx, select){
-		var tyl = $(select).data('code-tyl');	//코드타입(대)
-		var tys = $(select).data('code-tys');	//코드타입(소)
-		var empStr = $(select).data('empty-str');
-		
-		if(tyl==='BLD'){
-			$(select).on('change', function(){
-				$('[data-code-tyl=BED]').data('code-tys', $(this).val()).empty();
-			})
+	var $selector = selector ? $(selector) : $(document);
+	if($selector.is('select')){
+		var tyl = $selector.data('code-tyl');	//코드타입(대)
+		var tys = $selector.data('code-tys');	//코드타입(소)
+		var empStr = $selector.data('empty-str');
+	
+		if(empStr){
+			$selector.append($('<option>').val("").text(empStr));
 		}
-
+		
+		if(tyl==='BED' && !tys){
+			return;
+		}
+		
 		$.ajax({
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: tyl, codeTys: tys || ''},
@@ -223,10 +225,8 @@ function loadCodeSelect(cb, selector){
 					var options = res.list.map( function(data){
 						return $('<option>').val(data.CODE).text(data.CODE_NM);
 					})
-					if(empStr){
-						$(select).append($('<option>').val("").text(empStr));
-					}
-					$(select).append(options);
+					
+					$selector.append(options);
 					
 					
 					
@@ -238,7 +238,49 @@ function loadCodeSelect(cb, selector){
 				console.error(err)
 			}
 		})
-	})
+	} else{
+		$selector.find('select[data-code-tyl]').each(function(idx, select){
+			var tyl = $(select).data('code-tyl');	//코드타입(대)
+			var tys = $(select).data('code-tys');	//코드타입(소)
+			var empStr = $(select).data('empty-str');
+			
+			if(empStr){
+				$(select).append($('<option>').val("").text(empStr));
+			}
+			
+			if(tyl==='BLD'){
+				$(select).on('change', function(){
+					$('[data-code-tyl=BED]').data('code-tys', $(this).val()).empty();
+					loadCodeSelect(undefined, $('[data-code-tyl=BED]'));
+				})
+			}
+			
+			if(tyl==='BED' && !tys){
+				return;
+			}
+
+			$.ajax({
+				url: ROOT + '/cmmn/codeList',
+				data: {codeTyl: tyl, codeTys: tys || ''},
+				success : function(res){							
+					if(res.status === 200){
+						var options = res.list.map( function(data){
+							return $('<option>').val(data.CODE).text(data.CODE_NM);
+						})
+						
+						$(select).append(options);											
+						
+						if(cb) cb();	//콜백이 있다면 실행
+					}
+					
+				},
+				error : function(err) {
+					console.error(err)
+				}
+			})
+		})
+	}
+	
 }
 
 function openLayerPopup(id){

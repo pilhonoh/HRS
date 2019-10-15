@@ -610,7 +610,8 @@ public class ResveStatusService {
 		// 케어완료 입력
 		param.put("sttusCode", ResveStatusConst.DBSTATUS.COMPT.toString());
 		param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-		param.put("regEmpno", param.get("empno"));
+		param.put("regEmpno", param.get("empno"));	// 공용사번
+		//param.put("regEmpno", (String)resveItem.get("RESVE_EMPNO"));	//예약자사번 (예약자가 직접 완료처리를 하므로)
 		boolean insertResult = resveStatusDAO.insertResveHist(param);
 		
 		result.setItemOne(updateResult && insertResult);
@@ -816,17 +817,15 @@ public class ResveStatusService {
 				param.put("resveNo", item.get("RESVE_NO").toString());
 				
 				
-				// 현황 update				
-				param.put("updtEmpno", "WAITCNCL");								
-				// 10.04 추가 - 대기자삭제 (대기취소)
-				param.put("waitEmpno", "");				
-				processResult = processResult && resveStatusDAO.updateResveStatus(param);
-				
-						
-				// 이력 insert
-				
 				// 10.04 추가 - 대기자가 있다면 대기취소
-				if(item.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(item.get("WAIT_EMPNO").toString())) {	
+				if(item.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(item.get("WAIT_EMPNO").toString())) {
+					
+					// 현황 update				
+					param.put("updtEmpno", "WAITCNCL");								
+					param.put("waitEmpno", "");		// 10.04 추가 - 대기자삭제 (대기취소)			
+					processResult = processResult && resveStatusDAO.updateResveStatus(param);
+					
+					// 이력 insert
 					// 대기취소 입력
 					param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());
 					param.put("targetEmpno", item.get("WAIT_EMPNO").toString());
@@ -838,8 +837,13 @@ public class ResveStatusService {
 							item.get("WAIT_EMPNO").toString());
 				}
 				
+				// 이력 insert
 				// 노쇼입력
-				param.put("sttusCode", ResveStatusConst.DBSTATUS.NOSHOW.toString());
+				if(item.get("SUCCS_YN")!= null && "Y".equals(item.get("SUCCS_YN").toString())) {
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.NOSHOW_NOPANELTY.toString());
+				}else {
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.NOSHOW.toString());
+				}
 				param.put("targetEmpno", item.get("RESVE_EMPNO").toString());
 				param.put("regEmpno", "SYSTEM");
 				processResult = processResult && resveStatusDAO.insertResveHist(param);
