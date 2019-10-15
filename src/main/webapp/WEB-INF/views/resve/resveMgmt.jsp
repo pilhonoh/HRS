@@ -25,6 +25,7 @@
 					<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
 					<li rel="tab5"><a href="${ROOT}/cmmn/codeManage">공통코드 관리</a></li>
 					<li rel="tab6"><a href="#none">No-Show 관리</a></li>
+					<li rel="tab7"><a href="${ROOT}/cmmn/restDeList">휴일 관리</a></li>
 				</ul>
 				<div class="sub-tit">
 					<h2>예약 정보 조회 및 변경</h2>
