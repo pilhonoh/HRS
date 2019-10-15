@@ -33,8 +33,6 @@ var RestDeList = {
 		params: {
 			pageNo: 1, //조회할 페이지 번호
 			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
-			bldCode: '', //사옥코드
-			authCode: '', //관리사 사번
 			startRow: 0 //조회 시작할 ROW
 		},
 		
@@ -295,18 +293,11 @@ var RestDeList = {
 		//조회 버튼 클릭 이벤트
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
-			/*	//날짜 validation 실행
-				RestDeList.validation.dateCheck();*/
-				
+		
+				RestDeList.validation.dateCheck();
 				//조회 페이지는 1로 초기화 param 세팅
 				RestDeList.list.params.pageNo = 1;
-				
-				//사옥 param 세팅
-				RestDeList.list.params.bldCode = $('#search_bldCombo').val();
-				
-				//관리사 param 세팅
-				RestDeList.list.params.authCode = $('#search_authCombo').val();
-				
+			
 				//목록 조회 및 렌더 실행
 				RestDeList.list.renderRestDeList();
 			});

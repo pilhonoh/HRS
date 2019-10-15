@@ -17,6 +17,7 @@ import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.mssr.dao.MssrDAO;
+import com.skt.hrs.cmmn.dao.RestDeDAO;
 import com.skt.hrs.utils.DateUtil;
 import com.skt.hrs.utils.StringUtil;
 
@@ -46,7 +47,8 @@ public class MssrService {
 	@Autowired
 	MessageSource messageSource;
 
-	
+	@Autowired
+	RestDeDAO restDeDAO;
 	/**
 	 * 
 	 * @설명 : 관리사 목록 조회
@@ -153,6 +155,7 @@ public class MssrService {
 		String startDate ="", endDate = "", workDate="";
 		long days = 0;
 		int chk =0 , timeDup = 0, bedUse = 0;
+		int restChk = 0;
 		paramsMap.putAll(getListItems.get(0));
 		chkDataMap.put("RESVE_CHECK","");
 		chkDataMap.put("START_DATE",paramsMap.getString("startDate"));
@@ -165,7 +168,9 @@ public class MssrService {
         	days = DateUtil.getDateDiff(startDate, endDate );
         	for (int j = 0; j <= days; j++) {
         		 workDate = DateUtil.getDateAdd(startDate,j);
-        		 if(DateUtil.isWeekend(workDate,"yyyyMMdd")) {
+        		 chkDataMap.put("restDeDate",workDate.replaceAll("-", ""));
+        		 restChk = restDeDAO.selectRestCheck(chkDataMap);
+        		 if(DateUtil.isWeekend(workDate,"yyyyMMdd")|| restChk > 0) {
             		 continue;
             	 };
         		paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());
