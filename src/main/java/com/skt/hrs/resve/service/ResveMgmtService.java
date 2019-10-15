@@ -16,7 +16,6 @@ import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
-import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.resve.dao.ResveMgmtDAO;
 import com.skt.hrs.resve.dao.ResveStatusDAO;
 
@@ -32,10 +31,7 @@ public class ResveMgmtService {
 	
 	@Resource(name="resveStatusDAO")
 	private ResveStatusDAO resveStatusDAO;
-	
-	@Autowired
-	private CspService cspService;
-	
+		
 	@Autowired
 	private ResveStatusService resveStatusService;
 	
