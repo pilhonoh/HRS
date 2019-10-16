@@ -25,13 +25,13 @@
 			<tr>
 				<th  class = "required" >이름</th>
 				<td>
-					<input style="width:115px;"  data-empty-str="관리사본명" id="healthkeperCreate_mssrName">	
+					<input style="width:115px;"  data-empty-str="관리사본명" id="healthkeperCreate_mssrName" maxlength="10">	
 				</td>
 			</tr>
 			<tr>
 				<th  class = "required" >닉네임</th>
 				<td>
-					<input style="width:115px;"  data-empty-str="관리사" id="healthkeperCreate_mssrNCName">						
+					<input style="width:115px;"  data-empty-str="관리사" id="healthkeperCreate_mssrNCName" maxlength="10">						
 				</td>
 			</tr>
 			<tr>

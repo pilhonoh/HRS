@@ -103,7 +103,7 @@ function  modifyRow (){
 	  var trCnt = $(".healthkeperModify").length +1;	
 	  
 	  var mssr_ncnm=[];
-	  	mssr_ncnm.push('<input type="text" name="mssr_ncnm" placeholder='+popHealthkeperModify.params.mssrNCName+' style="color:black">');
+	  	mssr_ncnm.push('<input type="text" name="mssr_ncnm" placeholder='+popHealthkeperModify.params.mssrNCName+' style="color:black" maxlength="10">');
 	  	$('#tdMssNCName').append(mssr_ncnm);
 	  
 	  
