@@ -17,7 +17,7 @@ var resveStatus = {
 			resveStatus.fillBeds()		// bed목록 조회
 			.then(function(){
 				$('.month-calendar .today span').trigger('click');
-				$('.cal-day.sat,.sun').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
+				$('.cal-day.sat,.cal-day.sun,.cal-day.rest').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
 			});
 			
 		});			
@@ -127,79 +127,120 @@ var resveStatus = {
  * 상단 2주달력
  */
 resveStatus.calendar =  {
-	// 오늘부터 이후 2주조회
-	getAfter2Weeks : function(fromDate) {
+	getRestDe : function(fromDate) {
 		var startDt = moment(fromDate) || moment();
 		var endDt = startDt.clone().add(2, 'w');
-		var dates = [];	
-		while(!startDt.isSame(endDt)){
-			var d = {
-				date: startDt.toDate(),
-				yyyymmdd: startDt.format('YYYYMMDD'),
-				year: startDt.year(),
-				month: startDt.month()+1,
-				day: startDt.date(),
-				weekday: startDt.isoWeekday(),
-				weekdayName: startDt.format('ddd').toUpperCase()
-			}
-			
-			dates.push(d);
-			startDt = startDt.add(1, 'days');
-		}	
 		
-		return dates;
+		var params = {
+			pageNo: 1, //조회할 페이지 번호
+			rowPerPage: 14, //한 페이지 당 조회할 ROW 수
+			startRow: 0, //조회 시작할 ROW
+			fromDate: startDt.format('YYYYMMDD'),
+			toDate: endDt.format('YYYYMMDD')
+		}
+		
+		return $.ajax({
+			url: ROOT + '/cmmn/selectRestDeList',
+			data: params			
+		});
+				
+	},
+	// 오늘부터 이후 2주조회
+	getAfter2Weeks : function(fromDate) {
+			
+		var dates = [];
+		
+		return resveStatus.calendar.getRestDe()
+		.then(function(res){
+			
+			
+			var startDt = moment(fromDate) || moment();
+			var endDt = startDt.clone().add(2, 'w');
+			
+			while(!startDt.isSame(endDt)){
+				var d = {
+					date: startDt.toDate(),
+					yyyymmdd: startDt.format('YYYYMMDD'),
+					year: startDt.year(),
+					month: startDt.month()+1,
+					day: startDt.date(),
+					weekday: startDt.isoWeekday(),
+					weekdayName: startDt.format('ddd').toUpperCase()
+				}
+				
+				dates.push(d);
+				
+				startDt = startDt.add(1, 'days');
+			}	
+			
+			$.each(res.list, function(i, restDe){
+				dates.find(function(e, i){
+					if(e.yyyymmdd === restDe.RESTDE_DATE){
+						dates[i].restDe = restDe
+					}
+				})
+			})
+			
+			return dates;
+			
+		})
+
 	},
 	// 렌더링
 	render : function(){
 							
-		var dates = resveStatus.calendar.getAfter2Weeks();
-		var elements = [];
-							
-		dates.forEach(function(d, i){
+		resveStatus.calendar.getAfter2Weeks()
+		.then(function(dates){
+			var elements = [];
 			
-			var $td = $('<td>');
-			var $div = $('<div>').addClass('cal-day');
-			var $em = $('<em>').text(d.weekdayName);
-			var $span = $('<span>').text(d.day);
-			
-			if(i==0 || d.day==1) {
-				// 년월 입력
-				var $tdCopy = $td.clone();
-				var $divCopy = $div.clone().addClass('month');
-				var $emCopy = $em.clone().text(d.year);
-				var $spanCopy = $span.clone().text(d.month);
+			dates.forEach(function(d, i){
+				
+				var $td = $('<td>');
+				var $div = $('<div>').addClass('cal-day');
+				var $em = $('<em>').text(d.weekdayName);
+				var $span = $('<span>').text(d.day);
+				
+				if(i==0 || d.day==1) {
+					// 년월 입력
+					var $tdCopy = $td.clone();
+					var $divCopy = $div.clone().addClass('month');
+					var $emCopy = $em.clone().text(d.year);
+					var $spanCopy = $span.clone().text(d.month);
+					
+					elements.push(
+							$tdCopy.append($divCopy.append($emCopy).append($spanCopy))					
+					);
+					if(i==0){
+						// 오늘
+						$div.removeClass('month').addClass('today');
+						$em = $('<em>').text(d.weekdayName);
+						$span = $('<span>').text(d.day);
+					}
+				}
+				
+				if(d.weekday == 6) $div.addClass('sat');
+				if(d.weekday == 7) $div.addClass('sun');
+				if(d.restDe) $div.addClass('rest').attr('title', d.restDe.RESTDE_NAME);
+				
+				// 데이터 및 클릭 이벤트 바인딩
+				$span.data('data', d);
+				
+				//일단 클릭이벤트 모두 바인딩 후 휴일만 off (주말이어도 최초 트리깅을위해)
+				//if(d.weekday != 6 && d.weekday !=7)		
+					$span.on('click', resveStatus.calendar.click);
+					
+				
 				
 				elements.push(
-						$tdCopy.append($divCopy.append($emCopy).append($spanCopy))					
+					$td.append($div.append($em).append($span))					
 				);
-				if(i==0){
-					// 오늘
-					$div.removeClass('month').addClass('today');
-					$em = $('<em>').text(d.weekdayName);
-					$span = $('<span>').text(d.day);
-				}
-			}
+			});
 			
-			if(d.weekday == 6) $div.addClass('sat');
-			if(d.weekday == 7) $div.addClass('sun');
+			$('.month-calendar tbody tr').append(elements);		
 			
-			// 데이터 및 클릭 이벤트 바인딩
-			$span.data('data', d);
-			
-			//일단 클릭이벤트 모두 바인딩 후 휴일만 off (주말이어도 최초 트리깅을위해)
-			//if(d.weekday != 6 && d.weekday !=7)		
-				$span.on('click', resveStatus.calendar.click);
-				
-			
-			
-			elements.push(
-				$td.append($div.append($em).append($span))					
-			);
-		});
+			$( ".loca-btn" ).tooltip();
+		})
 		
-		$('.month-calendar tbody tr').append(elements);		
-		
-		$( ".loca-btn" ).tooltip();
 	},
 	// 클릭이벤트 리스너
 	click: function(e){

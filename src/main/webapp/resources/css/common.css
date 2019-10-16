@@ -714,6 +714,8 @@ button.ui-datepicker-trigger {
 .cal-day.off span {
 	color:#999;
 }
+.cal-day.rest em,
+.cal-day.rest span,
 .cal-day.sat em,
 .cal-day.sat span,
 .cal-day.sun em,
