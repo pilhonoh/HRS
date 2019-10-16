@@ -8,7 +8,7 @@
 	<head>
 		<jsp:include page="${JSP}/include/resource.jsp" />	
 		<jsp:include page="${JSP}/include/messages.jsp" />	
-		<script src="${JS}/mssr/healthkeper.js"></script>
+		<script src="${JS}/mssr/mssrblacklist.js"></script>
 	</head>
 	<body>
 
@@ -19,19 +19,17 @@
 			</header><!-- //header -->
 
 			<div class="content">
-
 				<ul class="tab-design">
 					<li rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
 					<li rel="tab2"><a href="${ROOT}/resveMgmt/list">예약 정보 조회 및 변경</a></li>
-					<li class="on" rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>					
+					<li rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>					
 					<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
 					<li rel="tab5"><a href="${ROOT}/cmmn/codeManage">공통코드 관리</a></li>
-					<%-- <li rel="tab6"><a href="${ROOT}/mssr/mssrblacklist">No-Show 관리</a></li> --%>
-					<li rel="tab6"><a href="${ROOT}/mssr/mssrblacklist">No-Show 관리</a></li>
+					<li class="on" rel="tab6"><a href="${ROOT}/mssr/mssrblacklist">No-Show 관리</a></li>
 					<li rel="tab7"><a href="${ROOT}/cmmn/restDeList">휴일 관리</a></li>
 				</ul>
 				<div class="sub-tit">
-					<h2>헬스키퍼 관리</h2>
+					<h2>No-Show 관리</h2>
 				</div>
 				
 				<div class="search_field_wrap">
@@ -44,52 +42,50 @@
 										<select style="width:120px;" data-code-tyl="BLD" data-empty-str="전체" id="bldCombo">
 										</select>										
 									</td>
-									<th><strong class="stit">재직여부</strong></th>
+									<th><strong class="stit">이름</strong></th>
 									<td>
-										<select style="width:120px;" id="hffcCombo">
-											<option value="">전체</option>
-											 <option value="Y">Y</option>
-											<option value="N">N</option>
-										</select>
+										<input type="text" id="userName">
 									</td>									
 								</tr>
 							</tbody>
 						</table>
-					</div><!-- //searchTableArea -->
+					</div>
 					<div class="search_btn_area">
 						<button class="search_btn" id="listBtn"><i class="xi-search xi-x"></i>검색</button>
-					</div><!-- //search_btn_area -->
-				</div><!-- // search_field_wrap -->
+					</div>
+				</div>
 
 				<div class="sub-tit">
-					<div class="f-right">
-						<button class="btn" id ="createBtn">등록</button>						
+					<div class="f-left" style="display:inline-block;">
+						<button class="btn" id ="deleteBtn">삭제</button>						
 					</div>
 				</div>
 
 				<table class="tbl-style t_center tbl-hover ">
 					<colgroup>
-						<col>						
-						<col>
-						<col>
-						<col>
+						<col style="width:50px;">						
 						<col style="width:10%;">
-						<col>
 						<col style="width:10%;">
+						<col style="width:13%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:13%;">
+						<col >
 					</colgroup>
 					<thead>
 						<tr>
-							<th>NO.</th>
-							<th>사옥</th>
+							<th><input id ='checkAll' type="checkbox"></th>
+							<th>사번</th>
 							<th>이름</th>
-							<th>닉네임</th>
-							<th>성별</th>
-							<th>등록일</th>
-							<th>재직</th>
+							<th>부서명</th>
+							<th>시작일자</th>
+							<th>종료일자</th>
+							<th>사옥</th>
+							<th>No-show 예약정보(예약일, 예약시간, 베드)</th>
 						</tr>
 					</thead>
-					<tbody id="healthkeperList">
-					
+					<tbody id="mssrblacklistList">
+						
 					</tbody>
 				</table>
 
