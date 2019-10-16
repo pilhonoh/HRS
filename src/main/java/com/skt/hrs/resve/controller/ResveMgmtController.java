@@ -12,14 +12,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.View;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
-import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.service.ResveMgmtService;
+import com.skt.hrs.resve.view.ResveMgmtExcelView;
 import com.skt.hrs.utils.StringUtil;
 
 
@@ -57,6 +58,16 @@ public class ResveMgmtController {
 		return "resve/resveMgmt";
 	}
 	
+	@RequestMapping(value = "/excel")
+	public View resveMgmtExcelView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception {	
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		ResponseResult result = new ResponseResult();
+		result = resveMgmtService.selectResveMgmtListExcel(param);
+        model.addAttribute("list", result.getList());
+ 
+        return new ResveMgmtExcelView();
+
+	}
 	
 	/**
 	 * 
@@ -102,6 +113,8 @@ public class ResveMgmtController {
 		return "popup/popResveModify";
 	}
 	
+	
+	
 	/**
 	 * 
 	 * @설명 : 관리자 예약 정보 조회
@@ -114,13 +127,9 @@ public class ResveMgmtController {
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/selectResveMgmtList")
-	public @ResponseBody ResponseResult selectResveMgmtList(HttpServletRequest request, HttpSession sess) throws Exception {
+	public @ResponseBody ResponseResult selectResveMgmtList(HttpServletRequest request) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(request);
-		
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
-		param.put("empNo", loginVo.getEmpno());
-		//param.put("empNo", "P149080"); //테스트를 위해 사번 하드코딩
-
+				
 		int rowPerPage = param.getInt("rowPerPage");
 		int startRow = param.getInt("startRow");
 		

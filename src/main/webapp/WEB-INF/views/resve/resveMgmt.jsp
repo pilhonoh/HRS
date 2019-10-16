@@ -19,7 +19,7 @@
 
 			<div class="content">
 				<ul class="tab-design">
-					<li rel="tab1"><a href="${ROOT}/mssr/schedule">관리사 스케쥴 관리</a></li>
+					<li rel="tab1"><a href="${ROOT}/mssr/schedule">헬스키퍼 스케쥴 관리</a></li>
 					<li rel="tab2" class="on"><a href="${ROOT}/resveMgmt/list">예약 정보 조회 및 변경</a></li>
 					<li rel="tab3"><a href="${ROOT}/mssr/healthkeper">헬스키퍼 관리</a></li>			
 					<li rel="tab4"><a href="${ROOT}/charger/chargerList">담당자 등록</a></li>
@@ -69,7 +69,7 @@
 		
 				<div class="sub-tit">
 					<div class="f-right">
-						<button class="btn">엑셀</button>				
+						<button id="btnExcel" class="btn">엑셀</button>				
 					</div>
 				</div>
 				
@@ -92,7 +92,7 @@
 							<th rowspan="2">예약일</th>
 							<th rowspan="2">예약시간</th>
 							<th rowspan="2">사옥</th>
-							<th rowspan="2">관리사</th>
+							<th rowspan="2">헬스키퍼</th>
 							<th rowspan="2">베드</th>
 							<th rowspan="2">진행상태</th>
 							<th colspan="2">예 약</th>

@@ -178,4 +178,19 @@ public class ResveMgmtService {
 		param.put("cancelGbn", ResveStatusConst.VIEWSTATUS.WAIT.toString());
 		return resveStatusService.cancelResveStatus(param);
 	}
+	
+	/**
+	 * 
+	 * @설명 : (관리자) 예약 현황 엑셀 조회 
+	 * @작성일 : 2019.10.16
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectResveMgmtListExcel(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemList(resveMgmtDAO.selectResveMgmtListExcel(param));
+		return result;
+	}
 }

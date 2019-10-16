@@ -76,5 +76,18 @@ public class ResveMgmtDAO {
 	public List selectResveMgmtDetailList(DataEntity param) {
 		return sqlSession.selectList("resveMgmtMapper.selectResveMgmtDetailList", param);
 	}
+	
+	/**
+	 * 
+	 * @설명 : 관리자 예약 현황 엑셀용 조회
+	 * @작성일 : 2019.10.16
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public List selectResveMgmtListExcel(DataEntity param) {
+		return sqlSession.selectList("resveMgmtMapper.selectResveMgmtListExcel", param);
+	}
 		
 }

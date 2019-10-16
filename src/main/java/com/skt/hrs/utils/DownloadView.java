@@ -34,7 +34,7 @@ public class DownloadView {
 		}
 	}
 
-	private String getBrowser(HttpServletRequest request) {
+	public static String getBrowser(HttpServletRequest request) {
 		String header = request.getHeader("User-Agent");
 		if (header.indexOf("MSIE") > -1 || header.indexOf("Trident") > -1)
 			return "MSIE";
@@ -45,7 +45,7 @@ public class DownloadView {
 		return "Firefox";
 	}
 
-	private String getDisposition(String filename, String browser)
+	public static String getDisposition(String filename, String browser)
 			throws UnsupportedEncodingException {
 		String dispositionPrefix = "attachment;filename=";
 		String encodedFilename = null;

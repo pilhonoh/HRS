@@ -11,6 +11,7 @@ var resveMgmt = {
 		resveMgmt.datepicker.setDefaultValue(); //datepicker 기본값 세팅
 		resveMgmt.list.renderResveList(); //목록 조회 후 렌더
 		resveMgmt.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
+		resveMgmt.button.excelBtnEvent();	//엑셀 버튼 클릭 이벤트
 	},
 	
 	
@@ -75,7 +76,7 @@ var resveMgmt = {
 			$('.search_field [data-code-tyl="STS"] option[value="STS04"]').remove(); //'대기취소' 삭제
 		},
 		bldComboEventBinding: function() {
-			$('[data-code-tyl="BLD"]').on('change', function() {
+			$('.search_field [data-code-tyl="BLD"]').on('change', function() {
 				var bldCode = $(this).val();
 				$('#cbbBedCode').attr('data-code-tyl', 'BED');
 				$('#cbbBedCode').attr('data-code-tys', bldCode);
@@ -450,6 +451,20 @@ var resveMgmt = {
 				
 				resveMgmt.popup.showModifyPopup();
 			});
+		},
+		excelBtnEvent : function() {
+			$('#btnExcel').on('click', function(e) {
+				
+				
+				location.href = ROOT + '/resveMgmt/excel?' + 
+					$.param(
+						Object.assign({
+							bldNm : $('.search_field [data-code-tyl="BLD"] option:selected').text(),
+							bedNm : $('.search_field [data-code-tyl="BED"] option:selected').text(),
+							statusNm : $('.search_field [data-code-tyl="STS"] option:selected').text()					
+						}, resveMgmt.list.params)
+					);
+			})
 		}
 	},
 	
