@@ -129,8 +129,7 @@ var popSchModify= {
 			return deferred.promise();
 		},
 		
-		
-		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성
+
 		renderScheduleList: function() {
 			$.when(	popSchModify.cmmnCode.getAllCodeList(),popSchModify.selectScheduleList()).done(function(result){
 							 popSchModify.rowAddEvent();
@@ -332,33 +331,23 @@ function fnRowDelete(){
 		});
 	
 }
-function getParams(){
-	var params = [] 
-	$(".scheduleModify").each(function(){
-		var rowid = $(this).data("rowid");
-		params.push({
-				startTime: $("#scheduleModify_startTime"+rowid).val(), //근무 시작일
-				endTime: $("#scheduleModify_endTime"+rowid).val(), //근무 종료일  */
-			});
-		
-	});	
-	return params;
-}
 
  function getParamsdiff(){
 	var defData = popSchModify.params.timeList.split(',');
-	var nowData =  getParams();
 	var setTimesheet = []
-    //var delTimesheet = []
     var start = 0; 
 	var end   = 0;
-    for (var i = 0; i < nowData.length; i++) {
-    	start = Number(nowData[i].startTime) ;
-    	end =  Number(nowData[i].endTime);
-	    for (var j = start ; j<=end; j++) {
-		   setTimesheet.push(j.toString());	
-		}  
-	}
+	
+	$(".scheduleModify").each(function(){
+		var rowid = $(this).data("rowid");
+		start= Number($("#scheduleModify_startTime"+rowid).val()); //근무 시작일
+		end = Number($("#scheduleModify_endTime"+rowid).val()); //근무 종료일  */
+		for (var i = start ; i <=end; i++) {
+			   setTimesheet.push(i.toString());	
+			}			
+		
+	});	
+	
     var diff1 = defData.filter( function(x){ return setTimesheet.indexOf(x) >= 0 });
     var diffInsert = setTimesheet.filter(function(x){ return defData.indexOf(x) < 0});
     var diffDelete = defData.filter(function(x){ return diff1.indexOf(x) < 0});

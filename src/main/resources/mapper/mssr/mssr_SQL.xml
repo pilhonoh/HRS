@@ -201,4 +201,10 @@
    JOIN  CMMN_CODE D ON A.BED_CODE = D.CODE AND A.BLD_CODE = D.CODE_TYS AND D.CODE_TYL ='BED'
   WHERE RESVE_NO = #{RESVE_NO}  ;
  </select>    
+ 	<select id="selectRestCheck" parameterType="map" resultType="hashmap">
+	 SELECT  IFNULL(GROUP_CONCAT(RESTDE_DATE ORDER BY RESTDE_DATE SEPARATOR ','),'')  AS REST_DATES  
+	  FROM RESTDE 
+	   WHERE RESTDE_DATE BETWEEN   #{startDate} AND  #{endDate} 
+	   AND USED_YN = 'Y'        
+	</select>
 </mapper>

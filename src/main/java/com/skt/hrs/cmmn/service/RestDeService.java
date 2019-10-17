@@ -77,7 +77,6 @@ public class RestDeService {
 		boolean  saveResult = false;
 		String saveStat = param.getString("saveStat");		
 		int days = 0 ; 
-		int dupchk = 0 ;
 		String startDate =param.getString("startDate"), endDate =  param.getString("endDate");
 		String workDate = "";
 		if (saveStat.equals("C")) {
@@ -89,10 +88,6 @@ public class RestDeService {
         		workDate = DateUtil.getDateAdd(startDate,i);
         		param.put("restDeDate",workDate.replaceAll("-", ""));
         		
-        		 dupchk = restDeDAO.selectRestCheck(param);
-        		 if(dupchk > 0) { 
- 					throw new HrsException("error.restduplicate", true);
- 				 } 		
         		saveResult = restDeDAO.insertRestDe(param); 
 			 	if(!(saveResult)) { 
 					throw new HrsException("error.processFailure", true);
@@ -129,4 +124,26 @@ public class RestDeService {
 		return result;
 	}
 	
+	/**
+	 * 
+	 * @설명 : 휴일 중복 체크 
+	 * @작성일 : 2019.10.07
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public ResponseResult selectRestDeCheck(DataEntity param) {	
+		ResponseResult result = new ResponseResult();
+		boolean  checkResult =false;
+		param.put("startDate",param.getString("startDate").replaceAll("-", ""));
+    	param.put("endDate", param.getString("endDate").replaceAll("-", ""));
+		int restDeCheckCnt = restDeDAO.selectRestCheck(param);
+	
+		if(restDeCheckCnt>=1) {
+			checkResult = true;
+		}
+		result.setItemOne(checkResult);
+		return result;
+	}
 }

@@ -43,10 +43,11 @@
 			WHERE RESTDE_NO = #{restDeNo}      
 	 </select>    
 	<!-- 휴일 중복 체크  -->
+	
 	<select id="selectRestCheck" parameterType="map" resultType="int">
 	 SELECT IFNULL(COUNT(*),0) AS RestCheck  
 	  FROM RESTDE 
-	   WHERE RESTDE_DATE =  #{restDeDate} 
+	   WHERE RESTDE_DATE BETWEEN  #{startDate} AND   #{endDate}
 	   AND USED_YN = 'Y'        
 	</select>
      <!-- 휴일 등록 -->

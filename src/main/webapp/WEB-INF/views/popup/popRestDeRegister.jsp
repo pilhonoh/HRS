@@ -41,11 +41,10 @@
 </div><!-- //pop-container -->
 <script>
 var popRestDeRegister = {
-		init: function() {
-			loadCodeSelect()
+		init: function()  {
+			//loadCodeSelect()
 			popRestDeRegister.button.popSaveClickEvent();
 			popRestDeRegister.datepicker.setDefaultValue();
-			
 		},
 
 		datepicker: {
@@ -66,9 +65,7 @@ var popRestDeRegister = {
 				    saveStat:""  // 등록수정 상태값
 		}, 
 		//예약 목록 조회
-		selectRestDeItem: function() {
-			var deferred = $.Deferred();
-			
+		selectRestDeItem: function() {		
 			$.ajax({
 				url: ROOT + '/cmmn/selectRestDeItem',
 				data: popRestDeRegister.params,
@@ -76,24 +73,17 @@ var popRestDeRegister = {
 					console.log('RestDeItem', res);
 					if (res.status === 200) {
 						   console.log(res)
-						   deferred.resolve(res.item);
-						
-					} else {
-						deferred.reject("");
-					}
+						   popRestDeRegister.setparam(res.item);
+					} 
 				},
 				error: function(err) {
 					console.error(err);
-					deferred.reject("");
 				}
 			})
-			
-			return deferred.promise();
 		},
 		button:{
 			popSaveClickEvent:function(){
 				$("#restDeRegister_saveBtn").on("click",function(){			
-					
 					if(!popRestDeRegister.validation.required()){
 						return false;
 					}
@@ -102,38 +92,36 @@ var popRestDeRegister = {
 				    popRestDeRegister.params.restDeName = $("#restDeRegister_Name").val();
 				    popRestDeRegister.params.startDate = $("#restDeRegister_start_date").val();
 					popRestDeRegister.params.endDate = $("#restDeRegister_end_date").val(); 
-					console.log(popRestDeRegister.params);
 					
+					popRestDeRegister.validation.restDeDupCheck(function(){
 					confirmPopup('휴일 정보를  저장  하시겠습니까?', function(){		 			
-			 		$.ajax({
-							url: ROOT + '/cmmn/restDeSave',
-							type: 'POST',
-							data: popRestDeRegister.params ,
-							success : function(res){
-										
-								RestDeList.list.renderRestDeList();
-								alertPopup('등록 되었습니다.');
-								//closeLayerPopup();
-							},
-							error : function(err) {
-								var json = JSON.parse(err.responseText);
-								alertPopup(json.message);
-							} 
-						}); 
-				    }); 
+				 		$.ajax({
+								url: ROOT + '/cmmn/restDeSave',
+								type: 'POST',
+								data: popRestDeRegister.params ,
+								success : function(res){
+											
+									RestDeList.list.renderRestDeList();
+									alertPopup('등록 되었습니다.');
+									//closeLayerPopup();
+								},
+								error : function(err) {
+									var json = JSON.parse(err.responseText);
+									alertPopup(json.message);
+								} 
+							}); 
+					    }); 
+					});
 				});
 			}
 		   
 		},
         setparam:function(data){
-        	$.when(	popRestDeRegister.selectRestDeItem()).done(function(res){
-	   		   $("#restDeRegister_No").val(res.RESTDE_NO);
-	   		   $("#restDeRegister_Name").val(res.RESTDE_NAME);
-	   		   $("#restDeRegister_start_date").val(res.RESTDE_DATE);
-	   		   $("#restDeRegister_end_date").val(res.RESTDE_DATE);
-   		    
-          })
-            
+	   		   $("#restDeRegister_No").val(data.RESTDE_NO);
+	   		   $("#restDeRegister_Name").val(data.RESTDE_NAME);
+	   		   $("#restDeRegister_start_date").val(data.RESTDE_DATE);
+	   		   $("#restDeRegister_end_date").val(data.RESTDE_DATE);
+    
 		},		
 		validation: {
 			 required:function(){
@@ -148,37 +136,39 @@ var popRestDeRegister = {
 						  return false;
 					  };
 					});  
+				 popRestDeRegister.validation.elementLock(chk)
 				 return chk;
 					 
 			 },
-		
 		elementLock:function(value){
 			if(popRestDeRegister.params.saveStat =='C'){
 				$(".rv-desc").css('display',(value)?'':'none');
-				$("#restDeRegister_saveBtn").prop("disabled",value);
+				//$("#restDeRegister_saveBtn").prop("disabled",value);
 			}else{
 				$("#restDeRegister_start_date").prop("disabled",value);
 				$("#restDeRegister_end_date").prop("disabled",value);
 				$(".ui-datepicker-trigger").prop("disabled",value);
 				
-			} 
-				
+			} 		
+		},
+		restDeDupCheck:function(func){
+			  $.ajax({
+					url: ROOT + '/cmmn/restDeCheck',
+					type: 'POST',
+					data: popRestDeRegister.params ,
+					success : function(res){
+						popRestDeRegister.validation.elementLock(res.item)
+						if(res.item){
+							  $("#requiredMsg").text("등록된 휴일이 있습니다");
+							
+						 }else{
+							 func();
+						 }
+					}
+				}); 
+		   }	 
 		}
-		/*  empDupCheck:function(result){
-			 var orgchartObj = JSON.parse(result);
-			 popRestDeRegister.params.restDeEmpno = orgchartObj[0].UserID.toUpperCase()
-			 $("#restDeRegister_restDeEmpNo").val(popRestDeRegister.params.restDeEmpno)
-			 $("#restDeRegister_Name").val(orgchartObj[0].UserName)
-			 $("#restDeRegister_Dept").val(orgchartObj[0].DeptName) 
-			$.when(orgchart_callback()).done(function(value){
-			     if(value){
-				  $("#requiredMsg").text("등록된 사번이 있습니다");
-			     }
-		     popRestDeRegister.validation.elementLock(value)	 
-		 })	 
-	},*/
 	}
-}
 
 
 
@@ -189,12 +179,12 @@ $(document).ready(function(){
     popRestDeRegister.init();
 	popRestDeRegister.params.restDeNo = data.RESTDE_NO;
  	if(data.RESTDE_NO !="" ){
-			popRestDeRegister.params.saveStat="U" 
-			popRestDeRegister.setparam();
+			popRestDeRegister.params.saveStat="U"; 
+			popRestDeRegister.selectRestDeItem();
 		    popRestDeRegister.validation.elementLock(true);
 			
 		}else{
-			popRestDeRegister.params.saveStat="C"
+			popRestDeRegister.params.saveStat="C";
 		   // popRestDeRegister.button.empCheckClickEvent();
 		}	 
 	

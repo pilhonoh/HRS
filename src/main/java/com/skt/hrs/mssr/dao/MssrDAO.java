@@ -170,4 +170,17 @@ public class MssrDAO {
 		return sqlSession.selectOne("mssrMapper.selectResveCheck", param);
 	}
 	
+	/**
+	 * 
+	 * @설명 : 휴일체크
+	 * @작성일 : 2019.09.20
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return count
+	 * @변경이력 :
+	 * */
+	public Map selectRestCheck(DataEntity param) { 
+		  return sqlSession.selectOne("mssrMapper.selectRestCheck", param); 
+	  }
+	
 }

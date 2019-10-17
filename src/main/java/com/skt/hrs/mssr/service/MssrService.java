@@ -17,11 +17,11 @@ import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CspService;
 import com.skt.hrs.mssr.dao.MssrDAO;
-import com.skt.hrs.cmmn.dao.RestDeDAO;
 import com.skt.hrs.utils.DateUtil;
 import com.skt.hrs.utils.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -47,8 +47,7 @@ public class MssrService {
 	@Autowired
 	MessageSource messageSource;
 
-	@Autowired
-	RestDeDAO restDeDAO;
+
 	/**
 	 * 
 	 * @설명 : 관리사 목록 조회
@@ -155,10 +154,12 @@ public class MssrService {
 		String startDate ="", endDate = "", workDate="";
 		long days = 0;
 		int chk =0 , timeDup = 0, bedUse = 0;
-		int restChk = 0;
-		paramsMap.putAll(getListItems.get(0));
+	    Map restDateMap = null; 
+		String [] restDates = null;
+	    paramsMap.putAll(getListItems.get(0));
 		chkDataMap.put("RESVE_CHECK","");
 		chkDataMap.put("START_DATE",paramsMap.getString("startDate"));
+		
 		boolean  insertResult = false;
         for (int i = 0; i < getListItems.size(); i++) {
         	paramsMap.putAll(getListItems.get(i));
@@ -166,11 +167,15 @@ public class MssrService {
         	endDate = paramsMap.getString("endDate");
         	paramsMap.put("regEmpNo",param.getString("regEmpNo"));
         	days = DateUtil.getDateDiff(startDate, endDate );
+        	chkDataMap.put("startDate", startDate.replaceAll("-", ""));
+        	chkDataMap.put("endDate", endDate.replaceAll("-", ""));
+        	restDateMap = mssrDAO.selectRestCheck(chkDataMap);        	
+        	restDates = restDateMap.get("REST_DATES").toString().split(",");        	
         	for (int j = 0; j <= days; j++) {
         		 workDate = DateUtil.getDateAdd(startDate,j);
         		 chkDataMap.put("restDeDate",workDate.replaceAll("-", ""));
-        		 restChk = restDeDAO.selectRestCheck(chkDataMap);
-        		 if(DateUtil.isWeekend(workDate,"yyyyMMdd")|| restChk > 0) {
+        		 
+        		 if(DateUtil.isWeekend(workDate,"yyyyMMdd")||Arrays.asList(restDates).contains(workDate.replaceAll("-", ""))) {
             		 continue;
             	 };
         		paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK.toString());

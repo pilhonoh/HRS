@@ -19,24 +19,19 @@ var codeManageList = {
 		codeManageList.button.codeManageCreateBtnEvent(); //등록 버튼 클릭 이벤트
 		codeManageList.button.codeManageDeleteBtnEvent(); //삭제 버튼 클릭 이벤트
 		codeManageList.checkboxEvent.checkall();
-//		codeManageList.button.codeManageModifyBtnEvent(); //수정 버튼 클릭 이벤트
-		//select list render 대분류에 따라 헤더도 render 해야될 수도 있음
-		//페이징, 버튼, valid체크, 새로고침, 팝업, 체크박스 등등..
-//소분류 sBox 만들기 - 불필요 10.10.
-//	- 소분류 sBox 목록 조회 - 불필요 10.10.
+
+
 	},
 	
 	comboDataSet: function(cb, selector) {
 		var $container = selector ? $(selector) : $(document);
-//			$container.find('select[data-code-tyl]').each(function(idx, select){
+
 		$container.find('select[data-code-type]').each(function(idx, select) {
 			var cType = $(select).data('code-type');	//코드타입(대)
-//				var tyl = $(select).data('code-tyl');	//코드타입(대)
 			var tyl = $("#codeTyl").val();
 			var tys = $("#codeTys").val();
 			var empStr = $(select).data('empty-str');
-			
-//			alert($("#codeType").data("code-type"));
+
 			if(tyl === 'BLD') {
 				$(select).on('change', function() {
 					$('[data-code-tyl=BED]').data('code-tys', $(this).val()).empty();
@@ -79,11 +74,11 @@ var codeManageList = {
 		bedComboBoxSet: function() {
 			if($('#codeType').val() === 'BED') {
 				$('.midCate').show();
-				$('#codeTys').attr('disabled', false);
+				$('#codeTys').prop('disabled', false);
 			} else {
 				$('.midCate').hide();
-				$('#codeTys').attr('disabled', true);
-				$('#codeTys option:eq("")').attr('selected', true);
+				$('#codeTys').prop('disabled', true);
+				$('#codeTys option:first').prop('selected', true);
 			}
 		}
 	},
@@ -93,10 +88,6 @@ var codeManageList = {
 		params: {
 			pageNo: 1, //조회할 페이지 번호
 			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
-//			fromDate: '', //조회 시작 날짜
-//			toDate: '', //조회 끝 날짜
-//			bldCode: '', //사옥코드
-//			mssrEmpno: '', //관리사 사번
 			startRow: 0 //조회 시작할 ROW
 		},
 		
@@ -107,12 +98,12 @@ var codeManageList = {
 		selectCodeManageList: function() {
 			codeManageList.list.params.startRow = parseInt((codeManageList.list.params.pageNo - 1 ) * codeManageList.list.params.rowPerPage);
 			var deferred = $.Deferred();
-			
+			//console.log('data', codeManageList.list.params);
 			$.ajax({
 				url: ROOT + '/cmmn/selectCodeManageList',
 				data: codeManageList.list.params,
 				success: function(res) {
-//					console.log('codeManageList', res);
+				console.log('codeManageList', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
 						codeManageList.list.dataList = res.list;
@@ -149,34 +140,18 @@ var codeManageList = {
 	                    var updtDt = updt_dt.format('YYYY-MM-DD (ddd)');
 						codeManageListHtml.push('<tr>');
 						codeManageListHtml.push('	<td><input id="codeKey" type="checkbox" value="'+ resultList[i].CODE_TYL + '-' + resultList[i].CODE_TYS + '-' + resultList[i].CODE +'"></td>');
-//						codeManageListHtml.push('	<td>' + resultList[i].CODE_TYL + '</td>');
 						codeManageListHtml.push('	<td>' + resultList[i].CODE_TYL_NM + '</td>');
-//						codeManageListHtml.push('	<td>' + resultList[i].CODE_TYS + '</td>');
 						codeManageListHtml.push('	<td>' + resultList[i].CODE_TYS_NM + '</td>');
 						codeManageListHtml.push('	<td>' + resultList[i].CODE + '</td>');
-//						codeManageListHtml.push('	<td>' + resultList[i].CODE_NM + '</td>');
-//						var codeNmSet = "";
-//						if(resultList[i].CODE_TYL == "BED") {
-//							codeNmSet = resultList[i].CODE_TYS_NM + " " + resultList[i].CODE_NM;
-//						} else {
-//							codeNmSet = resultList[i].CODE_NM;
-//						}
 						codeManageListHtml.push('	<td>' + resultList[i].CODE_NM + '</td>');
-//						codeManageListHtml.push('	<td>' + resultList[i].CODE_ORDR + '</td>');
 						codeManageListHtml.push('	<td><button name="modifyBtn" class="t-btn cr01" onclick="javascript:codeManageList.popup.showCodeManageModifyPopup(\''+resultList[i].CODE_TYL + '\',\'' + resultList[i].CODE_TYS + '\',\'' + resultList[i].CODE +'\');">수정</button></td>');
-//						codeManageListHtml.push('	<td>' + resultList[i].REG_EMPNO + '</td>');
-//						codeManageListHtml.push('	<td>' + regDt + '</td>');
-//						codeManageListHtml.push('	<td>' + resultList[i].UPDT_EMPNO + '</td>');
-//						codeManageListHtml.push('	<td>' + updtDt + '</td>');
 						codeManageListHtml.push('</tr>');
-//						console.log(codeManageListHtml);
 					}
 				}
 				
 				$('tbody#codeManageList').html(codeManageListHtml);
-//				$('tbody#codeManageList').html(codeManageListHtml.join(''));
+
 				codeManageList.paging.renderPaging();
-//				codeManageList.button.scheduleModifyBtnEvent();
 			});
 		},
 		
@@ -184,8 +159,7 @@ var codeManageList = {
 		getRowData: function(codeTypeVal, codeTysVal, codeVal) {
 			var rowDataList = codeManageList.list.dataList;
 			var rowData;
-////			alert(codeKeySet.split(','));
-//			var codeKey = codeKeySet.split(',');
+
 			for (var i in rowDataList) {
 				if (rowDataList[i].CODE_TYL == codeTypeVal && 
 					rowDataList[i].CODE_TYS == codeTysVal && 
@@ -232,22 +206,7 @@ var codeManageList = {
 				codeManageList.popup.showCodeManageCreatePopup();  
 			});
 		},
-/*
-		//수정 버튼 클릭 이벤트
-		codeManageModifyBtnEvent: function() {
-//			console.log(codeKeySet);
-//			$("a[name='modifyBtn']").on('click', function() {
-			$("input[name='modifyBtn']").on('click', function() {
-//				alert(1);
-//				var codeKeySet = $(this).val();
-//				$("button[name='modifyBtn']").on('click', function() {
-				codeManageList.popup.showCodeManageModifyPopup();  
-//				alert('1-1');
-//				codeManageList.popup.showCodeManageModifyPopup("1-2-3");  
-			})
-		},
-*/
-		//삭제 버튼 클릭 이벤트
+	//삭제 버튼 클릭 이벤트
 		codeManageDeleteBtnEvent: function() {
 			$("button#deleteBtn").on('click',function() {
 				var params = [];
@@ -256,22 +215,10 @@ var codeManageList = {
 				var delItemCnt = 0;
 				var meassage = '';
 				$('tbody#codeManageList input:checkbox:checked').each(function() {
-//					console.log('keyList', $(this).val());
-//					var delKeyList = $(this).val();
-//					alert(delKeyList.length);
-//					for (var i = 0; i < delKeyList.length; i++) {
 					delItemCnt++;  
 					var delkeySet = $(this).val().split('-');
 					params.push({ codeTyl: delkeySet[0], codeTys: delkeySet[1], code: delkeySet[2] });
-//					} 
-//					console.log(delItemCnt + "번째 : " + delkeySet);
-//					data = codeManageList.list.getRowData($(this).val())
-				     
-//					resveNoSplit = data.RESVE_NO_LIST.split(",")
-//					for (var i = 0; i < resveNoSplit.length; i++) {
-//						delItemCnt++;  
-//						params.push({ resveDate : data.RESVE_DE, mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE, RESVE_NO:resveNoSplit[i] });
-//					}
+
 				});
 				 
 				if(params.length == 0){

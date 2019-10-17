@@ -104,10 +104,9 @@ var popCodeManageCreate = {
 		tysComboBoxSet: function() {
 			if($('#codeType_createVal').val() === 'BED') {
 				$('.smallCate').show();
-// 				alert("Work")
 				$('#codeTys_createVal').attr('disabled', false);
 			} else {
-// 				alert("Not Work")
+
 				$('.smallCate').hide();
 				$('#codeTys_createVal option:eq("")').attr('selected', true);
 				$('#codeTys_createVal').attr('disabled', true);
@@ -116,7 +115,7 @@ var popCodeManageCreate = {
 		
 		tylComboEventBinding: function() {
 			$('#codeType_createVal').on('change', function() {
-// 				alert($('#codeType_createVal').val());
+
 				popCodeManageCreate.comboBox.tysComboBoxSet();
 			});
 		}
@@ -140,32 +139,28 @@ var popCodeManageCreate = {
 				if(!popCodeManageCreate.validation.required()) {
 					return false;
 				}
-// 				if(!popCodeManageCreate.validation.duplicateCheck()) {
-// 					return false;
-// 				}
-				
+		
 				$.when(popCodeManageCreate.validation.duplicateCheck())
 					.then(function(retVal){
 						if(retVal) {
 							confirmPopup('코드를 등록 하시겠습니까?', function() {
-//			 					console.log("Params", popCodeManageCreate.params);
+
 								$.ajax({
 									url: ROOT + '/cmmn/insertCodeManage',
 									type: 'POST',
 									data: {
 										codeTyl: $("#codeType_createVal").val(), 
 										codeTys: $("#codeTys_createVal").val(),
-										code: $("#code_createVal").val(),
+										code: $("#code_createVal").val().replace(/\s/gi,""),
 										codeNm: $("#codeNm_createVal").val()
 										},
 									success : function(res) {
 										console.log('regist', res);
 										codeManageList.list.renderCodeManageList();
 										alertPopup('등록 되었습니다.');
-										//closeLayerPopup();
+
 									},
 									error : function(err) {
-//			 							var json = JSON.parse(err.responseText);
 										alertPopup(err.responseText);
 									}
 								}); 
@@ -174,11 +169,7 @@ var popCodeManageCreate = {
 					})
 				
 				
-// 				alert(11);
-// 				if(!popCodeManageCreate.validation.selectiveRequired()) {
-// 					return false;
-// 				}
-				
+
 				
 			});
 		}

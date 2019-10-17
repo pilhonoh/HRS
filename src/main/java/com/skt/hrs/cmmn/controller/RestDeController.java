@@ -43,7 +43,7 @@ public class RestDeController {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴 목록 view 호출
+	 * @설명 :  휴일 목록 view 호출
 	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
 	 * @param response
@@ -63,7 +63,7 @@ public class RestDeController {
 	
 	/**
 	 * 
-	 * @설명 : 관리자 조회
+	 * @설명 : 휴일 조회
 	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
 	 * @param request
@@ -87,18 +87,7 @@ public class RestDeController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/exportRestDeList")
-	public void exportrestDeList(HttpServletRequest request, HttpSession sess, HttpServletResponse response) throws Exception {
-		DataEntity param = HttpUtil.getServletRequestParam(request);
-		ResponseResult result = new ResponseResult();
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
-		int rowPerPage = param.getInt("rowPerPage");
-		int startRow = param.getInt("startRow");
-		param.put("rowPerPage", rowPerPage);
-		param.put("startRow", startRow);	
-		result = restDeService.selectRestDeList(param);
-		/* ExcelExport.excelDownLoad(result, request, response); */
-	}
+	
 	
 	
 	@RequestMapping(value = "/selectRestDeItem")
@@ -112,7 +101,7 @@ public class RestDeController {
     
 	/**
 	 * 
-	 * @설명 : 관리자   등록 팝업
+	 * @설명 : 휴일  등록 팝업
 	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
 	 * @param : request
@@ -131,7 +120,7 @@ public class RestDeController {
 	
 	/**
 	 * 
-	 * @설명 : 관리자   중복 체크  
+	 * @설명 : 휴일   중복 체크  
 	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
 	 * @param request
@@ -140,17 +129,16 @@ public class RestDeController {
 	 * @변경이력 :
 	 */
 	
-//	@RequestMapping(value = "/restDeEmpNoCheck")
-//	public @ResponseBody ResponseResult selectEmpNoCheck(HttpServletRequest req, HttpSession res){
-	//  DataEntity param = HttpUtil.getServletRequestParam(req); 
-	  
-	  //return restDeService.selectEmpNoCheck(param);
-//	}
+	@RequestMapping(value = "/restDeCheck")
+	public @ResponseBody ResponseResult selectEmpNoCheck(HttpServletRequest req, HttpSession res){
+	   DataEntity param = HttpUtil.getServletRequestParam(req); 
+	  return restDeService.selectRestDeCheck(param);
+	}
 	 
 	
 	/**
 	 * 
-	 * @설명 : 관리자   등록 /수정 
+	 * @설명 : 휴일   등록 /수정 
 	 * @작성일 : 2019.10.11
 	 * @작성자 : LEE.Y.H
 	 * @param req
