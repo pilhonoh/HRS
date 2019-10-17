@@ -23,6 +23,7 @@ import com.skt.hrs.cmmn.contants.ResveStatusConst;
 //import com.skt.hrs.cmmn.contants.ResveViewStatus;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CspService;
+import com.skt.hrs.cmmn.service.ScheduleService;
 import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.resve.dao.ResveBlacklistDAO;
 import com.skt.hrs.resve.dao.ResveStatusDAO;
@@ -50,6 +51,9 @@ public class ResveStatusService {
 	
 	@Autowired
 	MessageSource messageSource;
+	
+	@Autowired
+	private ScheduleService scheduleService;
 
 	
 	/**
@@ -257,7 +261,8 @@ public class ResveStatusService {
 		// SMS 등록		
 		resveItem.put("targetEmpno", param.getString("targetEmpno"));
 		cspService.insertCspSMS(resveItem, "csp.sms.resveComplete", Locale.forLanguageTag(param.getString("_ep_locale")));
-		
+		// 아웃룩 일정 등록
+		scheduleService.insertScheduleSend(resveItem);
 		
 		return result;
 		
@@ -458,9 +463,15 @@ public class ResveStatusService {
 				// 예약취소 sms
 				resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
+				//일정취소 아웃룩연동
+				scheduleService.updateScheduleCancel(resveItem);
+				
 				// 예약승계 sms
 				resveItem.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
 				cspService.insertCspSMS(resveItem, "csp.sms.resveSuccession", locale);
+				//일정등록 아웃룩 연동
+				scheduleService.insertScheduleSend(resveItem);
+				
 				
 			}else {
 				/*****************************
@@ -485,6 +496,9 @@ public class ResveStatusService {
 				// 예약취소 sms
 				resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
 				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
+				//일정취소 아웃룩연동
+				scheduleService.updateScheduleCancel(resveItem);
+				
 			}
 			
 									

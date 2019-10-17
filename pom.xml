@@ -257,6 +257,12 @@
 		    <version>${org.springframework-version}</version>
 		</dependency>
 
+		<!-- json -->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20160810</version>
+		</dependency>
 		
 	</dependencies>
 	
