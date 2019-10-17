@@ -86,6 +86,7 @@ public class LoginController {
 			loginVo.settSex(user.get("T_SEX").toString());
 			loginVo.setAuth( user.get("AUTH_CODE") == null ? 
 					"" : user.get("AUTH_CODE").toString());	//구성원
+			loginVo.setHrsAgree(user.get("HRS_AGREE").toString());
 			sess.setAttribute("LoginVo", loginVo);
 			
 			// forward로 넘어온경우

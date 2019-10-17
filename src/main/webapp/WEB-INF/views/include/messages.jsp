@@ -19,6 +19,7 @@ var messages = {
 	'error.dateCompareStartEnd' : '<spring:message code="error.dateCompareStartEnd" javaScriptEscape="true" />',
 	'error.timeCompareStartEnd' : '<spring:message code="error.timeCompareStartEnd" javaScriptEscape="true" />',
 	'error.alreadyConfirm' : '<spring:message code="error.alreadyConfirm" javaScriptEscape="true" />',
+	'error.reqireAgree' : '<spring:message code="error.reqireAgree" javaScriptEscape="true" />'	
 }
 
 /**

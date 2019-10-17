@@ -34,6 +34,20 @@ public class UserDAO {
 	 * @변경이력 :
 	 */
 	public Map selectUserInfo(DataEntity param) {
-		return sqlSession.selectOne("hrsuserMapper.selectUserInfo", param);
+		return sqlSession.selectOne("userMapper.selectUserInfo", param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 급여공제 본인 동의 처리 
+	 * @작성일 : 2019.10.17
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean updateAgree(DataEntity param) {
+		int cnt = sqlSession.update("userMapper.updateAgree", param);
+		return cnt == 1;
 	}
 }

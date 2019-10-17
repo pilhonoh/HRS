@@ -41,5 +41,10 @@ public class UserService {
 		return result;
 	}
 	
+	public ResponseResult updateAgree(DataEntity param) {
+		ResponseResult result = new ResponseResult();
+		result.setItemOne(userDAO.updateAgree(param));
+		return result;
+	}
 	
 }
