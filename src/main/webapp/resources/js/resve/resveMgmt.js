@@ -457,11 +457,11 @@ var resveMgmt = {
 				
 				
 				location.href = ROOT + '/resveMgmt/excel?' + 
-					$.param(
-						Object.assign({
+					$.param(						
+						$.extend({
 							bldNm : $('.search_field [data-code-tyl="BLD"] option:selected').text(),
 							bedNm : $('.search_field [data-code-tyl="BED"] option:selected').text(),
-							statusNm : $('.search_field [data-code-tyl="STS"] option:selected').text()					
+							statusNm : $('.search_field [data-code-tyl="STS"] option:selected').text()
 						}, resveMgmt.list.params)
 					);
 			})

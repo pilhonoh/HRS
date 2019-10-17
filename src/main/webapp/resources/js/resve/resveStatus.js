@@ -174,7 +174,7 @@ resveStatus.calendar =  {
 			}	
 			
 			$.each(res.list, function(i, restDe){
-				dates.find(function(e, i){
+				dates.filter(function(e, i){
 					if(e.yyyymmdd === restDe.RESTDE_DATE){
 						dates[i].restDe = restDe
 					}
