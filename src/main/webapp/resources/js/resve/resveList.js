@@ -163,7 +163,17 @@ var resveList = {
 						var resve_de = resultList[i].RESVE_DE;
 						var resveDt = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 						var resveDtTxt = moment(resve_de, 'YYYYMMDD').locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
-						var regDtTxt = moment(resultList[i].REG_DT).locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
+						
+						// 신청일 (등록일 아님)
+						// 예약완료 	-> 나의 마지막 예약신청 일시
+						// 예약취소 	-> 나의 마지막 예약신청 일시
+						// 대기중 	-> 나의 마지막 대기신청 일시
+						// 대기취소	-> 나의 마지막 대기신청 일시
+						// 케어완료	-> 나의 마지막 예약신청 일시
+						// No-Show	-> 나의 마지막 예약신청 일시
+						// No-Show(패널티없음)	-> 나의 마지막 예약신청 일시
+						var reqDtTxt = moment(resultList[i].REQ_DT).locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();	
+						
 						var sttusNm = resultList[i].STTUS_NM;
 						if(resultList[i].LAST_STTUS_CODE === 'STS07'){
 							sttusNm = 'No-Show<br/>페널티없음';
@@ -175,7 +185,7 @@ var resveList = {
 						resveListHtml.push('	<td>' + resultList[i].BLD_NM + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].MSSR_NCNM + '</td>');
 						resveListHtml.push('	<td>' + resultList[i].BED_NM + '</td>');
-						resveListHtml.push('	<td>' + regDtTxt + '</td>');						
+						resveListHtml.push('	<td>' + reqDtTxt + '</td>');						
 						resveListHtml.push('	<td style="text-align:left; padding-left:85px">');
 						resveListHtml.push('		<span style="width: 65px; display: inline-block;">');
 						if(stsCode == 'STS02' || stsCode == 'STS04'){//대기취소, 예약취소 텍스트 색 다르게 조정
