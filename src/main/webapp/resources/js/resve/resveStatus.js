@@ -397,6 +397,11 @@ resveStatus.pop  =  {
 	// 예약신청 팝업 호출
 	regist : function(e){
 		
+		if(SESSION.AGREE != 'Y'){
+			$.alert({text: getMessage('error.reqireAgree')});
+			return false;
+		}
+		
 		var data = $(e.target).parents('td').data('data');		
 
 		// 시간체크
@@ -456,6 +461,11 @@ resveStatus.pop  =  {
 	},
 	// 대기신청 팝업 호출
 	wait : function(e){
+		
+		if(SESSION.AGREE != 'Y'){
+			$.alert({text: getMessage('error.reqireAgree')});
+			return false;
+		}
 		
 		var data = $(e.target).parents('td').data('data');
 
@@ -577,4 +587,9 @@ function checkBefore20min(resveDe, resveTm){
 
 $(document).ready(function(){	
 	resveStatus.init();
+	
+	// 급여공제 동의여부
+	if(SESSION.AGREE != 'Y'){
+		agree.popup();
+	}
 })

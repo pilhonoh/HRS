@@ -82,6 +82,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				loginVo.setPlace(user.get("PLACE").toString());
 				loginVo.settSex(user.get("T_SEX").toString());
 				loginVo.setAuth(authCode);
+				loginVo.setHrsAgree(user.get("HRS_AGREE").toString());
 				
 				//HttpSession sess = request.getSession();
 				session.setAttribute("LoginVo", loginVo);

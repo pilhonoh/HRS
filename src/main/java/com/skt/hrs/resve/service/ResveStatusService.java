@@ -195,8 +195,13 @@ public class ResveStatusService {
 		/*****************************
 		 *  VALIDATION
 		 ****************************/
-		if(resveItem == null ) 
+		if(!"Y".equals(param.getString("hrsAgree"))) {		
+			throw new HrsException("error.reqireAgree", true);		//급여공제에 대한 본인 동의가 필요합니다.
+		}
+		
+		if(resveItem == null ) {
 			throw new HrsException("error.invalidRequest", true);
+		}
 		
 		if("Y".equals(resveItem.get("CANCL_YN").toString())) {
 			throw new HrsException("error.canceledResve", true);	//이미 근무취소 처리되었습니다. 
@@ -286,8 +291,13 @@ public class ResveStatusService {
 		/*****************************
 		 *  VALIDATION
 		 ****************************/
-		if(resveItem == null)
+		if(!"Y".equals(param.getString("hrsAgree"))) {		
+			throw new HrsException("error.reqireAgree", true);		//급여공제에 대한 본인 동의가 필요합니다.
+		}
+		
+		if(resveItem == null) {
 			throw new HrsException("error.invalidRequest", true);
+		}
 		
 		if("Y".equals(resveItem.get("CANCL_YN").toString())) {
 			throw new HrsException("error.canceledResve", true);	//이미 근무취소 처리되었습니다. 

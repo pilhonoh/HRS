@@ -4,7 +4,8 @@ var SESSION = {
 	EMPNO : '${sessionScope.LoginVo.empno}',
 	HNAME : '${sessionScope.LoginVo.hname}',
 	SEX : '${sessionScope.LoginVo.tSex}',
-	PLACE: '${sessionScope.LoginVo.place}'
+	PLACE: '${sessionScope.LoginVo.place}',
+	AGREE: '${sessionScope.LoginVo.hrsAgree}'
 }
 var header = {
 	// 이번달 카운트 (2주카운트로 변경되며, 사용안함)

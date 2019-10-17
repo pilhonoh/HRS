@@ -231,6 +231,7 @@ public class ResveStatusController {
 		param.put("resveEmpno", loginVo.getEmpno());	//예약자사번
 		param.put("empno", loginVo.getEmpno());			//등록자사번
 		param.put("resveSexdstn", loginVo.gettSex());	//예약자성별
+		param.put("hrsAgree", loginVo.getHrsAgree());	//동의여부
 		return resveStatusService.registResveStatus(param);
 	}
 	
@@ -251,6 +252,7 @@ public class ResveStatusController {
 		param.put("waitEmpno", loginVo.getEmpno());	//예약자사번
 		param.put("empno", loginVo.getEmpno());			//등록자사번
 		param.put("waitSexdstn", loginVo.gettSex());	//예약자성별
+		param.put("hrsAgree", loginVo.getHrsAgree());	//동의여부
 		return resveStatusService.waitResveStatus(param);
 	}
 	
