@@ -23,7 +23,7 @@ public class CspSendJob {
 
 	private final String CSP_TYPE = "CSP_TYPE";
 
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+	Logger logger = LoggerFactory.getLogger("cspSendJobLogger");
 
 	@Autowired
 	private CspService service;

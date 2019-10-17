@@ -19,7 +19,7 @@ import com.skt.hrs.utils.StringUtil;
 
 public class ScheduleSendJob {
 	
-	Logger logger = LoggerFactory.getLogger(this.getClass());
+	Logger logger = LoggerFactory.getLogger("scheduleSendJobLogger");
 	
 	@Autowired
 	private ScheduleService scheduleService;
@@ -182,7 +182,7 @@ public class ScheduleSendJob {
 			newXml += "<meeting>";
 			newXml += "<sender><![CDATA["+map.get("RESVE_EMPNO").toString()+"]]></sender>";
 			newXml += "<sequence><![CDATA["+String.valueOf(map.get("RESVE_NO"))+"]]></sequence>";
-			newXml += "<subject><![CDATA[헬스케어예약]]></subject>";
+			newXml += "<subject><![CDATA[헬스케어 예약]]></subject>";
 			newXml += "<requiredAttendees><![CDATA["+map.get("EMAIL").toString()+"]]></requiredAttendees>";
 			newXml += "<optionalAttendees><![CDATA[]]></optionalAttendees>";
 			newXml += "<startTime><![CDATA["+StringUtil.getStartTime(map.get("RESVE_DE").toString(),map.get("TIME").toString())+"]]></startTime>";
