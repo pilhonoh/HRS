@@ -253,4 +253,22 @@ public class StringUtil {
 		}
 		return str;
 	}
+
+	public static String getStartTime(String date,String time) {
+		String startDate = new String();
+		startDate = date.substring(0, 4)+"/"+date.substring(4, 6)+"/"+date.substring(6,8);
+		
+		String[] startTime = time.split("~");
+		
+		return startDate+" "+startTime[0];
+	}
+	
+	public static String getEndTime(String date,String time) {
+		String endDate = new String();
+		endDate = date.substring(0, 4)+"/"+date.substring(4, 6)+"/"+date.substring(6,8);
+		
+		String[] endTime = time.split("~");
+		
+		return endDate+" "+endTime[1];
+	}
 }

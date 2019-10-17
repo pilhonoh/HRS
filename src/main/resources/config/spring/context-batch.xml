@@ -14,7 +14,8 @@
 	<bean id="blacklistFilterJob" class="com.skt.hrs.batch.BlacklistFilterJob"/> <!-- 블랙리스트 필터링 JOB -->
 	<bean id="cspSendJob" class="com.skt.hrs.batch.CspSendJob"/> <!-- CSP 연동 SMS/쪽지/Mail JOB -->
 	<bean id="resveNotifyJob" class="com.skt.hrs.batch.ResveNotifyJob"/>	<!-- 케어 30분전 알림 JOB -->
-	
+	<bean id="scheduleSendJob" class="com.skt.hrs.batch.ScheduleSendJob"/> <!-- 아웃룩 일정 연동 JOB -->
+	 
 	<!--
 		JOB Detail 	
 	-->	
@@ -30,6 +31,11 @@
     </bean>
     <bean id="jobResveNotifyDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> <!-- 케어 30분전 알림 JOB -->
 	    <property name="targetObject" ref="resveNotifyJob"/>
+	    <property name="targetMethod" value="execute"/>
+	    <property name="concurrent" value="false"/>
+    </bean>
+     <bean id="jobScheduleSendDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> <!-- 아웃룩 일정 연동 JOB -->
+	    <property name="targetObject" ref="scheduleSendJob"/>
 	    <property name="targetMethod" value="execute"/>
 	    <property name="concurrent" value="false"/>
     </bean>
@@ -50,6 +56,11 @@
 	    <property name="jobDetail" ref="jobResveNotifyDetail" />	    
 	    <property name="cronExpression" value="0 30 8-17 ? * MON-FRI" /> <!-- 월~금 08:30 ~ 17:30 -->	    
 	</bean>	
+	<bean id="scheduleSendTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean"> <!-- CSP 연동 SMS/쪽지/Mail JOB -->
+	    <property name="jobDetail" ref="jobScheduleSendDetail" />
+	    <property name="startDelay" value="6000" />
+	    <property name="repeatInterval" value="120000"></property>
+	</bean>	
 	
 	<!--
 		JOB Scheduler 	
@@ -61,6 +72,7 @@
 	        	<ref bean="blacklistFilterTrigger" />
 	        	<ref bean="cspSendTrigger" />
 	        	<ref bean="resveNotifyTrigger" /> 
+	        	<ref bean="scheduleSendTrigger" />
 	        	
 	        </list>
 	    </property>
