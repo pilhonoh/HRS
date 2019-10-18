@@ -52,7 +52,7 @@ var header = {
 	//급여공제 동의 여부 확인
 	checkAgree : function(){
 		//var agreeYn = '${sessionScope.LoginVo.hrsAgree}';		
-		console.log(SESSION.AGREE, '${sessionScope.LoginVo.hrsAgree}')
+		
 		if(SESSION.AGREE != 'Y'){
 			$('#layer_pop_agree').load(ROOT + '/resources/html/agree.html', function(res){
 				openLayerPopup('layer_pop_agree');

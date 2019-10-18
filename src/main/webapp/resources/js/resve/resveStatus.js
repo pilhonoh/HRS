@@ -9,24 +9,27 @@ var resveStatus = {
 	// 초기화
 	init: function(){
 		
-		resveStatus.calendar.render();	// 달력 렌더링
-		loadCodeSelect(function(){		// 공통코드 로드
-			if(SESSION.PLACE){				
-				$('[data-code-tyl=BLD] option[value='+SESSION.PLACE+']').attr('selected', true);	// default사옥선택
-			}
-			resveStatus.fillBeds()		// bed목록 조회
-			.then(function(){
-				$('.month-calendar .today span').trigger('click');
-				$('.cal-day.sat,.cal-day.sun,.cal-day.rest').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
-			});
-			
-		});			
+		resveStatus.calendar.render()	// 달력 렌더링
+		.then(function(){
+			loadCodeSelect(function(){		// 공통코드 로드
+				if(SESSION.PLACE){				
+					$('[data-code-tyl=BLD] option[value='+SESSION.PLACE+']').attr('selected', true);	// default사옥선택
+				}
+				resveStatus.fillBeds()		// bed목록 조회
+				.then(function(){
+					$('.month-calendar .today span').trigger('click');
+					$('.cal-day.sat,.cal-day.sun,.cal-day.rest').find('span').off('click');	//트리깅 후 주말클릭이벤트 삭제
+				});
 				
-		$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
-		
-		$('.loca-btn').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
-			resveStatus.pop.floor($('[data-code-tyl=BLD]').val());
+			});	
+					
+			$('[data-code-tyl=BLD]').on('change', resveStatus.bldOnChange);	// 사옥변경이벤트 바인딩
+			
+			$('.loca-btn').on('click', function(){		// 사옥위치 클릭 이벤트 바인딩
+				resveStatus.pop.floor($('[data-code-tyl=BLD]').val());
+			})
 		})
+		
 					
 	},
 	// 사옥변경 이벤트 리스너
@@ -189,7 +192,7 @@ resveStatus.calendar =  {
 	// 렌더링
 	render : function(){
 							
-		resveStatus.calendar.getAfter2Weeks()
+		return resveStatus.calendar.getAfter2Weeks()
 		.then(function(dates){
 			var elements = [];
 			
