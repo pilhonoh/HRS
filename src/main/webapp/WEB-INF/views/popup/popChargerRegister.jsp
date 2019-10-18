@@ -16,21 +16,24 @@
 		</colgroup>
 		<tbody>
 			<tr>
-			<th class = "required" >사번</th>
-				<td><input id="chargerRegister_chargerEmpNo" type="text"> <button id ="chargerRegister_getEmpInfo"  class="t-btn cr01" >사원검색</button></td>
+			<th class = "required"  >사번</th>
+				<td id ='tdEmp'>
+				  <input id="txt_Empno" type="text" disabled>
+				 <button id ="chargerRegister_getEmpInfo"  class="t-btn cr01" >사원검색</button>
+				</td>
 			</tr>
 			<tr>
 				<th>이름</th>
-				<td><input type="text" id="chargerRegister_Name"  ></td>
+				<td id="chargerRegister_Name" ></td>
 			</tr>
 			<tr>
 				<th>부서</th>
-				<td><input type="text" id="chargerRegister_Dept"></td>
+				<td id="chargerRegister_Dept" ></td>
 			</tr>
 			<tr>
 				<th class = "required" >담당사옥</th>
 				<td>
-					<select style="width:120px;" data-code-tyl="BLD" data-empty-str="선택" id="chargerRegister_bldCombo"></select>
+					<select style="width:120px;"  data-code-tyl="BLD" data-empty-str="선택" id="chargerRegister_bldCombo"></select>
 									
 				</td>
 			</tr>
@@ -47,13 +50,13 @@
 		<button id ="chargerRegister_saveBtn"  class="pop-btn">저장</button>
 		<button class="pop-btn gray layerClose">취소</button>
 	</div>
-
+     <input id="chargerRegister_chargerEmpNo" type="hidden">
 	<!-- 팝업 컨텐츠 E -->						
 </div><!-- //pop-container -->
 <script>
 var popRegCreate = {
 		init: function() {
-			loadCodeSelect()
+			
 			popRegCreate.button.popSaveClickEvent();
 			
 		},
@@ -131,9 +134,10 @@ var popRegCreate = {
 		},
         setparam:function(data){
         	$.when(	popRegCreate.selectChargerItem()).done(function(res){
-	   		   $("#chargerRegister_chargerEmpNo").val(res.EMPNO);
-	   		   $("#chargerRegister_Name").val(res.HNAME);
-	   		   $("#chargerRegister_Dept").val(res.DEPTNM);
+        	   $("#tdEmp").text(res.EMPNO);
+        	   $("#chargerRegister_chargerEmpNo").val(res.EMPNO);
+	   		   $("#chargerRegister_Name").text(res.HNAME);
+	   		   $("#chargerRegister_Dept").text(res.DEPTNM);
 	   		   $("#chargerRegister_bldCombo").val(res.BLD_CODE);
 	   		   $("#chargerRegister_authCombo").val(res.AUTH_CODE);
    		    
@@ -159,9 +163,10 @@ var popRegCreate = {
 			 empDupCheck:function(result){
 				 var orgchartObj = JSON.parse(result);
 				 popRegCreate.params.chargerEmpno = orgchartObj[0].UserID.toUpperCase()
+				 $("#txt_Empno").val(popRegCreate.params.chargerEmpno);
 				 $("#chargerRegister_chargerEmpNo").val(popRegCreate.params.chargerEmpno)
-				 $("#chargerRegister_Name").val(orgchartObj[0].UserName)
-				 $("#chargerRegister_Dept").val(orgchartObj[0].DeptName) 
+				 $("#chargerRegister_Name").text(orgchartObj[0].UserName)
+				 $("#chargerRegister_Dept").text(orgchartObj[0].DeptName) 
 				$.when(orgchart_callback()).done(function(value){
 				     if(value){
 					  $("#requiredMsg").text("등록된 사번이 있습니다");
@@ -173,8 +178,9 @@ var popRegCreate = {
 		if(popRegCreate.params.saveStat =='C'){
 			$(".rv-desc").css('display',(value)?'':'none');
 			$("#chargerRegister_saveBtn").prop("disabled",value);
+			
 		}else{
-			$("#chargerRegister_chargerEmpNo").prop("disabled",value);
+			/* $("#chargerRegister_chargerEmpNo").prop("disabled",value); */
 			$("#chargerRegister_getEmpInfo").css('display',(value)?'none':'');
 		} 
 			
@@ -206,7 +212,8 @@ $(document).ready(function(){
 	var data = JSON.parse(item);
 	popRegCreate.init();
 	popRegCreate.params.chargerEmpno = data.EMPNO;
-	
+
+	loadCodeSelect( function(){
 	if(data.EMPNO !="" ){
 			popRegCreate.params.saveStat="U" 
 			popRegCreate.setparam();
@@ -217,6 +224,7 @@ $(document).ready(function(){
 		    popRegCreate.button.empCheckClickEvent();
 		}	
 
+	},"#chargerRegister_enter")
 	
 })
   
