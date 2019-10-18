@@ -29,7 +29,7 @@
 				</td>
 			</tr>
 			<tr>
-				<th>신청일</th>
+				<th>예약일</th>
 				<td>${item.RESVE_DE_TXT}</td>
 			</tr>
 			<tr>
