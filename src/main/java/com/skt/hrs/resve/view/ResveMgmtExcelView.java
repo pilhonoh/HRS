@@ -105,7 +105,7 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
         worksheet.setColumnWidth(2, 3000);	//사옥
         worksheet.setColumnWidth(3, 3000);	//헬스키퍼
         worksheet.setColumnWidth(4, 2000);	//베드
-        worksheet.setColumnWidth(5, 3000);	//진행상태
+        worksheet.setColumnWidth(5, 4000);	//진행상태
         worksheet.setColumnWidth(6, 3000);	//예약자사번
         worksheet.setColumnWidth(7, 3000);	//예약자성명
         worksheet.setColumnWidth(8, 3000);	//예약자부서명

@@ -443,6 +443,10 @@ resveStatus.pop  =  {
 				resveDe: resveStatus.data.selectedDate.yyyymmdd
 			}, 
 			function(res){
+				
+				$('#layer_pop01 .comm-info').css('padding', '12px 20px');
+				$('#layer_pop01 .comm-info').css('text-align', 'left');
+				
 				$('#layer_pop01 #btnOk').on('click', function(){
 					//closeLayerPopup();
 					

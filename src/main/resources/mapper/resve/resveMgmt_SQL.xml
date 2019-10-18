@@ -58,7 +58,12 @@
 			AND BED_CODE = #{bedCode}
 			</if>
 			<if test='statusCode != null and statusCode != ""'>
-			AND LAST_STTUS_CODE = #{statusCode}
+				<if test='statusCode == "STS01"'>
+					AND LAST_STTUS_CODE IN ('STS01', 'STS03')				
+				</if>
+				<if test='statusCode != "STS01"'>
+					AND LAST_STTUS_CODE = #{statusCode}
+				</if>
 			</if>
 			AND CANCL_YN != 'Y'			
 			AND ((RESVE_EMPNO IS NOT NULL AND RESVE_EMPNO != '') OR (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != ''))			
@@ -101,7 +106,12 @@
 			AND BED_CODE = #{bedCode}
 			</if>
 			<if test='statusCode != null and statusCode != ""'>
-			AND LAST_STTUS_CODE = #{statusCode}
+				<if test='statusCode == "STS01"'>
+					AND LAST_STTUS_CODE IN ('STS01', 'STS03')				
+				</if>
+				<if test='statusCode != "STS01"'>
+					AND LAST_STTUS_CODE = #{statusCode}
+				</if>
 			</if>
 			AND CANCL_YN != 'Y'
 			AND ((RESVE_EMPNO IS NOT NULL AND RESVE_EMPNO != '') OR (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != ''))			
@@ -174,7 +184,7 @@
 	
 	<!-- 예약리스트 엑셀 조회 -->
 	<select id="selectResveMgmtListExcel" parameterType="map" resultType="hashmap">		
-		SELECT *
+		SELECT TBL.*
 		FROM (
 			SELECT STS.*,
 				DATE_FORMAT(RESVE_DE, '%Y-%m-%d') AS RESVE_DE_TXT,
@@ -190,7 +200,14 @@
 			    (SELECT DATE_FORMAT(MAX(REG_DT), '%Y-%m-%d %H:%i') FROM RESVE_HIST WHERE RESVE_NO = STS.RESVE_NO AND TARGET_EMPNO = STS.RESVE_EMPNO AND STTUS_CODE='STS01') AS RESVE_DT,
 			    (SELECT DATE_FORMAT(MAX(REG_DT), '%Y-%m-%d %H:%i') FROM RESVE_HIST WHERE RESVE_NO = STS.RESVE_NO AND TARGET_EMPNO = STS.WAIT_EMPNO AND STTUS_CODE='STS03') AS WAIT_DT,
 			    HIST.LAST_STTUS_CODE,
-			    (SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = HIST.LAST_STTUS_CODE ) AS LAST_STTUS_NM
+			    CASE WHEN HIST.LAST_STTUS_CODE = 'STS03' 
+			    	THEN CONCAT(
+				    		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = 'STS01'),
+				    		', ',
+				    		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = 'STS03')
+				    	)
+			    	ELSE (SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = HIST.LAST_STTUS_CODE)
+			    END AS LAST_STTUS_NM			    
 			FROM RESVE_STTUS STS
 			INNER JOIN (
 				SELECT T1.RESVE_NO, T1.STTUS_CODE AS LAST_STTUS_CODE
@@ -213,7 +230,12 @@
 			AND BED_CODE = #{bedCode}
 			</if>
 			<if test='statusCode != null and statusCode != ""'>
-			AND LAST_STTUS_CODE = #{statusCode}
+				<if test='statusCode == "STS01"'>
+					AND LAST_STTUS_CODE IN ('STS01', 'STS03')				
+				</if>
+				<if test='statusCode != "STS01"'>
+					AND LAST_STTUS_CODE = #{statusCode}
+				</if>
 			</if>
 			AND CANCL_YN != 'Y'			
 			AND ((RESVE_EMPNO IS NOT NULL AND RESVE_EMPNO != '') OR (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != ''))			
