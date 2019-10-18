@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+<script src="${JS}/cmmn/orgchart.js"></script>
 <div class="pop-head">
 	<h2>관리자등록/수정</h2>
 	<a href="#none" class="close layerClose">닫기</a> 

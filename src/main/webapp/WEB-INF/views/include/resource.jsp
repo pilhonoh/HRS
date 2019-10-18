@@ -23,4 +23,3 @@ var IMG = '${IMG}';
 <script src="${JS}/cmmn/common.js"></script>
 <script src="${JS}/cmmn/feedback.js"></script>
 <script src="${JS}/cmmn/agree.js"></script>
-<script src="${JS}/cmmn/orgchart.js"></script>
