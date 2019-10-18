@@ -587,9 +587,4 @@ function checkBefore20min(resveDe, resveTm){
 
 $(document).ready(function(){	
 	resveStatus.init();
-	
-	// 급여공제 동의여부
-	if(SESSION.AGREE != 'Y'){
-		agree.popup();
-	}
 })

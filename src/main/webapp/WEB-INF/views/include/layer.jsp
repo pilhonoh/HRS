@@ -23,3 +23,4 @@
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop_confirm"></div>	<!-- confirm -->
 
 <div class="pop-layer size3 bounceInDown animated" id="layer_pop_floor"></div>	<!-- 이미지(도면) -->
+<div class="pop-layer size1 bounceInDown animated" id="layer_pop_agree"></div>	<!-- 급여공제동의 -->

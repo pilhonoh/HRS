@@ -48,6 +48,16 @@ var header = {
 		}else{
 			location.href = ROOT + '/resve/list?from=resveCnt';
 		}
+	},
+	//급여공제 동의 여부 확인
+	checkAgree : function(){
+		//var agreeYn = '${sessionScope.LoginVo.hrsAgree}';		
+		console.log(SESSION.AGREE, '${sessionScope.LoginVo.hrsAgree}')
+		if(SESSION.AGREE != 'Y'){
+			$('#layer_pop_agree').load(ROOT + '/resources/html/agree.html', function(res){
+				openLayerPopup('layer_pop_agree');
+			});
+		}
 	}
 	
 }
@@ -61,6 +71,8 @@ $(document).ready(function(){
 	$('.user-desc em').on('click', header.goToList)
 	
 	header.get2WeeksCount();
+	
+	setTimeout(header.checkAgree, 500);	//급여공제 동의 여부 확인
 })
 
 </script>

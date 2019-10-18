@@ -159,18 +159,26 @@ $(function(){
 	 *	text: 'confirm 메시지'
 	 *	desc: '하부 보조 메시지',
 	 *	callback: 확인버튼 클릭시, 수행할 콜백함수
-	 *	icon : false면 아이콘 숨김
+	 *	icon : false면 아이콘 숨김,
+	 *  okText: 확인버튼 텍스트,
+	 *  cancelText : 취소버튼 텍스트
 	 * }
 	 */
 	$.confirm = function(options) {
 		$('#layer_pop_confirm').load(ROOT + '/resources/html/confirm.html', function(res){		
 			$('.alert-message h3').html(options.text.replace(/\n/g, '<br/>'));
 			if(options.desc){
-				$('.alert-message p').text(options.desc);
+				$('.alert-message p').html(options.desc.replace(/\n/g, '<br/>'));
 			}
 			
 			if(options.icon == false)
 				$('.alert-message h3').removeClass('confirm');
+			
+			if(options.okText)
+				$('.pop-container #btnOk').text(options.okText);
+			
+			if(options.cancelText)
+				$('.pop-container .layerClose').text(options.cancelText);
 			
 			$('#layer_pop_confirm #btnOk').one('click', options.callback);
 			openLayerPopup('layer_pop_confirm');
