@@ -181,9 +181,9 @@ var resveMgmt = {
 						if(item.RESVE_EMPNM){
 							
 							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || cancelDt < new Date()){	// 변경불가
-								$tr.append('	<td rowspan="2">' + item.RESVE_EMPNM + '<br/>'+ item.RESVE_EMPNO +'</td>');
+								$tr.append('	<td rowspan="2">' + item.RESVE_EMPNM + '<br/>('+ item.RESVE_EMPNO +')</td>');
 							}else{
-								$tr.append('	<td rowspan="2"><button class="t-btn cr01 resveModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.RESVE_EMPNM + '</button><br/>'+ item.RESVE_EMPNO +'</td>');
+								$tr.append('	<td rowspan="2"><button class="t-btn cr01 resveModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.RESVE_EMPNM + '</button><br/>('+ item.RESVE_EMPNO +')</td>');
 							}
 							$tr.append('	<td>' + item.RESVE_DT + '</td>');						
 						}else{
@@ -193,9 +193,9 @@ var resveMgmt = {
 						
 						if(item.WAIT_EMPNM){		
 							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || cancelDt < new Date()){	// 변경불가
-								$tr.append('	<td rowspan="2">' + item.WAIT_EMPNM + '<br/>'+ item.WAIT_EMPNO +'</td>');
+								$tr.append('	<td rowspan="2">' + item.WAIT_EMPNM + '<br/>('+ item.WAIT_EMPNO +')</td>');
 							}else{
-								$tr.append('	<td rowspan="2"><button class="t-btn cr02 waitModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.WAIT_EMPNM + '</button><br/>'+ item.WAIT_EMPNO +'</td>');
+								$tr.append('	<td rowspan="2"><button class="t-btn cr02 waitModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.WAIT_EMPNM + '</button><br/>('+ item.WAIT_EMPNO +')</td>');
 							}							
 							$tr.append('	<td>' + item.WAIT_DT + '</td>');						
 						}else{
