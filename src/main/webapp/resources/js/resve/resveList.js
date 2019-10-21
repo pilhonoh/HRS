@@ -172,7 +172,11 @@ var resveList = {
 						// 케어완료	-> 나의 마지막 예약신청 일시
 						// No-Show	-> 나의 마지막 예약신청 일시
 						// No-Show(패널티없음)	-> 나의 마지막 예약신청 일시
-						var reqDtTxt = moment(resultList[i].REQ_DT).locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();	
+						
+						var reqDtTxt = '';
+						if(resultList[i].REQ_DT){
+							reqDtTxt = moment(resultList[i].REQ_DT).locale('ko').format('YYYY-MM-DD (ddd)').toUpperCase();
+						}
 						
 						var sttusNm = resultList[i].STTUS_NM;
 						if(resultList[i].LAST_STTUS_CODE === 'STS07'){

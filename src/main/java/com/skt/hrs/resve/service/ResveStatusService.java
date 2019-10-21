@@ -392,78 +392,141 @@ public class ResveStatusService {
 		}
 		
 		// 시간체크
-		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-		if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
-			throw new HrsException("error.over20minCancel", true);
+		Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());	// 사용자 예약취소 가능시각
+		int dateDiff = DateUtil.getDateDiff(DateUtil.getYYYYYMMDD(), resveItem.get("RESVE_DE").toString(), "yyyyMMdd");		// 관리자 예약취소 가능시각 (당일이후 dateDiff > -1)
+		
+		if(!StringUtil.isEmpty(param.getString("auth"))) {	//관리자면 당일껀 시간지나도 취소가능
+			if(dateDiff < 0) {
+				throw new HrsException("error.notAvailable", true);
+			}
+		}else {			
+			if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
+				throw new HrsException("error.over20minCancel", true);
+			}
 		}
+		
 		
 		
 		// 예약취소
 		if(param.getString("cancelGbn").equals(ResveStatusConst.VIEWSTATUS.RESVE_COMPT.toString())) {					
 			
 			
-			//대기자가 있다면 예약승계 (대기중인 구성원을 예약상태로 변경)
+			//대기자가 있다면 예약승계 또는 대기취소
 			if(resveItem.get("WAIT_EMPNO") != null && !StringUtil.isEmpty(resveItem.get("WAIT_EMPNO").toString())) {
+				
+				boolean isWaitCancel = false;	// 대기자를 취소해야하는지 여부 (true:대기취소, false:예약자로승계)
+				
+				if(!StringUtil.isEmpty(param.getString("auth"))) {	//예약변경(관리자)이고
+					// 예약-20분이전이 아니라면
+					if(!DateUtil.isPastBeforeMin(resveDt, 20)) {
+						isWaitCancel = true;	// 대기자 취소
+					}											
+				}
 				
 				/*****************************
 				 *  입력
 				 *  
-				 *  예약승계 (자동등록)
+				 *  1. 사용자가 예약취소
+				 *  
+				 *  * 예약승계 (자동등록)
 				 * 	  - 예약자가 취소하면 대기자는 자동으로 예약자로 변경된다.
-				 *   * 케어시작 30~20분 전에 예약을 취소한경우
+				 *   A) 케어시작 30~20분 전에 예약을 취소한경우
 				 *	  - 자동승계로 변경된 예약자는 예약취소를 할 수 없다.
 				 *	  - 대신, 노쇼에 따른 패널티도 없다
-				 *   * 케어시작 30분 전에 예약을 취소한경우
+				 *   B) 케어시작 30분 전에 예약을 취소한경우
 				 *    - 자동승계로 변경된 예약자도 예약취소 및 패널티 적용
+				 *    
+				 *  2. 관리자가 예약변경으로 예약취소
+				 *  
+				 *   A) 미래의 예약을 취소한경우
+				 *    - 승계 가능한 시간이므로 대기자를 예약자로 승계
+				 *   B) 당일 과거시간의 예약을 취소한경우 (관리자는 당일과거 취소 가능)
+				 *    - 승계 가능한 시간이 아니므로 예약취소, 대기자도 대기취소 
+				 *  
 				 ****************************/				
 				
-				// 현황 update
-				param.put("resveEmpno", (String)resveItem.get("WAIT_EMPNO"));
-				param.put("waitEmpno", "");
-				param.put("updtEmpno", "SYSTEM");
-				
-				// 승계여부 계산
-				// 케어시작 30분전 보다 과거이면 정상예약
-				// 케어시작 30~20분 사이이면 승계예약
-				if(!DateUtil.isPastBeforeMin(resveDt, 30)) {					
-					param.put("succsYn", "Y");	//승계여부
-				}
-				boolean updateResult = resveStatusDAO.updateResveStatus(param);
-				
-				// 이력 insert (예약취소)
-				param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
-				param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-				param.put("regEmpno", param.getString("empno"));
-				boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
-								
-
-				// 이력 insert (대기취소)
-				param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
-				param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
-				param.put("regEmpno", "SYSTEM");
-				boolean insertResult2 =  resveStatusDAO.insertResveHist(param);
-				
-				// 이력 insert (예약등록)
-				param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_COMPT.toString());	// STS01 : 예약등록
-				param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
-				boolean insertResult3 =  resveStatusDAO.insertResveHist(param);
+				if(isWaitCancel) {	// 예약취소, 대기취소
+					// 현황 update
+					param.put("resveEmpno", "");
+					param.put("waitEmpno", "");
+					param.put("updtEmpno", param.getString("empno"));
+					boolean updateResult = resveStatusDAO.updateResveStatus(param);
+					
+					// 이력 insert (대기취소)
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
+					param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+					param.put("regEmpno", param.getString("empno"));
+					boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
+					
+					// 이력 insert (예약취소)
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
+					param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+					param.put("regEmpno", param.getString("empno"));
+					boolean insertResult2 =  resveStatusDAO.insertResveHist(param);
+					
+					
+					result = updateResult && insertResult1 && insertResult2;
+					
+					/*****************************
+					 *  후처리
+					 ****************************/
+					// 예약취소 sms
+					resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+					cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
+					//일정취소 아웃룩연동
+					scheduleService.updateScheduleCancel(resveItem);
+					
+				}else {	// 예약취소, 대기->예약 승계
+					
+					// 현황 update
+					param.put("resveEmpno", (String)resveItem.get("WAIT_EMPNO"));
+					param.put("waitEmpno", "");
+					param.put("updtEmpno", "SYSTEM");
+					
+					// 승계여부 계산
+					// 케어시작 30분전 보다 과거이면 정상예약
+					// 케어시작 30~20분 사이이면 승계예약
+					if(!DateUtil.isPastBeforeMin(resveDt, 30)) {					
+						param.put("succsYn", "Y");	//승계여부
+					}
+					boolean updateResult = resveStatusDAO.updateResveStatus(param);
+					
+					// 이력 insert (예약취소)
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_CANCL.toString());	// STS02 : 예약취소
+					param.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+					param.put("regEmpno", param.getString("empno"));
+					boolean insertResult1 =  resveStatusDAO.insertResveHist(param);
 									
-				result = updateResult && insertResult1 && insertResult2 && insertResult3;
+
+					// 이력 insert (대기취소)
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.WAIT_CANCL.toString());	// STS04 : 대기취소
+					param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+					param.put("regEmpno", "SYSTEM");
+					boolean insertResult2 =  resveStatusDAO.insertResveHist(param);
+					
+					// 이력 insert (예약등록)
+					param.put("sttusCode", ResveStatusConst.DBSTATUS.RESVE_COMPT.toString());	// STS01 : 예약등록
+					param.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+					boolean insertResult3 =  resveStatusDAO.insertResveHist(param);
+										
+					result = updateResult && insertResult1 && insertResult2 && insertResult3;
+					
+					/*****************************
+					 *  후처리
+					 ****************************/
+					// 예약취소 sms
+					resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
+					cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
+					//일정취소 아웃룩연동
+					scheduleService.updateScheduleCancel(resveItem);
+					
+					// 예약승계 sms
+					resveItem.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
+					cspService.insertCspSMS(resveItem, "csp.sms.resveSuccession", locale);
+					//일정등록 아웃룩 연동
+					scheduleService.insertScheduleSend(resveItem);
+				}
 				
-				/*****************************
-				 *  후처리
-				 ****************************/
-				// 예약취소 sms
-				resveItem.put("targetEmpno", (String)resveItem.get("RESVE_EMPNO"));
-				cspService.insertCspSMS(resveItem, "csp.sms.resveCancel", locale);
-				//일정취소 아웃룩연동
-				scheduleService.updateScheduleCancel(resveItem);
-				
-				// 예약승계 sms
-				resveItem.put("targetEmpno", (String)resveItem.get("WAIT_EMPNO"));
-				cspService.insertCspSMS(resveItem, "csp.sms.resveSuccession", locale);
-				//일정등록 아웃룩 연동
-				scheduleService.insertScheduleSend(resveItem);
 				
 				
 			}else {
@@ -504,18 +567,6 @@ public class ResveStatusService {
 		}
 		// 대기취소
 		else if(param.getString("cancelGbn").equals(ResveStatusConst.VIEWSTATUS.WAIT.toString())) {
-			
-			/*****************************
-			 *  VALIDATION
-			 ****************************/
-			// 시간체크
-			/*
-			Date resveDt = DateUtil.hrsDtToRealDt(resveItem.get("RESVE_DE").toString(), resveItem.get("RESVE_TM").toString());
-			if(DateUtil.isPast(resveDt)) {
-				throw new HrsException("error.notAvailable", true);
-			}
-			*/
-			
 			
 			/*****************************
 			 *  입력

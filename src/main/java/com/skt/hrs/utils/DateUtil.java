@@ -118,7 +118,7 @@ public class DateUtil {
 	
 	/**
 	 * 
-	 * @설명 : 예약시간 -min 보다 과거인지 판단 
+	 * @설명 : 현재시각이 예약시간 -min 보다 과거인지 판단 
 	 * @작성일 : 2019.09.05
 	 * @작성자 : P149365
 	 * @param compareDate
@@ -175,6 +175,30 @@ public class DateUtil {
 	 */
 	public static int getDateDiff(String strart,  String end) {
 		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");  
+	    long diff = 0;
+		try {
+			Date startDate = dateFormater.parse(strart);
+			Date endDate = dateFormater.parse(end);
+            diff = endDate.getTime() - startDate.getTime();
+            return (int)(diff/(24 * 60 * 60 * 1000));
+	    }catch(Exception e) {
+			throw new HrsException("invalid date");
+		
+	    }
+	}
+	
+	/**
+	 * 
+	 * @설명 :  일자 계산  
+	 * @작성일 : 2019.09.15
+	 * @작성자 : P150113
+	 * @param strart
+	 * @param end
+	 * @return
+	 * @변경이력 :
+	 */
+	public static int getDateDiff(String strart,  String end, String format) {
+		SimpleDateFormat dateFormater = new SimpleDateFormat(format);  
 	    long diff = 0;
 		try {
 			Date startDate = dateFormater.parse(strart);
