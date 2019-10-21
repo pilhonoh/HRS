@@ -92,10 +92,10 @@
 	
 	<delete id="deleteResve">
 	    	<choose>
-					<when test='delType=="M"'>
+					<when test='delType=="sttus"'>
 						 DELETE  FROM  RESVE_STTUS  WHERE RESVE_DE = #{RESVE_DE} AND  RESVE_NO = #{RESVE_NO}
 					</when>
-					<when test='delType=="H"'>
+					<when test='delType=="hist"'>
 					    DELETE  FROM  RESVE_HIST   WHERE RESVE_NO = #{RESVE_NO}
 					</when>
 				      
@@ -115,12 +115,17 @@
                               FROM  RESVE_STTUS A   JOIN RESVE_HIST B 
                                 ON A.RESVE_NO = B.RESVE_NO
                                 AND A.RESVE_DE BETWEEN  #{startDate} AND  #{endDate}  
+                                AND A.CANCL_YN ='N'
+                                AND A.COMPT_YN ='N'
                                 AND B.REG_DT = (SELECT MAX(AA.REG_DT) 
                                                  FROM  RESVE_HIST AA 
                                                 WHERE AA.RESVE_NO  = A.RESVE_NO )
-                             WHERE B.STTUS_CODE IN ('STS00','STS01','STS03')
-                          ) R               
-         ORDER BY  R.STTUS_CODE;
+                             <![CDATA[
+					           WHERE B.STTUS_CODE < 'STS05'
+                             ]]>
+                          ) R  
+           WHERE R.RESVE_DE BETWEEN  #{startDate} AND  #{endDate}                                
+         ORDER BY  R.STTUS_CODE
          
 	 </select>
 </mapper>

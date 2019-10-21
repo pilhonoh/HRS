@@ -303,25 +303,20 @@ public class MssrService {
    	 }
 	    //삭제
 		if (DeleteTime.length>0) {
-			param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
-			param.put("canclYn","Y");
+
 			for (int i = 0 ; i < DeleteTime.length; i++) {
 				 param.put("resveTime",DeleteTime[i]);
 				 Map item = mssrDAO.selectResveItem(param);
 				
 				 if(!"0".equals(item.get("resveNo").toString())) {
 					 param.put("RESVE_NO",item.get("resveNo").toString());
-					    insertResult = mssrDAO.deleteResve(param); 
-						if(!(insertResult)) { 
+					
+					 insertResult = deleteResveItme(param);
+				    	
+					 if(!(insertResult)) { 
 							throw new HrsException("error.processFailure", true);
 						 }		
-						insertResult = mssrDAO.insertResveHist(param); 
-						if(!(insertResult)) { 
-							throw new HrsException("error.processFailure", true);
-						 }	 
-					
-					sendSms(param);	
-
+				
 					param.remove("RESVE_NO");
 				 }else {
 					 throw new HrsException("error.processFailure", true);
@@ -342,32 +337,19 @@ public class MssrService {
 		    for (int j = 0; j < getListItems.size(); j++) {
 		    	paramsMap.putAll(getListItems.get(j));
 		    	paramsMap.put("regEmpNo", param.getString("regEmpNo"));
-		    	paramsMap.put("canclYn", "Y");
-		    	paramsMap.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
-
-		    	updateResult = mssrDAO.deleteResve(paramsMap); 
-                 
+		    	updateResult = deleteResveItme(paramsMap);
+		    	 
 				if(!(updateResult)) { 
 					throw new HrsException("error.processFailure", true);
 				 }	
-				
-				updateResult = mssrDAO.insertResveHist(paramsMap); 
-				if(!(updateResult)) { 
-					throw new HrsException("error.processFailure", true);
-				 }
-				
-				sendSms(paramsMap);
 		
-           } 
-        
-		  
-		
+           }   	
 		result.setItemOne(updateResult);
 		// data적용 성공여부
 		return result;
 	}
 	
-	
+	@Transactional
 	public  boolean deleteResveItme(DataEntity param) {
 	      boolean updateResult = false;	 
 		 
@@ -418,6 +400,5 @@ public class MssrService {
 	    }
 	    
   }
-  
 			
 }

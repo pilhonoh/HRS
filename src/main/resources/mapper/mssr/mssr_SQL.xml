@@ -128,7 +128,10 @@
 		   AND  A.MSSR_EMPNO =  #{mssrEmpno}
            AND  A.BLD_CODE = #{bldCode}
            AND  A.BED_CODE = #{bedCode}
-		   AND CANCL_YN ='N'
+		   AND  A.CANCL_YN ='N'
+		   <![CDATA[          
+           	   AND B.STTUS_CODE <= 'STS05'
+           ]]>
          GROUP BY  A.RESVE_DE   
 			      , A.MSSR_EMPNO
                   , A.BED_CODE   
@@ -154,6 +157,7 @@
 		  SELECT LAST_INSERT_ID()
 		</selectKey>				 
      </insert>
+     
 	 <!-- 관리사 예약 상태 등록  -->
      <insert id="insertResveHist"  parameterType="map">
        	INSERT INTO RESVE_HIST ( RESVE_NO , STTUS_CODE  ,REG_EMPNO , REG_DT)
@@ -164,7 +168,7 @@
         UPDATE RESVE_STTUS
            SET CANCL_YN = #{canclYn}
              , UPDT_EMPNO = #{regEmpNo}
- 			 , UPDT_DT =  now(3)
+ 			 , UPDT_DT =  now(6)
         WHERE RESVE_NO = #{RESVE_NO}
      </update>
      

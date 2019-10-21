@@ -107,10 +107,11 @@ public class RestDeService {
             List<HashMap<String,String>> list = restDeDAO.selectRestReveList(param);
     		for(HashMap<String,String> item : list) {		
     		     	delParam.putAll(item);
+    		     	delParam.put("regEmpNo",param.getString("regEmpNo"));
     				if(ResveStatusConst.DBSTATUS.WORK.toString().equals(item.get("STTUS_CODE"))) {	
-    					delParam.put("delType", "M");
+    					delParam.put("delType", "sttus");
     					saveResult = restDeDAO.deleteResve(delParam); 
-    					delParam.put("delType", "H");
+    					delParam.put("delType", "hist");
     					saveResult = restDeDAO.deleteResve(delParam);
     					if(!(saveResult)) { 
     						throw new HrsException("error.processFailure", true);
