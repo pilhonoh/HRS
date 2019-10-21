@@ -30,15 +30,6 @@
         </layout>  
     </appender> 
     
-    <!-- 과거 대기취소 JOB daily log -->  
-    <appender name="pastWaitCancelJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
-        <param name="file" value="/data/logs/pastWaitCancelJob.log"/>  
-        <param name="Append" value="true"/>  
-        <param name="DatePattern" value="'.'yyMMdd"/>  
-        <layout class="org.apache.log4j.PatternLayout">  
-            <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%p] %m %n"/>  
-        </layout>  
-    </appender> 
     
     <!-- CSP Send JOB daily log(1분주기) -->  
     <appender name="cspSendJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
@@ -68,11 +59,6 @@
     <logger name="resveNotiJobLogger">
     	<level value="info" />    	
     	<appender-ref ref="resveNotiJobDailyAppender" />
-    </logger>
-    
-    <logger name="pastWaitCancelJobLogger">
-    	<level value="info" />    	
-    	<appender-ref ref="pastWaitCancelJobDailyAppender" />
     </logger>
     
     <logger name="cspSendJobLogger">

@@ -4,6 +4,7 @@
 <mapper namespace="resveStatusMapper">
 
 	<!-- 사용자의 이번달 예약/대기 건수 -->
+	<!-- 사용안함 -->
 	<select id="selectMonthCount" parameterType="map" resultType="hashmap">			
 		SELECT (
 			SELECT COUNT(RESVE_NO)
@@ -188,29 +189,6 @@
 		AND A.RESVE_EMPNO != '' 
 		AND A.RESVE_EMPNO IS NOT NULL
 	</select>
-	
-	<!-- 지난시간 대기 취소처리 대상 조회-->
-	<select id="selectWaitCancelTarget" parameterType="map" resultType="hashmap">
-		SELECT *
-		FROM resve_sttus
-		WHERE RESVE_DE = DATE_FORMAT(CURRENT_DATE,'%Y%m%d')
-		AND RESVE_TM <![CDATA[<]]> #{nextResveTm}
-		AND (WAIT_EMPNO IS NOT NULL AND WAIT_EMPNO != '')
-		AND CANCL_YN != 'Y'
-	</select>
-	
-	<!-- 전일 노쇼 이력 추가 -->
-	<insert id="insertNoShowHist" parameterType="int">
-		INSERT INTO RESVE_HIST (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
-		SELECT RESVE_NO, 'STS06', 'SYSTEM', NOW(6), RESVE_EMPNO
-		FROM RESVE_STTUS
-		WHERE RESVE_DE = DATE_FORMAT(SUBDATE(CURRENT_DATE, 1),'%Y%m%d')
-		AND CANCL_YN != 'Y'
-		AND COMPT_YN != 'Y'
-		<!-- AND SUCCS_YN != 'Y' --> 	<!-- /* 승계된 예약도 노쇼 처리, 패널티는 없음. */ -->
-		AND RESVE_EMPNO != '' 
-		AND RESVE_EMPNO IS NOT NULL 
-	</insert>	
 	
 	<!-- 전일 노쇼 조회 -->
 	<select id="selectNoShowResve" parameterType="map" resultType="hashmap">

@@ -136,23 +136,6 @@ public class ResveStatusService {
 	
 	/**
 	 * 
-	 * @설명 : 지난시간 대기 취소처리 대상 조회 (정각 배치용 조회)
-	 * @작성일 : 2019.09.26
-	 * @작성자 : P149365
-	 * @param param
-	 * @return
-	 * @변경이력 :
-	 */
-	public ResponseResult selectWaitCancelTarget(DataEntity param) {
-		ResponseResult result = new ResponseResult();
-		
-		List<Map> list = resveStatusDAO.selectResveNotifyList();
-		result.setItemList(list);
-		return result;
-	}
-	
-	/**
-	 * 
 	 * @설명 : 당일 예약/대기건수 조회 
 	 * @작성일 : 2019.10.02
 	 * @작성자 : P149365
