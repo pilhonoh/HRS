@@ -115,7 +115,7 @@
 						GROUP BY RESVE_NO
 					) B
 					ON A.RESVE_NO = B.RESVE_NO
-		            WHERE (TARGET_EMPNO = #{empNo} OR TARGET_EMPNO IS NULL OR TARGET_EMPNO = '')
+		            WHERE (TARGET_EMPNO = #{empNo} OR STTUS_CODE = 'STS99')
 				) T 		        
 				GROUP BY RESVE_NO
 			) T2

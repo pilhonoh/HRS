@@ -22,6 +22,7 @@ import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
 import com.pub.core.util.JsonUtils;
+import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.utils.StringUtil;
 
 @ControllerAdvice
@@ -93,7 +94,7 @@ public class GlobalExceptionHandler{
 	public void hrsExceptionHandle(HrsException ex, HttpServletRequest request ,  HttpServletResponse response, Locale locale){
 		
 		//logger.error(getClass().getName(),ex);
-		logger.error(ex.getMessage());	//비즈니스에러 로그는 메세지만 간단히 찍도록
+		logger.error("{} - {}", ex.getMessage(), messageSource.getMessage(ex.getMessage(), null, request.getLocale()).replaceAll("\\\n", " "));	//비즈니스에러 로그는 메세지만 간단히 찍도록
 		 
 		
 		ResponseResult result = new ResponseResult();
@@ -135,7 +136,9 @@ public class GlobalExceptionHandler{
 	
 	private void exceptionRequestHandle(HttpServletRequest request, HttpServletResponse response ,ResponseResult result, String pageName) {
 		DataEntity param = HttpUtil.getServletRequestParam(request);
-		logger.error("EXCEPTION REQUEST PARAMETER : " + param.toString());
+		LoginVo loginVo = (LoginVo) (request.getSession().getAttribute("LoginVo"));
+		logger.error("EXCEPTION LoginVo : {}", loginVo.toString());
+		logger.error("EXCEPTION REQUEST PARAMETER : {}", param.toString());
 		
 		String headerInfo = request.getHeader("X-Requested-With");
 		

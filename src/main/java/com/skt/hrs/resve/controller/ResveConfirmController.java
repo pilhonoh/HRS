@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +34,8 @@ import com.skt.hrs.utils.StringUtil;
 @Controller
 @RequestMapping(value = "/confirm")
 public class ResveConfirmController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(ResveConfirmController.class);
 	
 	@Autowired
 	ResveConfirmService resveConfirmService;
@@ -116,6 +120,9 @@ public class ResveConfirmController {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
 		param.put("empno", loginVo.getEmpno());			//등록자사번		
+		
+		logger.info("[CONFIRM]  => " + param.toString());
+		
 		return resveStatusService.completeResveStatus(param);
 	}
 }

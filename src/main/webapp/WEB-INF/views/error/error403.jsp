@@ -16,7 +16,7 @@
 			</div>
 			<div class="pop-btn-area">
 <!-- 				<button class="pop-btn" onclick="history.back();">이전</button> -->
-				<button class="pop-btn" onclick="window.open('','_self').close();;">닫기</button>
+				<button class="pop-btn" onclick="window.open('about:blank','_self').close();">닫기</button>
 			</div>
 		</div>
 
