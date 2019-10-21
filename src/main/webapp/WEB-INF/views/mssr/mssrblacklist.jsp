@@ -55,26 +55,21 @@
 					</div>
 				</div>
 
-				<div class="sub-tit">
-					<div class="f-left" style="display:inline-block;">
-						<button class="btn" id ="deleteBtn">삭제</button>						
-					</div>
-				</div>
 
 				<table class="tbl-style t_center tbl-hover ">
-					<colgroup>
-						<col style="width:50px;">						
-						<col style="width:10%;">
-						<col style="width:10%;">
-						<col style="width:13%;">
-						<col style="width:10%;">
+					<colgroup>						
+						<col style="width:8%;">
 						<col style="width:10%;">
 						<col style="width:13%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
+						<col style="width:10%;">
 						<col >
+						<col style="width:8%;">
+						<col style="width:8%;">
 					</colgroup>
 					<thead>
 						<tr>
-							<th><input id ='checkAll' type="checkbox"></th>
 							<th>사번</th>
 							<th>이름</th>
 							<th>부서명</th>
@@ -82,6 +77,8 @@
 							<th>종료일자</th>
 							<th>사옥</th>
 							<th>No-show 예약정보(예약일, 예약시간, 베드)</th>
+							<th>케어완료 처리</th>
+							<th>No-Show 패널티 미적용</th>
 						</tr>
 					</thead>
 					<tbody id="mssrblacklistList">

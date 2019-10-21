@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
@@ -64,6 +65,7 @@ public class HealthkeperService {
 	 * @return
 	 * @변경이력 :
 	 */
+	@Transactional
 	public ResponseResult insertHealthkeper(DataEntity param) {
 		ResponseResult result = new ResponseResult();
 		boolean  insertResult = false;
@@ -85,7 +87,7 @@ public class HealthkeperService {
 		return result;
 	}
 
-
+	@Transactional
 	public ResponseResult healthkeperModify(DataEntity param) {
 		ResponseResult result = new ResponseResult();
 		boolean  updateResult = false;

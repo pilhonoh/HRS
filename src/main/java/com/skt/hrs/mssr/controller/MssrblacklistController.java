@@ -9,12 +9,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
 import com.pub.core.util.HttpUtil;
+import com.skt.hrs.cmmn.vo.LoginVo;
 import com.skt.hrs.mssr.service.MssrblacklistService;
 
 
@@ -80,6 +82,46 @@ public class MssrblacklistController {
 		result = mssrblacklistService.selectMssrblacklistList(param);
 
 		return result;
+	}
+	
+	/**
+	 * 
+	 * @설명 : No-show(블랙리스트) 케어완료 상태로 변경
+	 * @Date      : 2019. 10. 21.
+	 * @작성자    : YANG.H.R
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/mssrblacklistcareDelete", method = RequestMethod.POST)
+	public @ResponseBody ResponseResult mssrblacklistDelete(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		param.put("regEmpNo", loginVo.getEmpno()); //등록자사번
+		
+		String resveEmpno = param.getString("resveEmpno");
+		param.put("resveEmpno", resveEmpno);
+		
+		String rowData = param.getString("rowData");
+		param.put("rowData", rowData);
+		
+		
+		return mssrblacklistService.mssrblacklistcareDelete(param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : No-show(블랙리스트) No-Show 상태로 2주 패널티만 제외
+	 * @Date      : 2019. 10. 21.
+	 * @작성자    : YANG.H.R
+	 * @변경이력 :
+	 */
+	@RequestMapping(value = "/mssrblacklistnoshowDelete", method = RequestMethod.POST)
+	public @ResponseBody ResponseResult mssrblacklistnoshowDelete(HttpServletRequest req, HttpSession sess) {
+		DataEntity param = HttpUtil.getServletRequestParam(req);
+		
+		String resveEmpno = param.getString("resveEmpno");
+		param.put("resveEmpno", resveEmpno);
+		
+		return mssrblacklistService.mssrblacklistnoshowDelete(param);
 	}
 
 }

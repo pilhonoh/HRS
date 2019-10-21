@@ -36,4 +36,49 @@ public class MssrblacklistDAO {
 	}
 
 	
+	/**
+	 * 
+	 * @설명 : No-show(블랙리스트) No-Show 상태로 2주 패널티만 제외 
+	 * @Date : 2019. 10. 21.
+	 * @작성자 : YANG.H.R
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean mssrblacklistnoshowDelete(DataEntity param) {
+		int result = sqlSession.delete("mssrblacklistMapper.mssrblacklistnoshowDelete", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
+	 * 
+	 * @설명 : No-show(블랙리스트) 케어완료 상태로 변경
+	 * @Date : 2019. 10. 21.
+	 * @작성자 : YANG.H.R
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public boolean mssrblacklistcomptUpdate(DataEntity param) {
+		int result = sqlSession.update("mssrblacklistMapper.mssrblacklistcomptUpdate", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public boolean mssrblacklisthistInsert(DataEntity param) {
+		int result = sqlSession.insert("mssrblacklistMapper.mssrblacklisthistInsert", param);
+		if(result == 1) {
+			return true;
+		}
+		return false;
+	}
+
+
 }

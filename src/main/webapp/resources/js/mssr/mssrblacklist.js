@@ -28,6 +28,8 @@ var mssrblacklistList = {
 			bldCode: '', //사옥코드
 			userName: '',//사용자 이름
 			startRow: 0, //조회 시작할 ROW
+			resveEmpno: '',
+			rowData: [],
 		},
 		
 		//현재 조회된 데이터 저장
@@ -71,12 +73,16 @@ var mssrblacklistList = {
 				
 				var resultList = result.list;
 				var mssrblacklistListHtml = [];
+				var btnText1 = '';
+				var btnClass1 = '';
+				var btnText2 = '';
+				var btnClass2 = '';
 
 				mssrblacklistList.paging.params.totalCount = resultList.length;
 				
 				if(mssrblacklistList.paging.params.totalCount == 0){
 					mssrblacklistListHtml.push('<tr>');
-					mssrblacklistListHtml.push('<td colspan=8 >검색 결과가 없습니다</td>');
+					mssrblacklistListHtml.push('<td colspan=9 >검색 결과가 없습니다</td>');
 					mssrblacklistListHtml.push('</tr>');
 				}else{
 					for (var i in resultList) {
@@ -87,47 +93,57 @@ var mssrblacklistList = {
 						var summaryList = resultList[i].SUMMARY;
 						var summarylist = summaryList.split('|');
 						
+						btnText1 = '케어완료';
+						btnClass1 = 'blacklistCancelBtn';
+						btnText2 = 'No-Show';
+						btnClass2 = 'blacklistNoshowBtn';
+
 						mssrblacklistListHtml.push('<tr>');
-						mssrblacklistListHtml.push('<td><input type="checkbox" value="'+ resultList[i].RESVE_NO +'"></td>');
 						mssrblacklistListHtml.push('<td>' + resultList[i].RESVE_EMPNO + '</td>');
 						mssrblacklistListHtml.push('<td>' + resultList[i].USER_NAME + '</td>');
 						mssrblacklistListHtml.push('<td>' + resultList[i].USER_DEPT + '</td>');
 						mssrblacklistListHtml.push('<td>' + resultList[i].START_DT + '</td>');
 						mssrblacklistListHtml.push('<td>' + resultList[i].END_DT + '</td>');
 						mssrblacklistListHtml.push('<td>' + bldCodelist[0] );
-							for(i=1; i<bldCodelist.length; i++){
-								mssrblacklistListHtml.push('</br>' + bldCodelist[i] );
+							for(j=1; j<bldCodelist.length; j++){
+								mssrblacklistListHtml.push('</br>' + bldCodelist[j] );
 							}
 						mssrblacklistListHtml.push('</td>');
 						mssrblacklistListHtml.push('<td>' + summarylist[0] );
-							for(i=1; i<summarylist.length; i++){
-								mssrblacklistListHtml.push('</br>' + summarylist[i] );
+							for(j=1; j<summarylist.length; j++){
+								mssrblacklistListHtml.push('</br>' + summarylist[j] );
 							}
 						mssrblacklistListHtml.push('</td>');
+						mssrblacklistListHtml.push('<td><button class="t-btn '  + btnClass1 + '" data-mssrblacklistno="' + resultList[i].RESVE_EMPNO + '">' + btnText1 + '</button></td>');
+						mssrblacklistListHtml.push('<td><button class="t-btn ' + btnClass2 + '" data-mssrblacklistno="' + resultList[i].RESVE_EMPNO + '">' + btnText2 + '</button></td>');
 						mssrblacklistListHtml.push('</tr>');
 					}
 				}
 				
 				$('tbody#mssrblacklistList').html(mssrblacklistListHtml.join(''));
-				mssrblacklistList.paging.renderPaging();
+					mssrblacklistList.paging.renderPaging();
+
+					mssrblacklistList.button.blacklistCancelBtnEvent();
+					mssrblacklistList.button.blacklistNoshowBtnEvent();
 
 			});
 		},
 		
-		//현재 리스트에서 예약번호로 해당 ROW 의 데이터를 가져옴
-		/*getRowData: function(mssrblacklistNo) {
+		//해당 ROW 의 RESVE_NO 가져옴
+		getRowData: function(mssrblacklistNo) {
 			var rowDataList = mssrblacklistList.list.dataList;
-			var rowData;
 			
-			for (var i in rowDataList) {
-				if (rowDataList[i].MSSR_EMPNO == mssrblacklistNo) {
-					rowData = rowDataList[i];
+
+			for(i=0; i<rowDataList.length; i++){
+				if (rowDataList[i].RESVE_EMPNO == mssrblacklistNo) {
+					var resveNoList = rowDataList[i].RESVE_NO;
+					mssrblacklistList.list.params.rowData = resveNoList;
 					break;
 				}
 			}
 			
-			return rowData;
-		},*/
+			return resveNoList;
+		},
 
 	},
 	
@@ -275,7 +291,7 @@ var mssrblacklistList = {
 	},
 	
 	button: {
-		
+
 		//조회 버튼 클릭 이벤트
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
@@ -285,13 +301,64 @@ var mssrblacklistList = {
 				mssrblacklistList.list.rendermssrblacklistList();
 			});
 		},
+
+		blacklistCancelBtnEvent: function() {
+			$('button.blacklistCancelBtn').on('click', function(e) {
+				var btn = $(this);
+				var meassage = '';
+
+				mssrblacklistList.list.params.resveEmpno = btn.data('mssrblacklistno');
+
+				console.log(mssrblacklistList.list.getRowData(btn.data('mssrblacklistno')));
+				
+				confirmPopup( meassage||'케어완료 처리하시겠습니까?', function(){					  					
+					$.ajax({
+							url: ROOT + '/mssr/mssrblacklistcareDelete',
+							type: 'POST',
+							data: mssrblacklistList.list.params,
+							success : function(res){
+								console.log('delete',res);				
+								mssrblacklistList.list.rendermssrblacklistList();
+								alertPopup('처리되었습니다.');
+							},
+							error : function(err) {
+								console.error(err)
+							}
+					  });
+					})
+					
+			});
+		},
+
+		blacklistNoshowBtnEvent: function() {
+			$('button.blacklistNoshowBtn').on('click', function(e) {
+				var btn = $(this);
+				var meassage = '';
+
+				mssrblacklistList.list.params.resveEmpno = btn.data('mssrblacklistno');
+
+				confirmPopup( meassage||'2주 패널티 제외하시겠습니까?', function(){					  					
+					$.ajax({
+							url: ROOT + '/mssr/mssrblacklistnoshowDelete',
+							type: 'POST',
+							data: mssrblacklistList.list.params,
+							success : function(res){
+								console.log('delete',res);				
+								mssrblacklistList.list.rendermssrblacklistList();
+								alertPopup('처리되었습니다.');
+							},
+							error : function(err) {
+								console.error(err)
+							}
+					  });
+					})
+				
+		
+			});
+		},
+		
 		
 	},		
-	
-	popup: {
-		
-
-	}
 
 }
 

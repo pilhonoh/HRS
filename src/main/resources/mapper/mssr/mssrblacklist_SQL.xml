@@ -21,6 +21,7 @@
 	<select id="selectMssrblacklistList" parameterType="map" resultType="hashmap">
 		<include refid="COMMON_PAGING_HEADER"/>
 		SELECT
+			GROUP_CONCAT(LIST.RESVE_NO SEPARATOR '|') AS RESVE_NO,
 		    LIST.RESVE_EMPNO,
 		    LIST.HNAME AS USER_NAME,
 		    LIST.DEPTNM AS USER_DEPT,
@@ -45,5 +46,35 @@
 		<include refid="COMMON_PAGING_TAIL"/>
 	</select>
 
-	
+	<!-- No-show(블랙리스트) No-Show 상태로 2주 패널티만 제외 -->
+	<delete id="mssrblacklistnoshowDelete">
+        DELETE FROM RESVE_BLCLST WHERE RESVE_EMPNO=#{resveEmpno}
+     </delete>
+     
+     <!-- No-show(블랙리스트) No-Show 상태로 케어완료 상태로 변경 -->
+	<update id="mssrblacklistcomptUpdate" >     
+       	UPDATE RESVE_STTUS SET COMPT_YN='Y' WHERE RESVE_NO = #{resveNo}	 
+     </update>
+     
+     <insert id="mssrblacklisthistInsert" parameterType="map" >     
+       	INSERT INTO resve_hist (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
+		VALUES (#{resveNo},'STS05',#{regEmpNo},now(),#{resveEmpno})		 
+     </insert>
+     
+     
 </mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
