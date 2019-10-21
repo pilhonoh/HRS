@@ -169,8 +169,10 @@ var resveMgmt = {
 						var sttusNm = item.LAST_STTUS_NM;
 						if(item.LAST_STTUS_CODE === 'STS07'){
 							sttusNm = 'No-Show<br/>페널티없음';
-						}else if(item.LAST_STTUS_CODE === 'STS03'){
+						}else if(item.LAST_STTUS_CODE === 'STS03'){		// 대기중 -> 예약완료,대기중
 							sttusNm = $('select[data-code-tyl=STS] option[value=STS01]').text() + '<br/> ' + sttusNm
+						}else if(item.LAST_STTUS_CODE === 'STS04') {	// 대기취소 -> 예약완료
+							sttusNm = $('select[data-code-tyl=STS] option[value=STS01]').text()// + '<br/> ' + sttusNm
 						}
 						
 						var $tr = $('<tr>').data('data', item).attr('id', item.RESVE_NO);
