@@ -16,6 +16,7 @@ import com.pub.core.entity.ResponseResult;
 import com.skt.hrs.cmmn.contants.ResveStatusConst;
 import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.cmmn.service.CspService;
+import com.skt.hrs.cmmn.service.ScheduleService;
 import com.skt.hrs.mssr.dao.MssrDAO;
 import com.skt.hrs.utils.DateUtil;
 import com.skt.hrs.utils.StringUtil;
@@ -47,6 +48,8 @@ public class MssrService {
 	@Autowired
 	MessageSource messageSource;
 
+	@Autowired
+	private ScheduleService scheduleService;
 
 	/**
 	 * 
@@ -318,6 +321,7 @@ public class MssrService {
 						 }	 
 					
 					sendSms(param);	
+
 					param.remove("RESVE_NO");
 				 }else {
 					 throw new HrsException("error.processFailure", true);
@@ -392,6 +396,9 @@ public class MssrService {
 		   if(!StringUtil.isEmpty(smsItem.get("RESVE_EMPNO").toString())) {
 				smsItem.put("targetEmpno", smsItem.get("RESVE_EMPNO").toString());
 		       cspService.insertCspSMS(smsItem, "csp.sms.adminResveCancel", Locale.forLanguageTag(param.getString("_ep_locale")));
+		          
+		   	   //일정취소 아웃룩연동
+			   scheduleService.updateScheduleCancel(smsItem);
 			}				
 			
 			if(!StringUtil.isEmpty(smsItem.get("WAIT_EMPNO").toString())) {
