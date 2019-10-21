@@ -50,7 +50,7 @@ public class ScheduleSendJob {
 					result = HttpClientUtils.httpPostDataString(outlookUrl+"?type=N", param);
 					
 					//http post 요청이 성공한 경우
-					if(result.getMessageCode() =="success") {
+					if(result.getMessageCode() =="success" && !"".equals(result.getItem())) {
 						
 						String returnJsonStr = JsonUtils.xmlStringToJsonString(result.getItem());
 						
@@ -110,7 +110,7 @@ public class ScheduleSendJob {
 					result = HttpClientUtils.httpPostDataString(outlookUrl+"?type=C", param);
 					
 					//http post 요청이 성공한 경우
-					if(result.getMessageCode() =="success") {
+					if(result.getMessageCode() =="success" && !"".equals(result.getItem())) {
 						
 						String returnJsonStr = JsonUtils.xmlStringToJsonString(result.getItem());
 						
