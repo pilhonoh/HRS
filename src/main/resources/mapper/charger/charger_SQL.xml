@@ -78,7 +78,7 @@
 	 
 	<insert id="insertCharger"  parameterType="map" >     
       INSERT INTO CHARGER ( EMPNO, BLD_CODE, AUTH_CODE, REG_EMPNO, REG_DT    )
-				  VALUES ( #{chargerEmpno}, #{bldCode}, #{authCode}, #{regEmpNo}, now(6))			 
+				  VALUES ( #{chargerEmpno}, #{bldCode}, #{authCode}, #{regEmpNo}, now())			 
      </insert>
      
      <update id="updateCharger" parameterType="map" >   
@@ -86,7 +86,7 @@
          SET BLD_CODE = #{bldCode}, 
              AUTH_CODE  = #{authCode},
              UPDT_EMPNO =  #{regEmpNo} ,
-             UPDT_DT = now(6)
+             UPDT_DT = now()
 		WHERE EMPNO = #{chargerEmpno}
      </update>
 	

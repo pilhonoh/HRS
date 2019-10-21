@@ -116,8 +116,7 @@ public class RestDeService {
     					if(!(saveResult)) { 
     						throw new HrsException("error.processFailure", true);
     					 } 	
-    				}
-    				if(ResveStatusConst.DBSTATUS.RESVE_COMPT.toString().equals(item.get("STTUS_CODE"))) {
+    				}else  {
     					saveResult = mssrService.deleteResveItme(delParam);	
     					if(!(saveResult)) { 
     						throw new HrsException("error.processFailure", true);

@@ -65,7 +65,7 @@
      <!-- 휴일 등록 -->
      <insert id="insertRestDe"  useGeneratedKeys="true" keyProperty="RESTDE_NO"  parameterType="map" >     
       INSERT INTO RESTDE ( RESTDE_DATE, RESTDE_NAME, REG_EMPNO, REG_DT ) 
-                          VALUES (#{restDeDate}, #{restDeName}, #{regEmpno},now(6))    
+                          VALUES (#{restDeDate}, #{restDeName}, #{regEmpno},now())    
           <!--   VALUES (#{restDeDate}, #{restDeType}, #{restDeName}, #{restDeRemark}, #{regEmpno}, #{regDt}, #{usedYn})    -->
      </insert>
 	<!-- 휴일 수정 -->
@@ -77,7 +77,7 @@
 			 <!-- , RESTDE_TYPE = #{restDeType} -->
 			 <!-- , RESTDE_REMARK =#{restDeRemark} -->
 			 , UPDT_EMPNO = #{regEmpNo}
-			 , UPDT_DT =  now(6)
+			 , UPDT_DT =  now()
 		 WHERE RESTDE_NO = #{restDeNo}
 	</update>
 	
@@ -102,30 +102,30 @@
 				</choose> 
 	</delete>
    	<select id="selectRestReveList" parameterType="map" resultType="hashmap">
-	  SELECT  R.RESVE_DE 
+	
+      SELECT  R.RESVE_DE 
       , R.STTUS_CODE 
       , R.RESVE_NO 
       , IFNULL(R.RESVE_EMPNO,'') AS RESVE_EMPNO
       , IFNULL( R.WAIT_EMPNO,'') AS WAIT_EMPNO
      FROM  ( SELECT A.RESVE_NO
                                , A.RESVE_DE
-                               , CASE B.STTUS_CODE WHEN 'STS03' THEN 'STS01' ELSE B.STTUS_CODE END AS STTUS_CODE
+                               , B.STTUS_CODE AS STTUS_CODE
                                , A.RESVE_EMPNO
                                , A.WAIT_EMPNO
                               FROM  RESVE_STTUS A   JOIN RESVE_HIST B 
                                 ON A.RESVE_NO = B.RESVE_NO
-                                AND A.RESVE_DE BETWEEN  #{startDate} AND  #{endDate}  
                                 AND A.CANCL_YN ='N'
                                 AND A.COMPT_YN ='N'
                                 AND B.REG_DT = (SELECT MAX(AA.REG_DT) 
                                                  FROM  RESVE_HIST AA 
                                                 WHERE AA.RESVE_NO  = A.RESVE_NO )
-                             <![CDATA[
-					           WHERE B.STTUS_CODE < 'STS05'
-                             ]]>
+                            WHERE A.RESVE_DE BETWEEN #{startDate} AND  #{endDate}   
                           ) R  
-           WHERE R.RESVE_DE BETWEEN  #{startDate} AND  #{endDate}                                
+          <![CDATA[ 
+            WHERE R.STTUS_CODE < 'STS05'
+           ]]>
          ORDER BY  R.STTUS_CODE
-         
+
 	 </select>
 </mapper>
