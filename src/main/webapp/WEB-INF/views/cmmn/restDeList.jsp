@@ -35,14 +35,6 @@
 				<div class="search_field_wrap">
 					<div class="search_field_area">
 						<table class="search_field">
-							<%-- <colgroup>
-								<col width="80px">
-								<col width="*">
-								<col width="80px">
-								<col width="*">
-								<col width="80px">
-								<col width="*">
-							</colgroup> --%>
 							<tbody>
 								<tr>
 									<th><strong class="stit">기간</strong></th>
@@ -72,8 +64,8 @@
 				<table class="tbl-style t_center tbl-hover ">
 					<colgroup>
 						<col style="width:50px;">						
-						<col style="width:16%;">
-						<col style="width:16%;">
+						<col style="width:50%;">
+						<col style="width:50%;">
 						<%-- <col style="width:15%;"> --%>
 					</colgroup>
 					<thead>
