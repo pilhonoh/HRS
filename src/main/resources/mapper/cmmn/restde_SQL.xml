@@ -44,11 +44,23 @@
 	 </select>    
 	<!-- 휴일 중복 체크  -->
 	
-	<select id="selectRestCheck" parameterType="map" resultType="int">
-	 SELECT IFNULL(COUNT(*),0) AS RestCheck  
-	  FROM RESTDE 
-	   WHERE RESTDE_DATE BETWEEN  #{startDate} AND   #{endDate}
-	   AND USED_YN = 'Y'        
+	<select id="selectRestCheck" parameterType="map" resultType="hashmap">
+	  SELECT IFNULL(GROUP_CONCAT(DISTINCT R.STTUS_CODE ORDER BY R.STTUS_CODE SEPARATOR ',' ),'') AS REST_STATUS
+		       ,IFNULL( SUM(R.STS01_CNT),0) AS STS01_CNT
+		       ,( SELECT IFNULL(MAX(USED_YN),'N') FROM RESTDE WHERE RESTDE_DATE BETWEEN  #{startDate} AND  #{endDate}  AND USED_YN='Y') DUP_YN
+       FROM ( SELECT A.RESVE_DE
+                     , CASE B.STTUS_CODE WHEN 'STS03' THEN 'STS01'  ELSE B.STTUS_CODE END AS STTUS_CODE
+                     , CASE WHEN  B.STTUS_CODE IN ('STS01','STS03') THEN 1 ELSE  0 END AS STS01_CNT 
+                FROM  RESVE_STTUS A JOIN RESVE_HIST B 
+                                      ON A.RESVE_NO = B.RESVE_NO
+                                     AND A.RESVE_DE  BETWEEN  #{startDate} AND  #{endDate} 
+                                     AND A.CANCL_YN ='N'
+                                     AND A.COMPT_YN ='N'
+                                     AND B.REG_DT = (SELECT MAX(AA.REG_DT) 
+                                                       FROM  RESVE_HIST AA 
+                                                      WHERE AA.RESVE_NO  = A.RESVE_NO )
+                               WHERE B.STTUS_CODE IN ('STS00','STS01','STS03')
+                          ) R 
 	</select>
      <!-- 휴일 등록 -->
      <insert id="insertRestDe"  useGeneratedKeys="true" keyProperty="RESTDE_NO"  parameterType="map" >     
@@ -77,5 +89,38 @@
 			 , UPDT_DT =   now(6)
 		 WHERE RESTDE_NO = #{restDeNo}
 	</update>
-   
+	
+	<delete id="deleteResve">
+	    	<choose>
+					<when test='delType=="M"'>
+						 DELETE  FROM  RESVE_STTUS  WHERE RESVE_DE = #{RESVE_DE} AND  RESVE_NO = #{RESVE_NO}
+					</when>
+					<when test='delType=="H"'>
+					    DELETE  FROM  RESVE_HIST   WHERE RESVE_NO = #{RESVE_NO}
+					</when>
+				      
+				</choose> 
+	</delete>
+   	<select id="selectRestReveList" parameterType="map" resultType="hashmap">
+	  SELECT  R.RESVE_DE 
+      , R.STTUS_CODE 
+      , R.RESVE_NO 
+      , IFNULL(R.RESVE_EMPNO,'') AS RESVE_EMPNO
+      , IFNULL( R.WAIT_EMPNO,'') AS WAIT_EMPNO
+     FROM  ( SELECT A.RESVE_NO
+                               , A.RESVE_DE
+                               , CASE B.STTUS_CODE WHEN 'STS03' THEN 'STS01' ELSE B.STTUS_CODE END AS STTUS_CODE
+                               , A.RESVE_EMPNO
+                               , A.WAIT_EMPNO
+                              FROM  RESVE_STTUS A   JOIN RESVE_HIST B 
+                                ON A.RESVE_NO = B.RESVE_NO
+                                AND A.RESVE_DE BETWEEN  #{startDate} AND  #{endDate}  
+                                AND B.REG_DT = (SELECT MAX(AA.REG_DT) 
+                                                 FROM  RESVE_HIST AA 
+                                                WHERE AA.RESVE_NO  = A.RESVE_NO )
+                             WHERE B.STTUS_CODE IN ('STS00','STS01','STS03')
+                          ) R               
+         ORDER BY  R.STTUS_CODE;
+         
+	 </select>
 </mapper>

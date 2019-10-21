@@ -50,7 +50,7 @@ public class RestDeDAO {
 	 * @변경이력 :
 	 */
 	
-	  public int selectRestCheck(DataEntity param) { 
+	  public Map selectRestCheck(DataEntity param) { 
 		  return sqlSession.selectOne("restdeMapper.selectRestCheck", param); 
 	  }
 	 
@@ -88,6 +88,15 @@ public class RestDeDAO {
 		  return false; 
 	}
 	 
+	 public boolean deleteResve(DataEntity param) { 
+		  int result = sqlSession.delete("restdeMapper.deleteResve", param); 
+		  if(result == 1) { 
+			  return true; 
+		  } 
+		  return false; 
+	}
+
+	 
 	/**
 	 * 
 	 * @설명 : 휴일 조회 
@@ -100,5 +109,20 @@ public class RestDeDAO {
 	public Map selectRestDeItem(DataEntity param) {
 		return sqlSession.selectOne("restdeMapper.selectRestDeItem", param);
 	}
+	
+	
+	/**
+	 * 
+	 * @설명 : 휴일 스케  조회 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	
+	  public List selectRestReveList(DataEntity param) { 
+		  return sqlSession.selectList("restdeMapper.selectRestReveList", param);
+	  }
 	
 }

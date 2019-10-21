@@ -130,9 +130,11 @@ public class RestDeController {
 	 */
 	
 	@RequestMapping(value = "/restDeCheck")
-	public @ResponseBody ResponseResult selectEmpNoCheck(HttpServletRequest req, HttpSession res){
+	public @ResponseBody ResponseResult selectRestDeItem(HttpServletRequest req, HttpSession res){
 	   DataEntity param = HttpUtil.getServletRequestParam(req); 
-	  return restDeService.selectRestDeCheck(param);
+	    ResponseResult result = new ResponseResult();
+		result = restDeService.selectRestDeCheck(param);
+		return result;
 	}
 	 
 	
@@ -161,6 +163,26 @@ public class RestDeController {
 		param.put("regEmpNo", loginVo.getEmpno()); //등록자사번
 				
 		return  restDeService.deleteRestDe(param);
+	}
+	
+	/**
+	 * 
+	 * @설명 : 휴일  스케줄조회 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : LEE.Y.H
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
+	
+	@RequestMapping(value = "/selectRestReveList")
+	public @ResponseBody ResponseResult selectRestReveList(HttpServletRequest request, HttpSession sess) throws Exception {
+		DataEntity param = HttpUtil.getServletRequestParam(request);
+		ResponseResult result = new ResponseResult();
+		 LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		result = restDeService.selectRestReveList(param);
+		return result;
 	}
 
 }

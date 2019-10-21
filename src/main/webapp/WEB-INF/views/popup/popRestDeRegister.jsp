@@ -60,7 +60,7 @@ var popRestDeRegister = {
 		}, 
 		 params: {	restDeNo:"", // 휴일등록 코드
 			        startDate:"", // 휴일 시작일
-			        endtDate:"", // 휴일 시작일
+			        endDate:"", // 휴일 시작일
 				    restDeName:"",  //휴일명
 				    saveStat:""  // 등록수정 상태값
 		}, 
@@ -82,7 +82,7 @@ var popRestDeRegister = {
 			})
 		},
 		button:{
-			popSaveClickEvent:function(){
+			popSaveClickEvent:function( ){
 				$("#restDeRegister_saveBtn").on("click",function(){			
 					if(!popRestDeRegister.validation.required()){
 						return false;
@@ -93,9 +93,9 @@ var popRestDeRegister = {
 				    popRestDeRegister.params.startDate = $("#restDeRegister_start_date").val();
 					popRestDeRegister.params.endDate = $("#restDeRegister_end_date").val(); 
 					
-					popRestDeRegister.validation.restDeDupCheck(function(){
-					confirmPopup('휴일 정보를  저장  하시겠습니까?', function(){		 			
-				 		$.ajax({
+					popRestDeRegister.validation.restDeDupCheck(function(msg){
+					confirmPopup(msg||'휴일 정보를  저장  하시겠습니까?', function(){		 			
+				  $.ajax({
 								url: ROOT + '/cmmn/restDeSave',
 								type: 'POST',
 								data: popRestDeRegister.params ,
@@ -152,18 +152,25 @@ var popRestDeRegister = {
 			} 		
 		},
 		restDeDupCheck:function(func){
-			  $.ajax({
+			   var stscode = '';
+			$.ajax({
 					url: ROOT + '/cmmn/restDeCheck',
 					type: 'POST',
 					data: popRestDeRegister.params ,
 					success : function(res){
-						popRestDeRegister.validation.elementLock(res.item)
-						if(res.item){
-							  $("#requiredMsg").text("등록된 휴일이 있습니다");
-							
-						 }else{
-							 func();
-						 }
+						   popRestDeRegister.validation.elementLock(false);
+						    stscode  =   res.item.REST_STATUS.split(",")		
+							if(res.item.DUP_YN == 'Y'){
+								  $("#requiredMsg").text("등록된 휴일이 있습니다");
+								  popRestDeRegister.validation.elementLock(true);
+							 }else if( stscode.indexOf('STS01') >= 0 ) {
+								 func('휴일 등록 시 기존 예약 '+res.item.STS01_CNT+'건이\n 자동 취소 됩니다. 저장하시겠습니까')
+							 } else if( stscode.indexOf('STS00') >= 0 ){
+								 func('휴일 등록 시 근무스케쥴이 \n 자동 취소 됩니다. 저장하시겠습니까')
+							 }else{
+								 func();
+							 }
+				        
 					}
 				}); 
 		   }	 

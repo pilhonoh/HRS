@@ -363,6 +363,28 @@ public class MssrService {
 		return result;
 	}
 	
+	
+	public  boolean deleteResveItme(DataEntity param) {
+	      boolean updateResult = false;	 
+		 
+		    	param.put("canclYn", "Y");
+		    	param.put("sttusCode",ResveStatusConst.DBSTATUS.WORK_CANCL.toString());
+
+		    	updateResult = mssrDAO.deleteResve(param); 
+               
+				if(!(updateResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 }	
+				
+				updateResult = mssrDAO.insertResveHist(param); 
+				if(!(updateResult)) { 
+					throw new HrsException("error.processFailure", true);
+				 }		
+				sendSms(param);
+		// data적용 성공여부
+		return updateResult;
+	}
+	
   public void sendSms(DataEntity param) {
 	 // ResponseResult result = new ResponseResult(); 
 	   Map smsItem = mssrDAO.selectSmsInfoGet(param);
