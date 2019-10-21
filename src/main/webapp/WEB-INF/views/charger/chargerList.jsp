@@ -30,7 +30,7 @@
 				<li rel="tab7"><a href="${ROOT}/cmmn/restDeList">휴일 관리</a></li>
 				</ul>
 				<div class="sub-tit">
-					<h2>담당자등록/수정</h2>
+					<h2>담당자 등록</h2>
 				</div>
 				
 				<div class="search_field_wrap">
