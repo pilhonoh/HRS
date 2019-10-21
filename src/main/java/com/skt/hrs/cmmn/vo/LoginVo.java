@@ -52,6 +52,14 @@ public class LoginVo implements Serializable {
 	}
 	public void setHrsAgree(String hrsAgree) {
 		this.hrsAgree = hrsAgree;
+	}
+	
+	@Override
+	public String toString() {
+		return "[empno=" + empno + ", hname=" + hname + ", auth=" + auth + ", tSex=" + tSex + ", place=" + place
+				+ ", hrsAgree=" + hrsAgree + "]";
 	}	
+	
+	
 	
 }

@@ -158,7 +158,7 @@ public class ResveMgmtController {
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	public @ResponseBody ResponseResult modifyResveStatus(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
-		
+						
 		if(param.get("type") == null || StringUtil.isEmpty(param.getString("type"))) {
 			throw new HrsException("error.invalidRequest", true);
 		}
@@ -166,6 +166,7 @@ public class ResveMgmtController {
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
 		param.put("empno", loginVo.getEmpno());			//수정인사번
 		
+		logger.info("[MODIFY]  => " + param.toString());
 		
 		if("resve".equals(param.getString("type"))) {	// 예약변경				
 			return resveMgmtService.modifyResveStatus(param);

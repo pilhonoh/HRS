@@ -227,6 +227,8 @@ public class ResveStatusController {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
 		
+		logger.info("[REGIST RESVE]  => " + param.toString());
+		
 		// resveEmpno와 empno가 같지만, 타인의 예약 등을 대비하여 일단 분리한다.		
 		param.put("resveEmpno", loginVo.getEmpno());	//예약자사번
 		param.put("empno", loginVo.getEmpno());			//등록자사번
@@ -249,6 +251,9 @@ public class ResveStatusController {
 	public @ResponseBody ResponseResult waitResveStatus(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		
+		logger.info("[REGIST WAIT]  => " + param.toString());
+		
 		param.put("waitEmpno", loginVo.getEmpno());	//예약자사번
 		param.put("empno", loginVo.getEmpno());			//등록자사번
 		param.put("waitSexdstn", loginVo.gettSex());	//예약자성별
@@ -271,6 +276,9 @@ public class ResveStatusController {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
 		param.put("empno", loginVo.getEmpno());			//등록자사번
+		
+		logger.info("[CANCEL]  => " + param.toString());
+		
 		return resveStatusService.cancelResveStatus(param);
 	}
 
@@ -288,6 +296,9 @@ public class ResveStatusController {
 	public @ResponseBody ResponseResult noshowConfirm(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
+		
+		logger.info("[CONFIRM]  => " + param.toString());
+		
 		param.put("empno", loginVo.getEmpno());			//등록자사번
 		return resveStatusService.completeResveStatus(param);
 	}
