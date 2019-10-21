@@ -92,7 +92,7 @@ var resveMgmt = {
 		//목록 조회 시 사용하는 파라미터
 		params: {
 			pageNo: 1, 		//조회할 페이지 번호
-			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
+			rowPerPage: 6, //한 페이지 당 조회할 ROW 수
 			fromDate: '', 	//조회 시작 날짜
 			toDate: '', 	//조회 끝 날짜
 			bldCode: '',	//사옥코드
@@ -163,8 +163,10 @@ var resveMgmt = {
 						resveDe = resve_de.substr(0,4) + '-' + resve_de.substr(4,2) + '-' + resve_de.substr(6,2);
 						
 						//20분전
-						var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
-						var cancelDt = moment(resveDe + " " +resve_tm_start, 'YYYY-MM-DD HH:mm').subtract(20, 'minutes').toDate();
+						//var resve_tm_start = resultList[i].RESVE_TM_TXT.substr(0,5);	// 10:30~11:00 에서 10:30자르기						
+						//var cancelDt = moment(resveDe + " " +resve_tm_start, 'YYYY-MM-DD HH:mm').subtract(20, 'minutes').toDate();
+						// 금일(지난시간포함) 이후는 수정가능
+						var canCancel = item.RESVE_DE >= moment().format('YYYYMMDD');
 												
 						var sttusNm = item.LAST_STTUS_NM;
 						if(item.LAST_STTUS_CODE === 'STS07'){
@@ -184,7 +186,7 @@ var resveMgmt = {
 						$tr.append('	<td rowspan="2"><a class="link" href="javascript:resveMgmt.popup.detail('+ item.RESVE_NO +');">' + sttusNm + '</a></td>');					
 						if(item.RESVE_EMPNM){
 							
-							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || cancelDt < new Date()){	// 변경불가
+							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || !canCancel){	// 변경불가
 								$tr.append('	<td rowspan="2">' + item.RESVE_EMPNM + '<br/>('+ item.RESVE_EMPNO +')</td>');
 							}else{
 								$tr.append('	<td rowspan="2"><button class="t-btn cr01 resveModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.RESVE_EMPNM + '</button><br/>('+ item.RESVE_EMPNO +')</td>');
@@ -196,7 +198,7 @@ var resveMgmt = {
 						}
 						
 						if(item.WAIT_EMPNM){		
-							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || cancelDt < new Date()){	// 변경불가
+							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || !canCancel){	// 변경불가
 								$tr.append('	<td rowspan="2">' + item.WAIT_EMPNM + '<br/>('+ item.WAIT_EMPNO +')</td>');
 							}else{
 								$tr.append('	<td rowspan="2"><button class="t-btn cr02 waitModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.WAIT_EMPNM + '</button><br/>('+ item.WAIT_EMPNO +')</td>');
@@ -313,7 +315,7 @@ var resveMgmt = {
 			}
 
 
-			for (var i=first; i<(first+last); i++) {
+			for (var i=first; i<=last; i++) {
 				if (i > totalIndexCount) {
 					break;
 				}
