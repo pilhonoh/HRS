@@ -142,32 +142,6 @@ public class ResveStatusDAO {
 	
 	/**
 	 * 
-	 * @설명 : 지난시간 대기 취소처리 대상 조회 (정각 배치용 조회)
-	 * @작성일 : 2019.09.26
-	 * @작성자 : P149365
-	 * @param param
-	 * @return
-	 * @변경이력 :
-	 */
-	public List selectWaitCancelTarget(DataEntity param) {
-		return sqlSession.selectList("resveStatusMapper.selectWaitCancelTarget");
-	}
-	
-	/**
-	 * 
-	 * @설명 : 전일 노쇼 이력 저장 
-	 * 			- 00시 배치(블랙리스트 필터 배치) 수행시, 전일 노쇼이력 hist테이블에 저장
-	 * @작성일 : 2019.10.02
-	 * @작성자 : P149365
-	 * @return
-	 * @변경이력 : 
-	 */
-	public int insertNoShowHist() {
-		return sqlSession.insert("resveStatusMapper.insertNoShowHist");
-	}
-	
-	/**
-	 * 
 	 * @설명 : 전일 노쇼 조회 
 	 * @작성일 : 2019.10.02
 	 * @작성자 : P149365

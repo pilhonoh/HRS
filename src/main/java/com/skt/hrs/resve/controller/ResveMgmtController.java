@@ -165,6 +165,7 @@ public class ResveMgmtController {
 		
 		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
 		param.put("empno", loginVo.getEmpno());			//수정인사번
+		param.put("auth", loginVo.getAuth());			//관리자가 취소(당일은 지난시간도 취소가능)
 		
 		logger.info("[MODIFY]  => " + param.toString());
 		
