@@ -459,7 +459,12 @@ var resveMgmt = {
 		excelBtnEvent : function() {
 			$('#btnExcel').on('click', function(e) {
 				
+				resveMgmt.validation.dateCheck();
 				
+				if(moment(resveMgmt.list.params.toDate).diff(moment(resveMgmt.list.params.fromDate), 'day') > 31){
+					$.alert({text:'엑셀출력 기간은 최대 한달을 넘길 수 없습니다.'});
+					return false;
+				}
 				location.href = ROOT + '/resveMgmt/excel?' + 
 					$.param(						
 						$.extend({
