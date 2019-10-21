@@ -59,7 +59,7 @@
 			</if>
 			<if test='statusCode != null and statusCode != ""'>
 				<if test='statusCode == "STS01"'>
-					AND LAST_STTUS_CODE IN ('STS01', 'STS03')				
+					AND LAST_STTUS_CODE IN ('STS01', 'STS03', 'STS04')				
 				</if>
 				<if test='statusCode != "STS01"'>
 					AND LAST_STTUS_CODE = #{statusCode}
@@ -107,7 +107,7 @@
 			</if>
 			<if test='statusCode != null and statusCode != ""'>
 				<if test='statusCode == "STS01"'>
-					AND LAST_STTUS_CODE IN ('STS01', 'STS03')				
+					AND LAST_STTUS_CODE IN ('STS01', 'STS03', 'STS04')				
 				</if>
 				<if test='statusCode != "STS01"'>
 					AND LAST_STTUS_CODE = #{statusCode}
@@ -200,12 +200,15 @@
 			    (SELECT DATE_FORMAT(MAX(REG_DT), '%Y-%m-%d %H:%i') FROM RESVE_HIST WHERE RESVE_NO = STS.RESVE_NO AND TARGET_EMPNO = STS.RESVE_EMPNO AND STTUS_CODE='STS01') AS RESVE_DT,
 			    (SELECT DATE_FORMAT(MAX(REG_DT), '%Y-%m-%d %H:%i') FROM RESVE_HIST WHERE RESVE_NO = STS.RESVE_NO AND TARGET_EMPNO = STS.WAIT_EMPNO AND STTUS_CODE='STS03') AS WAIT_DT,
 			    HIST.LAST_STTUS_CODE,
-			    CASE WHEN HIST.LAST_STTUS_CODE = 'STS03' 
+			    CASE 
+			    	WHEN HIST.LAST_STTUS_CODE = 'STS03' 
 			    	THEN CONCAT(
 				    		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = 'STS01'),
 				    		', ',
 				    		(SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = 'STS03')
-				    	)
+				    	)	<!-- 대기중은 "예약완료, 대기중"으로 표시 -->
+				    WHEN HIST.LAST_STTUS_CODE = 'STS04'
+				    THEN (SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = 'STS01')	<!-- 대기취소는 "예약완료"로 표시 -->
 			    	ELSE (SELECT CODE_NM FROM CMMN_CODE WHERE CODE_TYL = 'STS' AND CODE = HIST.LAST_STTUS_CODE)
 			    END AS LAST_STTUS_NM			    
 			FROM RESVE_STTUS STS
@@ -231,7 +234,7 @@
 			</if>
 			<if test='statusCode != null and statusCode != ""'>
 				<if test='statusCode == "STS01"'>
-					AND LAST_STTUS_CODE IN ('STS01', 'STS03')				
+					AND LAST_STTUS_CODE IN ('STS01', 'STS03', 'STS04')				
 				</if>
 				<if test='statusCode != "STS01"'>
 					AND LAST_STTUS_CODE = #{statusCode}
