@@ -55,7 +55,7 @@
 	<!-- 헬스키퍼 등록 -->
      <insert id="insertHealthkeper" parameterType="map" >     
        	INSERT INTO masseur (empno, ncnm, sexdstn, bld_code, hffc_yn, reg_empno, reg_dt, updt_empno, updt_dt, MSSR_NAME)
-		VALUES (#{Empno}, #{mssrNCName},#{sexdstn}, #{bldCode}, 'Y', #{regEmpNo}, sysdate(), null, null,#{mssrName})				 
+		VALUES (#{Empno}, #{mssrNCName},#{sexdstn}, #{bldCode}, 'Y', #{regEmpNo}, now(), null, null,#{mssrName})				 
      </insert>
      
      <!-- 헬스키퍼 Empno-M사번 COUNT 값 조회 -->

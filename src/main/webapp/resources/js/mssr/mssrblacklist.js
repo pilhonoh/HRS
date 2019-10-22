@@ -93,6 +93,9 @@ var mssrblacklistList = {
 						var summaryList = resultList[i].SUMMARY;
 						var summarylist = summaryList.split('|');
 						
+						var test = resultList[i].RESVE_NO;
+						
+						
 						btnText1 = '케어완료';
 						btnClass1 = 'blacklistCancelBtn';
 						btnText2 = 'No-Show';
@@ -114,7 +117,7 @@ var mssrblacklistList = {
 								mssrblacklistListHtml.push('</br>' + summarylist[j] );
 							}
 						mssrblacklistListHtml.push('</td>');
-						mssrblacklistListHtml.push('<td><button class="t-btn '  + btnClass1 + '" data-mssrblacklistno="' + resultList[i].RESVE_EMPNO + '">' + btnText1 + '</button></td>');
+						mssrblacklistListHtml.push('<td><button class="t-btn cr01 resveModifyBtn '  + btnClass1 + '" data-mssrblacklistno="' + resultList[i].RESVE_EMPNO + '">' + btnText1 + '</button></td>');
 						mssrblacklistListHtml.push('<td><button class="t-btn ' + btnClass2 + '" data-mssrblacklistno="' + resultList[i].RESVE_EMPNO + '">' + btnText2 + '</button></td>');
 						mssrblacklistListHtml.push('</tr>');
 					}

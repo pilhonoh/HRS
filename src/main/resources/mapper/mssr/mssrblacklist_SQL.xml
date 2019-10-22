@@ -47,12 +47,12 @@
 	</select>
 
 	<!-- No-show(블랙리스트) No-Show 상태로 2주 패널티만 제외 -->
-	<delete id="mssrblacklistnoshowDelete">
+	<delete id="mssrblacklistnoshowDelete" parameterType="map">
         DELETE FROM RESVE_BLCLST WHERE RESVE_EMPNO=#{resveEmpno}
      </delete>
      
      <!-- No-show(블랙리스트) No-Show 상태로 케어완료 상태로 변경 -->
-	<update id="mssrblacklistcomptUpdate" >     
+	<update id="mssrblacklistcomptUpdate" parameterType="map">     
        	UPDATE RESVE_STTUS SET COMPT_YN='Y' WHERE RESVE_NO = #{resveNo}	 
      </update>
      

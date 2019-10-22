@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.mssr.dao.MssrblacklistDAO;
 
 
@@ -50,6 +51,7 @@ public class MssrblacklistService {
 	@Transactional
 	public ResponseResult mssrblacklistcareDelete(DataEntity param) {
 		ResponseResult result = new ResponseResult();	
+		boolean  resResult = false;
 		
 		String rowdata ="";
 		
@@ -58,12 +60,23 @@ public class MssrblacklistService {
 		
 		for(int i=0; i<resveNo.length; i++) {
 			
+			boolean  deleteResult = false;
+			boolean  updateResult = false;
+			boolean  insertResult = false;
+			
 			param.put("resveNo", resveNo[i]);
 			
-			result.setItemOne(mssrblacklistDAO.mssrblacklistnoshowDelete(param));
-			result.setItemOne(mssrblacklistDAO.mssrblacklistcomptUpdate(param));
-			result.setItemOne(mssrblacklistDAO.mssrblacklisthistInsert(param));
+			deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param); 
+			updateResult = mssrblacklistDAO.mssrblacklistcomptUpdate(param);
+			insertResult = mssrblacklistDAO.mssrblacklisthistInsert(param);
+			
+			resResult = deleteResult && updateResult && insertResult;
+			
+			if(!resResult) {
+				throw new HrsException("error.processFailure", true);
+			}
 		}
+		result.setItemOne(resResult);
 		
 		return result;
 	}
@@ -78,7 +91,15 @@ public class MssrblacklistService {
 	@Transactional
 	public ResponseResult mssrblacklistnoshowDelete(DataEntity param) {
 		ResponseResult result = new ResponseResult();
-		result.setItemOne(mssrblacklistDAO.mssrblacklistnoshowDelete(param));
+		boolean  deleteResult = false;
+		
+		deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param);
+		
+		if(!deleteResult) {
+			throw new HrsException("error.processFailure", true);
+		}
+		result.setItemOne(deleteResult);
+		
 		return result;
 	}
 	

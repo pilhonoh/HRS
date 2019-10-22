@@ -77,7 +77,7 @@
 							<th rowspan="2">종료일자</th>
 							<th rowspan="2">사옥</th>
 							<th rowspan="2">No-show 예약정보<br/>(예약일, 예약시간, 베드)</th>
-							<th colspan="2">삭제</th>
+							<th colspan="2">2주 패널티 삭제</th>
 						</tr>
 						<tr>
 							<th style="border-left:1px solid #ddd;">급여차감(O)</th>

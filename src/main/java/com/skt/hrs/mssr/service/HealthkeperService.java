@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pub.core.entity.DataEntity;
 import com.pub.core.entity.ResponseResult;
+import com.skt.hrs.cmmn.exception.HrsException;
 import com.skt.hrs.mssr.dao.HealthkeperDAO;
 
 
@@ -80,9 +81,13 @@ public class HealthkeperService {
 		Empno = Empno + zeroEmpno;
 		
 		param.put("Empno", Empno);
-		//paramsMap.put("regEmpNo",param.getString("regEmpNo"));
 		
 		insertResult = healthkeperDAO.insertHealthkeper(param); 
+		
+		if(!insertResult) {
+			throw new HrsException("error.processFailure", true);
+		}
+		
 		result.setItemOne(insertResult);
 		return result;
 	}
@@ -92,7 +97,12 @@ public class HealthkeperService {
 		ResponseResult result = new ResponseResult();
 		boolean  updateResult = false;
 		
-		updateResult = healthkeperDAO.updateHealthkeper(param); 
+		updateResult = healthkeperDAO.updateHealthkeper(param);
+		
+		if(!updateResult) {
+			throw new HrsException("error.processFailure", true);
+		}
+		
 		result.setItemOne(updateResult);
 		return result;
 	}
