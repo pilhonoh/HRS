@@ -117,8 +117,7 @@ var popRestDeRegister = {
         setparam:function(data){  // 휴일 수정건 정보 셋잍   휴일 수정시에만 
 	   		   $("#restDeRegister_No").val(data.RESTDE_NO);
 	   		   $("#restDeRegister_Name").val(data.RESTDE_NAME);
-	   		   $("#restPeriod").text(data.RESTDE_DATE);
-    
+	   		   $("#restPeriod").text(moment(data.RESTDE_DATE,"YYYYMMDD",'ko').format('YYYY-MM-DD (ddd)')); 
 		},		
 		validation: {
 			 required:function(){
