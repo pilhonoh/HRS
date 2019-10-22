@@ -35,6 +35,18 @@ public class MssrblacklistDAO {
 		return sqlSession.selectList("mssrblacklistMapper.selectMssrblacklistList", param);
 	}
 
+	/**
+	 * 
+	 * @설명 : 헬스키퍼 리스트 카운트 조회 
+	 * @작성일 : 2019.10.22
+	 * @작성자 : P149365
+	 * @param param
+	 * @return
+	 * @변경이력 :
+	 */
+	public int selectMssrblacklistListCount(DataEntity param) {
+		return sqlSession.selectOne("mssrblacklistMapper.selectMssrblacklistListCount", param);
+	}
 	
 	/**
 	 * 

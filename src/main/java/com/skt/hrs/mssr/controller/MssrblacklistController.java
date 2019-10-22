@@ -80,7 +80,10 @@ public class MssrblacklistController {
 		
 		ResponseResult result = new ResponseResult();
 		result = mssrblacklistService.selectMssrblacklistList(param);
-
+		
+		int totalCount = mssrblacklistService.selectMssrblacklistListCount(param);
+		result.addCustoms("totalCount", totalCount);
+		
 		return result;
 	}
 	
