@@ -46,7 +46,6 @@ var mssrblacklistList = {
 				url: ROOT + '/mssr/selectMssrblacklistList',
 				data: mssrblacklistList.list.params,
 				success: function(res) {
-					console.log('mssrblacklistList', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
 						mssrblacklistList.list.dataList = res.list;
@@ -312,15 +311,12 @@ var mssrblacklistList = {
 
 				mssrblacklistList.list.params.resveEmpno = btn.data('mssrblacklistno');
 
-				console.log(mssrblacklistList.list.getRowData(btn.data('mssrblacklistno')));
-				
 				confirmPopup( meassage||'케어완료 처리하시겠습니까?', function(){					  					
 					$.ajax({
 							url: ROOT + '/mssr/mssrblacklistcareDelete',
 							type: 'POST',
 							data: mssrblacklistList.list.params,
 							success : function(res){
-								console.log('delete',res);				
 								mssrblacklistList.list.rendermssrblacklistList();
 								$.alert({text:'처리되었습니다.', icon: false});
 							},
@@ -346,7 +342,6 @@ var mssrblacklistList = {
 							type: 'POST',
 							data: mssrblacklistList.list.params,
 							success : function(res){
-								console.log('delete',res);				
 								mssrblacklistList.list.rendermssrblacklistList();
 								$.alert({text:'처리되었습니다.', icon: false});
 							},

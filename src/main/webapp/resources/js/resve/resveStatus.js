@@ -50,7 +50,6 @@ var resveStatus = {
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: "BED", codeTys: bldCode},
 			success : function(res){
-				//console.log('fillBeds',res);
 				resveStatus.data.beds = res.list;
 			},
 			error : function(err) {
@@ -66,7 +65,6 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},			
 			success : function(res){
-				//console.log('regist',res);				
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -82,7 +80,6 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},
 			success : function(res){
-				//console.log('wait',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -98,7 +95,6 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo, cancelGbn: cancelGbn},
 			success : function(res){
-				//console.log('cancel',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -114,7 +110,6 @@ var resveStatus = {
 			type: 'POST',
 			data: {resveNo: resveNo},
 			success : function(res){
-				//console.log('complete',res);
 				resveStatus.table.refresh();
 				closeLayerPopup();
 			},
@@ -311,7 +306,6 @@ resveStatus.table = {
 			url: ROOT + '/resve/getStatus',
 			data: {resveDe: yyyymmdd, bldCode: $('[data-code-tyl="BLD"').val()},
 			success : function(res){
-				//console.log('getStatus',res);
 				
 				var list = res.list;
 				

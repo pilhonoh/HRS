@@ -19,7 +19,7 @@ var resveList = {
 			$.ajax({
 				url: ROOT + '/cmmn/allCodeList',
 				success: function(res) {
-					console.log('allCodeList', res);
+
 					if (res.status === 200) {
 						resveList.cmmnCode.allCodeList = res.list;
 					}
@@ -109,7 +109,6 @@ var resveList = {
 				url: ROOT + '/resve/selectResveList',
 				data: resveList.list.params,
 				success: function(res) {
-					console.log('resveList', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
 						resveList.list.dataList = res.list;
@@ -418,8 +417,6 @@ var resveList = {
 			$('button.resveCancelBtn').on('click', function(e) {
 				var btn = $(this);
 				
-				console.log(resveList.list.getRowData(btn.data('resveno')));
-				
 				resveList.button.cancelBtnStatus.type = 'resve';
 				resveList.button.cancelBtnStatus.rowData =  resveList.list.getRowData(btn.data('resveno'));
 				
@@ -432,8 +429,6 @@ var resveList = {
 			$('button.waitCancelBtn').off();
 			$('button.waitCancelBtn').on('click', function(e) {
 				var btn = $(this);
-				
-				console.log(resveList.list.getRowData(btn.data('resveno')));
 				
 				resveList.button.cancelBtnStatus.type = 'wait';
 				resveList.button.cancelBtnStatus.rowData =  resveList.list.getRowData(btn.data('resveno'));
@@ -500,7 +495,6 @@ var resveList = {
 				data: {resveNo: resveNo, cancelGbn: cancelGbn},
 				success : function(res){
 					if (res.status === 200) {
-						console.log('cancel',res);
 						resveList.list.renderResveList();
 						closeLayerPopup();
 						header.get2WeeksCount();
@@ -513,7 +507,6 @@ var resveList = {
 		},
 		
 		detail : function(resveNo){
-			console.log(resveNo)
 			$('#layer_pop13').load(ROOT + '/resve/pop/detailHist', {resveNo : resveNo}, function(res){				
 				openLayerPopup('layer_pop13');
 			});

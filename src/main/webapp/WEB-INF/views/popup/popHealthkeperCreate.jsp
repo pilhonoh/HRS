@@ -78,7 +78,6 @@ var popHealthkeperCreate = {
 		button:{
 			popSaveClickEvent:function(){
 				$("#healthkeperCreate_saveBtn").on("click",function(){			
-					console.log('data', JSON.stringify(getParams()));
 					 
 					if(!popHealthkeperCreate.validation.required()){
 						return false;
@@ -95,7 +94,6 @@ var popHealthkeperCreate = {
 							type: 'POST',
 							data: params ,
 							success : function(res){
-								console.log('regist',res);				
 								healthkeperList.list.renderhealthkeperList();
 								closeLayerPopup();
 							},
@@ -113,7 +111,7 @@ var popHealthkeperCreate = {
 					 var chk = true;
 					 var returnMsg=" 등록된 값이 없습니다"
 						$(".required").nextAll("td").children("input,select").each(function(){
-							console.log($(this).parent().prev().text());	
+								
 						  if ($(this).val()==null||$(this).val()==""){
 							  returnMsg = $(this).parent().prev().text() +returnMsg;
 							  $(".rv-desc").show();

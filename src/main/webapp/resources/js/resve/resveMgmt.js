@@ -21,7 +21,6 @@ var resveMgmt = {
 			$.ajax({
 				url: ROOT + '/cmmn/allCodeList',
 				success: function(res) {
-					console.log('allCodeList', res);
 					if (res.status === 200) {
 						resveMgmt.cmmnCode.allCodeList = res.list;
 					}
@@ -119,7 +118,6 @@ var resveMgmt = {
 				url: ROOT + '/resveMgmt/selectResveMgmtList',
 				data: resveMgmt.list.params,
 				success: function(res) {
-					console.log('resveMgmt', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
 						resveMgmt.list.dataList = res.list;
@@ -541,7 +539,6 @@ var resveMgmt = {
 				data: {resveNo: resveNo, type: type, sttusCode: sttusCode},
 				success : function(res){
 					if (res.status === 200) {
-						console.log('modify',res);
 						resveMgmt.list.renderResveList();
 						//closeLayerPopup();
 						$.alert({text:'처리되었습니다.', icon: false});
@@ -555,7 +552,6 @@ var resveMgmt = {
 		},
 		
 		detail : function(resveNo){
-			console.log(resveNo)
 			$('#layer_pop13').load(ROOT + '/resveMgmt/pop/detailHist', {resveNo : resveNo}, function(res){				
 				openLayerPopup('layer_pop13');
 			});

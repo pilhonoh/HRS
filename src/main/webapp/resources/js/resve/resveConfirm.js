@@ -54,7 +54,6 @@ var resveConfirm = {
 			url: ROOT + '/cmmn/codeList',
 			data: {codeTyl: "BED", codeTys: bldCode},
 			success : function(res){
-				console.log('fillBeds',res);
 				resveConfirm.data.beds = res.list;
 			},
 			error : function(err) {
@@ -139,7 +138,6 @@ resveConfirm.calendar = {
 			url: ROOT + '/cmmn/selectRestDeList',
 			data: params,
 			success : function(res){
-				console.log('success')
 				var retArray = [];
 				$.each(res.list, function(){
 					retArray.push(this.RESTDE_DATE);
@@ -358,8 +356,6 @@ function checkDateChange(){
 	var today = moment().format('YYYYMMDD');
 	var min = moment().format('mm')
 	var selectedDay = resveConfirm.data.selectedDate.yyyymmdd;
-	
-	console.log(today, selectedDay);
 	
 	if(selectedDay < today){
 		location.reload();	// 날짜가 바뀌었으면 페이지 리로드		

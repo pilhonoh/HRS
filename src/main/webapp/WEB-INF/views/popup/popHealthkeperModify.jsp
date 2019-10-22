@@ -81,7 +81,6 @@ var popHealthkeperModify= {
 						type: 'POST',
 						data: params,
 						success : function(res){
-							console.log('regist',res);				
 							alertPopup('수정 되었습니다.');
 							healthkeperList.list.renderhealthkeperList();
 							closeLayerPopup();
@@ -123,7 +122,6 @@ function  modifyRow (){
 $(document).ready(function(){		
 	var item = '${item}';
 	var data = JSON.parse(item);
-	console.log("modify",data);
 	popHealthkeperModify.init();
 	popHealthkeperModify.params.bldName = data.BLD_NM;
 	popHealthkeperModify.params.mssrEmpno = data.MSSR_EMPNO;

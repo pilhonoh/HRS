@@ -40,8 +40,6 @@ $(document).ready(function(){
 	var item = '${item}';
 	var data = JSON.parse(item);
 	
-	console.log('완료대상건', data);
-	
 	if(data){
 		
 		if(data.COMPT_YN != 'Y'){

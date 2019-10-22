@@ -59,7 +59,6 @@ var healthkeperList = {
 				url: ROOT + '/mssr/selectHealthkeperList',
 				data: healthkeperList.list.params,
 				success: function(res) {
-					console.log('healthkeperList', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
 						healthkeperList.list.dataList = res.list;
