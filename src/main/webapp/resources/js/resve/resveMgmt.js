@@ -520,7 +520,13 @@ var resveMgmt = {
 			
 			$('#layer_pop08').load(ROOT + '/resveMgmt/pop/modify', {resveNo : rowData.RESVE_NO, type: type}, function(res) {
 				$('#layer_pop08 #btnOk').on('click', function() {
-					resveMgmt.popup.confirmBtn(rowData.RESVE_NO, type, $('#layer_pop08 #sttusCode').val());
+					$.confirm({
+						text: $('#layer_pop08 #sttusCode option:selected').text() + ' 상태로 변경하시겠습니까?',
+						callback: function(){
+							resveMgmt.popup.confirmBtn(rowData.RESVE_NO, type, $('#layer_pop08 #sttusCode').val());
+						}
+					})
+
 				});
 				openLayerPopup('layer_pop08');
 			});
@@ -537,7 +543,8 @@ var resveMgmt = {
 					if (res.status === 200) {
 						console.log('modify',res);
 						resveMgmt.list.renderResveList();
-						closeLayerPopup();
+						//closeLayerPopup();
+						$.alert({text:'처리되었습니다.'});
 						header.get2WeeksCount();
 					}
 				},
