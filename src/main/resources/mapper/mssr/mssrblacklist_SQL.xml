@@ -58,7 +58,7 @@
      
      <insert id="mssrblacklisthistInsert" parameterType="map" >     
        	INSERT INTO resve_hist (RESVE_NO, STTUS_CODE, REG_EMPNO, REG_DT, TARGET_EMPNO)
-		VALUES (#{resveNo},'STS05',#{regEmpNo},now(),#{resveEmpno})		 
+		VALUES (#{resveNo},'STS05',#{regEmpNo},now(6),#{resveEmpno})		 
      </insert>
      
      
