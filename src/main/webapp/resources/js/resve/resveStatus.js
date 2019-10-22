@@ -528,7 +528,7 @@ resveStatus.pop  =  {
 		// 시간체크
 		if(!checkBefore20min(data.RESVE_DE, data.RESVE_TM)){
 			$.alert({
-				text: getMessage('error.over20min'),				
+				text: getMessage('error.over20minCancel'),				
 				callback: resveStatus.table.refresh
 			});			
 			return false;
@@ -554,7 +554,7 @@ resveStatus.pop  =  {
 			// 20분전 ~ 케어시작시간 사이라면 alert
 			if(new Date() < resveDatetime){				
 				$.alert({
-					text: getMessage('error.over20min'),				
+					text: getMessage('error.over20minCancel'),				
 					callback: resveStatus.table.refresh
 				});
 				return false;
@@ -588,7 +588,7 @@ function checkBefore20min(resveDe, resveTm){
 	var targetDate = moment(resveDe + " " + resveTm, 'YYYYMMDD HH:mm').subtract(20,'minutes').toDate();	//예약시간 20분전
 	var now = new Date();
 
-	return now < targetDate;
+	return now.getTime() <= targetDate.getTime();
 }
 
 

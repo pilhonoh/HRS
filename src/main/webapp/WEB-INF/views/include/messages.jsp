@@ -8,6 +8,7 @@ var messages = {
 	'error.processFailure' : '<spring:message code="error.processFailure"  javaScriptEscape="true" />',
 	'error.duplicateDayResve' : '<spring:message code="error.duplicateDayResve"  javaScriptEscape="true" />',
 	'error.over20min' : '<spring:message code="error.over20min"  javaScriptEscape="true" />',
+	'error.over20minCancel' : '<spring:message code="error.over20minCancel"  javaScriptEscape="true" />',
 	'error.onlySameday' : '<spring:message code="error.onlySameday"  javaScriptEscape="true" />',
 	'error.canceledResve' : '<spring:message code="error.canceledResve"  javaScriptEscape="true" />',
 	'error.completeResve' : '<spring:message code="error.completeResve"  javaScriptEscape="true" />',
