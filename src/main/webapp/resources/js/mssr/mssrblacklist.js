@@ -46,6 +46,7 @@ var mssrblacklistList = {
 				url: ROOT + '/mssr/selectMssrblacklistList',
 				data: mssrblacklistList.list.params,
 				success: function(res) {
+					
 					if (res.status === 200) {
 						deferred.resolve(res);
 						mssrblacklistList.list.dataList = res.list;
@@ -77,7 +78,7 @@ var mssrblacklistList = {
 				var btnText2 = '';
 				var btnClass2 = '';
 
-				mssrblacklistList.paging.params.totalCount = resultList.length;
+				mssrblacklistList.paging.params.totalCount = result.customs.totalCount;
 				
 				if(mssrblacklistList.paging.params.totalCount == 0){
 					mssrblacklistListHtml.push('<tr>');
