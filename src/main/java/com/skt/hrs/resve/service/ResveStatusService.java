@@ -388,7 +388,9 @@ public class ResveStatusService {
 		}
 		
 		if("Y".equals(resveItem.get("SUCCS_YN").toString())) {
-			throw new HrsException("error.canNotSuccessionCancel", true);	//승계된 예약은 취소하실 수 없습니다.
+			//if(StringUtil.isEmpty(param.getString("auth"))) {		// 관리자는 승계된 예약도 취소가능(보류됨)		
+				throw new HrsException("error.canNotSuccessionCancel", true);	//승계된 예약은 취소하실 수 없습니다.
+			//}
 		}
 		
 		// 시간체크

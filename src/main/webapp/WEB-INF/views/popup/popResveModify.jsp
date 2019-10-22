@@ -53,9 +53,9 @@
 				<td>
 					<c:if test="${type eq 'resve' }">
 						<select id="sttusCode">
-							<c:if test="${item.SUCCS_YN ne 'Y'}"> <%-- 승계된 예약은 취소불가 --%>
+							<%-- <c:if test="${item.SUCCS_YN ne 'Y'}"> --%> <%-- 승계된 예약은 취소불가 --%>
 							<option value="STS02">예약취소</option>
-							</c:if>
+							<%-- </c:if> --%>
 							<option value="STS05">케어완료</option>
 						</select>
 					</c:if>
