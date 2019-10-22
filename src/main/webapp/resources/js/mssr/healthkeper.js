@@ -313,12 +313,12 @@ var healthkeperList = {
 		showhealthkeperSavePopup: function() {
 			
 			$('#layer_pop10').load(ROOT + '/mssr/pop/healthkeperCreate',null, function(res) {
-				openLayerPopup('layer_pop10');
+				openLayerPopup('layer_pop16');
 			});
 		},
         showRowhealthkeperSavePopup: function(healthkeperno) {	
 			$('#layer_pop15').load(ROOT + '/mssr/pop/healthkeperModify',healthkeperList.list.getRowData(healthkeperno), function(res) {
-				openLayerPopup('layer_pop15');
+				openLayerPopup('layer_pop17');
 			});
 		}
 

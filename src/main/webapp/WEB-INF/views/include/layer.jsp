@@ -16,6 +16,9 @@
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop11"></div>	<!-- 코드등록 -->
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop12"></div>	<!-- 코드수정 -->
 <div class="pop-layer size2 bounceInDown animated" id="layer_pop15"></div>	<!-- 휴일 등록 수정 -->
+<div class="pop-layer size1 bounceInDown animated" id="layer_pop16"></div>	<!-- 헬스키퍼 등록-->
+<div class="pop-layer size1 bounceInDown animated" id="layer_pop17"></div>	<!-- 헬스키퍼 수정 -->
+
 <!-- 공통 -->
 <div class="pop-layer size1 bounceInDown animated" id="layer_pop13"></div>	<!-- 예약현황 상세 -->
 <div class="pop-layer size1 bounceInUp animated" id="layer_pop14"></div>	<!-- 문의하기 -->
