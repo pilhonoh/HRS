@@ -47,10 +47,16 @@ $(function(){
 					
 					function afterHandler(){
 						try{
-							if(resveStatus) resveStatus.table.refresh();
-							if(resveList) resveList.list.renderResveList();
-							if(scheduleList) scheduleList.list.renderScheduleList();
-							if(resveConfirm) resveConfirm.table.refresh();
+							if(typeof resveStatus == 'object') resveStatus.table.refresh();		//예약하기
+							if(typeof resveList == 'object') resveList.list.renderResveList();		//예약현황
+							if(typeof scheduleList == 'object') scheduleList.list.renderScheduleList();	//스케쥴관리
+							if(typeof resveMgmt == 'object') resveMgmt.list.renderResveList();		//예약변경
+							if(typeof healthkeperList == 'object') healthkeperList.list.renderhealthkeperList();	//헬스키퍼관리
+							if(typeof ChargerList == 'object') ChargerList.list.renderChargerList();	//담당자
+							if(typeof codeManageList == 'object') codeManageList.list.renderCodeManageList();	//공통코드
+							if(typeof mssrblacklistList == 'object') mssrblacklistList.list.rendermssrblacklistList();	//노쇼관리
+							if(typeof RestDeList == 'object') RestDeList.list.renderRestDeList();	//휴일관리
+							if(typeof resveConfirm == 'object') resveConfirm.table.refresh();	//예약확인
 						}catch(err){}
 					}
 					
