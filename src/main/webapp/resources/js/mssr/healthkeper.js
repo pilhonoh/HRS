@@ -92,7 +92,7 @@ var healthkeperList = {
 				
 				if(result.customs.totalCount == 0){
 					healthkeperListHtml.push('<tr>');
-					healthkeperListHtml.push('<td colspan=8 >검색 결과가 없습니다</td>');
+					healthkeperListHtml.push('<td colspan=7 >검색 결과가 없습니다</td>');
 					healthkeperListHtml.push('</tr>');
 				}else{
 					for (var i in resultList) {
