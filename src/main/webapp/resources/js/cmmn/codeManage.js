@@ -98,12 +98,10 @@ var codeManageList = {
 		selectCodeManageList: function() {
 			codeManageList.list.params.startRow = parseInt((codeManageList.list.params.pageNo - 1 ) * codeManageList.list.params.rowPerPage);
 			var deferred = $.Deferred();
-			//console.log('data', codeManageList.list.params);
 			$.ajax({
 				url: ROOT + '/cmmn/selectCodeManageList',
 				data: codeManageList.list.params,
 				success: function(res) {
-				console.log('codeManageList', res);
 					if (res.status === 200) {
 						deferred.resolve(res);
 						codeManageList.list.dataList = res.list;
@@ -363,7 +361,6 @@ var codeManageList = {
 					if (codeManageList.list.params.pageNo == codeManageList.paging.params.prev) {
 						return false;
 					}
-//					console.log(codeManageList.paging.params.prev)
 					codeManageList.list.params.pageNo = codeManageList.paging.params.prev;
 					codeManageList.list.renderCodeManageList();
 				});
@@ -375,7 +372,6 @@ var codeManageList = {
 					if (codeManageList.list.params.pageNo == codeManageList.paging.params.next) {
 						return false;
 					}
-//					console.log(codeManageList.paging.params.prev)
 					codeManageList.list.params.pageNo = codeManageList.paging.params.next;
 					codeManageList.list.renderCodeManageList();
 				});

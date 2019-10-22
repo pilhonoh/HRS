@@ -77,7 +77,6 @@ public class CodeController {
 	 * @param request
 	 * @param response
 	 * @return
-	 * @throws Exception
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/codeManage")
@@ -109,7 +108,6 @@ public class CodeController {
 	 * @작성자 : P150114
 	 * @param request
 	 * @return
-	 * @throws Exception
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/selectCodeManageList")
@@ -137,7 +135,6 @@ public class CodeController {
 	 * @작성자 : P150114
 	 * @param request
 	 * @return
-	 * @throws Exception
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/pop/codeManageCreate")
@@ -152,7 +149,6 @@ public class CodeController {
 	 * @작성일 : 2019.10.11
 	 * @작성자 : P150114
 	 * @param req
-	 * @param sess
 	 * @return
 	 * @변경이력 :
 	 */
@@ -170,7 +166,6 @@ public class CodeController {
 	 * @작성일 : 2019.10.11
 	 * @작성자 : P150114
 	 * @param req
-	 * @param sess
 	 * @return
 	 * @변경이력 :
 	 */
@@ -189,7 +184,6 @@ public class CodeController {
 	 * @작성자 : P150114
 	 * @param request
 	 * @return
-	 * @throws Exception
 	 * @변경이력 :
 	 */
 	@RequestMapping(value = "/pop/codeManageModify")
@@ -205,7 +199,6 @@ public class CodeController {
 	 * @작성일 : 2019.10.11
 	 * @작성자 : P150114
 	 * @param req
-	 * @param sess
 	 * @return
 	 * @변경이력 :
 	 */
@@ -223,7 +216,6 @@ public class CodeController {
 	 * @작성일 : 2019.10.11
 	 * @작성자 : P150114
 	 * @param req
-	 * @param sess
 	 * @return
 	 * @변경이력 :
 	 */

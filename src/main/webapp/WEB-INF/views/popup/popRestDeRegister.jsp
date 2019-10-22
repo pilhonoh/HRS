@@ -17,7 +17,7 @@
 		<tbody>
 			<tr>
 			<th class = "required" >휴일 일자</th>
-				<td>	
+				<td id="restPeriod">	
 					<input type="text" class="datepicker startDate" id="restDeRegister_start_date">
 					<em class="fromto"> ~ </em>
 					<input type="text" class="datepicker endDate" id="restDeRegister_end_date">
@@ -55,7 +55,6 @@ var popRestDeRegister = {
 			    initDatepicker(); 
 				$('input#restDeRegister_start_date').val(fromDate);
 				$('input#restDeRegister_end_date').val(toDate);
-				
 			}
 		}, 
 		 params: {	restDeNo:"", // 휴일등록 코드
@@ -70,7 +69,6 @@ var popRestDeRegister = {
 				url: ROOT + '/cmmn/selectRestDeItem',
 				data: popRestDeRegister.params,
 				success: function(res) {
-					console.log('RestDeItem', res);
 					if (res.status === 200) {
 						   console.log(res)
 						   popRestDeRegister.setparam(res.item);
@@ -116,11 +114,10 @@ var popRestDeRegister = {
 			}
 		   
 		},
-        setparam:function(data){
+        setparam:function(data){  // 휴일 수정건 정보 셋잍   휴일 수정시에만 
 	   		   $("#restDeRegister_No").val(data.RESTDE_NO);
 	   		   $("#restDeRegister_Name").val(data.RESTDE_NAME);
-	   		   $("#restDeRegister_start_date").val(data.RESTDE_DATE);
-	   		   $("#restDeRegister_end_date").val(data.RESTDE_DATE);
+	   		   $("#restPeriod").text(data.RESTDE_DATE);
     
 		},		
 		validation: {
@@ -137,21 +134,21 @@ var popRestDeRegister = {
 					  };
 					});  
 				 popRestDeRegister.validation.elementLock(chk)
-				 return chk;
-					 
+				 return chk;	 
 			 },
-		elementLock:function(value){
+		elementLock:function(value){ // 등록 수정별  화면 제어
 			if(popRestDeRegister.params.saveStat =='C'){
 				$(".rv-desc").css('display',(value)?'':'none');
-				//$("#restDeRegister_saveBtn").prop("disabled",value);
 			}else{
+				
+				$("#restPeriod").text();
 				$("#restDeRegister_start_date").prop("disabled",value);
 				$("#restDeRegister_end_date").prop("disabled",value);
 				$(".ui-datepicker-trigger").prop("disabled",value);
 				
 			} 		
 		},
-		restDeDupCheck:function(func){
+		restDeDupCheck:function(func){ // 휴일 중복 체크 및  휴일에 포함된 예약건 체크 
 			   var stscode = '';
 			$.ajax({
 					url: ROOT + '/cmmn/restDeCheck',
@@ -170,13 +167,11 @@ var popRestDeRegister = {
 							 }else{
 								 func();
 							 }
-				        
 					}
 				}); 
 		   }	 
 		}
 	}
-
 
 
 $(document).ready(function(){		
@@ -185,16 +180,13 @@ $(document).ready(function(){
 	console.log(data)
     popRestDeRegister.init();
 	popRestDeRegister.params.restDeNo = data.RESTDE_NO;
- 	if(data.RESTDE_NO !="" ){
+ 	if(data.RESTDE_NO !="" ){  //휴일  아이디 번호가 있으면 수정 없으며 저장  
 			popRestDeRegister.params.saveStat="U"; 
 			popRestDeRegister.selectRestDeItem();
 		    popRestDeRegister.validation.elementLock(true);
-			
 		}else{
 			popRestDeRegister.params.saveStat="C";
-		   // popRestDeRegister.button.empCheckClickEvent();
 		}	 
-	
 })
   
 </script>

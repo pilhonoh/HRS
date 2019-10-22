@@ -59,7 +59,6 @@ var popSchModify= {
 				$.ajax({
 					url: ROOT + '/cmmn/allCodeList',
 					success: function(res) {
-						console.log('allCodeList', res);
 						if (res.status === 200) {
 						
 							var data = res.list.filter(function (item) { return item.CODE_TYL.indexOf("RVT")>=0});
@@ -107,15 +106,12 @@ var popSchModify= {
 				url: ROOT + '/mssr/selectScheduleDetail',
 				data:popSchModify.params,
 				success: function(res) {
-				console.log('selectScheduleDetail', res);
 					if (res.status === 200) {
 						popSchModify.margData = popSchModify.convertTime(res.list[0].RESVE_TM_LIST);
 						popSchModify.dataList.RESVE_COMPT = res.list[0].RESVE_COMPT.split(',');
 						popSchModify.dataList.CARE_COMPT = res.list[0].CARE_COMPT.split(',');
-						console.log(popSchModify.dataList);
-						
 						deferred.resolve(popSchModify.margData);
-						//popSchModify.dataList.push (res.list);
+
 					} else {
 						deferred.reject("");
 					}
@@ -130,13 +126,13 @@ var popSchModify= {
 		},
 		
 
-		renderScheduleList: function() {
+		renderScheduleList: function() { //예약 row 랜더링 
 			$.when(	popSchModify.cmmnCode.getAllCodeList(),popSchModify.selectScheduleList()).done(function(result){
 							 popSchModify.rowAddEvent();
 			});
 			
 		},		
-		convertTime: function(timeListStr) {
+		convertTime: function(timeListStr) {  //연속 되거나 연속 적이지 않은  근무 시간   병합 및  분활
 			
 			var tList = timeListStr.split(',');
 			var tListLength = tList.length;
@@ -148,28 +144,28 @@ var popSchModify= {
 			var timeSheet ={"time":[]};
 			 if(tListLength >1){
 				 for (var i in tList) {
-					if( firstNum == tList[i]){
+					if( firstNum == tList[i]){ //첫번째  시간은는 무조건 입력
 						timeSheet.time.push({startTime:firstNum,endTime:firstNum});
-					}else{ 				
+					}else{ 	// 첫 row 이후 는 이전  row 시간 값 비교 하여 1 이상 차이시 분활 1 이면 병합			
 				      var timecnt = timeSheet.time.length	
-					  var pervStartTime = timeSheet.time[timecnt-1].startTime;
-					  var pervEndTime =   timeSheet.time[timecnt-1].endTime;
-					  var diff  =  Math.abs(pervEndTime - tList[i] ) ;
-					  if( diff == 1){
+					  var pervStartTime = timeSheet.time[timecnt-1].startTime; // 이전 row 시작 시간
+					  var pervEndTime =   timeSheet.time[timecnt-1].endTime;   // 이후 row 종료시간
+					  var diff  =  Math.abs(pervEndTime - tList[i] ) ; // 이전 종료 시간과  현재 시간 차이 비교 
+					  if( diff == 1){ //병합
 						   timeSheet.time[timecnt-1].endTime = tList[i];
 						   continue ;
-					   }else{
+					   }else{ // 분활 
 						  timeSheet.time.push({startTime:tList[i],endTime: tList[i]});	   
 					   }  
 					}
 				}
-			}else{
+			}else{ //row 가 하나일시 
 				timeSheet.time.push({startTime:firstNum,endTime:lastNum});
 			}
 			return timeSheet.time;
 		},
 	   rowAddEvent:function(){		
-				$.when(addRow()).then(function(cnt,lastTime){
+				$.when(addRow()).then(function(cnt,lastTime){  // 수정 할 예약정보 리스트 
 			
 					    var arrayCnt = popSchModify.margData.length  
 					    var startTime = 0;
@@ -184,7 +180,6 @@ var popSchModify= {
 					    	startTime = lastTime  
 					    	endTime  =  $("#scheduleModify_startTime1 option:last").val();
 					    }
-					     console.log(endTime);
 					    $("#scheduleModify_startTime"+cnt).val(startTime);
 						$("#scheduleModify_endTime"+cnt).val(endTime); 
 				    
@@ -205,7 +200,7 @@ var popSchModify= {
 					}
 				    var timeSheet = getParamsdiff();
 				    
-				    if(!popSchModify.validation.careCheck(timeSheet.deleteTime)){
+				    if(!popSchModify.validation.careCheck(timeSheet.deleteTime)){ //케어완료 예약 건 체큰 
 				    	return false;
 					}			    
 				   
@@ -268,7 +263,6 @@ var popSchModify= {
 				 var chk = true;
 				 var returnMsg="등록된값이 없습니다"
 					$(".required").nextAll("td").children("input,select").each(function(){
-						console.log($(this).parent().prev().text());	
 					  if ($(this).val()==null||$(this).val()==""){
 						  returnMsg = $(this).parent().prev().text() +returnMsg;
 						  $(".rv-desc").show();
@@ -294,7 +288,7 @@ var popSchModify= {
 				 })
 				 return chk;
 			 },
-			 resveCheck:function(deleteTime){
+			 resveCheck:function(deleteTime){// 예약건 삭제시 예약 취소 건수 확이 팝업 
 			    var cnt =  deleteTime.filter(function(x){return popSchModify.dataList.RESVE_COMPT.indexOf(x) >= 0; });
 			    if(cnt.length>0){	 
 					 return '스케쥴 수정 시 기존 예약 '+cnt.length +'건이\n 자동 취소 됩니다. 수정하시겠습니까';
@@ -302,7 +296,7 @@ var popSchModify= {
 					return'';
 				}
 			 },
-			 careCheck:function(deleteTime){
+			 careCheck:function(deleteTime){// 케어 완료 예약 건 체크  
 				 var cnt = deleteTime.filter(function(x){return popSchModify.dataList.CARE_COMPT.indexOf(x) >= 0; });
 				 if(cnt.length>0){	 
 					alertPopup('수정되는 시간에 이미 \n케어완료 된 건이 있습니다.\n근무시간 확인 후 재 요청 바랍니다.');
@@ -317,7 +311,7 @@ var popSchModify= {
 		
 }
 
-function fnRowDelete(){
+function fnRowDelete(){ // row 삭제 
     var id = event.target.parentNode.parentNode.id;
     $('#'+id).remove();
     popSchModify.margData =[];
@@ -332,7 +326,7 @@ function fnRowDelete(){
 	
 }
 
- function getParamsdiff(){
+ function getParamsdiff(){ // 수정전 자료와 수정후 자료 비교   신규등록 /삭제  시간  param 생성
 	var defData = popSchModify.params.timeList.split(',');
 	var setTimesheet = []
     var start = 0; 
@@ -354,7 +348,7 @@ function fnRowDelete(){
     return{insertTime:diffInsert,deleteTime:diffDelete}
  }
 
- function  addRow (){ 
+ function  addRow (){ //신규 로우 생성 
 	  var deferred = $.Deferred();
 	  var trCnt = $(".scheduleModify").length +1;	
 	  var lastTiem = (trCnt==1)? trCnt + 1 : $("select[name='endTime']:last").val();
@@ -392,7 +386,6 @@ function fnRowDelete(){
 $(document).ready(function(){		
 	var item = '${item}';
 	var data = JSON.parse(item);
-	console.log("modify",data);
 	var resveDt =data.RESVE_DE.substr(0,4) + '-' + data.RESVE_DE.substr(4,2) + '-' + data.RESVE_DE.substr(6,2);
 	popSchModify.init();
 	popSchModify.params.bldCode = data.BLD_CODE;

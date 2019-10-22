@@ -71,10 +71,8 @@ var popCodeManageModify = {
 							console.log('modify',res);
 							codeManageList.list.renderCodeManageList();
 							alertPopup('수정 되었습니다.');
-							//closeLayerPopup();
 						},
 						error : function(err) {
-// 							var json = JSON.parse(err.responseText);
 							alertPopup(err.responseText);
 						}
 					}); 
@@ -102,7 +100,6 @@ var popCodeManageModify = {
 $(document).ready(function() {
 	var item = '${item}';
 	var data = JSON.parse(item);
-	console.log(data);
 	popCodeManageModify.init();
 	
 	$("#tdCodeTyl").text(data.CODE_TYL_NM);

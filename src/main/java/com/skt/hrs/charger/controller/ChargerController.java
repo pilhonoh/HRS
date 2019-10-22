@@ -29,8 +29,8 @@ import com.skt.hrs.utils.StringUtil;
  * 
  * @FileName  : ChargerController.java
  * @프로그램 설명   : 헬스케어 예약 시스템 - 매니저 charger(charger) 컨트롤러
- * @Date      : 2019. 9. 03. 
- * @작성자    : LEE.J.H
+ * @Date      : 2019. 10. 03. 
+ * @작성자    : P150113
  * @변경이력  :
  */
 @Controller
@@ -44,14 +44,15 @@ public class ChargerController {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴 목록 view 호출
+	 * @설명 : 담당자 스케쥴 목록 view 호출
 	 * @작성일 : 2019.10.11
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param response
 	 * @return
 	 * @throws Exception
 	 * @변경이력 :
 	 */
+	
 	@RequestMapping(value = "/chargerList")
 	public ModelAndView ChargerView(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -64,9 +65,9 @@ public class ChargerController {
 	
 	/**
 	 * 
-	 * @설명 : 관리자 조회
+	 * @설명 : 담당자  리스트 조회 
 	 * @작성일 : 2019.10.11
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param request
 	 * @return
 	 * @throws Exception
@@ -88,19 +89,18 @@ public class ChargerController {
 		return result;
 	}
 	
-	@RequestMapping(value = "/exportChargerList")
-	public void exportChargerList(HttpServletRequest request, HttpSession sess, HttpServletResponse response) throws Exception {
-		DataEntity param = HttpUtil.getServletRequestParam(request);
-		ResponseResult result = new ResponseResult();
-		LoginVo loginVo = (LoginVo) sess.getAttribute("LoginVo");
-		int rowPerPage = param.getInt("rowPerPage");
-		int startRow = param.getInt("startRow");
-		param.put("rowPerPage", rowPerPage);
-		param.put("startRow", startRow);	
-		result = chargerService.selectChargerList(param);
-		/* ExcelExport.excelDownLoad(result, request, response); */
-	}
 	
+
+	/**
+	 * 
+	 * @설명 : 담당자  상세 조회 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : P150113
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 * @변경이력 :
+	 */
 	
 	@RequestMapping(value = "/selectChargerItem")
 	public @ResponseBody ResponseResult selectChargerItem(HttpServletRequest request, HttpSession sess) throws Exception {
@@ -113,15 +113,14 @@ public class ChargerController {
     
 	/**
 	 * 
-	 * @설명 : 관리자   등록 팝업
+	 * @설명 : 담당자   등록 팝업
 	 * @작성일 : 2019.10.11
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param : request
 	 * @return: response
 	 * @throws Exception
 	 * @변경이력 :
 	 */
-	
 	
 	@RequestMapping(value = "/pop/ChargerRegister") 
 	public String ChargerRegistPopupView(HttpServletRequest req, HttpServletResponse res, Model model) throws Exception { 
@@ -132,9 +131,9 @@ public class ChargerController {
 	
 	/**
 	 * 
-	 * @설명 : 관리자   중복 체크  
+	 * @설명 : 담당자   중복 체크  
 	 * @작성일 : 2019.10.11
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param request
 	 * @param Exception
 	 * @return
@@ -151,9 +150,9 @@ public class ChargerController {
 	
 	/**
 	 * 
-	 * @설명 : 관리자   등록 /수정 
+	 * @설명 : 담당자   등록 /수정 
 	 * @작성일 : 2019.10.11
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param req
 	 * @param sess
 	 * @return
@@ -167,6 +166,17 @@ public class ChargerController {
 				
 		return  chargerService.chargerSave(param);
 	}
+	
+	/**
+	 * 
+	 * @설명 : 담당자   리스트 선택 삭제 
+	 * @작성일 : 2019.10.11
+	 * @작성자 : P150113
+	 * @param req
+	 * @param sess
+	 * @return
+	 * @변경이력 :
+	 */
 	@RequestMapping(value = "/chargerDelete", method = RequestMethod.POST)
 	public @ResponseBody ResponseResult deleteCharger(HttpServletRequest req, HttpSession sess) {
 		DataEntity param = HttpUtil.getServletRequestParam(req);

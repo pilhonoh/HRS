@@ -21,7 +21,6 @@ var scheduleList = {
 			$.ajax({
 				url: ROOT + '/cmmn/allCodeList',
 				success: function(res) {
-					console.log('allCodeList', res);
 					if (res.status === 200) {
 						scheduleList.cmmnCode.allCodeList = res.list;
 					}
@@ -143,7 +142,6 @@ var scheduleList = {
 				url: ROOT + '/mssr/selectScheduleList',
 				data: scheduleList.list.params,
 				success: function(res) {
-					console.log('scheduleList', res);
 					if (res.status === 200) {
 						
 							deferred.resolve(res);
@@ -307,10 +305,6 @@ var scheduleList = {
 			var totalCount = scheduleList.paging.params.totalCount; //list 의 전체 row count
 			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
 			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
-			/*console.log(currentIndex);
-			console.log(totalCount);
-			console.log(rowPerPage);
-			console.log(rowPerPage);*/
 			$("div#pagingArea").empty();
 			
 			var preStr = '';
@@ -320,8 +314,6 @@ var scheduleList = {
 			
 			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; //이전 블록의 시작페이지
 			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount; //다음 블록의 시작 페이지
-			//var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
-			//var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
 			var first = (currentBlock - 1) * 10 + 1; //현재 블록의 시작 페이지
 			var last = currentBlock * 10; //현재 블록의 끝 페이지
 			
@@ -390,7 +382,6 @@ var scheduleList = {
 					if (scheduleList.list.params.pageNo == scheduleList.paging.params.prev) {
 						return false;
 					}
-					console.log(scheduleList.paging.params.prev)
 					scheduleList.list.params.pageNo = scheduleList.paging.params.prev;
 					scheduleList.list.renderScheduleList();
 				});
@@ -402,7 +393,6 @@ var scheduleList = {
 					if (scheduleList.list.params.pageNo == scheduleList.paging.params.next) {
 						return false;
 					}
-					console.log(scheduleList.paging.params.prev)
 					scheduleList.list.params.pageNo = scheduleList.paging.params.next;
 					scheduleList.list.renderScheduleList();
 				});
@@ -494,7 +484,6 @@ var scheduleList = {
 					  resveItemCnt+=Number(data.RESVE_COMPT_CNT);
 					  careItemCnt+=Number(data.CARE_COMPT_CNT);
 					  resveNoSplit = data.RESVE_NO_LIST.split(",")
-					  console.log( 'resv_no',resveNoSplit.length);
 					 for (var i = 0; i < resveNoSplit.length; i++) {
 						 delItemCnt++;  
 						 params.push({resveDate : data.RESVE_DE , mssrCode :data.MSSR_EMPNO, bldCode : data.BLD_CODE , RESVE_NO:resveNoSplit[i]});	
@@ -521,8 +510,7 @@ var scheduleList = {
 							url: ROOT + '/mssr/scheduleDelete',
 							type: 'POST',
 							data:{params:JSON.stringify(params)}  ,
-							success : function(res){
-								console.log('delete',res);				
+							success : function(res){			
 								scheduleList.list.renderScheduleList();
 								$("#checkAll").prop('checked',false);
 								alertPopup('삭제되었습니다.');

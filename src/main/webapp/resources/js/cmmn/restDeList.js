@@ -4,20 +4,20 @@
 var RestDeList = {
 	// 초기화
 	init: function() {
-		//loadCodeSelect(); //콤보박스 공통코드 세팅
+		// loadCodeSelect(); //콤보박스 공통코드 세팅
 		RestDeList.datepicker.setDefaultValue();
-	    RestDeList.list.renderRestDeList(); //목록 조회 후 렌더
-		RestDeList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
+	    RestDeList.list.renderRestDeList(); // 목록 조회 후 렌더
+		RestDeList.button.listBtnClickEvent(); // 조회 버튼 클릭 이벤트
 		RestDeList.button.restDeRegisterCreateBtnEvent();
 		RestDeList.button.restDeRegisterDeleteBtnEvent();
-	   /* RestDeList.button.restDeExcelDownBtnEvent();*/
+	   /* RestDeList.button.restDeExcelDownBtnEvent(); */
 		RestDeList.checkboxEvent.checkall();
 	},
 	
 	datepicker: {
-		setDefaultValue: function() { //기본 날짜 세팅
-			var fromDate = moment().format('YYYY-MM-DD'); //오늘 날짜
-			var toDate = moment().add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
+		setDefaultValue: function() { // 기본 날짜 세팅
+			var fromDate = moment().format('YYYY-MM-DD'); // 오늘 날짜
+			var toDate = moment().add(1, 'M').format('YYYY-MM-DD'); // 30일 전 날짜
 			
 			$('input#from_date').val(fromDate);
 			$('input#to_date').val(toDate);
@@ -29,30 +29,27 @@ var RestDeList = {
 	
 	list: {
 		
-		//목록 조회 시 사용하는 파라미터
+		// 목록 조회 시 사용하는 파라미터
 		params: {
-			pageNo: 1, //조회할 페이지 번호
-			rowPerPage: 10, //한 페이지 당 조회할 ROW 수
-			startRow: 0 //조회 시작할 ROW
+			pageNo: 1, // 조회할 페이지 번호
+			rowPerPage: 10, // 한 페이지 당 조회할 ROW 수
+			startRow: 0 // 조회 시작할 ROW
 		},
 		
-		//현재 조회된 데이터 저장
+		// 현재 조회된 데이터 저장
 		dataList: [],
 		
-		//예약 목록 조회
+		// 예약 목록 조회
 		selectRestDeList: function() {
 			
 			RestDeList.list.params.startRow = parseInt((RestDeList.list.params.pageNo - 1 ) * RestDeList.list.params.rowPerPage);
-			console.log(RestDeList.list.params)
 			var deferred = $.Deferred();
 			
 			$.ajax({
 				url: ROOT + '/cmmn/selectRestDeList',
 				data: RestDeList.list.params,
 				success: function(res) {
-					console.log('RestDeList', res);
 					if (res.status === 200) {
-						   console.log(res)
 							deferred.resolve(res);
 							RestDeList.list.dataList = res.list;
 					   	
@@ -72,16 +69,13 @@ var RestDeList = {
 		exportRestDeList: function() {
 			
 			RestDeList.list.params.startRow = parseInt((RestDeList.list.params.pageNo - 1 ) * RestDeList.list.params.rowPerPage);
-			console.log(RestDeList.list.params)
 			var deferred = $.Deferred();
 			
 			$.ajax({
 				url: ROOT + '/cmmn/exportRestDeList',
 				data: RestDeList.list.params,
 				success: function(res) {
-					console.log('RestDeList', res);
 					if (res.status === 200) {
-						   console.log(res)
 							deferred.resolve(res);
 							RestDeList.list.dataList = res.list;
 					   	
@@ -99,7 +93,7 @@ var RestDeList = {
 			return deferred.promise();
 		},
 		 
-		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성  
+		// 조회된 예약 목록 데이터를 가지고 화면에 목록 생성
 		renderRestDeList: function() {
 			$.when(RestDeList.list.selectRestDeList()).done(function(result) {
 
@@ -137,27 +131,25 @@ var RestDeList = {
 	
 	
 	paging: {
-		//페이징 처리를 위한 파라미터
+		// 페이징 처리를 위한 파라미터
 		params: {
-			totalCount: null, //list 의 전체 row count
-			first: null, //현재 보여질 첫페이지
-			last: null, //현재 보여질 마지막페이지
-			prev: null, //이전페이지
-			next: null //다음페이지
+			totalCount: null, // list 의 전체 row count
+			first: null, // 현재 보여질 첫페이지
+			last: null, // 현재 보여질 마지막페이지
+			prev: null, // 이전페이지
+			next: null // 다음페이지
 		},
 		
-		//페이지 이동 영역 생성
+		// 페이지 이동 영역 생성
 		renderPaging: function() {
 			
-			var currentIndex = RestDeList.list.params.pageNo; //현재 페이지 위치
-			var rowPerPage = RestDeList.list.params.rowPerPage; //페이지 당 레코드 수
-			var totalCount = RestDeList.paging.params.totalCount; //list 의 전체 row count
-			var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
-			var currentBlock = Math.ceil(currentIndex / 10) //현재 블럭의 시작 페이지 번호
-			/*console.log(currentIndex);
-			console.log(totalCount);
-			console.log(rowPerPage);
-			console.log(rowPerPage);*/
+			var currentIndex = RestDeList.list.params.pageNo; // 현재 페이지 위치
+			var rowPerPage = RestDeList.list.params.rowPerPage; // 페이지 당 레코드 수
+			var totalCount = RestDeList.paging.params.totalCount; // list 의 전체
+																	// row count
+			var totalIndexCount = Math.ceil(totalCount / rowPerPage); // 전체
+																		// 인덱스 수
+			var currentBlock = Math.ceil(currentIndex / 10) // 현재 블럭의 시작 페이지 번호
 			$("div#pagingArea").empty();
 			
 			var preStr = '';
@@ -165,12 +157,15 @@ var RestDeList = {
 			var pageNumStr = '';
 			
 			
-			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; //이전 블록의 시작페이지
-			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount; //다음 블록의 시작 페이지
-			//var first = (parseInt((currentIndex-1) / 10) * 10) + 1;
-			//var last = (parseInt(totalIndexCount/10) == parseInt(currentIndex/10)) ? totalIndexCount%10 : 10;
-			var first = (currentBlock - 1) * 10 + 1; //현재 블록의 시작 페이지
-			var last = currentBlock * 10; //현재 블록의 끝 페이지
+			var prev = (parseInt((currentIndex-1)/10)*10) - 9 > 0 ? (parseInt((currentIndex-1)/10)*10) - 9 : 1; // 이전
+																												// 블록의
+																												// 시작페이지
+			var next = (parseInt((currentIndex-1)/10)+1) * 10 + 1 < totalIndexCount ? (parseInt((currentIndex-1)/10)+1) * 10 + 1 : totalIndexCount; // 다음
+																																					// 블록의
+																																					// 시작
+																																					// 페이지
+			var first = (currentBlock - 1) * 10 + 1; // 현재 블록의 시작 페이지
+			var last = currentBlock * 10; // 현재 블록의 끝 페이지
 			
 			
 			RestDeList.paging.params.first = first;
@@ -178,18 +173,30 @@ var RestDeList = {
 			RestDeList.paging.params.prev = prev;
 			RestDeList.paging.params.next = next;
 			
-			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, first + prev 버튼
+			if (totalIndexCount > 10) { // 전체 인덱스가 10이 넘을 경우, first + prev 버튼
 				preStr += '<a href="#none" class="first" id="firstBtn"><img src="' + IMG + '/common/btn_first.gif"></a>'
 					   +  '<a href="#none" class="prev" id="prevBtn"><img src="' + IMG + '/common/btn_prev.gif"></a>';
-			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, first 버튼
+			} else if (totalIndexCount <=10 && totalIndexCount > 1) { // 전체
+																		// 인덱스가
+																		// 10보다
+																		// 작을
+																		// 경우,
+																		// first
+																		// 버튼
 				preStr += '<a href="#none" class="first" id="firstBtn"><img src="' + IMG + '/common/btn_first.gif"></a>';
 			}
 
 			
-			if (totalIndexCount > 10) { //전체 인덱스가 10이 넘을 경우, next + last 버튼
+			if (totalIndexCount > 10) { // 전체 인덱스가 10이 넘을 경우, next + last 버튼
 				postStr += '<a href="#none" class="next" id="nextBtn"><img src="' + IMG + '/common/btn_next.gif"></a>'
 						+  '<a href="#none" class="last" id="lastBtn"><img src="' + IMG + '/common/btn_last.gif"></a>';
-			} else if (totalIndexCount <=10 && totalIndexCount > 1) { //전체 인덱스가 10보다 작을 경우, last 버튼
+			} else if (totalIndexCount <=10 && totalIndexCount > 1) { // 전체
+																		// 인덱스가
+																		// 10보다
+																		// 작을
+																		// 경우,
+																		// last
+																		// 버튼
 				postStr += '<a href="#none" class="last" id="lastBtn"><img src="' + IMG + '/common/btn_last.gif"></a>';
 			}
 			
@@ -237,7 +244,6 @@ var RestDeList = {
 					if (RestDeList.list.params.pageNo == RestDeList.paging.params.prev) {
 						return false;
 					}
-					console.log(RestDeList.paging.params.prev)
 					RestDeList.list.params.pageNo = RestDeList.paging.params.prev;
 					RestDeList.list.renderRestDeList();
 				});
@@ -249,7 +255,6 @@ var RestDeList = {
 					if (RestDeList.list.params.pageNo == RestDeList.paging.params.next) {
 						return false;
 					}
-					console.log(RestDeList.paging.params.prev)
 					RestDeList.list.params.pageNo = RestDeList.paging.params.next;
 					RestDeList.list.renderRestDeList();
 				});
@@ -270,9 +275,15 @@ var RestDeList = {
 			lastBtnEvent: function() {
 				$('a#lastBtn').off();
 				$('a#lastBtn').on('click', function() {
-					var rowPerPage = RestDeList.list.params.rowPerPage; //페이지 당 레코드 수
-					var totalCount = RestDeList.paging.params.totalCount; //list 의 전체 row count
-					var totalIndexCount = Math.ceil(totalCount / rowPerPage); //전체 인덱스 수
+					var rowPerPage = RestDeList.list.params.rowPerPage; // 페이지 당
+																		// 레코드 수
+					var totalCount = RestDeList.paging.params.totalCount; // list
+																			// 의 전체
+																			// row
+																			// count
+					var totalIndexCount = Math.ceil(totalCount / rowPerPage); // 전체
+																				// 인덱스
+																				// 수
 					
 					if (RestDeList.list.params.pageNo == totalIndexCount) {
 						return false;
@@ -290,19 +301,19 @@ var RestDeList = {
 	
 	button: {
 		
-		//조회 버튼 클릭 이벤트
+		// 조회 버튼 클릭 이벤트
 		listBtnClickEvent: function() {
 			$('button#listBtn').on('click', function(e) {
 		
 				RestDeList.validation.dateCheck();
-				//조회 페이지는 1로 초기화 param 세팅
+				// 조회 페이지는 1로 초기화 param 세팅
 				RestDeList.list.params.pageNo = 1;
 			
-				//목록 조회 및 렌더 실행
+				// 목록 조회 및 렌더 실행
 				RestDeList.list.renderRestDeList();
 			});
 		},
-		//관리자등록		
+		// 관리자등록
 		restDeRegisterCreateBtnEvent: function(){
 			
 			$("#createBtn").off('click').on('click',function(){  
@@ -364,7 +375,7 @@ var RestDeList = {
 
 	
 	validation: {
-		//날짜 필드 값 체크
+		// 날짜 필드 값 체크
 		dateCheck: function() {
 			var fromDate = $('input#from_date').val().trim().split('-');
 			var toDate = $('input#to_date').val().trim().split('-');

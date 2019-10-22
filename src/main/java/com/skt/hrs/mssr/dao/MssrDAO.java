@@ -24,7 +24,7 @@ public class MssrDAO {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 목록 조회 
+	 * @설명 : 관리사 콤보 목록 조회 
 	 * @작성일 : 2019.09.04
 	 * @작성자 : LEE.J.H
 	 * @param param
@@ -69,7 +69,7 @@ public class MssrDAO {
 	 * 
 	 * @설명 : 관리사 스케쥴 등록 
 	 * @작성일 : 2019.09.10
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -86,7 +86,7 @@ public class MssrDAO {
 	 * 
 	 * @설명 : 관리사 스케쥴 상태 등록 
 	 * @작성일 : 2019.09.10
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -103,7 +103,7 @@ public class MssrDAO {
 	 * 
 	 * @설명 : 관리사 스케쥴 삭제 변경
 	 * @작성일 : 2019.09.10
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -133,8 +133,8 @@ public class MssrDAO {
 	/**
 	 * 
 	 * @설명 : 관리사 스케쥴 상세 조회 
-	 * @작성일 : 2019.09.05
-	 * @작성자 : LEE.J.H
+	 * @작성일 : 2019.09.27
+	 * @작성자 : P150113
 	 * @param param
 	 * @return
 	 * @변경이력 :
@@ -145,7 +145,7 @@ public class MssrDAO {
 	/**
 	 * 
 	 * @설명 : 관리사 관리화면 SMS 정보 
-	 * @작성일 : 2019.09.05
+	 * @작성일 : 2019.09.27
 	 * @작성자 : LEE.J.H
 	 * @param param
 	 * @return
@@ -161,7 +161,7 @@ public class MssrDAO {
 	 * 
 	 * @설명 : 관리사 스케쥴 중복 예약 체크 
 	 * @작성일 : 2019.09.20
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
 	 * @return 10: 에약일 시간관리시 예약여부 , 20:예약일 시간 BED 사용여부 
 	 * @변경이력 :
@@ -173,8 +173,8 @@ public class MssrDAO {
 	/**
 	 * 
 	 * @설명 : 휴일체크
-	 * @작성일 : 2019.09.20
-	 * @작성자 : LEE.Y.H
+	 * @작성일 : 2019.10.18
+	 * @작성자 : P150113
 	 * @param param
 	 * @return count
 	 * @변경이력 :

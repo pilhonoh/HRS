@@ -81,8 +81,7 @@ var popCodeManageCreate = {
 					url: ROOT + '/cmmn/codeKindList',
 					data: {codeType: cType, codeTyl: tyl, codeTys: tys || ''},
 					success : function(res) {
-						console.log('codeKindList',res);
-						if(res.status === 200) {
+    						if(res.status === 200) {
 							var options = res.list.map(function(data) {
 									return $('<option>').val(data.CODE).text(data.CODE_NM);
 								});
@@ -155,7 +154,6 @@ var popCodeManageCreate = {
 										codeNm: $("#codeNm_createVal").val()
 										},
 									success : function(res) {
-										console.log('regist', res);
 										codeManageList.list.renderCodeManageList();
 										alertPopup('등록 되었습니다.');
 
@@ -209,7 +207,7 @@ var popCodeManageCreate = {
 					   },
 				success : function(result) {
 					if(result.status === 200) {
-// 						console.log('duplTFnum', (parseInt(result.customs.duplCnt) > 0));
+
 						if(parseInt(result.customs.duplCnt) > 0) {
 							returnMsg = "중복된 코드입니다.";
 							$(".rv-desc").show();
@@ -219,10 +217,9 @@ var popCodeManageCreate = {
 							$(".rv-desc").hide();
 							retVal = true;
 						}
-// 						if(cb) cb(); //콜백이 있다면 실행
+
 					}
 					deferred.resolve(retVal);
-					//return retVal;
 				},
 				error : function(err) {
 					console.error(err)
@@ -230,8 +227,7 @@ var popCodeManageCreate = {
 			});
 			
 			return deferred;
-// 			alert(retVal);
-// 			console.log('result', retVal);
+
 		}
 	}
 }

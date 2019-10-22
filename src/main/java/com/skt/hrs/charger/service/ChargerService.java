@@ -47,11 +47,11 @@ public class ChargerService {
 
 	/**
 	 * 
-	 * @설명 : 관리자  조회
+	 * @설명 : 담당자  조회
 	 * @작성일 : 2019.10.07
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
-	 * @return
+	 * @return: response
 	 * @변경이력 :
 	 */
 	public ResponseResult selectChargerList(DataEntity param) {
@@ -62,11 +62,11 @@ public class ChargerService {
 	
 	/**
 	 * 
-	 * @설명 : 관리자 상세 조회
+	 * @설명 : 담당자 상세 조회
 	 * @작성일 : 2019.10.07
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
-	 * @return
+	 * @return: response
 	 * @변경이력 :
 	 */
 	public ResponseResult selectChargerItem(DataEntity param) {
@@ -77,11 +77,11 @@ public class ChargerService {
 	
 	/**
 	 * 
-	 * @설명 : 관리자 사번 중복 체크 
+	 * @설명 : 담당자 사번 중복 체크 
 	 * @작성일 : 2019.10.07
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param param
-	 * @return
+	 * @return: response
 	 * @변경이력 :
 	 */
 	public ResponseResult selectEmpNoCheck(DataEntity param) {	
@@ -96,11 +96,11 @@ public class ChargerService {
 	}
 	/**
 	 * 
-	 * @설명 : 관리자 동록
+	 * @설명 : 담당자 동록/수정
 	 * @작성일 : 2019.10.07
-	 * @작성자 : LEE.Y.H
-	 * @param param
-	 * @return
+	 * @작성자 : P150113
+	 * @param param  -> saveStat C:INSERT ,U:UPDATE
+	 * @return: response
 	 * @변경이력 :
 	 */
 	@Transactional
@@ -120,9 +120,18 @@ public class ChargerService {
 		return result;
 	}
 	
-
+	/**
+	 * 
+	 * @설명 : 담당자 리스트 선택 삭제 
+	 * @작성일 : 2019.10.07
+	 * @작성자 : P150113
+	 * @param param 
+	 * @return: response
+	 * @변경이력 :
+	 */
+	
 	@Transactional
-	public  ResponseResult deleteCharger(DataEntity param) {
+	public  ResponseResult deleteCharger(DataEntity param) { // 1,2 ... SPLIT 배열 생성 
 		  ResponseResult result = new ResponseResult(); 
 		  String[] deleteEmpNo = param.split("deleteEmpNo",",");
 	      boolean updateResult = false;	 

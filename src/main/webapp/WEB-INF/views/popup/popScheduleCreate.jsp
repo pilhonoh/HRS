@@ -57,8 +57,8 @@ var popSchCreate = {
 			loadCodeSelect(undefined, '#scheduleCreate_enter'); //콤보박스 공통코드 세팅
 			popSchCreate.combobox.bldComboEventBinding(); //사옥 콤보박스 변경 이벤트
 			popSchCreate.datepicker.setDefaultValue(); //datepicker 기본값 세팅	
-			popSchCreate.button.popSaveClickEvent();
-			popSchCreate.button.rowAddClickEvent();
+			popSchCreate.button.popSaveClickEvent(); //근무저장
+			popSchCreate.button.rowAddClickEvent();//row추가
 		},
 		
 		cmmnCode: {
@@ -67,7 +67,6 @@ var popSchCreate = {
 				$.ajax({
 					url: ROOT + '/cmmn/allCodeList',
 					success: function(res) {
-						console.log('allCodeList', res);
 						if (res.status === 200) {
 							popSchCreate.cmmnCode.allCodeList = res.list;
 						}
@@ -163,13 +162,13 @@ var popSchCreate = {
 		button:{
 			popSaveClickEvent:function(){
 				$("#scheduleCreate_saveBtn").on("click",function(){			
-					console.log('data', JSON.stringify(getParams()));
+					
 				    
-					if(!popSchCreate.validation.required()){
+					if(!popSchCreate.validation.required()){  // 필수입력 체크
 						return false;
 					}
 					
-					if(!popSchCreate.validation.timeCheck()){
+					if(!popSchCreate.validation.timeCheck()){ //시작  종료시간    체크 
 						return false;
 					}
 					
@@ -177,10 +176,9 @@ var popSchCreate = {
 						$.ajax({
 							url: ROOT + '/mssr/scheduleCreate',
 							type: 'POST',
-							data:{params:JSON.stringify(getParams())} ,
-							success : function(res){
-								console.log('regist',res);				
-								scheduleList.list.renderScheduleList();
+							data:{params:JSON.stringify(getParams())} , //여러건의 json param 전송  josn -> String 변환
+							success : function(res){		
+								scheduleList.list.renderScheduleList(); // 리스트제조회 
 								alertPopup('등록 되었습니다.');
 								//closeLayerPopup();
 							},
@@ -195,10 +193,11 @@ var popSchCreate = {
 			
 		   rowAddClickEvent:function(){			   
 				  $.when(addRow()).done(function(cnt,setDate){
-				    $("#scheduleCreate_Body").find('.datepicker').datepicker("destroy");//.datepicker();
-  				    initDatepicker(); 
-  				    loadCodeSelect( function(){
-  				 
+					//datepicker Element 추가시  datapicker 속성  재설정     
+					$("#scheduleCreate_Body").find('.datepicker').datepicker("destroy");//.datepicker();
+  				    initDatepicker();  
+  				    
+  				    loadCodeSelect( function(){ 
   				    var mm = moment(setDate,"YYYYMMDD");
   				    var fromDate = mm.format('YYYY-MM-DD');
   					var toDate = mm.add(1, 'M').format('YYYY-MM-DD'); //30일 전 날짜
@@ -213,12 +212,12 @@ var popSchCreate = {
 		},
 		
 		validation: {
-			 required:function(){
+			 required:function(){ // 필수갑 체크 
 				 var chk = true;
 				 var returnMsg="등록된값이 없습니다"
 					$(".required").nextAll("td").children("input,select").each(function(){
 					  if ($(this).val()==null||$(this).val()==""){
-						  returnMsg = $(this).parent().prev().text() +returnMsg;
+						  returnMsg = $(this).parent().prev().text() +returnMsg; //th text get
 						  $(".rv-desc").show();
 						  $("#requiredMsg").text(returnMsg);
 						  chk = false
@@ -229,7 +228,7 @@ var popSchCreate = {
 					 
 			 },
 			 
-			 timeCheck: function(){
+			 timeCheck: function(){ //시간 체크
 				 var chk = true;
 				 $('select[id^=scheduleCreate_startTime]').each(function(i,e){
 					 var startTm = $('#'+e.id);
@@ -247,24 +246,23 @@ var popSchCreate = {
 		}
 	}
 
-	function fnRowDelete(){
+	function fnRowDelete(){  //row 삭제 
 		    var id = event.target.parentNode.parentNode.id;
 		    $('#'+id).remove();
-			  $("#scheduleCreate_Body  tr").each(function(index){
+			  $("#scheduleCreate_Body  tr").each(function(index){ // row 삭제시   row번호  재지정
 				     rowidrest = this;
 				     index += 1
 				     $(rowidrest).children("th").text("근무시간 "+index)
 				     $(rowidrest).attr({"id":"scheduleCreate_tr"+index ,"data-rowid":index});
 				     $(rowidrest).children('td').children('input,select').attr("id",function(){ return "cheduleCreate_"+ this.name+ index })  
-				    
 				});
 			
 		}
 		
-	function addRow (){
+	function addRow (){ //row추가 
 		var deferred = $.Deferred();
-		var trCnt =$(".trschedule").length + 1
-		var lastdate = (trCnt==1)? moment() : moment($('.datepicker:last').val(),"YYYYMMDD"); 
+		var trCnt =$(".trschedule").length + 1 //추가되는 row 번호 발췌
+		var lastdate = (trCnt==1)? moment() : moment($('.datepicker:last').val(),"YYYYMMDD");//추가되는 row 에 datepicker  초기화 일자 (상위로우에 마직막일자)  
 		var scheduleListHtml = [];
 		if(trCnt >5){ deferred.reject(''); return false;}
 			scheduleListHtml.push('<tr id ="scheduleCreate_tr'+trCnt+'" class="trschedule" data-rowid = "'+trCnt+'" >');
@@ -287,7 +285,7 @@ var popSchCreate = {
 		return deferred.promise();
 	}
 	
-	function getParams(){
+	function getParams(){  //기간  시간별 등록  ROW parma 생성
 		var params = [] 
 		
 		$(".trschedule").each(function(){

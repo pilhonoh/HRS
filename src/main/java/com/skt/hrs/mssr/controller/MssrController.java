@@ -40,9 +40,7 @@ public class MssrController {
 	private static final Logger logger = LoggerFactory.getLogger(MssrController.class);
 	
 	@Autowired
-	MssrService mssrService;
-	
-	
+	MssrService mssrService;	
 	
 	/**
 	 * 
@@ -67,7 +65,7 @@ public class MssrController {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 목록 조회
+	 * @설명 : 관리사 콤보 리스트 조회
 	 * @작성일 : 2019.09.04
 	 * @작성자 : LEE.J.H
 	 * @param req
@@ -79,8 +77,6 @@ public class MssrController {
 		DataEntity param = HttpUtil.getServletRequestParam(req);
 		return mssrService.getMssrList(param);
 	}
-	
-	
 	
 	
 	/**
@@ -116,7 +112,7 @@ public class MssrController {
 	 * 
 	 * @설명 : 관리사 스케쥴  등록 팝업
 	 * @작성일 : 2019.09.09
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param request
 	 * @return
 	 * @throws Exception
@@ -136,7 +132,7 @@ public class MssrController {
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
 	 * @param req
-	 * @param sess
+	 * @param 
 	 * @return
 	 * @변경이력 :
 	 */
@@ -151,11 +147,11 @@ public class MssrController {
 
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴  등록
+	 * @설명 : 관리사 스케쥴  리스트 선택 삭제 
 	 * @작성일 : 2019.09.03
 	 * @작성자 : P149365
 	 * @param req
-	 * @param sess
+	 * @param 
 	 * @return
 	 * @변경이력 :
 	 */
@@ -170,11 +166,11 @@ public class MssrController {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴  수정
+	 * @설명 : 관리사 스케쥴  수정 팝업
 	 * @작성일 : 2019.09.17
-	 * @작성자 : LEE.Y.H
+	 * @작성자 : P150113
 	 * @param req
-	 * @param sess
+	 * @param 
 	 * @return
 	 * @변경이력 :
 	 */
@@ -189,11 +185,11 @@ public class MssrController {
 	
 	/**
 	 * 
-	 * @설명 : 관리사 스케쥴  등록
-	 * @작성일 : 2019.09.03
-	 * @작성자 : P149365
+	 * @설명 : 관리사 스케쥴 수정 
+	 * @작성일 : 2019.09.17
+	 * @작성자 : P150113
 	 * @param req
-	 * @param sess
+	 * @param 
 	 * @return
 	 * @변경이력 :
 	 */
@@ -205,7 +201,16 @@ public class MssrController {
 				
 		return mssrService.scheduleModify(param);
 	}
-	
+	/**
+	 * 
+	 * @설명 : 관리사 스케쥴  상세 조회 
+	 * @작성일 : 2019.09.26
+	 * @작성자 : P149365
+	 * @param req
+	 * @param 
+	 * @return
+	 * @변경이력 :
+	 */
 	@RequestMapping(value = "/selectScheduleDetail")
 	public @ResponseBody ResponseResult selectScheduleDetail(HttpServletRequest request, HttpSession sess) throws Exception {
 		DataEntity param = HttpUtil.getServletRequestParam(request);

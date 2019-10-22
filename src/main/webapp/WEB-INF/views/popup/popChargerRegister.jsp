@@ -74,9 +74,7 @@ var popRegCreate = {
 				url: ROOT + '/charger/selectChargerItem',
 				data: popRegCreate.params,
 				success: function(res) {
-					console.log('ChargerItem', res);
 					if (res.status === 200) {
-						   console.log(res)
 						   deferred.resolve(res.item);
 						
 					} else {
@@ -102,7 +100,7 @@ var popRegCreate = {
 					popRegCreate.params.bldCode = $("#chargerRegister_bldCombo").val();
 				    popRegCreate.params.chargerEmpno = $("#chargerRegister_chargerEmpNo").val();
 					popRegCreate.params.authCode = $("#chargerRegister_authCombo").val(); 
-					console.log(popRegCreate.params);
+				
 					
 					confirmPopup('담당자 정보를  저장  하시겠습니까?', function(){		 			
 			 		$.ajax({
@@ -172,7 +170,7 @@ var popRegCreate = {
 					  $("#requiredMsg").text("등록된 사번이 있습니다");
 				     }
 			     popRegCreate.validation.elementLock(value)	 
-			 })	
+			   });	
 		},
 		elementLock:function(value){
 		if(popRegCreate.params.saveStat =='C'){

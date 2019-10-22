@@ -10,7 +10,6 @@ var ChargerList = {
 		ChargerList.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		ChargerList.button.chargerRegisterCreateBtnEvent();
 		ChargerList.button.chargerRegisterDeleteBtnEvent();
-	    ChargerList.button.chargerExcelDownBtnEvent();
 		ChargerList.checkboxEvent.checkall();
 	},
 	
@@ -109,36 +108,6 @@ var ChargerList = {
 			
 			return deferred.promise();
 		},
-		exportChargerList: function() {
-			
-			ChargerList.list.params.startRow = parseInt((ChargerList.list.params.pageNo - 1 ) * ChargerList.list.params.rowPerPage);
-			console.log(ChargerList.list.params)
-			var deferred = $.Deferred();
-			
-			$.ajax({
-				url: ROOT + '/charger/exportChargerList',
-				data: ChargerList.list.params,
-				success: function(res) {
-					console.log('ChargerList', res);
-					if (res.status === 200) {
-						   console.log(res)
-							deferred.resolve(res);
-							ChargerList.list.dataList = res.list;
-					   	
-						
-					} else {
-						deferred.reject("");
-					}
-				},
-				error: function(err) {
-					console.error(err);
-					deferred.reject("");
-				}
-			})
-			
-			return deferred.promise();
-		},
-		 
 		//조회된 예약 목록 데이터를 가지고 화면에 목록 생성  
 		renderChargerList: function() {
 			$.when(ChargerList.list.selectChargerList()).done(function(result) {
@@ -330,9 +299,7 @@ var ChargerList = {
 		}
 		
 	},
-	
-	
-	
+		
 	button: {
 		
 		//조회 버튼 클릭 이벤트
@@ -356,65 +323,51 @@ var ChargerList = {
 		},
 		//관리자등록		
 		chargerRegisterCreateBtnEvent: function(){
-		  $("#createBtn").off('click').on('click',function(){  
-			
+		  $("#createBtn").off('click').on('click',function(){  // 신규 등록
 			   var popParam = { EMPNO:$(this).data("chargerempno")}
-			   console.log(popParam)
 			    ChargerList.popup.showChargerRegisterSavePopup(popParam);  
 		  });
 		  
-		  $("a[name='modifyBtn']").on('click',function(){  
-				 
+		  $("a[name='modifyBtn']").on('click',function(){  // 수정 
 			   var popParam = { EMPNO:$(this).data("chargerempno")}
-			   console.log(popParam)
 			    ChargerList.popup.showChargerRegisterSavePopup(popParam);  
 		  });
 		},
 		chargerRegisterDeleteBtnEvent:function(){
-			
-			$("#deleteBtn").on('click',function(){  
-				 
-						  var delEmpNo = [] ;
+		$("#deleteBtn").on('click',function(){  
+					  var delEmpNo = [] ;
+					  var meassage = '';
+					  $('tbody#chargerList input:checkbox:checked').each(function(){
 						  
-						  var meassage = '';
-						  $('tbody#chargerList input:checkbox:checked').each(function(){
-							  
-							  	delEmpNo.push($(this).val());	
-							 
+						  	delEmpNo.push($(this).val());	
+						 
+					  });
+					  
+					  if(delEmpNo.length == 0){
+						  alertPopup('삭제할 스케쥴을 선택하세요.');
+						  return false;
+					  }
+					  
+					  confirmPopup('총' + delEmpNo.length + '건을 삭제하시겠습니까?', function(){					  					
+						$.ajax({
+								url: ROOT + '/charger/chargerDelete',
+								type: 'POST',
+								data:{deleteEmpNo:delEmpNo.toString()}  ,
+								success : function(res){
+								
+									ChargerList.list.renderChargerList();
+									$("#checkAll").prop('checked',false);
+									alertPopup('삭제되었습니다.');
+								},
+								error : function(err) {
+									console.error(err)
+								}
 						  });
-						  
-						  if(delEmpNo.length == 0){
-							  alertPopup('삭제할 스케쥴을 선택하세요.');
-							  return false;
-						  }
-						  
-						  confirmPopup('총' + delEmpNo.length + '건을 삭제하시겠습니까?', function(){					  					
-							$.ajax({
-									url: ROOT + '/charger/chargerDelete',
-									type: 'POST',
-									data:{deleteEmpNo:delEmpNo.toString()}  ,
-									success : function(res){
-									
-										ChargerList.list.renderChargerList();
-										$("#checkAll").prop('checked',false);
-										alertPopup('삭제되었습니다.');
-									},
-									error : function(err) {
-										console.error(err)
-									}
-							  });
-						  })
-						  
-					  });					
-			
-		},
-
-		chargerExcelDownBtnEvent:function(){
-			  
-			  $("button#excelDownBtn").on('click',function(){
-				  ChargerList.list.exportChargerList();
-			  });	
+					  })
+					  
+				  });					
 		}
+
 	},
 
 	
