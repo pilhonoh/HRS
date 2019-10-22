@@ -544,7 +544,7 @@ var resveMgmt = {
 						console.log('modify',res);
 						resveMgmt.list.renderResveList();
 						//closeLayerPopup();
-						$.alert({text:'처리되었습니다.'});
+						$.alert({text:'처리되었습니다.', icon: false});
 						header.get2WeeksCount();
 					}
 				},

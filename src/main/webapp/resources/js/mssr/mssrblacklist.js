@@ -322,7 +322,7 @@ var mssrblacklistList = {
 							success : function(res){
 								console.log('delete',res);				
 								mssrblacklistList.list.rendermssrblacklistList();
-								alertPopup('처리되었습니다.');
+								$.alert({text:'처리되었습니다.', icon: false});
 							},
 							error : function(err) {
 								console.error(err)
@@ -348,7 +348,7 @@ var mssrblacklistList = {
 							success : function(res){
 								console.log('delete',res);				
 								mssrblacklistList.list.rendermssrblacklistList();
-								alertPopup('처리되었습니다.');
+								$.alert({text:'처리되었습니다.', icon: false});
 							},
 							error : function(err) {
 								console.error(err)

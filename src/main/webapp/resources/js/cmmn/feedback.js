@@ -30,7 +30,7 @@ var feedback = {
 			success : function(res){						
 				//resveStatus.table.refresh();
 				if(res.item > 0){
-					$.alert({text:'등록하였습니다.', desc:'신속히 답변드리겠습니다.'})
+					$.alert({text:'등록하였습니다.', desc:'신속히 답변드리겠습니다.', icon: false});
 				}
 				closeLayerPopup();
 			},
