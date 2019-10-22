@@ -149,7 +149,7 @@ var codeManageList = {
 					}
 				}
 				
-				$('tbody#codeManageList').html(codeManageListHtml);
+				$('tbody#codeManageList').html(codeManageListHtml.join(''));
 
 				codeManageList.paging.renderPaging();
 			});
