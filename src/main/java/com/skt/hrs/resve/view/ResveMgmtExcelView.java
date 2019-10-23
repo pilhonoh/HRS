@@ -89,7 +89,9 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
         headerStyle.setBorderBottom(BorderStyle.THIN);
         headerStyle.setBorderLeft(BorderStyle.THIN);
         
-      
+        //본문 가운데정렬 스타일
+        CellStyle centerStyle = workbook.createCellStyle(); 
+        centerStyle.setAlignment(HorizontalAlignment.CENTER);
         
         /****************
          *  Sheet 생성
@@ -110,10 +112,13 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
         worksheet.setColumnWidth(7, 3000);	//예약자성명
         worksheet.setColumnWidth(8, 3000);	//예약자부서명
         worksheet.setColumnWidth(9, 4000);	//신청일시
-        worksheet.setColumnWidth(10, 3000);	//대기자사번
-        worksheet.setColumnWidth(11, 3000);	//대기자성명
-        worksheet.setColumnWidth(12, 3000);	//대기자부서명
-        worksheet.setColumnWidth(13, 4000);	//신청일시
+        worksheet.setColumnWidth(10, 2000);	//급여공제동의여부
+        
+        worksheet.setColumnWidth(11, 3000);	//대기자사번
+        worksheet.setColumnWidth(12, 3000);	//대기자성명
+        worksheet.setColumnWidth(13, 3000);	//대기자부서명
+        worksheet.setColumnWidth(14, 4000);	//신청일시
+        worksheet.setColumnWidth(15, 2000);	//급여공제동의여부
         
         /****************
          *  ROW 생성
@@ -157,10 +162,12 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
         row.createCell(7).setCellValue("");
         row.createCell(8).setCellValue("");
         row.createCell(9).setCellValue("");
-        row.createCell(10).setCellValue("대 기");
-        row.createCell(11).setCellValue("");
+        row.createCell(10).setCellValue("");
+        row.createCell(11).setCellValue("대 기");
         row.createCell(12).setCellValue("");
         row.createCell(13).setCellValue("");
+        row.createCell(14).setCellValue("");
+        row.createCell(15).setCellValue("");
         
         
         Iterator<Cell> cellIter = row.cellIterator();        
@@ -179,10 +186,12 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
         row.createCell(7).setCellValue("성명");
         row.createCell(8).setCellValue("부서명");
         row.createCell(9).setCellValue("신청일시");
-        row.createCell(10).setCellValue("사번");
-        row.createCell(11).setCellValue("성명");
-        row.createCell(12).setCellValue("부서명");
-        row.createCell(13).setCellValue("신청일시");
+        row.createCell(10).setCellValue("급여공제동의여부");
+        row.createCell(11).setCellValue("사번");
+        row.createCell(12).setCellValue("성명");
+        row.createCell(13).setCellValue("부서명");
+        row.createCell(14).setCellValue("신청일시");
+        row.createCell(15).setCellValue("급여공제동의여부");
         
         cellIter = row.cellIterator();        
         while(cellIter.hasNext()) {
@@ -195,8 +204,8 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
         worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER+1, 3, 3));	//헬스키퍼 병합
         worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER+1, 4, 4));	//베드 병합
         worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER+1, 5, 5));	//진행상태 병합
-        worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER, 6, 9));		//예약 병합
-        worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER, 10, 13));	//대기 병합
+        worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER, 6, 10));		//예약 병합
+        worksheet.addMergedRegion(new CellRangeAddress(ROW_HEADER, ROW_HEADER, 11, 15));	//대기 병합
         
          
         int rowIndex = ROW_LIST_START;
@@ -215,12 +224,21 @@ public class ResveMgmtExcelView extends AbstractXlsxView {
             row.createCell(7).setCellValue(map.getOrDefault("RESVE_EMPNM", "").toString());
             row.createCell(8).setCellValue(map.getOrDefault("RESVE_DEPTNM", "").toString());
             row.createCell(9).setCellValue(map.getOrDefault("RESVE_DT", "").toString());
+            row.createCell(10).setCellValue(map.getOrDefault("RESVE_AGREE_YN", 
+            		(map.get("RESVE_EMPNO") == null || StringUtil.isEmpty(map.get("RESVE_EMPNO").toString())) ? "" : "N").toString());
             
-            row.createCell(10).setCellValue(map.getOrDefault("WAIT_EMPNO", "").toString());
-            row.createCell(11).setCellValue(map.getOrDefault("WAIT_EMPNM", "").toString());
-            row.createCell(12).setCellValue(map.getOrDefault("WAIT_DEPTNM", "").toString());
-            row.createCell(13).setCellValue(map.getOrDefault("WAIT_DT", "").toString());
-             
+            row.createCell(11).setCellValue(map.getOrDefault("WAIT_EMPNO", "").toString());
+            row.createCell(12).setCellValue(map.getOrDefault("WAIT_EMPNM", "").toString());
+            row.createCell(13).setCellValue(map.getOrDefault("WAIT_DEPTNM", "").toString());
+            row.createCell(14).setCellValue(map.getOrDefault("WAIT_DT", "").toString());
+            row.createCell(15).setCellValue(map.getOrDefault("WAIT_AGREE_YN", 
+            		(map.get("WAIT_EMPNO") == null || StringUtil.isEmpty(map.get("WAIT_EMPNO").toString())) ? "" : "N").toString());
+            
+            //가운데 정렬 스타일 세팅
+            row.getCell(4).setCellStyle(centerStyle);	//베드
+            row.getCell(10).setCellStyle(centerStyle);	//(예약자)동의여부
+            row.getCell(15).setCellStyle(centerStyle);	//(대기자)동의여부
+            
             rowIndex++;
         }
          

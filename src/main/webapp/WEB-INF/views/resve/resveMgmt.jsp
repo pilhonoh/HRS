@@ -81,11 +81,12 @@
 						<col style="width:7%;">
 						<col style="width:7%;">
 						<col style="width:6%;">
-						<col style="width:10%;">
-						<col style="width:13%;">
-						<col style="width:10%;">
-						<col style="width:13%;">
-						<%-- <col style="width:6%;"> --%>
+						<col style="width:9%;">
+						<col style="width:12%;">
+						<col style="width:5%;">
+						<col style="width:9%;">
+						<col style="width:12%;">
+						<col style="width:5%;">
 					</colgroup>
 					<thead>
 						<tr>
@@ -95,14 +96,16 @@
 							<th rowspan="2">헬스키퍼</th>
 							<th rowspan="2">베드</th>
 							<th rowspan="2">진행상태</th>
-							<th colspan="2">예 약</th>
-							<th colspan="2">대 기</th>							
+							<th colspan="3">예 약</th>
+							<th colspan="3">대 기</th>							
 						</tr>
 						<tr>
 							<th style="border-left:1px solid #ddd;">신청인</th>
 							<th>일시<br/>부서</th>
+							<th>급여공제<br/>동의여부</th>
 							<th>신청인</th>
 							<th>일시<br/>부서</th>
+							<th>급여공제<br/>동의여부</th>
 						</tr>
 					</thead>
 					<tbody id="resveMgmt">

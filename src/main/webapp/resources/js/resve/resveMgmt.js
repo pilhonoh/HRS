@@ -182,6 +182,8 @@ var resveMgmt = {
 						$tr.append('	<td rowspan="2">' + item.MSSR_NCNM + '</td>');
 						$tr.append('	<td rowspan="2">' + item.BED_NM + '</td>');
 						$tr.append('	<td rowspan="2"><a class="link" href="javascript:resveMgmt.popup.detail('+ item.RESVE_NO +');">' + sttusNm + '</a></td>');					
+						
+						//예약자
 						if(item.RESVE_EMPNM){
 							
 							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || !canCancel){	// 변경불가
@@ -189,22 +191,26 @@ var resveMgmt = {
 							}else{
 								$tr.append('	<td rowspan="2"><button class="t-btn cr01 resveModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.RESVE_EMPNM + '</button><br/>('+ item.RESVE_EMPNO +')</td>');
 							}
-							$tr.append('	<td>' + item.RESVE_DT + '</td>');						
+							$tr.append('	<td>' + item.RESVE_DT + '</td>');
+							$tr.append('	<td rowspan="2">' + (item.RESVE_AGREE_YN || 'N') + '</td>');
 						}else{
 							$tr.append('	<td rowspan="2"></td>');
 							$tr.append('	<td></td>');
+							$tr.append('	<td rowspan="2"></td>');
 						}
-						
+						//대기자
 						if(item.WAIT_EMPNM){		
 							if(!item || item.CANCL_YN=='Y' || item.COMPT_YN=='Y' || !canCancel){	// 변경불가
 								$tr.append('	<td rowspan="2">' + item.WAIT_EMPNM + '<br/>('+ item.WAIT_EMPNO +')</td>');
 							}else{
 								$tr.append('	<td rowspan="2"><button class="t-btn cr02 waitModifyBtn" data-resveno="' + item.RESVE_NO + '">' + item.WAIT_EMPNM + '</button><br/>('+ item.WAIT_EMPNO +')</td>');
 							}							
-							$tr.append('	<td>' + item.WAIT_DT + '</td>');						
+							$tr.append('	<td>' + item.WAIT_DT + '</td>');
+							$tr.append('	<td rowspan="2">' + (item.WAIT_AGREE_YN || 'N') + '</td>');
 						}else{
 							$tr.append('	<td rowspan="2"></td>');
 							$tr.append('	<td></td>');
+							$tr.append('	<td rowspan="2"></td>');
 						}
 						
 						//$tr.append('	<td rowspan="2">' + item.COMPT_YN + '</td>');
@@ -459,7 +465,11 @@ var resveMgmt = {
 		excelBtnEvent : function() {
 			$('#btnExcel').on('click', function(e) {
 				
-				resveMgmt.validation.dateCheck();
+				resveMgmt.validation.dateCheck();				
+				resveMgmt.list.params.bldCode =  $('.search_field [data-code-tyl="BLD"]').val();
+				resveMgmt.list.params.bedCode = $('.search_field [data-code-tyl="BED"]').val();
+				resveMgmt.list.params.empnm = $('#empnm').val();
+				resveMgmt.list.params.statusCode = $('.search_field [data-code-tyl="STS"]').val();
 				
 				/*
 				if(moment(resveMgmt.list.params.toDate).diff(moment(resveMgmt.list.params.fromDate), 'day') > 31){
