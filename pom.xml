@@ -281,7 +281,7 @@
 
     <build>
     	<!-- <finalName>hrs_${env}</finalName> -->
-    	<finalName>ROOT</finalName>
+    	<finalName>${warName}</finalName>
     	<resources>    		
     		<resource>
 	            <directory>src/main/resources</directory>
@@ -341,21 +341,24 @@
 	        <id>local</id>
 	        <activation>
 	            <activeByDefault>true</activeByDefault>
-	         </activation>
-	      <properties>
-	          <env>local</env>
-	      </properties>
+	        </activation>
+			<properties>
+			    <env>local</env>
+			    <warName>hrs</warName>
+			</properties>
 	    </profile>
 	    <profile>
 	        <id>dev</id>	        
-	      <properties>
-	          <env>dev</env>
-	      </properties>
+			<properties>
+			    <env>dev</env>
+			    <warName>ROOT</warName>
+			</properties>
 	    </profile>
 	    <profile>
 	        <id>prod</id>
 	        <properties>
 	            <env>prod</env>
+	            <warName>hrs</warName>
 	        </properties>
 	    </profile>	    
 	</profiles>
