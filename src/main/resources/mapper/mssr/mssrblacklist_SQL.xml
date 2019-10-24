@@ -78,7 +78,7 @@
 
 	<!-- No-show(블랙리스트) No-Show 상태로 2주 패널티만 제외 -->
 	<delete id="mssrblacklistnoshowDelete" parameterType="map">
-        DELETE FROM RESVE_BLCLST WHERE RESVE_EMPNO=#{resveEmpno}
+        DELETE FROM RESVE_BLCLST WHERE RESVE_NO = #{resveNo}	
      </delete>
      
      <!-- No-show(블랙리스트) No-Show 상태로 케어완료 상태로 변경 -->
