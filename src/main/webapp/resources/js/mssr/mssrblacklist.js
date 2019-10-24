@@ -94,8 +94,7 @@ var mssrblacklistList = {
 						var summarylist = summaryList.split('|');
 						
 						var test = resultList[i].RESVE_NO;
-						
-						
+												
 						btnText1 = '케어완료';
 						btnClass1 = 'blacklistCancelBtn';
 						btnText2 = 'No-Show';
@@ -311,6 +310,7 @@ var mssrblacklistList = {
 				var meassage = '';
 
 				mssrblacklistList.list.params.resveEmpno = btn.data('mssrblacklistno');
+				mssrblacklistList.list.params.rowData = mssrblacklistList.list.getRowData(btn.data('mssrblacklistno'));
 
 				confirmPopup( meassage||'케어완료 처리하시겠습니까?', function(){					  					
 					$.ajax({
