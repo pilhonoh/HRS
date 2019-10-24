@@ -56,10 +56,11 @@ public class MssrblacklistDAO {
 	 * @param param
 	 * @return
 	 * @변경이력 :
+	 *  	- 2019.10.24 YJH : 사번을 조건으로 삭제하므로 result >= 1일 수 있음.
 	 */
 	public boolean mssrblacklistnoshowDelete(DataEntity param) {
 		int result = sqlSession.delete("mssrblacklistMapper.mssrblacklistnoshowDelete", param);
-		if(result == 1) {
+		if(result >= 1) {
 			return true;
 		}
 		return false;

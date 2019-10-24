@@ -60,7 +60,8 @@ public class MssrblacklistService {
 	 * @설명 : No-show(블랙리스트) 케어완료 상태로 변경
 	 * @Date      : 2019. 10. 21.
 	 * @작성자    : YANG.H.R
-	 * @변경이력 :
+	 * @변경이력 : 
+	 * 		- 2019.10.24 YJH : for문에서 건별로 케어완료처리만 하고 delete는 for문 밖에서 처리
 	 */
 	@Transactional
 	public ResponseResult mssrblacklistcareDelete(DataEntity param) {
@@ -72,25 +73,33 @@ public class MssrblacklistService {
 		rowdata = param.getString("rowData");
 		String [] resveNo = rowdata.split("\\|");
 		
+		// YJH수정: 케어완료처리만 하고 delete는 한번에 처리
 		for(int i=0; i<resveNo.length; i++) {
-			
-			boolean  deleteResult = false;
+						
+			//boolean deleteResult = false;	
 			boolean  updateResult = false;
 			boolean  insertResult = false;
 			
 			param.put("resveNo", resveNo[i]);
 			
-			deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param); 
+			//deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param); 
 			updateResult = mssrblacklistDAO.mssrblacklistcomptUpdate(param);
 			insertResult = mssrblacklistDAO.mssrblacklisthistInsert(param);
 			
-			resResult = deleteResult && updateResult && insertResult;
+			resResult = /* deleteResult && */ updateResult && insertResult;
 			
 			if(!resResult) {
 				throw new HrsException("error.processFailure", true);
 			}
 		}
-		result.setItemOne(resResult);
+		// 블랙리스트 삭제(multiple rows)
+		boolean deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param); 
+		if(!deleteResult) {
+			throw new HrsException("error.processFailure", true);
+		}
+		
+		//result.setItemOne(resResult);
+		result.setItemOne(true);
 		
 		return result;
 	}
