@@ -97,7 +97,7 @@ var mssrblacklistList = {
 												
 						btnText1 = '케어완료';
 						btnClass1 = 'blacklistCancelBtn';
-						btnText2 = 'No-Show';
+						btnText2 = '패널티 미적용';
 						btnClass2 = 'blacklistNoshowBtn';
 
 						mssrblacklistListHtml.push('<tr>');
@@ -336,7 +336,8 @@ var mssrblacklistList = {
 				var meassage = '';
 
 				mssrblacklistList.list.params.resveEmpno = btn.data('mssrblacklistno');
-
+				mssrblacklistList.list.params.rowData = mssrblacklistList.list.getRowData(btn.data('mssrblacklistno'));
+				
 				confirmPopup( meassage||'2주 패널티 제외하시겠습니까?', function(){					  					
 					$.ajax({
 							url: ROOT + '/mssr/mssrblacklistnoshowDelete',

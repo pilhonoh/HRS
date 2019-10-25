@@ -107,11 +107,24 @@ public class MssrblacklistService {
 		ResponseResult result = new ResponseResult();
 		boolean  deleteResult = false;
 		
-		deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param);
+		String rowdata ="";
 		
-		if(!deleteResult) {
-			throw new HrsException("error.processFailure", true);
+		
+		rowdata = param.getString("rowData");
+		String [] resveNo = rowdata.split("\\|");
+		
+		for(int i=0; i<resveNo.length; i++) {
+			
+			
+			param.put("resveNo", resveNo[i]);
+			
+			deleteResult = mssrblacklistDAO.mssrblacklistnoshowDelete(param);			
+			
+			if(!deleteResult) {
+				throw new HrsException("error.processFailure", true);
+			}
 		}
+		
 		result.setItemOne(deleteResult);
 		
 		return result;

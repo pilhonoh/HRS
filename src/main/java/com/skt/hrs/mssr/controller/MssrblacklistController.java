@@ -124,6 +124,9 @@ public class MssrblacklistController {
 		String resveEmpno = param.getString("resveEmpno");
 		param.put("resveEmpno", resveEmpno);
 		
+		String rowData = param.getString("rowData");
+		param.put("rowData", rowData);
+		
 		return mssrblacklistService.mssrblacklistnoshowDelete(param);
 	}
 
