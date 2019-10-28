@@ -150,7 +150,7 @@ var resveMgmt = {
 				
 				if(resultList.length == 0){
 					var $tr = $('<tr>');
-					$tr.append('	<td colspan="10">검색 결과가 없습니다.</td>');		
+					$tr.append('	<td colspan="12">검색 결과가 없습니다.</td>');		
 					trArray.push($tr);
 				}else{
 					
