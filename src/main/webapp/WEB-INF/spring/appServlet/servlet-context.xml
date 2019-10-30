@@ -62,6 +62,7 @@
 		
 		<!-- 담당자권한체크 -->
 		<mvc:interceptor>
+			<mvc:mapping path="/confirm/**" /> 
 			<mvc:mapping path="/mssr/**" /> 
 			<mvc:mapping path="/charger/**" />
 			<mvc:mapping path="/resveMgmt/**" />
