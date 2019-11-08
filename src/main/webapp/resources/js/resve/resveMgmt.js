@@ -12,8 +12,17 @@ var resveMgmt = {
 		resveMgmt.list.renderResveList(); //목록 조회 후 렌더
 		resveMgmt.button.listBtnClickEvent(); //조회 버튼 클릭 이벤트
 		resveMgmt.button.excelBtnEvent();	//엑셀 버튼 클릭 이벤트
+		resveMgmt.initEnter();//input Enter
 	},
 	
+	initEnter : function(){
+		$('#empnm').keypress(function(data){
+			if(data.which == 13){//Enter key pressed
+					$('#listBtn').click();//Trigger search button click event
+			}
+		});
+
+	},
 	
 	cmmnCode: {
 		allCodeList: [],
