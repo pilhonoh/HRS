@@ -358,7 +358,7 @@
 	        <id>prod</id>
 	        <properties>
 	            <env>prod</env>
-	            <warName>hrs</warName>
+	            <warName>ROOT</warName>
 	        </properties>
 	    </profile>	    
 	</profiles>
