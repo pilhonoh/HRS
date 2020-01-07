@@ -23,7 +23,8 @@
 	
 	<update id="userMapper.updateAgree" parameterType="map">
 		UPDATE INF_PERSON_INFO_RCV
-		SET HRS_AGREE = 'Y'
+		SET HRS_AGREE = 'Y',
+			AGREE_DT = now()
 		WHERE EMPNO = #{empno}
 	</update>
 	
