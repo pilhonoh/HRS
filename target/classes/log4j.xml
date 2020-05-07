@@ -20,7 +20,7 @@
         </layout> 
     </appender>
     
-    <!--  30ë¶„ì „ ì•Œë¦¼ JOB daily log -->  
+    <!--  30ë¶„ì „ ?•Œë¦? JOB daily log -->  
     <appender name="resveNotiJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
         <param name="file" value="/data/logs/resveNotiJob.log"/>  
         <param name="Append" value="true"/>  
@@ -30,9 +30,10 @@
         </layout>  
     </appender> 
     
-    <!-- ê³¼ê±° ëŒ€ê¸°ì·¨ì†Œ JOB daily log -->  
-    <appender name="pastWaitCancelJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
-        <param name="file" value="/data/logs/pastWaitCancelJob.log"/>  
+    
+    <!-- CSP Send JOB daily log(1ë¶„ì£¼ê¸?) -->  
+    <appender name="cspSendJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
+        <param name="file" value="/data/logs/cspSendJob.log"/>  
         <param name="Append" value="true"/>  
         <param name="DatePattern" value="'.'yyMMdd"/>  
         <layout class="org.apache.log4j.PatternLayout">  
@@ -40,6 +41,15 @@
         </layout>  
     </appender> 
     
+     <!-- ?•„?›ƒë£? ?¼? • Send JOB daily log(2ë¶„ì£¼ê¸?) -->  
+    <appender name="scheduleSendJobDailyAppender" class="org.apache.log4j.DailyRollingFileAppender">          
+        <param name="file" value="/data/logs/scheduleSendJob.log"/>  
+        <param name="Append" value="true"/>  
+        <param name="DatePattern" value="'.'yyMMdd"/>  
+        <layout class="org.apache.log4j.PatternLayout">  
+            <param name="ConversionPattern" value="%t> [%d{yyyy-MM-dd HH:mm:ss}] [%c{1}] [%p] %m %n"/>  
+        </layout>  
+    </appender> 
     
     <logger name="blacklistFilterJobLogger">
     	<level value="info" />    	
@@ -51,9 +61,14 @@
     	<appender-ref ref="resveNotiJobDailyAppender" />
     </logger>
     
-    <logger name="pastWaitCancelJobLogger">
+    <logger name="cspSendJobLogger">
     	<level value="info" />    	
-    	<appender-ref ref="pastWaitCancelJobDailyAppender" />
+    	<appender-ref ref="cspSendJobDailyAppender" />
+    </logger>
+    
+    <logger name="scheduleSendJobLogger">
+    	<level value="info" />    	
+    	<appender-ref ref="scheduleSendJobDailyAppender" />
     </logger>
 	
 	<!-- Application Loggers -->
